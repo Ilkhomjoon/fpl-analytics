@@ -34,7 +34,6 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 
-Copy-Item config.example.yaml config.yaml           # sozlamalar
 Copy-Item .env.example .env                         # maxfiy qiymatlar
 
 python run.py --demo --dry-run                      # soxta ma'lumot bilan namuna
@@ -42,6 +41,21 @@ python run.py --dry-run                             # haqiqiy ma'lumot, JO'NATMA
 python run.py                                       # Telegramga jo'natadi
 python run.py --dry-run --out                       # hisobot.html ga yozadi
 ```
+
+`config.yaml` ixtiyoriy — bo'lmasa koddagi standart qiymatlar ishlaydi.
+Model parametrlarini o'zgartirmoqchi bo'lsangiz, faylni o'zingiz yarating:
+
+```yaml
+# config.yaml — faqat o'zgartirmoqchi bo'lgan qiymatlarni yozing
+entry_id: 1234567
+mini_league_ids: [123456, 789012]
+free_transfers_override: 0   # 0 = avtomatik aniqlansin
+horizon: 5                   # necha tur oldinga qaraladi
+min_gain_to_suggest: 1.5     # shundan kam foyda bersa transfer taklif qilinmaydi
+minutes_prior_matches: 1.2   # mavsum o'rtasida 1.0 ga tushiring
+```
+
+Barcha parametrlar va ularning ma'nosi quyida, "Sozlash" bo'limida.
 
 > `--dry-run` — "Telegramga jo'natma" degani. Kanalga borishi uchun uni olib
 > tashlang. Konsolda o'qish noqulay bo'lsa, `--out` bilan HTML faylga yozing
@@ -190,8 +204,13 @@ sizning IP va brauzer barmoq izingizga bog'langan bot himoyasi tokenlari.
 GitHub Actions boshqa IP dan ishlagani uchun ular o'tmaydi.
 
 Shuning uchun: **cookie ni faqat o'z kompyuteringizda ishlating.** Actions
-uchun `config.yaml` da `free_transfers_override` ni qo'lda yozib qo'ying —
-o'zgarganda yangilaysiz. `--check-auth` shu haqda ham ogohlantiradi.
+uchun FT ni `FPL_FREE_TRANSFERS` secret'i bilan bering (yoki lokalda
+`config.yaml` dagi `free_transfers_override` bilan). `--check-auth` shu haqda
+ham ogohlantiradi.
+
+> `config.yaml` `.gitignore` da, ya'ni GitHub da yo'q. Workflow uni
+> `config.example.yaml` dan nusxalaydi; u ham bo'lmasa koddagi standart
+> qiymatlar ishlatiladi va hammasi baribir ishlaydi.
 
 Cookie umuman qo'shmasangiz ham hamma narsa ishlayveradi — hisobot oxirida
 "taxminiy" degan eslatma chiqadi.
@@ -206,6 +225,7 @@ Repo → **Settings → Secrets and variables → Actions** da qo'shing:
 | `TELEGRAM_CHAT_ID` | kanal ID si |
 | `FPL_ENTRY_ID` | jamoa ID si |
 | `FPL_LEAGUE_IDS` | mini-liga ID lari, vergul bilan |
+| `FPL_FREE_TRANSFERS` | erkin transfer soni (ixtiyoriy) — Actions da `config.yaml` yo'q, shuning uchun FT ni shu yerdan berasiz |
 
 `.github/workflows/daily.yml` ikki marta ishga tushadi:
 

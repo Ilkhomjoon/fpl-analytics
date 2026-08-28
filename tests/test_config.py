@@ -211,3 +211,22 @@ def test_sso_cookie_lari_tanilaydi():
 
     names = cookie_names("access_token=a; global_sso_id=b; datadome=c")
     assert [c for c in SESSION_COOKIES if c in names] == ["access_token", "global_sso_id"]
+
+
+def test_erkin_transfer_muhitdan_beriladi(tmp_path, monkeypatch):
+    """config.yaml bo'lmaganda ham (Actions) FT ni Secret orqali berish mumkin."""
+    monkeypatch.setenv("FPL_FREE_TRANSFERS", "3")
+    cfg = Config.load(tmp_path / "yoq.yaml", env_file=tmp_path / "yoq.env")
+    assert cfg.free_transfers_override == 3
+
+    monkeypatch.setenv("FPL_FREE_TRANSFERS", "notogri")
+    cfg = Config.load(tmp_path / "yoq.yaml", env_file=tmp_path / "yoq.env")
+    assert cfg.free_transfers_override == 0        # xato qiymat e'tiborsiz qoladi
+
+
+def test_config_yaml_bolmasa_ham_yuklanadi(tmp_path):
+    """Namuna fayl o'chirilgan bo'lsa ham standart qiymatlar bilan ishlasin."""
+    cfg = Config.load(tmp_path / "umuman_yoq.yaml", env_file=tmp_path / "yoq.env")
+    assert cfg.horizon == 5
+    assert cfg.timezone == "Asia/Tashkent"
+    assert cfg.mini_league_ids == []

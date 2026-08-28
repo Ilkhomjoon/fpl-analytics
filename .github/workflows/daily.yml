@@ -42,7 +42,16 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Sozlamalarni tayyorlash
-        run: cp config.example.yaml config.yaml
+        # config.yaml gitignore da. Namuna fayl bo'lsa — undan nusxa olamiz,
+        # bo'lmasa ham ishlayveradi: barcha muhim qiymatlar Secrets dan keladi,
+        # qolgani esa koddagi standart qiymatlar bilan to'ldiriladi.
+        run: |
+          if [ -f config.example.yaml ]; then
+            cp config.example.yaml config.yaml
+            echo "config.yaml namunadan yasaldi"
+          else
+            echo "config.example.yaml yo'q — standart qiymatlar ishlatiladi"
+          fi
 
       - name: FPL keshini tiklash
         uses: actions/cache@v4
@@ -57,8 +66,9 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           FPL_ENTRY_ID: ${{ secrets.FPL_ENTRY_ID }}
           FPL_LEAGUE_IDS: ${{ secrets.FPL_LEAGUE_IDS }}
+          FPL_FREE_TRANSFERS: ${{ secrets.FPL_FREE_TRANSFERS }}
           # FPL_COOKIE bu yerda YO'Q: cf_clearance/datadome brauzer va IP ga bog'langan,
-          # Actions boshqa IP dan ishlaydi. FT ni config.yaml dagi free_transfers_override bilan bering.
+          # Actions boshqa IP dan ishlaydi. FT ni FPL_FREE_TRANSFERS secret bilan bering.
         run: |
           python run.py \
             --mode "${{ inputs.mode || 'auto' }}" \

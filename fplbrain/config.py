@@ -125,6 +125,13 @@ class Config:
             cfg.mini_league_ids = [
                 int(x) for x in os.environ["FPL_LEAGUE_IDS"].replace(" ", "").split(",") if x
             ]
+        # config.yaml bo'lmaganda ham (masalan GitHub Actions da) erkin transfer
+        # sonini qo'lda berish imkoni — Secrets orqali
+        if os.getenv("FPL_FREE_TRANSFERS"):
+            try:
+                cfg.free_transfers_override = int(os.environ["FPL_FREE_TRANSFERS"])
+            except ValueError:
+                pass
 
         cfg.cache_dir = Path(cfg.cache_dir)
         cfg.store_dir = Path(cfg.store_dir)
