@@ -1,0 +1,83 @@
+<b>📊 FPL DEADLINE HISOBOTI</b>
+27-avgust, payshanba · 12:27
+GW3 deadline: 28.08 22:30 — <b>1 kun 10 soat qoldi</b>
+
+<b>💷 NARXLAR</b>
+<i>Bugun kechqurun kutilmoqda:</i>
+↓ TOT37 (TOT) 6.5 — 105% · <b>bugun</b>
+↑ SUN11 (SUN) 6.3 — 104% · <b>bugun</b>
+↓ LEE35 (LEE) 5.5 — 104% · <b>bugun</b>
+↓ AVL44 (AVL) 9.1 — 104% · <b>bugun</b>
+↓ WHU35 (WHU) 5.6 — 104% · <b>bugun</b>
+↓ CHE33 (CHE) 6.6 — 104% · <b>bugun</b>
+
+<b>🧠 MENING JAMOAM</b>
+Qiymat <b>126.4m</b> · bank 1.2m · FT ≈ 2
+GW3 eng yaxshi sxema: <b>4-4-2</b> — 23.7 EV
+Kelgusi 5 tur (vaznlangan): <b>101.3 EV</b>
+<i>Eng zaif bo'g'inlar:</i>
+• BHA37 (YAR) — 1.0 EV · jarohat/shubha, asosiy tarkib ehtimoli 4%, kelgusi turlar zaif
+• WHU43 (HUJ) — 1.6 EV · jarohat/shubha, asosiy tarkib ehtimoli 5%, kelgusi turlar zaif
+• WOL26 (HIM) — 2.5 EV · asosiy tarkib ehtimoli 11%, kelgusi turlar zaif
+
+<b>📋 GW3 TAVSIYA ETILGAN 11 LIK</b>
+DRV CRY11 — 2.9 · LEE(m)
+HIM BOU23 — 3.3 · CHE(u)
+HIM WOL22 — 1.4 · WHU(m)
+HIM LIV28 — 1.0 · MUN(u)
+HIM AVL25 — 0.7 · BRE(m)
+YAR BHA32 — 3.5 · NFO(u)
+YAR BOU32 — 3.1 · CHE(u)
+YAR BUR38 — 0.9 · ARS(u)
+YAR WOL39 — 0.7 · WHU(m)
+HUJ CRY41 — 3.2 · LEE(m)
+HUJ ARS41 — 3.0 · BUR(m)
+<i>Zaxira:</i> WOL26 (0.6), WHU43 (0.4), BHA37 (0.3), BUR13 (1.2)
+
+<b>🔁 TRANSFER TAHLILI</b>
+<b>1.</b> BHA37 (9.4) + WOL26 (6.8) ➜ BRE31 (9.1) + LEE21 (7.5)
+    sof foyda <b>+23.9 EV</b> (xom +23.9) · hit yo'q · +0.4m, bank 0.8m
+<b>2.</b> AVL25 (7.0) ➜ SUN22 (6.3)
+    sof foyda <b>+11.4 EV</b> (xom +11.4) · hit yo'q · -0.7m, bank 1.9m
+<b>3.</b> BUR38 (9.4) ➜ BHA34 (9.4)
+    sof foyda <b>+11.1 EV</b> (xom +11.1) · hit yo'q · +0.0m, bank 1.2m
+<b>4.</b> LIV28 (10.8) ➜ CHE22 (8.6)
+    sof foyda <b>+10.0 EV</b> (xom +10.0) · hit yo'q · -2.2m, bank 3.4m
+
+<b>🅲 KAPITAN — GW3</b>
+<b>1.</b> BHA32 — 3.5 EV · haul 5% · hissa 26%
+    <i>zaif variant</i>
+<b>2.</b> BOU23 — 3.3 EV · haul 1% · hissa 12%
+    <i>zaif variant</i>
+<b>3.</b> CRY41 — 3.2 EV · haul 4% · hissa 28%
+    <i>zaif variant</i>
+<b>4.</b> BOU32 — 3.1 EV · haul 3% · hissa 20%
+    <i>zaif variant</i>
+
+<b>👥 RAQIBLAR TAHLILI</b>
+<u>Mini-liga: Demo liga 12345</u> (50 jamoa · o'rtacha 122 ochko)
+⛔ Menda yo'q, ularda bor: BOU11 22%, SUN11 20%, FUL12 14%, NEW44 12%, ARS42 12%
+💎 Mening differensiallarim: AVL25 2%, BHA37 2%, WHU43 4%, BUR38 4%, WOL26 4%
+🅲 Ularning kapitani: BOU11 8%, FUL12 6%, SUN11 6%
+
+<u>Top-100</u> (100 jamoa · o'rtacha 122 ochko)
+⛔ Menda yo'q, ularda bor: BOU11 16%, LIV12 11%, CHE12 11%, NEW44 10%, LIV13 10%
+💎 Mening differensiallarim: WOL26 2%, BHA37 2%, AVL25 3%, WHU43 3%, BOU32 3%
+🅲 Ularning kapitani: LIV12 5%, CHE12 5%, BOU11 5%
+
+<u>Mendan ~1% tepada (≈147,832)</u> (25 jamoa · o'rtacha 118 ochko)
+⛔ Menda yo'q, ularda bor: BOU13 20%, BOU43 16%, BHA13 16%, LIV13 16%, FUL12 12%
+💎 Mening differensiallarim: WHU43 0%, BHA32 0%, WOL26 0%, BHA37 0%, LIV28 0%
+🅲 Ularning kapitani: BHA13 8%, BOU13 8%, FUL12 4%
+
+<u>Mendan ~1% pastda (≈342,434)</u> (25 jamoa · o'rtacha 118 ochko)
+⛔ Menda yo'q, ularda bor: TOT44 24%, LEE13 24%, MCI11 20%, BOU44 16%, NEW11 16%
+💎 Mening differensiallarim: AVL25 0%, WHU43 0%, CRY11 0%, BUR38 0%, ARS41 0%
+🅲 Ularning kapitani: MCI11 8%, NEW11 8%, LIV13 8%
+
+<b>🎴 CHIP SIGNALI</b>
+• <b>Wildcard</b> — shu tur: +67.9 EV (5 tur bo'yicha jami farq, turiga ≈13.6)
+• <b>Free Hit</b> — shu tur: +18.4 EV (ideal 11 lik ≈42.0 vs meniki 23.7)
+
+<i>Model: xG/xA + Poisson fixture, daqiqalar, DefCon, bonus. EV = kutilayotgan ochko.</i>
+<i>Umumiy o'rin: 245,133 / 9,730,161</i>

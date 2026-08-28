@@ -1,0 +1,42 @@
+[
+ {
+  "mode": "daily",
+  "at": "2026-08-27T13:00:18.362594+05:00",
+  "event": 3,
+  "horizon_ev": 101.322,
+  "best_move": "BHA37 (9.4) + WOL26 (6.8) ➜ BRE31 (9.1) + LEE21 (7.5)",
+  "captain": "BHA32"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-08-27T13:03:39.937109+05:00",
+  "event": 2,
+  "horizon_ev": 216.252,
+  "best_move": "James (5.5) + Calafiori (5.5) ➜ Guéhi (6.0) + Senesi (6.0)",
+  "captain": "Hume"
+ },
+ {
+  "mode": "deadline",
+  "at": "2026-08-27T23:00:58.316266+05:00",
+  "event": 2,
+  "horizon_ev": 199.806,
+  "best_move": "James (5.5) ➜ Guéhi (6.0)",
+  "captain": "Szoboszlai"
+ },
+ {
+  "mode": "deadline",
+  "at": "2026-08-27T23:09:08.760748+05:00",
+  "event": 2,
+  "horizon_ev": 199.806,
+  "best_move": "James (5.5) ➜ Guéhi (6.0)",
+  "captain": "Szoboszlai"
+ },
+ {
+  "mode": "deadline",
+  "at": "2026-08-27T23:10:23.109540+05:00",
+  "event": 2,
+  "horizon_ev": 199.806,
+  "best_move": "James (5.5) ➜ Guéhi (6.0)",
+  "captain": "Szoboszlai"
+ }
+]

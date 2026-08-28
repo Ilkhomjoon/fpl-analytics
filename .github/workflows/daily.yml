@@ -1,0 +1,77 @@
+name: FPL kunlik tahlil
+
+on:
+  schedule:
+    # 01:00 UTC = 06:00 Asia/Tashkent — kechagi narx o'zgarishlaridan keyin
+    - cron: "0 1 * * *"
+    # 13:00 UTC = 18:00 Asia/Tashkent — deadline oldidan oxirgi tekshiruv
+    - cron: "0 13 * * 4,5"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Hisobot rejimi"
+        required: false
+        default: "auto"
+        type: choice
+        options: [auto, daily, deadline]
+      strategy:
+        description: "Kapitan strategiyasi"
+        required: false
+        default: "balanced"
+        type: choice
+        options: [safe, balanced, aggressive]
+
+concurrency:
+  group: fpl-analysis
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write          # snapshotlarni repoga qaytarib yozish uchun
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Kutubxonalarni o'rnatish
+        run: pip install -r requirements.txt
+
+      - name: Sozlamalarni tayyorlash
+        run: cp config.example.yaml config.yaml
+
+      - name: FPL keshini tiklash
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: fpl-cache-${{ github.run_id }}
+          restore-keys: fpl-cache-
+
+      - name: Tahlilni ishga tushirish
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          FPL_ENTRY_ID: ${{ secrets.FPL_ENTRY_ID }}
+          FPL_LEAGUE_IDS: ${{ secrets.FPL_LEAGUE_IDS }}
+          # FPL_COOKIE bu yerda YO'Q: cf_clearance/datadome brauzer va IP ga bog'langan,
+          # Actions boshqa IP dan ishlaydi. FT ni config.yaml dagi free_transfers_override bilan bering.
+        run: |
+          python run.py \
+            --mode "${{ inputs.mode || 'auto' }}" \
+            --strategy "${{ inputs.strategy || 'balanced' }}"
+
+      - name: Snapshotlarni saqlash
+        run: |
+          git config user.name "fpl-bot"
+          git config user.email "fpl-bot@users.noreply.github.com"
+          git add data/store
+          if git diff --staged --quiet; then
+            echo "O'zgarish yo'q"
+          else
+            git commit -m "chore: update market snapshot $(date -u +%F)"
+            git push
+          fi
