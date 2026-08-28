@@ -38,5 +38,13 @@
   "horizon_ev": 199.806,
   "best_move": "James (5.5) ➜ Guéhi (6.0)",
   "captain": "Szoboszlai"
+ },
+ {
+  "mode": "deadline",
+  "at": "2026-08-28T15:52:22.752301+05:00",
+  "event": 2,
+  "horizon_ev": 199.806,
+  "best_move": "James (5.5) ➜ Guéhi (6.0)",
+  "captain": "Szoboszlai"
  }
 ]
