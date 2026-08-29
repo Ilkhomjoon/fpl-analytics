@@ -54,5 +54,13 @@
   "horizon_ev": 151.15,
   "best_move": "James (5.5) + Diop (4.0) ➜ Guéhi (6.0) + Mitchell (4.5)",
   "captain": "Thiago"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-08-29T12:34:31.657660+05:00",
+  "event": 3,
+  "horizon_ev": 151.15,
+  "best_move": "James (5.5) + Diop (4.0) ➜ Guéhi (6.0) + Mitchell (4.5)",
+  "captain": "Thiago"
  }
 ]
