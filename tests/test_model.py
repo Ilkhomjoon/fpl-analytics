@@ -12,32 +12,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from fplbrain import ratings
 from fplbrain.captain import rank_captains
-from fplbrain.config import Config
 from fplbrain.ev import (
-    DEF, FWD, GK, MID, EVEngine, build_profile, expected_conceded_penalty,
+    DEF, FWD, GK, MID, build_profile, expected_conceded_penalty,
     poisson_pmf, poisson_tail, shrink,
 )
-from fplbrain.squad import Squad, SquadPlayer, best_eleven, selling_price, squad_ev
+from fplbrain.squad import best_eleven, selling_price, squad_ev
 from fplbrain.transfers import evaluate_moves
-from tests.fake import make_bootstrap, make_fixtures, make_picks
-
-
-@pytest.fixture(scope="module")
-def world():
-    cfg = Config()
-    cfg.horizon = 5
-    bs = make_bootstrap()
-    fx = make_fixtures(bs)
-    rt = ratings.build_team_ratings(bs, cfg)
-    events = [3, 4, 5, 6, 7]
-    views = ratings.build_fixture_views(fx, rt, cfg, events[0], events[-1])
-    engine = EVEngine(cfg, rt, views)
-    ev_by_element = {}
-    for e in bs["elements"]:
-        p = build_profile(e, None, cfg, 2)
-        ev_by_element[e["id"]] = engine.evaluate(p, events)
-    return dict(cfg=cfg, bs=bs, fx=fx, rt=rt, views=views, engine=engine,
-                events=events, ev=ev_by_element)
+from tests.conftest import make_squad as _make_squad
+from tests.fake import make_picks
 
 
 # ------------------------------------------------------------------ matematika
@@ -152,23 +134,6 @@ def test_jarohatlangan_oyinchi_nol_ev(world):
 
 
 # ------------------------------------------------------------------- tarkib
-def _make_squad(world) -> Squad:
-    bs, ev = world["bs"], world["ev"]
-    picks = make_picks(bs)
-    by_id = {e["id"]: e for e in bs["elements"]}
-    players = [
-        SquadPlayer(
-            ev=ev[p["element"]],
-            purchase_price=by_id[p["element"]]["now_cost"] / 10.0,
-            selling_price=by_id[p["element"]]["now_cost"] / 10.0,
-            is_captain=p["is_captain"],
-            is_vice=p["is_vice_captain"],
-        )
-        for p in picks
-    ]
-    return Squad(players=players, bank=1.5, event=3, free_transfers=1)
-
-
 def test_eng_yaxshi_11_qoidaga_mos(world):
     squad = _make_squad(world)
     xi, bench, form, total = best_eleven(squad.players, 3)
@@ -308,7 +273,8 @@ def test_kapitan_reytingi(world):
     options = rank_captains(squad, 3, {}, "balanced", limit=5)
     assert len(options) == 5
     assert options[0].score >= options[-1].score
-    assert all(0 <= o.p_haul <= 1 for o in options)
+    assert all(0 <= o.p10 <= 1 for o in options)
+    assert all(0 <= o.p15 <= o.p10 + 1e-9 for o in options)   # 15+ hech qachon 10+ dan ko'p emas
 
 
 def test_darvozabon_kapitan_taklif_qilinmaydi(world):
@@ -338,3 +304,61 @@ def test_chip_tavsiyasi_faqat_mavjudlaridan(world):
                     world["views"], world["cfg"], available_chips=["freehit"])
     assert advice
     assert {a.chip for a in advice} == {"freehit"}
+
+
+# --------------------------------------------------- ochko taqsimoti (kapitan)
+def test_taqsimot_yigindisi_bir_va_tepasi_mantiqiy():
+    """Taqsimot to'liq bo'lishi va pozitsiyalar orasidagi farqni ko'rsatishi kerak."""
+    from fplbrain.ev import FixtureInputs, points_distribution
+
+    forward = points_distribution(FixtureInputs(
+        xg=0.95, xa=0.20, p_cs=0.35, p_appear=0.97, p60=0.93,
+        bonus_mean=0.95, lam_conceded=1.0, position=FWD))
+    keeper = points_distribution(FixtureInputs(
+        xg=0.0, xa=0.01, p_cs=0.40, p_appear=0.99, p60=0.99,
+        bonus_mean=0.45, lam_conceded=0.95, saves_mean=3.0, position=GK))
+
+    assert abs(sum(forward.pmf.values()) - 1.0) < 1e-3
+    assert abs(sum(keeper.pmf.values()) - 1.0) < 1e-3
+    # premium hujumchida "haul" real, darvozabonda deyarli imkonsiz
+    assert 0.20 < forward.tail(10) < 0.45
+    assert keeper.tail(10) < 0.05
+    # o'rtacha EV yo'li bilan hisoblangan qiymatga yaqin bo'lsin
+    assert 6.5 < forward.mean() < 8.5
+    # tepasi past chegaradan yuqori
+    assert forward.percentile(0.90) >= 10
+
+
+def test_taqsimot_oynamaydigan_oyinchida_nolga_yigiladi():
+    from fplbrain.ev import FixtureInputs, points_distribution
+
+    d = points_distribution(FixtureInputs(
+        xg=0.5, xa=0.3, p_cs=0.3, p_appear=0.0, p60=0.0, position=FWD))
+    assert d.pmf.get(0, 0) == pytest.approx(1.0)
+    assert d.mean() == pytest.approx(0.0)
+
+
+def test_toza_darvoza_va_kiritilgan_gol_zid_emas():
+    """CS va kiritilgan gol jarimasi bitta tasodifiy miqdordan chiqadi."""
+    from fplbrain.ev import FixtureInputs, points_distribution
+
+    # deyarli aniq toza darvoza -> jarima bo'lmasligi kerak
+    clean = points_distribution(FixtureInputs(
+        xg=0.0, xa=0.0, p_cs=1.0, p_appear=1.0, p60=1.0,
+        bonus_mean=0.0, lam_conceded=0.001, position=DEF))
+    # 2 ochko ishtirok + 4 toza darvoza = 6 (bonussiz)
+    assert clean.pmf.get(6, 0) > 0.8
+
+    leaky = points_distribution(FixtureInputs(
+        xg=0.0, xa=0.0, p_cs=0.0, p_appear=1.0, p60=1.0,
+        bonus_mean=0.0, lam_conceded=4.0, position=DEF))
+    assert leaky.mean() < clean.mean()
+
+
+def test_strategiya_orinaga_qarab_tanlanadi():
+    from fplbrain.captain import rank_strategy
+
+    assert rank_strategy(5_000, 10_000_000)[0] == "safe"
+    assert rank_strategy(500_000, 10_000_000)[0] == "balanced"
+    assert rank_strategy(2_400_000, 10_000_000)[0] == "aggressive"
+    assert rank_strategy(None, None)[0] == "balanced"

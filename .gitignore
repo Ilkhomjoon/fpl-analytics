@@ -1,7 +1,10 @@
-__pycache__/
 *.py[cod]
 .env
-config.yaml
-data/cache/
 .pytest_cache/
 .venv/
+__pycache__/
+config.yaml
+cookie.txt
+data/cache/
+data/demo_store/
+hisobot.html

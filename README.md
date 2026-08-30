@@ -10,18 +10,69 @@ run.py ──▶ FPL API ──▶ EV modeli ──▶ transfer / kapitan / chip
                     jamoa reytingi       raqiblar tahlili
 ```
 
+## Telegram boti
+
+Hisobot bitta uzun devor emas — **qisqa xulosa + tugmalar**. Tugmani bosganingizda
+o'sha bo'lim o'sha xabarning o'zida ochiladi, "◀ Menyu" bilan orqaga qaytasiz.
+
+```
+📊 FPL — GW3
+28-avgust · deadline 28.08 22:30 (6 soat qoldi)
+O'rin: 2,434,397 (24.8%) · qiymat 100.0m · 2 FT · bank 1.0m
+🔁 James ➜ Guéhi (+10.4 EV)
+🅲 Szoboszlai — 5.1 EV · 10+: 14%
+
+[🎯 Strategiya] [🔁 Transfer]
+[🅲 Kapitan]    [🧠 Jamoam]
+[📋 11 lik]     [📅 Turlar]
+[👥 Raqiblar]   [💷 Narxlar]
+[🎴 Chip]
+[📄 Hammasi]    [🔄 Yangilash]
+```
+
+Ikki qism alohida ishlaydi:
+
+- **`run.py`** tahlilni hisoblab, bo'limlarni `data/store/last_report.json` ga
+  saqlaydi va menyu xabarini jo'natadi. Jadval bo'yicha (GitHub Actions) shu
+  ishlaydi.
+- **`bot.py`** tugma bosilishini tinglaydi va saqlangan bo'limni **darhol**
+  ko'rsatadi — qayta hisoblamaydi. U sizning kompyuteringizda ishlab turishi
+  kerak:
+
+```powershell
+python bot.py
+```
+
+Buyruqlar: `/menu`, `/yangila` (qaytadan hisoblash), `/holat`.
+
+Bot faqat `TELEGRAM_CHAT_ID` da ko'rsatilgan kanal bilan ishlaydi — begona
+odam tugmani bossa, javob bermaydi.
+
+`bot.py` ishlamayotgan paytda tugmalar javob bermaydi. Faqat matn kerak bo'lsa:
+
+```powershell
+python run.py --full-text
+```
+
 ## Nima qiladi
 
 | Bo'lim | Mazmuni |
 |---|---|
+| ⭐ Reyting | Har pozitsiya bo'yicha eng yaxshi o'yinchilar: **rol × chiqim**. Byudjet to'ldiruvchilar belgilanadi |
+| 💎 Samara | 1 million evaziga eng ko'p chiqim beradiganlar |
+| 📊 Bozor | Shu tur oldidan kim olinmoqda, kim sotilmoqda — egalar soniga nisbatan |
+| 📈 Sur'at | Mavsum maqsadiga (2508 ochko) nisbatan holat: sizning o'rtachangiz, yetakchiniki, qolgan turlarda kerakli o'rtacha |
+| 🔄 Shablon | Top-100 da ommaviy, sizda yo'q o'yinchilar — kimni sotib kimni olish, EV va EO farqi bilan |
+| 🎯 Strategiya | O'ringa mos yondashuv + **11 likka 11 lik** solishtiruv: shablon jamoadan qancha orqadasiz va aynan kim sizni har tur ortga tortyapti |
 | 🩺 Yangi xabarlar | Kechadan beri paydo bo'lgan jarohat/diskvalifikatsiya xabarlari — sizdagi o'yinchilar birinchi |
 | 💷 Narxlar | Kecha o'zgargan narxlar + bugun kechqurun kutilayotganlari (FPL ning `price_change_percent` va soatlik tezlik maydonlari asosida) |
 | 🧠 Mening jamoam | Qiymat, bank, FT, eng yaxshi sxema, kelgusi turlar EV si, eng zaif 3 bo'g'in |
 | 📋 11 lik | GW uchun tavsiya etilgan asosiy tarkib va zaxira tartibi |
-| 🔁 Transfer | 1 va 2 transferli variantlar, hit matematikasi, byudjet va "jamoadan 3 tadan" qoidasi bilan |
-| 🅲 Kapitan | EV, "haul" ehtimoli va raqiblardagi kapitanlik ulushi (EO) bo'yicha reyting |
+| 🔁 Transfer | FT soniga mos **reja**: asosiy tavsiya, hit arziydimi, va bir-birini istisno qiluvchi muqobillar |
+| 🅲 Kapitan | To'liq **ochko taqsimoti**: P(10+), P(15+), tepasi va maydon kapitanidan ustunlik |
 | 👥 Raqiblar | Mini-liga, top-100 va **mendan ±1% o'rindagi** jamoalar: EO, differensiallar, tahdidlar, kapitan taqsimoti |
-| 🎴 Chip | WC / BB / TC / FH uchun eng foydali tur, byudjetga mos ideal tarkib bilan solishtirib |
+| 📅 Turlar | Kelgusi 5 tur jadvali — eng qulay va eng og'ir jamoalar, sizning o'yinchilaringiz belgilangan |
+| 🎴 Chip | WC / BB / TC / FH uchun eng foydali tur; ishlatilgan chiplar hisobga olinadi |
 
 ## Tez boshlash
 
@@ -38,7 +89,8 @@ Copy-Item .env.example .env                         # maxfiy qiymatlar
 
 python run.py --demo --dry-run                      # soxta ma'lumot bilan namuna
 python run.py --dry-run                             # haqiqiy ma'lumot, JO'NATMAYDI
-python run.py                                       # Telegramga jo'natadi
+python run.py                                       # Telegramga menyu jo'natadi
+python bot.py                                       # tugmalarni tinglaydi
 python run.py --dry-run --out                       # hisobot.html ga yozadi
 ```
 
@@ -243,10 +295,58 @@ avtomatik **to'liq** rejimga o'tadi.
 
 Har bir o'yinchi uchun har bir uchrashuvda kutilayotgan ochko hisoblanadi:
 
-**1. Daqiqalar.** `starts`, oxirgi 6 o'yin daqiqalari va `chance_of_playing_next_round`
-dan `p(asosiy tarkib)`, `p(60+ daqiqa)` va kutilayotgan daqiqa chiqariladi. Mavsum
-boshida ma'lumot kam bo'lgani uchun o'tgan mavsum (yoki narx) prior sifatida
-aralashtiriladi, o'yinlar ortgani sari prior vazni tushadi.
+**0. Model o'tgan mavsumga TAYANMAYDI.** Jamoa almashgan, roli o'zgargan yoki
+jarohatdan qaytgan o'yinchini o'tgan yil natijasi bilan baholash xato. Priorlar
+ikkita **joriy** bozor signalidan quriladi:
+
+- **Egalik** (`selected_by_percent`) — ROL signali. Menejerlar ommaviy ravishda
+  zaxira o'yinchini sotib olmaydi: 25% egalikdagi 6.5m lik qanot deyarli aniq
+  asosiy tarkibda. Bu jamoaviy bashorat 2 o'yinlik namunadan ishonchliroq.
+- **Narx** — SIFAT signali. FPL narxni talabga qarab o'zgartiradi, ya'ni narx
+  bozorning bahosi. Undan xG90, xA90 va bonus priorlari chiqariladi.
+
+Muhim chegara: **egalik faqat rolni bashorat qiladi, chiqimni emas.** Aks holda
+model shablonni takrorlab qolardi va "hamma olgan, siz olmang" deya olmasdi —
+yuqori o'ringa chiqish uchun esa aynan shu kerak.
+
+**Byudjet to'ldiruvchi (enabler) muammosi.** Menejerlar 4.0m lik o'yinchini
+byudjetni to'ldirish uchun oladi — u hech qachon o'ynamaydi. Egalik foizini
+oddiy o'qish uni "ommaviy, demak asosiy" deb ko'rsatardi. Ikki himoya qo'yilgan:
+
+1. Egalikning rol signali **narxga qarab chegiriladi**: 4.0m da ishonch 0.25,
+   5.5m dan yuqorida 1.0. Arzon o'yinchida egalik rolni deyarli bashorat
+   qilmaydi.
+2. Egalik **daqiqalarni bosib o'tolmaydi**: rol `o'ynagan daqiqa ulushi × 1.25
+   + 0.30` bilan cheklanadi. 60% egalikdagi, lekin 45 daqiqa o'ynagan o'yinchi
+   asosiy tarkib deb baholanmaydi.
+
+Bunday o'yinchilar hisobotda ⚠️ bilan belgilanadi va "Samara" ro'yxatidan
+chiqarib tashlanadi.
+
+**Reyting formulasi.** `reyting = rol × chiqim`:
+
+- **rol** — o'ynagan daqiqalar ulushi (60%), asosiy tarkib ulushi (40%), va
+  dalil kam bo'lganda chegirilgan egalik. Dalil to'planishi bilan egalikning
+  vazni `1.5/(1.5+turlar)` bo'yicha pasayadi.
+- **chiqim** — 90 daqiqalik ochko. xG/xA ga 75% (namuna kichik bo'lsa), haqiqiy
+  gol/uzatmaga 25% vazn: kichik namunada asos natijadan barqarorroq bashorat
+  beradi. Natija asosdan keskin farq qilsa, hisobotda alohida belgilanadi.
+- **transfer oqimi** — `(kirgan − chiqgan) / egalar soni`. 100 ming transfer
+  1% egalikda katta voqea, 50% egalikda kichik — shuning uchun mutlaq son
+  emas, nisbat olinadi.
+
+O'tgan mavsumni yoqish uchun `config.yaml` da `use_last_season: true`.
+
+**1. Daqiqalar.** Uchta manbadan quriladi:
+
+- **Rol priori** — yuqoridagi egalik + narx.
+- **So'nggi turlar** — ketma-ket asosiy tarkibda 60+ daqiqa chiqishlar soni
+  quyi chegara qo'yadi: 1 tur → 0.75, 2 tur → 0.82, 3+ tur → 0.88. Zanjir
+  uzilsa chegara ham yo'qoladi. Mavsum boshida bu eng kuchli signal.
+- **Xabarlar** — `chance_of_playing_next_round` hammasini proporsional
+  pasaytiradi; 0% bo'lsa EV nolga tushadi.
+
+Natijani `--explain` bilan har doim tekshirish mumkin.
 
 **2. Uchrashuv kuchi.** Jamoa hujum/himoya reytingi FPL ning `strength_*` qiymatlari
 va joriy mavsum xG ma'lumotidan (hujum — jamoa xG yig'indisi, himoya — asosiy
@@ -269,6 +369,20 @@ Yetarli o'yin bo'lsa, model natijasi haqiqiy "chegaradan o'tish foizi" bilan
 
 **6. Bonus va kartochka.** 90 daqiqalik bonus tezligi (shrinkage bilan), uchrashuv
 kuchiga biroz bog'lab; sariq kartochka o'rtachasi ayiriladi.
+
+**7. Ochko taqsimoti (kapitan uchun).** O'rtacha EV kapitan tanlash uchun
+yetarli emas — ochko ikkilangani uchun **tepasi** hal qiladi. Shuning uchun gol,
+uzatma, toza darvoza, DefCon va bonus bo'yicha to'liq taqsimot sanab chiqiladi
+va undan P(10+), P(15+) hamda 90-foizli natija olinadi. Toza darvoza va
+kiritilgan gol jarimasi bitta tasodifiy miqdordan (kiritilgan gollar soni)
+chiqariladi, shuning uchun ular o'zaro zid bo'lmaydi. Shu hisobdan darvozabonda
+P(10+) ≈ 1% chiqadi — model uni kapitanlikka umuman tavsiya qilmaydi.
+
+**8. Maydonga nisbatan holat.** Raqiblarning shablon 11 ligi tuziladi va
+sizning 11 ligingiz bilan solishtiriladi. Bu — yagona asosli umumiy o'lchov
+(ikkala tomon ham 11 o'yinchi qo'yadi). Undan keyin farqning tarkibi
+ko'rsatiladi: qaysi o'yinchi sizda yo'qligi uchun har tur `EO × EV` ochko
+yo'qotyapsiz va qaysi biri sizga ustunlik beryapti.
 
 Transfer qarori butun tarkib darajasida hisoblanadi: almashtirishdan **keyingi**
 tarkibning har turdagi eng yaxshi 11 ligi qayta tanlanadi, zaxira `bench_weight`
@@ -295,10 +409,23 @@ differensialni (o'rinni ko'tarishga urinadi).
 ## Sinov va tekshiruv
 
 ```bash
-python -m pytest tests/ -q      # 23 ta unit test, tarmoqsiz
+python -m pytest tests/ -q      # 62 ta unit test, tarmoqsiz
 python tools/calibrate.py       # EV real FPL oraliqlarida ekanini tekshiradi
 python run.py --demo --dry-run  # to'liq hisobot, soxta ma'lumot bilan
 ```
+
+### Model raqamlarini tekshirish
+
+Har qanday o'yinchi bo'yicha modelning butun hisobini ko'rish mumkin:
+
+```powershell
+python run.py --explain Isak
+```
+
+Chiqadi: o'tgan mavsum ma'lumoti, joriy mavsum, so'nggi turlardagi daqiqalar,
+`p(asosiy tarkib)` qanday chiqqani, xG90/xA90 shrinkage dan keyin, har tur
+uchun EV va uning tarkibi, hamda ochko taqsimoti. Agar raqam noto'g'ri
+ko'rinsa, aynan qaysi bosqichda xato borligi shu yerdan ko'rinadi.
 
 `tools/calibrate.py` tanish arxetiplarni tekshiradi — premium hujumchi uyda
 kuchsiz raqibga qarshi 6–9.5 EV, oddiy himoyachi mehmonda kuchli raqibga qarshi

@@ -1,0 +1,84 @@
+{
+ "event": 3,
+ "mode": "daily",
+ "generated": "2026-08-30T12:44:15.050833+05:00",
+ "deadline": "2026-09-04T22:30:00+05:00",
+ "summary": "<b>📊 FPL — GW3</b>\n30-avgust, yakshanba · deadline 04.09 22:30 (<b>5 kun 9 soat qoldi</b>)\nO'rin: <b>6,296,217</b> (62.7%) · qiymat 100.0m · 2 FT · bank 1.0m\n<b>⚠️ 11 likda 8 ta o'yinchi o'ynamasligi mumkin</b>\n🔁 <b>James (5.5) + Calafiori (5.5) ➜ Guéhi (6.0) + Tarkowski (6.0)</b> (+23.9 EV)\n🅲 <b>Szoboszlai</b> — 4.5 EV · 10+: 10%",
+ "sections": [
+  {
+   "key": "risk",
+   "title": "⚠️ Xavf",
+   "text": "<b>⚠️ O'YIN VAQTI XAVFI — GW3</b>\n<i>Maydonga chiqmagan o'yinchi 0 ochko beradi. Bu tekshiruv boshqa hamma narsadan muhimroq.</i>\n🟠 <b>Diop</b> (HIM) — asosiy tarkib ehtimoli 44%\n🟠 <b>Calafiori</b> (HIM) — asosiy tarkib ehtimoli 45%\n🟠 <b>Maguire</b> (HIM) — asosiy tarkib ehtimoli 45%\n🟠 <b>James</b> (HIM) — asosiy tarkib ehtimoli 45%\n🟠 <b>Hume</b> (HIM) — asosiy tarkib ehtimoli 45%\n🟠 <b>B.Fernandes</b> (YAR) — asosiy tarkib ehtimoli 45%\n🟠 <b>Mbeumo</b> (YAR) — asosiy tarkib ehtimoli 45%\n🟠 <b>Thiago</b> (HUJ) — asosiy tarkib ehtimoli 45%\n\n<b>8 ta o'yinchini almashtirish yoki zaxiraga tushirishni ko'rib chiqing.</b>"
+  },
+  {
+   "key": "target",
+   "title": "📈 Sur'at",
+   "text": "<b>🎯 MAVSUM SUR'ATI — maqsad 2,508 ochko</b>\n<i>66 ochko/tur × 38 tur. O'tgan mavsum g'olibi shu darajada.</i>\n\nO'ynalgan: <b>1</b> tur · qolgan <b>37</b>\nMenda: <b>57</b> ochko · o'rtacha <b>57.0</b>/tur (eng yaxshi 57, eng yomon 57)\n<i>GW2 hali tugamagan (12 ochko — oraliq natija), hisobga olinmadi.</i>\nYetakchi (Patrick Komu): <b>175</b> ochko · o'rtacha 87.5/tur · mendan <b>+106</b> oldinda (ikkalasi ham jonli)\n\n<b>Maqsad uchun kerak: 66.2 ochko/tur</b> (hozir 57.0)\nHozirgi sur'atda yakun: <b>2,166</b> ochko\nMaqsaddan farq: <b>342</b> ochko kam\nYetakchini quvib yetish uchun: <b>90.7</b> ochko/tur\n\n<i>bu maqsad joriy sur'atda erishib bo'lmaydi</i>\n\n<i>So'nggi turlar (siz / o'rtacha):</i>\n  GW1: <b>57</b>/0"
+  },
+  {
+   "key": "rating",
+   "title": "⭐ Reyting",
+   "text": "<b>⭐ O'YINCHI REYTINGI</b>\n<i>Reyting = rol × chiqim. Rol daqiqalar, asosiy tarkib va (narxga qarab chegirilgan) egalikdan; chiqim xG/xA va haqiqiy natijadan.</i>\n\n<u>Hujumchi</u>\n  João Pedro (CHE, 7.6m)\n    reyting <b>60</b> · rol 95% · chiqim 3.78/90 · egalik 68.5%\n  Isak (LIV, 9.0m)\n    reyting <b>51</b> · rol 84% · chiqim 3.63/90 · egalik 16.2%\n    <i>asosi natijadan yuqori — portlashi mumkin</i>\n  Haaland (MCI, 15.5m)\n    reyting <b>50</b> · rol 95% · chiqim 3.12/90 · egalik 68.8%\n  Thiago (BRE, 8.0m)\n    reyting <b>48</b> · rol 82% · chiqim 3.49/90 · egalik 16.2%\n\n<u>Yarim himoyachi</u>\n  Hinshelwood (BHA, 6.0m)\n    reyting <b>89</b> · rol 48% · chiqim 11.19/90 · egalik 2.0%\n    <i>bozor sotyapti (-10%)</i>\n  Cherki (MCI, 7.6m)\n    reyting <b>89</b> · rol 83% · chiqim 6.40/90 · egalik 15.5%\n    <i>bozor olyapti (+26%)</i>\n  Rogers (CHE, 7.5m)\n    reyting <b>81</b> · rol 86% · chiqim 5.64/90 · egalik 26.0%\n  Saka (ARS, 9.5m)\n    reyting <b>62</b> · rol 72% · chiqim 5.14/90 · egalik 10.3%\n\n<u>Himoyachi</u>\n  De Cuyper (BHA, 4.6m)\n    reyting <b>100</b> · rol 57% · chiqim 10.91/90 · egalik 10.0%\n    <i>bozor olyapti (+11%)</i>\n  Guéhi (MCI, 6.0m)\n    reyting <b>45</b> · rol 86% · chiqim 3.16/90 · egalik 19.5%\n  Kayode (BRE, 4.6m)\n    reyting <b>41</b> · rol 55% · chiqim 4.50/90 · egalik 8.2%\n  Gvardiol (MCI, 5.6m)\n    reyting <b>25</b> · rol 83% · chiqim 1.82/90 · egalik 15.4%"
+  },
+  {
+   "key": "value",
+   "title": "💎 Samara",
+   "text": "<b>💎 NARXIGA NISBATAN ENG SAMARALI</b>\n<i>1 million evaziga kutilayotgan haftalik chiqim. Byudjet to'ldiruvchilar (ommaviy, lekin o'ynamaydiganlar) chiqarib tashlangan.</i>\n1. De Cuyper (BHA, 4.6m) — <b>1.36</b>/m · rol 57% · 1G 1A · xGI 1.7\n2. Cherki (MCI, 7.6m) — <b>0.70</b>/m · rol 83% · 2G 2A · xGI 1.4\n3. Rogers (CHE, 7.5m) — <b>0.65</b>/m · rol 86% · 1G 0A · xGI 1.1\n4. Kayode (BRE, 4.6m) — <b>0.54</b>/m · rol 55% · 1G 0A · xGI 0.5\n5. Barry (EVE, 5.5m) — <b>0.49</b>/m · rol 63% · 1G 0A · xGI 2.0\n6. João Pedro (CHE, 7.6m) — <b>0.47</b>/m · rol 95% · 1G 1A · xGI 0.7\n7. Guéhi (MCI, 6.0m) — <b>0.45</b>/m · rol 86% · 1G 0A · xGI 1.2\n8. Szoboszlai (LIV, 7.0m) — <b>0.40</b>/m · rol 93% · 1G 0A · xGI 1.4"
+  },
+  {
+   "key": "momentum",
+   "title": "📊 Bozor",
+   "text": "<b>📊 BOZOR HARAKATI (shu tur)</b>\n<i>Eng ko'p olinmoqda:</i>\n  ↗ Cherki (MCI, 7.6m) <b>+401,102</b> · egalik 15.5% · rol 83%\n  ↗ Gvardiol (MCI, 5.6m) <b>+117,487</b> · egalik 15.4% · rol 83%\n  ↗ De Cuyper (BHA, 4.6m) <b>+109,105</b> · egalik 10.0% · rol 57%\n  ↗ Wissa (NEW, 6.0m) <b>+94,278</b> · egalik 4.7% · rol 66%\n  ↗ Elanga (NEW, 6.0m) <b>+77,308</b> · egalik 3.1% · rol 60%\n<i>Eng ko'p sotilmoqda:</i>\n  ↘ Mbeumo (MUN, 8.0m) <b>-126,330</b> · egalik 34.0%\n  ↘ B.Fernandes (MUN, 12.0m) <b>-101,719</b> · egalik 46.7%\n  ↘ Semenyo (MCI, 8.5m) <b>-70,064</b> · egalik 23.1%\n  ↘ Mateta (CRY, 6.5m) <b>-67,918</b> · egalik 4.4%\n  ↘ Calvert-Lewin (LEE, 6.0m) <b>-44,095</b> · egalik 27.8%"
+  },
+  {
+   "key": "template",
+   "title": "🔄 Shablon",
+   "text": "<b>🔄 SHABLON BILAN TENGLASHISH — Top-100</b>\n<i>Ommaviy o'yinchi ikki tomonlama foyda beradi: EV odatda yuqori, va u ochko olganda siz orqada qolmaysiz.</i>\n<i>Bank: 1.0m</i>\n\n<b>1.</b> James (5.5m, EO 4%) ➜ <b>Gvardiol</b> (5.6m, EO 33%)\n    EV <b>+9.8</b> · EO <b>+29%</b> · EV ham, maydon himoyasi ham yaxshilanadi\n\n<b>2.</b> Diop (4.0m, EO 5%) ➜ <b>De Cuyper</b> (4.6m, EO 41%)\n    EV <b>+3.5</b> · EO <b>+36%</b> · EV ham, maydon himoyasi ham yaxshilanadi\n\n<b>3.</b> João Pedro (7.5m, EO 78%) ➜ <b>Haaland</b> (15.5m, EO 183%) ⚠️\n    EV <b>+16.4</b> · EO <b>+105%</b> · EV ham, maydon himoyasi ham yaxshilanadi — 7.0m yetmaydi\n\n<b>4.</b> Hume (4.5m, EO 5%) ➜ <b>Tarkowski</b> (6.0m, EO 39%) ⚠️\n    EV <b>+10.9</b> · EO <b>+34%</b> · EV ham, maydon himoyasi ham yaxshilanadi — 0.5m yetmaydi\n\n<b>5.</b> E.Le Fée (6.0m, EO 4%) ➜ <b>Cherki</b> (7.6m, EO 66%) ⚠️\n    EV <b>+8.1</b> · EO <b>+62%</b> · EV ham, maydon himoyasi ham yaxshilanadi — 0.6m yetmaydi"
+  },
+  {
+   "key": "strategy",
+   "title": "🎯 Strategiya",
+   "text": "<b>🎯 STRATEGIYA — HUJUM</b>\n<i>yuqori 62.7% dasiz — ommaviy tanlov sizni yuqoriga ko'tarmaydi, o'rin ko'tarish uchun farq kerak</i>\n\n<b>Top-100</b> bilan 11 likka 11 lik: meniki <b>32.5</b> vs shablon <b>45.6</b> = <b>-13.1 ochko/tur</b> — har tur maydonga yutqazyapsiz\n<i>Menda yo'q, ular har tur shundan yutadi (EO × EV):</i>\n  ▼ Haaland — 183% EO · 6.5 EV · <b>-11.89</b>/tur\n  ▼ Cherki — 66% EO · 3.9 EV · <b>-2.56</b>/tur\n  ▼ Tarkowski — 39% EO · 5.2 EV · <b>-2.05</b>/tur\n  ▼ Gvardiol — 33% EO · 5.1 EV · <b>-1.67</b>/tur\n  ▼ De Cuyper — 41% EO · 3.2 EV · <b>-1.32</b>/tur\n<i>Mening 11 ligimdagi ustunliklarim:</i>\n  ▲ Kinsky — 17% EO · 4.5 EV · <b>+3.70</b>/tur\n  ▲ Isak — 34% EO · 4.3 EV · <b>+2.85</b>/tur\n  ▲ B.Fernandes — 5% EO · 2.8 EV · <b>+2.61</b>/tur\n<i>Yuqoridagi qatorlar farqning izohi — ular qo'shilib umumiy songa aylanmaydi.</i>"
+  },
+  {
+   "key": "transfers",
+   "title": "🔁 Transfer",
+   "text": "<b>🔁 TRANSFER REJASI</b> · 2 FT · bank 1.0m\n\n<b>▶ TAVSIYA</b> (2 ta transfer)\n  James (5.5) + Calafiori (5.5) ➜ Guéhi (6.0) + Tarkowski (6.0)\n  foyda <b>+23.9 EV</b> (kelgusi turlar bo'yicha) · hit yo'q · +1.0m, bank 0.0m\n\n<i>Muqobillar (bir vaqtda emas — har biri bankni o'zicha ishlatadi):</i>\n  • Diop (4.0) ➜ Hall (5.0) — +10.8 EV, bank 0.0m"
+  },
+  {
+   "key": "captain",
+   "title": "🅲 Kapitan",
+   "text": "<b>🅲 KAPITAN — GW3</b>\n<i>Kapitanlikda o'rtacha emas, tepasi hal qiladi — ochko ikkilanadi.</i>\n<b>1.</b> Szoboszlai — 4.5 EV · 10+: <b>10%</b> · 15+: 1% · maydondan -1.7\n    <i>muvozanatli variant</i>\n<b>2.</b> Isak — 4.4 EV · 10+: <b>8%</b> · 15+: 1% · maydondan -1.7\n    <i>muvozanatli variant</i>\n<b>3.</b> Calafiori — 2.8 EV · 10+: <b>2%</b> · 15+: 0% · maydondan -3.3\n    <i>tepasi yo'q — kapitanlikka yaramaydi</i>"
+  },
+  {
+   "key": "squad",
+   "title": "🧠 Jamoam",
+   "text": "<b>🧠 MENING JAMOAM</b>\nQiymat <b>100.0m</b> · bank 1.0m · FT ≈ 2\nGW3 eng yaxshi sxema: <b>5-3-2</b> — 32.5 EV\nKelgusi 5 tur (vaznlangan): <b>141.2 EV</b>\n<i>Eng zaif bo'g'inlar:</i>\n• E.Le Fée (YAR) — 7.2 EV · asosiy tarkib ehtimoli 45%, shu narxdagi eng yaxshisidan 8.1 EV orqada, kelgusi turlarning hammasi zaif\n• Tzolis (YAR) — 7.7 EV · asosiy tarkib ehtimoli 45%, shu narxdagi eng yaxshisidan 10.7 EV orqada, kelgusi turlarning hammasi zaif\n• João Pedro (HUJ) — 8.8 EV · asosiy tarkib ehtimoli 45%, kelgusi turlarning hammasi zaif"
+  },
+  {
+   "key": "xi",
+   "title": "📋 11 lik",
+   "text": "<b>📋 GW3 TAVSIYA ETILGAN 11 LIK</b>\nDRV Kinsky — 4.5 · NFO(m)\nHIM Calafiori — 2.7 · CHE(u)\nHIM Maguire — 2.5 · EVE(m)\nHIM James — 2.4 · ARS(m)\nHIM Hume — 2.3 · BRE(m)\nHIM Diop — 2.3 · LIV(u)\nYAR Szoboszlai — 4.3 · IPS(m)\nYAR B.Fernandes — 2.8 · EVE(m)\nYAR Mbeumo — 2.2 · EVE(m)\nHUJ Isak — 4.3 · IPS(m)\nHUJ Thiago — 2.3 · SUN(u)\n<i>Zaxira:</i> João Pedro (2.1), Tzolis (2.0), E.Le Fée (1.7), Raya (2.8)"
+  },
+  {
+   "key": "fixtures",
+   "title": "📅 Turlar",
+   "text": "<b>📅 KELGUSI TURLAR (GW3–7)</b>\n<i>Eng qulay jadval:</i>\n  BOU +0.02 · NEW(m) BRE(u) LIV(u) CHE(m) SUN(u)\n  BRE +0.02 · SUN(u) BOU(m) CHE(u) AVL(m) LIV(u) ← Thiago\n  BHA +0.02 · LEE(u) COV(m) ARS(u) SUN(m) CRY(u)\n  EVE +0.02 · MUN(u) TOT(m) IPS(u) HUL(m) CHE(u)\n<i>Eng og'ir jadval:</i>\n  SUN -0.02 · BRE(m) ARS(u) MCI(m) BHA(u) BOU(m) ← <b>Hume, E.Le Fée</b>\n  MUN -0.02 · EVE(m) MCI(u) FUL(m) TOT(u) LEE(m) ← <b>Maguire, B.Fernandes, Mbeumo</b>\n  LIV -0.02 · IPS(m) FUL(u) BOU(m) MCI(u) BRE(m) ← <b>Szoboszlai, Isak</b>"
+  },
+  {
+   "key": "rivals",
+   "title": "👥 Raqiblar",
+   "text": "<b>👥 RAQIBLAR TAHLILI</b>\n<i>EO = egalik % + kapitanlik %. Shuning uchun 100% dan oshishi mumkin: hamma egallagan va yarmi kapitan qilgan o'yinchi 150% beradi.</i>\n<u>Mini-liga: FPLUzbekistan</u> (50 jamoa · o'rtacha 105 ochko)\n⛔ Menda yo'q, ularda bor: Haaland 78% (K 66%), Tarkowski 36%, Calvert-Lewin 34%, Dubravka 32%\n💎 Mening differensiallarim: James 6%, Hume 6%, Thiago 8% (K 2%), Maguire 14%\n🅲 Ularning kapitani: Haaland 66%, João Pedro 14%, Mbeumo 4%\n🎴 Chip ishlatganlar: Bench Boost 5, Triple Captain 4, Wildcard 4\n\n<u>Mini-liga: Overall</u> (50 jamoa · o'rtacha 161 ochko)\n⛔ Menda yo'q, ularda bor: Haaland 96% (K 94%), Cherki 64% (K 4%), De Cuyper 44%, Ndiaye 40%\n💎 Mening differensiallarim: Thiago 0%, Diop 2%, James 2%, E.Le Fée 2%\n🅲 Ularning kapitani: Haaland 94%, Cherki 4%, Gakpo 2%\n🎴 Chip ishlatganlar: Triple Captain 17, Free Hit 4, Wildcard 6, Bench Boost 2\n\n<u>Mini-liga: Uzbekistan</u> (50 jamoa · o'rtacha 120 ochko)\n⛔ Menda yo'q, ularda bor: Haaland 82% (K 76%), Cherki 46% (K 4%), Rogers 34%, Palmer 28% (K 6%)\n💎 Mening differensiallarim: Hume 0%, B.Fernandes 2%, Maguire 6%, James 6%\n🅲 Ularning kapitani: Haaland 76%, Palmer 6%, João Pedro 6%\n🎴 Chip ishlatganlar: Triple Captain 5, Free Hit 2, Wildcard 4, Bench Boost 1\n\n<u>Top-100</u> (100 jamoa · o'rtacha 158 ochko)\n⛔ Menda yo'q, ularda bor: Haaland 95% (K 88%), Cherki 60% (K 6%), De Cuyper 41%, Tarkowski 39%\n💎 Mening differensiallarim: Thiago 3%, James 4%, E.Le Fée 4%, Diop 5%\n🅲 Ularning kapitani: Haaland 88%, Cherki 6%, Gakpo 1%\n🎴 Chip ishlatganlar: Triple Captain 31, Free Hit 9, Wildcard 13, Bench Boost 4\n\n<u>Mendan ~1% tepada (≈6,195,746)</u> (25 jamoa · o'rtacha 70 ochko)\n⛔ Menda yo'q, ularda bor: Gabriel 52% (K 4%), Haaland 40% (K 12%), Rogers 36% (K 4%), Semenyo 36%\n💎 Mening differensiallarim: Hume 0%, James 4%, E.Le Fée 4%, Maguire 16%\n🅲 Ularning kapitani: B.Fernandes 36%, João Pedro 28%, Haaland 12%\n🎴 Chip ishlatganlar: Wildcard 4, Bench Boost 1\n\n<u>Mendan ~1% pastda (≈6,396,688)</u> (25 jamoa · o'rtacha 69 ochko)\n⛔ Menda yo'q, ularda bor: Haaland 60% (K 20%), Gabriel 28%, O'Reilly 28%, Dubravka 28%\n💎 Mening differensiallarim: E.Le Fée 4%, Hume 8%, Thiago 12%, James 12%\n🅲 Ularning kapitani: João Pedro 24%, B.Fernandes 20%, Haaland 20%\n🎴 Chip ishlatganlar: Wildcard 2"
+  },
+  {
+   "key": "prices",
+   "title": "💷 Narxlar",
+   "text": "<b>💷 NARXLAR</b>\n<i>Bugun kechqurun kutilmoqda:</i>\n↑ Wissa (NEW) 6.0 — 104% · <b>bugun</b>\n↓ Fernandes (TOT) 6.0 — 104% · <b>bugun</b>\n↑ Elanga (NEW) 6.0 — 75% · ~1 soat"
+  },
+  {
+   "key": "chips",
+   "title": "🎴 Chip",
+   "text": "<b>🎴 CHIP SIGNALI</b>\n• <b>Wildcard</b> — shu tur: +71.9 EV (5 tur bo'yicha jami farq, turiga ≈14.4)\n• <b>Free Hit</b> — GW5: +21.2 EV (ideal 11 lik ≈53.4 vs meniki 32.2)"
+  }
+ ]
+}

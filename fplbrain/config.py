@@ -74,8 +74,10 @@ class Config:
     shrink_defcon_90s: float = 5.0
     shrink_bonus_90s: float = 8.0
     prior_season_weight: float = 0.55      # o'tgan mavsum ma'lumotining boshlang'ich vazni
-    minutes_prior_matches: float = 2.0     # daqiqalar priori necha o'yinga teng dalil sanaladi
+    minutes_prior_matches: float = 1.2     # daqiqalar priori necha o'yinga teng dalil sanaladi
+    use_last_season: bool = False          # o'tgan mavsum ma'lumotini ishlatishmi (odatda yo'q)
     detail_players: int = 130              # nechta o'yinchi uchun batafsil tarix yuklanadi
+    season_target: int = 2508              # mavsum maqsadi (38 x 66 = o'tgan yil g'olibi)
 
     # jamoa kuchi
     home_base_goals: float = 1.55
