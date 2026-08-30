@@ -135,28 +135,32 @@ class Bot:
         message = query.get("message") or {}
         chat_id = (message.get("chat") or {}).get("id")
         message_id = message.get("message_id")
+
+        # Telegram callback ga javob berish uchun ~15 soniya beradi. Shuning
+        # uchun boshqa hech narsa qilishdan OLDIN javob qaytaramiz — aks holda
+        # sekin tarmoqda "query is too old" chiqadi va tugma "osilib" turadi.
+        hint = {"refresh": "Hisoblanmoqda…", "full": "Jo'natilmoqda…"}.get(data, "")
         if not self.allowed(chat_id):
             self.tg.answer_callback(query["id"], "Ruxsat yo'q")
             return
+        self.tg.answer_callback(query["id"], hint)
 
         if data == "menu":
-            self.tg.answer_callback(query["id"])
             text, keyboard = self.menu_view()
             self.tg.edit(message_id, text, keyboard, chat_id=chat_id)
         elif data == "refresh":
-            self.tg.answer_callback(query["id"], "Hisoblanmoqda…")
             self.refresh_async(message_id)
         elif data == "full":
-            self.tg.answer_callback(query["id"], "To'liq hisobot jo'natilmoqda")
+            # Uzun hisobot bir necha xabarga bo'linadi va sekundlar oladi —
+            # asosiy siklni bloklamaslik uchun alohida oqimda jo'natamiz
             rep = self.report()
             if rep:
-                self.tg.send(rep.full_text())
+                threading.Thread(
+                    target=self.tg.send, args=(rep.full_text(),), daemon=True
+                ).start()
         elif data.startswith("s:"):
-            self.tg.answer_callback(query["id"])
             text, keyboard = self.section_view(data[2:])
             self.tg.edit(message_id, text, keyboard, chat_id=chat_id)
-        else:
-            self.tg.answer_callback(query["id"])
 
     def on_message(self, message: dict) -> None:
         chat_id = (message.get("chat") or {}).get("id")
@@ -198,6 +202,18 @@ class Bot:
             return 2
 
         offset = int(self.store.read("bot_offset", 0) or 0)
+
+        # Bot o'chiq turgan paytdagi tugma bosishlari navbatda qolgan bo'ladi.
+        # Ular allaqachon eskirgan — javob berib bo'lmaydi, faqat xato beradi.
+        # Shuning uchun ularni o'tkazib yuboramiz.
+        stale = self.tg.get_updates(offset, timeout=0)
+        if stale:
+            offset = stale[-1]["update_id"] + 1
+            self.store.write("bot_offset", offset)
+            skipped = sum(1 for u in stale if "callback_query" in u)
+            if skipped:
+                log.info("%d ta eskirgan tugma bosishi o'tkazib yuborildi", skipped)
+
         log.info("Bot ishga tushdi. Kanal: %s", self.cfg.telegram_chat_id)
 
         # Ishga tushganda menyuni bir marta ko'rsatamiz

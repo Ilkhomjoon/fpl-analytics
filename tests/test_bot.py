@@ -192,3 +192,56 @@ def test_holat_buyrugi(fake_bot):
     method, payload = fake_bot.tg.calls[-1]
     assert method == "send"
     assert "GW3" in payload
+
+
+# --------------------------------------------------- eskirgan tugma bosishlari
+def test_callback_ga_darhol_javob_beriladi(fake_bot):
+    """Telegram ~15 soniya beradi — javob boshqa ishdan OLDIN ketishi kerak."""
+    order = []
+    fake_bot.tg.answer_callback = lambda cid, text="": order.append("answer")
+    fake_bot.tg.edit = lambda *a, **k: order.append("edit") or True
+
+    fake_bot.on_callback({
+        "id": "q", "data": "s:captain",
+        "message": {"message_id": 1, "chat": {"id": "-1001234"}},
+    })
+    assert order[0] == "answer", f"javob kechikdi: {order}"
+
+
+def test_toliq_hisobot_siklni_bloklamaydi(fake_bot):
+    """"Hammasi" uzun xabar jo'natadi — u alohida oqimda ketishi kerak."""
+    import threading
+
+    sent = threading.Event()
+    fake_bot.tg.send = lambda text: sent.set()
+    fake_bot.on_callback({
+        "id": "q", "data": "full",
+        "message": {"message_id": 1, "chat": {"id": "-1001234"}},
+    })
+    assert sent.wait(timeout=2), "to'liq hisobot jo'natilmadi"
+    # javob jo'natishdan oldin berilgan bo'lishi kerak
+    assert fake_bot.tg.answers[-1][0] == "q"
+
+
+def test_zararsiz_400_ogohlantirish_bermaydi(tmp_path, caplog):
+    """"query is too old" — eskirgan tugma, foydalanuvchiga ko'rsatish shart emas."""
+    import logging
+
+    from fplbrain.telegram import Telegram
+
+    tg = Telegram("token", "-1")
+
+    class Resp:
+        status_code = 400
+        text = '{"ok":false,"description":"Bad Request: query is too old"}'
+
+    tg._session = None
+    import fplbrain.telegram as tmod
+    orig = tmod.requests.post
+    tmod.requests.post = lambda *a, **k: Resp()
+    try:
+        with caplog.at_level(logging.WARNING):
+            assert tg.call("answerCallbackQuery", {}) is None
+        assert not [r for r in caplog.records if r.levelno >= logging.WARNING]
+    finally:
+        tmod.requests.post = orig

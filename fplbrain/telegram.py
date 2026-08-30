@@ -139,10 +139,16 @@ class Telegram:
             log.warning("%s ishlamadi: %s", method, type(exc).__name__)
             return None
         if resp.status_code != 200:
-            # 400 "message is not modified" — bir xil matnni qayta yozish, zararsiz
-            if "message is not modified" not in resp.text:
+            # Ikkita 400 zararsiz va e'tibor talab qilmaydi:
+            #   "message is not modified" — bir xil matnni qayta yozish
+            #   "query is too old"        — eskirgan tugma bosishi
+            harmless = ("message is not modified", "query is too old",
+                        "query ID is invalid")
+            if not any(h in resp.text for h in harmless):
                 log.warning("%s rad etildi %s: %s", method, resp.status_code,
                             resp.text[:200])
+            else:
+                log.debug("%s: %s", method, resp.text[:120])
             return None
         return resp.json().get("result")
 
