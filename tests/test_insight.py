@@ -305,3 +305,73 @@ def test_hamma_tur_tugagan_holat():
     assert pace.partial_event is None
     assert pace.live_total == pace.my_total == 118
     assert pace.leader_average == pytest.approx(87.5)
+
+
+# ------------------------------------------------------------ FDR jadvali
+def test_fdr_royxati_qulay_jadvalni_topadi(world):
+    """Past FDR li jamoa birinchi o'rinda turishi kerak."""
+    squad = _make_squad(world)
+    views = {tid: {ev: list(fx) for ev, fx in per.items()}
+             for tid, per in world["views"].items()}
+    target = next(iter(views))
+    for per in views[target].values():
+        for fixture in per:
+            fixture.fdr = 2                     # juda qulay
+    for tid, per in views.items():
+        if tid == target:
+            continue
+        for fixtures in per.values():
+            for fixture in fixtures:
+                fixture.fdr = 5                 # juda og'ir
+
+    rows = insight.fdr_ranking(squad, views, world["rt"], world["events"], top=3)
+    assert rows[0].team_id == target
+    assert rows[0].avg_fdr == 2.0
+    assert len(rows) == 3
+
+
+def test_qosh_tur_mukofotlanadi_bosh_tur_jazolanadi(world):
+    """Σ(6−FDR) qo'sh turni ikki marta sanaydi, bo'sh tur nol qo'shadi."""
+    squad = _make_squad(world)
+    views = {tid: {ev: list(fx) for ev, fx in per.items()}
+             for tid, per in world["views"].items()}
+    ids = list(views)
+    double_team, blank_team = ids[0], ids[1]
+
+    for tid, per in views.items():
+        for fixtures in per.values():
+            for fixture in fixtures:
+                fixture.fdr = 3
+
+    # birinchisiga qo'sh tur beramiz
+    ev0 = world["events"][0]
+    views[double_team][ev0] = views[double_team][ev0] * 2
+    # ikkinchisidan bitta turni olib tashlaymiz
+    views[blank_team].pop(ev0, None)
+
+    rows = insight.fdr_ranking(squad, views, world["rt"], world["events"], top=20)
+    scores = {r.team_id: r for r in rows}
+    assert scores[double_team].doubles == 1
+    assert scores[blank_team].blanks == 1
+    # o'rtacha FDR ikkalasida ham 3.0, lekin ball farq qiladi
+    assert scores[double_team].avg_fdr == scores[blank_team].avg_fdr == 3.0
+    assert scores[double_team].attractiveness > scores[blank_team].attractiveness
+
+
+def test_fdr_mening_oyinchilarimni_belgilaydi(world):
+    squad = _make_squad(world)
+    rows = insight.fdr_ranking(squad, world["views"], world["rt"],
+                               world["events"], top=20)
+    mine = {p.ev.profile.team for p in squad.players}
+    for row in rows:
+        if row.team_id in mine:
+            assert row.my_players
+        else:
+            assert row.my_players == []
+
+
+def test_fdr_tarkibsiz_ham_ishlaydi(world):
+    rows = insight.fdr_ranking(None, world["views"], world["rt"],
+                               world["events"], top=3)
+    assert len(rows) == 3
+    assert all(r.my_players == [] for r in rows)

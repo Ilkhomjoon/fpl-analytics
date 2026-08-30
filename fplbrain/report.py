@@ -652,3 +652,34 @@ def risk_section(risk, event: int) -> str:
         lines.append(f"\n<b>{serious} ta o'yinchini almashtirish yoki "
                      f"zaxiraga tushirishni ko'rib chiqing.</b>")
     return "\n".join(lines)
+
+
+def fdr_section(rows, events: list[int], top_label: int = 3) -> str:
+    """FDR bo'yicha eng qulay jadvalga ega jamoalar."""
+    if not rows:
+        return ""
+    span = f"GW{events[0]}–{events[-1]}"
+    lines = [
+        f"<b>🗓 ENG QULAY JADVAL — TOP {top_label} ({span})</b>",
+        "<i>Saralash Σ(6−FDR) bo'yicha: qo'sh tur ikki marta, bo'sh tur nol "
+        "qo'shadi. Oddiy o'rtacha bo'sh turi bor jamoani asossiz ko'taradi.</i>",
+    ]
+    medals = ["🥇", "🥈", "🥉"]
+    for i, row in enumerate(rows):
+        medal = medals[i] if i < len(medals) else f"{i + 1}."
+        extra = []
+        if row.doubles:
+            extra.append(f"{row.doubles} qo'sh tur")
+        if row.blanks:
+            extra.append(f"{row.blanks} bo'sh tur")
+        suffix = f" · {', '.join(extra)}" if extra else ""
+        lines.append(
+            f"\n{medal} <b>{escape(row.name)}</b> — ball <b>{row.attractiveness}</b> · "
+            f"o'rtacha FDR {row.avg_fdr}{suffix}"
+        )
+        lines.append(f"    {' · '.join(row.marks)}")
+        if row.my_players:
+            lines.append(f"    <b>Sizda:</b> {', '.join(_p(n) for n in row.my_players)}")
+        else:
+            lines.append("    <i>Sizda bu jamoadan o'yinchi yo'q</i>")
+    return "\n".join(lines)

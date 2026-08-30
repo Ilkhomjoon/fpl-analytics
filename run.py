@@ -359,6 +359,7 @@ def main() -> int:
 
     best_fx, worst_fx = insight.fixture_outlook(squad, views, team_ratings, events, ev_by_element)
     risk = insight.squad_risk(squad, events[0], views)
+    fdr_top = insight.fdr_ranking(squad, views, team_ratings, events, top=3)
 
     # --- mavsum sur'ati: maqsadga nisbatan holat ---
     leader = target_mod.fetch_leader(client, cfg.overall_league_id)
@@ -424,6 +425,7 @@ def main() -> int:
     rep.add("squad", "🧠 Jamoam",
             report.squad_section(squad, events, horizon_ev, weak))
     rep.add("xi", "📋 11 lik", report.xi_section(squad, events[0]))
+    rep.add("fdr", "🗓 FDR", report.fdr_section(fdr_top, events))
     rep.add("fixtures", "📅 Turlar",
             report.fixtures_section(best_fx, worst_fx, events))
     rep.add("rivals", "👥 Raqiblar",

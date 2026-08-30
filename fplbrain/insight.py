@@ -378,3 +378,80 @@ def squad_risk(squad: Squad, event: int, views=None) -> SquadRisk:
 
     risk.players.sort(key=lambda p: (-p.severity, p.p_start))
     return risk
+
+
+# ----------------------------------------------------------- FDR bo'yicha jadval
+@dataclass
+class FdrTeam:
+    """Jamoaning kelgusi turlardagi jadval qulayligi (FPL ning rasmiy FDR si)."""
+    team_id: int
+    short: str
+    name: str
+    fixtures: int                 # oynadigan uchrashuvlar soni (DGW/BGW bilan)
+    total_fdr: int
+    avg_fdr: float
+    attractiveness: int           # sum(6 - FDR): DGW ni mukofotlaydi, BGW ni jazolaydi
+    marks: list[str] = field(default_factory=list)
+    my_players: list[str] = field(default_factory=list)
+    model_score: float = 0.0      # mening modelim bahosi (lam_for - lam_against)
+    blanks: int = 0
+    doubles: int = 0
+
+
+def fdr_ranking(
+    squad: Squad | None,
+    views,
+    ratings,
+    events: list[int],
+    top: int = 3,
+) -> list[FdrTeam]:
+    """Kelgusi turlarda jadvali eng qulay jamoalar.
+
+    Saralash `attractiveness = Σ(6 − FDR)` bo'yicha, oddiy o'rtacha emas.
+    Sabab: o'rtacha FDR bo'sh turi bor jamoani asossiz mukofotlaydi (kam
+    uchrashuv = kam qiyinlik ko'rinadi), qo'sh turni esa e'tiborsiz qoldiradi.
+    Yig'indi shakli ikkalasini ham to'g'ri hisobga oladi: bo'sh tur 0 qo'shadi,
+    qo'sh tur ikki marta qo'shadi.
+    """
+    mine: dict[int, list[str]] = {}
+    if squad is not None:
+        for player in squad.players:
+            mine.setdefault(player.ev.profile.team, []).append(player.name)
+
+    rows: list[FdrTeam] = []
+    for team_id, per_event in views.items():
+        marks, fdrs, scores = [], [], []
+        blanks = doubles = 0
+        for event in events:
+            fixtures = per_event.get(event, [])
+            if not fixtures:
+                blanks += 1
+                marks.append("—")
+                continue
+            if len(fixtures) > 1:
+                doubles += 1
+            for fixture in fixtures:
+                opponent = ratings[fixture.opponent].short
+                marks.append(f"{opponent}{'(u)' if fixture.is_home else '(m)'} {fixture.fdr}")
+                fdrs.append(fixture.fdr)
+                scores.append(fixture.lam_for - fixture.lam_against)
+
+        if not fdrs:
+            continue
+        rows.append(FdrTeam(
+            team_id=team_id,
+            short=ratings[team_id].short,
+            name=ratings[team_id].name,
+            fixtures=len(fdrs),
+            total_fdr=sum(fdrs),
+            avg_fdr=round(sum(fdrs) / len(fdrs), 2),
+            attractiveness=sum(6 - f for f in fdrs),
+            marks=marks,
+            my_players=mine.get(team_id, []),
+            model_score=round(sum(scores) / len(scores), 2) if scores else 0.0,
+            blanks=blanks,
+            doubles=doubles,
+        ))
+
+    rows.sort(key=lambda r: (-r.attractiveness, r.avg_fdr))
+    return rows[:top]

@@ -71,6 +71,7 @@ python run.py --full-text
 | 🔁 Transfer | FT soniga mos **reja**: asosiy tavsiya, hit arziydimi, va bir-birini istisno qiluvchi muqobillar |
 | 🅲 Kapitan | To'liq **ochko taqsimoti**: P(10+), P(15+), tepasi va maydon kapitanidan ustunlik |
 | 👥 Raqiblar | Mini-liga, top-100 va **mendan ±1% o'rindagi** jamoalar: EO, differensiallar, tahdidlar, kapitan taqsimoti |
+| 🗓 FDR | Kelgusi 5 turda jadvali eng qulay **top-3 jamoa**, rasmiy FDR bo'yicha |
 | 📅 Turlar | Kelgusi 5 tur jadvali — eng qulay va eng og'ir jamoalar, sizning o'yinchilaringiz belgilangan |
 | 🎴 Chip | WC / BB / TC / FH uchun eng foydali tur; ishlatilgan chiplar hisobga olinadi |
 
