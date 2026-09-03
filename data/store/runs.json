@@ -38,5 +38,13 @@
   "horizon_ev": 223.129,
   "best_move": "Maguire (5.0) + James (5.5) ➜ Guéhi (6.0) + Hall (5.1)",
   "captain": "B.Fernandes"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-03T10:23:49.112810+05:00",
+  "event": 3,
+  "horizon_ev": 223.07,
+  "best_move": "James (5.5) + Maguire (5.0) ➜ Hall (5.1) + Guéhi (6.0)",
+  "captain": "B.Fernandes"
  }
 ]
