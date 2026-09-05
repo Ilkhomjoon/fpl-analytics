@@ -70,5 +70,13 @@
   "horizon_ev": 222.971,
   "best_move": "James (5.5) + Maguire (5.0) ➜ Hall (5.1) + Guéhi (6.0)",
   "captain": "B.Fernandes"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-05T10:08:12.469469+05:00",
+  "event": 4,
+  "horizon_ev": 149.204,
+  "best_move": "James (5.5) + Raya (6.0) ➜ Virgil (6.5) + Scherpen (4.5)",
+  "captain": "Szoboszlai"
  }
 ]
