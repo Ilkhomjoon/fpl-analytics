@@ -86,5 +86,13 @@
   "horizon_ev": 167.665,
   "best_move": "James (5.4) + Maguire (5.0) ➜ Guéhi (6.0) + Virgil (6.5)",
   "captain": "Szoboszlai"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-07T10:32:08.043317+05:00",
+  "event": 4,
+  "horizon_ev": 222.684,
+  "best_move": "James (5.4) + Hume (4.5) ➜ Guéhi (6.0) + Virgil (6.5)",
+  "captain": "B.Fernandes"
  }
 ]
