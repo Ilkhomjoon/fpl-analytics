@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import sys
 from pathlib import Path
 
@@ -309,25 +310,53 @@ def test_hamma_tur_tugagan_holat():
 
 # ------------------------------------------------------------ FDR jadvali
 def test_fdr_royxati_qulay_jadvalni_topadi(world):
-    """Past FDR li jamoa birinchi o'rinda turishi kerak."""
+    """Samarali qiyinligi past jamoa birinchi o'rinda turishi kerak."""
     squad = _make_squad(world)
-    views = {tid: {ev: list(fx) for ev, fx in per.items()}
-             for tid, per in world["views"].items()}
+    views = copy.deepcopy(world["views"])
     target = next(iter(views))
-    for per in views[target].values():
-        for fixture in per:
-            fixture.fdr = 2                     # juda qulay
-    for tid, per in views.items():
-        if tid == target:
-            continue
+    for per in views.values():
         for fixtures in per.values():
             for fixture in fixtures:
-                fixture.fdr = 5                 # juda og'ir
+                fixture.fdr, fixture.eff_fdr = 3, 5.0        # juda og'ir
+    for fixtures in views[target].values():
+        for fixture in fixtures:
+            fixture.fdr, fixture.eff_fdr = 3, 1.5            # juda qulay
 
     rows = insight.fdr_ranking(squad, views, world["rt"], world["events"], top=3)
     assert rows[0].team_id == target
-    assert rows[0].avg_fdr == 2.0
+    assert rows[0].avg_eff == 1.5
     assert len(rows) == 3
+
+
+def test_rasmiy_fdr_yolgiz_ozi_saralashni_belgilamaydi(world):
+    """Rasmiy FDR past bo'lsa ham, model qiyinligi yuqori bo'lsa — tepaga chiqmaydi.
+
+    Aynan shu holat Arsenal — Aston Villa o'yinida yuz bergan: rasmiy FDR 4
+    ("qiyin") edi, lekin Villa mavsumni 0:4 mag'lubiyat bilan boshlagandi.
+    """
+    squad = _make_squad(world)
+    views = copy.deepcopy(world["views"])
+    ids = list(views)
+    paper_easy, really_easy = ids[0], ids[1]
+
+    for tid, per in views.items():
+        for fixtures in per.values():
+            for fixture in fixtures:
+                fixture.fdr, fixture.eff_fdr = 3, 3.0
+    for fixtures in views[paper_easy].values():
+        for fixture in fixtures:
+            fixture.fdr, fixture.eff_fdr = 2, 4.0    # qog'ozda oson, aslida qiyin
+    for fixtures in views[really_easy].values():
+        for fixture in fixtures:
+            fixture.fdr, fixture.eff_fdr = 4, 2.0    # qog'ozda qiyin, aslida oson
+
+    rows = insight.fdr_ranking(squad, views, world["rt"], world["events"], top=20)
+    by_id = {r.team_id: r for r in rows}
+    assert by_id[really_easy].attractiveness > by_id[paper_easy].attractiveness
+    # eski (rasmiy) ball esa teskarisini ko'rsatardi — shuning uchun almashtirdik
+    assert by_id[paper_easy].official_attractiveness > \
+        by_id[really_easy].official_attractiveness
+    assert rows.index(by_id[really_easy]) < rows.index(by_id[paper_easy])
 
 
 def test_qosh_tur_mukofotlanadi_bosh_tur_jazolanadi(world):

@@ -20,11 +20,29 @@ from .ratings import FixtureView, TeamRating
 
 GK, DEF, MID, FWD = 1, 2, 3, 4
 
-GOAL_POINTS = {GK: 6, DEF: 6, MID: 5, FWD: 4}
+# Darvozabon goli 2024/25 dan beri 6 emas, **10** ochko
+GOAL_POINTS = {GK: 10, DEF: 6, MID: 5, FWD: 4}
 CS_POINTS = {GK: 4, DEF: 4, MID: 1, FWD: 0}
 DEFCON_THRESHOLD = {DEF: 10, MID: 12, FWD: 12}          # GK uchun DefCon yo'q
 ASSIST_POINTS = 3
 DEFCON_POINTS = 2
+SAVES_PER_POINT = 3
+# Qiyin uchrashuv himoya harakatlarini oshiradi, lekin to'liq emas —
+# raqib kuchi 20% ortsa, CBIT ~12% ortadi
+DC_FIXTURE_TILT = 0.6
+# Bonus voqeaga bog'liq: gol/uzatma bergan o'yinchi BPS da yuqoriga chiqadi,
+# toza darvoza esa himoyachiga +12 BPS beradi. Koeffitsiyentlar shunday
+# tanlanganki, o'rtacha o'yinchida umumiy bonus tezligi o'zgarmasin —
+# u faqat qaytim bo'lgan holatlarga qarab qayta taqsimlanadi.
+BONUS_RETURN_LIFT = 1.10
+BONUS_CS_LIFT = 0.55
+BONUS_NORMALISER = 1.30      # o'rtacha lift ~1.30, shunga bo'lib qaytariladi
+
+# --- rotatsiya (jadval zichligi) ---
+ROTATION_NEUTRAL = 0.55      # "kim o'ynashi noma'lum" holatidagi ehtimol
+ROTATION_PULL = 0.28         # eng zich haftada shu ulushda neytralga tortiladi
+ROTATION_EARLY_SUB = 0.10    # zich haftada erta almashtirish ehtimoli
+ROTATION_MINUTES = 0.08      # kutilayotgan daqiqalarning o'zgarishi
 
 # Pozitsiya bo'yicha priorlar (90 daqiqaga) — kam o'ynagan o'yinchini shu tomon tortamiz
 PRIOR_XG90 = {GK: 0.0, DEF: 0.06, MID: 0.16, FWD: 0.34}
@@ -33,6 +51,24 @@ PRIOR_BONUS90 = {GK: 0.28, DEF: 0.26, MID: 0.28, FWD: 0.34}
 PRIOR_DC90 = {GK: 0.0, DEF: 6.4, MID: 6.0, FWD: 3.4}
 PRIOR_YELLOW90 = 0.13
 PRIOR_SAVES90 = 3.0
+# Kam uchraydigan, lekin haqiqiy ochkolar
+RED_POINTS = -3
+OG_POINTS = -2
+PEN_MISS_POINTS = -2
+PEN_SAVE_POINTS = 5
+PRIOR_RED90 = 0.012
+PRIOR_OG90 = 0.008
+PRIOR_PENMISS90 = 0.010
+PRIOR_PENSAVE90 = 0.020
+
+# Penalti va standart pozitsiyalar — **priorga** qo'shiladi, xom xG ustiga emas.
+# Sabab: FPL ning `expected_goals` i penaltilarni ALLAQACHON o'z ichiga oladi
+# (penalti xG ~0.79). Ustiga qo'shilsa ikki marta hisoblangan bo'lardi.
+# Bo'shliq boshqa joyda: endigina penaltichi etib tayinlangan o'yinchi.
+# Uning statistikasida penalti yo'q, model esa uni narx priori tomon tortadi
+# va penalti huquqini umuman ko'rmaydi.
+PEN_XG90 = 0.11          # jamoa ~6-7 o'yinda bitta penalti oladi × 0.79 xG
+SETPIECE_XA90 = 0.05     # burchak/shtrafnilarni oladigan o'yinchi
 
 
 # --------------------------------------------------------------------- yordamchi
@@ -76,6 +112,20 @@ def negbinom_tail(threshold: int, mean: float, dispersion: float = 1.8) -> float
 def expected_conceded_penalty(lam: float, cap: int = 9) -> float:
     """E[floor(gollar / 2)] — har 2 golga -1 ochko."""
     return sum(poisson_pmf(k, lam) * (k // 2) for k in range(cap + 1))
+
+
+def expected_floor(lam: float, per_point: int, cap: int = 20) -> float:
+    """E[floor(N / per_point)], N ~ Puasson(lam).
+
+    **E[N]/per_point EMAS.** Farqi katta: lam=3 va per_point=3 bo'lganda
+    o'rtachani bo'lish 1.00 beradi, to'g'ri qiymat esa 0.665 — ya'ni 50%
+    oshirib yuborilgan bo'lardi. Sabab: 2 ta to'xtatish ham, 0 ta ham
+    bir xil — 0 ochko. Xuddi shu xato kiritilgan gol jarimasida ham
+    bo'lishi mumkin edi, u yerda boshidan to'g'ri hisoblangan.
+    """
+    if lam <= 0 or per_point <= 0:
+        return 0.0
+    return sum(poisson_pmf(k, lam) * (k // per_point) for k in range(cap + 1))
 
 
 def shrink(observed_total: float, nineties: float, prior_rate: float, k: float) -> float:
@@ -122,10 +172,52 @@ class PlayerProfile:
     nineties: float
     news: str = ""
     ownership: float = 0.0
+    form: float = 0.0                 # FPL ning "form" maydoni (30 kunlik ochko)
+    # Kam uchraydigan hodisalar (90 daqiqaga)
+    red90: float = 0.0
+    og90: float = 0.0
+    penmiss90: float = 0.0
+    pensave90: float = 0.0
+    # Mavsumdagi sariq kartochkalar soni — 5 tasi diskvalifikatsiya
+    yellow_total: int = 0
 
 
 def _history_window(history: list[dict], n: int = 6) -> list[dict]:
     return [h for h in history if h.get("minutes") is not None][-n:]
+
+
+def form_multiplier(form: float, baseline: float, weight: float) -> float:
+    """Formaning hujum tezliklariga kichik ta'siri (1.0 = ta'sirsiz).
+
+    **Nega kichik?** FPL "form" — so'nggi 30 kunda olingan **ochko**, ya'ni
+    natija. Unda omad ham bor: xG dan ortiq urgan o'yinchi keyingi turda
+    o'rtachaga qaytadi. Shuning uchun forma modelni **boshqarmaydi**, faqat
+    biroz suradi — xG hali ko'rmagan o'zgarishni (yangi rol, penalti huquqi,
+    standart pozitsiyalar) ushlab qolish uchun.
+
+    Bazaviy qiymat o'zi hisoblanadi (o'ynayotgan o'yinchilarning medianasi),
+    shuning uchun tur o'tishi bilan eskirmaydi.
+    """
+    if weight <= 0 or baseline <= 0:
+        return 1.0
+    ratio = max(0.4, min(2.0, form / baseline))
+    return max(1.0 - weight, min(1.0 + weight, 1.0 + weight * (ratio - 1.0)))
+
+
+def form_baseline(elements: list[dict], min_minutes: int = 180) -> float:
+    """O'ynayotgan o'yinchilarning forma medianasi — taqqoslash uchun baza.
+
+    Qattiq yozilgan son emas: mavsum davomida ham, turlar orasida ham
+    o'zgaradi (masalan bo'sh turdan keyin hammaning formasi tushadi).
+    """
+    values = sorted(
+        _f(e.get("form")) for e in elements or []
+        if (e.get("minutes") or 0) >= min_minutes
+    )
+    if not values:
+        return 0.0
+    mid = len(values) // 2
+    return values[mid] if len(values) % 2 else (values[mid - 1] + values[mid]) / 2.0
 
 
 def build_profile(
@@ -133,6 +225,7 @@ def build_profile(
     summary: dict | None,
     cfg: Config,
     team_matches: int = 0,
+    form_base: float = 0.0,
 ) -> PlayerProfile:
     """team_matches — o'yinchi jamoasi mavsumda nechta o'yin o'ynagani (bootstrap teams.played)."""
     pos = element["element_type"]
@@ -257,6 +350,13 @@ def build_profile(
     # model shablonni takrorlab qolardi.
     prior_xg = priors.xg90_prior(price, pos)
     prior_xa = priors.xa90_prior(price, pos)
+    # Penaltichi va standart pozitsiya egasi — priorni ko'taradi (yuqoridagi
+    # izohga qarang: xom xG ga qo'shish ikki marta hisoblash bo'lardi)
+    if element.get("penalties_order") == 1 and pos != GK:
+        prior_xg += PEN_XG90
+    if (element.get("corners_and_indirect_freekicks_order") == 1
+            or element.get("direct_freekicks_order") == 1):
+        prior_xa += SETPIECE_XA90
     if cfg.use_last_season and past:
         last = past[-1]
         past_90s = (last.get("minutes", 0) or 0) / 90.0
@@ -265,6 +365,12 @@ def build_profile(
             prior_xa = shrink(_f(last.get("expected_assists")), past_90s, prior_xa, 8.0)
     xg90 = shrink(xg, nineties, prior_xg, cfg.shrink_attack_90s)
     xa90 = shrink(xa, nineties, prior_xa, cfg.shrink_attack_90s)
+    # Forma — kichik tuzatish. Faqat hujum tezliklariga: toza darvoza
+    # uchrashuvga bog'liq, daqiqalarning esa o'z modeli bor.
+    fm = form_multiplier(_f(element.get("form")), form_base,
+                         float(getattr(cfg, "form_weight", 0.0) or 0.0))
+    xg90 *= fm
+    xa90 *= fm
 
     # ---------- 4. DefCon ----------
     cbit = _f(element.get("clearances_blocks_interceptions")) + _f(element.get("tackles"))
@@ -287,9 +393,22 @@ def build_profile(
 
     # ---------- 5. bonus, saqlash, kartochka ----------
     bonus90 = shrink(_f(element.get("bonus")), nineties,
-                     priors.bonus90_prior(price, pos), cfg.shrink_bonus_90s)
+                     priors.bonus90_prior(price, pos), cfg.shrink_bonus_90s) * fm
     saves90 = shrink(_f(element.get("saves")), nineties, PRIOR_SAVES90, 4.0) if pos == GK else 0.0
     yellow90 = shrink(_f(element.get("yellow_cards")), nineties, PRIOR_YELLOW90, 6.0)
+    # Kam uchraydigan hodisalar: kuchli siqiladi (k=10), aks holda bitta
+    # qizil kartochka butun mavsumga tarqalib ketardi
+    red90 = shrink(_f(element.get("red_cards")), nineties, PRIOR_RED90, 10.0)
+    og90 = shrink(_f(element.get("own_goals")), nineties, PRIOR_OG90, 10.0)
+    penmiss90 = (shrink(_f(element.get("penalties_missed")), nineties,
+                        PRIOR_PENMISS90, 10.0)
+                 if element.get("penalties_order") == 1 else 0.0)
+    pensave90 = (shrink(_f(element.get("penalties_saved")), nineties,
+                        PRIOR_PENSAVE90, 10.0) if pos == GK else 0.0)
+    # Sariq kartochkalar yig'indisi: 5 tasi — bir o'yinlik diskvalifikatsiya.
+    # Bu KEYINGI o'yinlarga tegishli, shuning uchun EV ga qo'shilmaydi —
+    # ogohlantirish sifatida ko'rsatiladi.
+    yellow_total = int(_f(element.get("yellow_cards")))
 
     return PlayerProfile(
         element=element["id"],
@@ -319,6 +438,12 @@ def build_profile(
         nineties=nineties,
         news=element.get("news") or "",
         ownership=_f(element.get("selected_by_percent")),
+        form=_f(element.get("form")),
+        red90=red90,
+        og90=og90,
+        penmiss90=penmiss90,
+        pensave90=pensave90,
+        yellow_total=yellow_total,
     )
 
 
@@ -348,6 +473,31 @@ class FixtureEV:
     p_haul: float = 0.0        # 10+ ochko ehtimoli
     p_return: float = 0.0      # gol yoki uzatma ehtimoli
     inputs: FixtureInputs = field(default_factory=FixtureInputs)
+    fdr: int = 3               # FPL ning rasmiy qiyinligi
+    eff_fdr: float = 3.0       # model bahosi (jadval bilan tuzatilgan)
+    opp_position: int = 0      # raqibning jadvaldagi o'rni (0 = noma'lum)
+
+
+def _rotation_adjust(profile: PlayerProfile, rotation: float):
+    """Rotatsiya xavfini hisobga olib (p_start, p60, daqiqa ulushi) qaytaradi.
+
+    Zichlik tarkibni **noaniqroq** qiladi: ehtimollar neytral qiymat tomon
+    tortiladi. Bundan tashqari, zich haftada boshlagan o'yinchi ham erta
+    almashtiriladi — shuning uchun 60 daqiqa o'ynash ehtimoli alohida
+    pasayadi (u ishtirok ochkosini, toza darvozani va DefCon ni ushlab
+    turadi, ya'ni eng qimmat qismi aynan shu).
+    """
+    if rotation <= 0:
+        return profile.p_start, profile.p60, profile.xmins / 90.0
+    pull = ROTATION_PULL * rotation
+    p_start = profile.p_start + pull * (ROTATION_NEUTRAL - profile.p_start)
+    p_start = max(0.0, min(1.0, p_start))
+    # Erta almashtirish: boshlaganda ham 60 daqiqagacha yetib bormasligi mumkin
+    ratio = (p_start / profile.p_start) if profile.p_start > 0 else 1.0
+    p60 = min(p_start, profile.p60 * ratio * (1.0 - ROTATION_EARLY_SUB * rotation))
+    share = (profile.xmins / 90.0) * (1.0 - ROTATION_MINUTES * rotation * (
+        1.0 if profile.p_start >= ROTATION_NEUTRAL else -1.0))
+    return p_start, max(0.0, p60), max(0.0, share)
 
 
 def fixture_ev(
@@ -358,7 +508,11 @@ def fixture_ev(
     team_neutral_lam_against: float,
 ) -> FixtureEV:
     pos = profile.position
-    share = profile.xmins / 90.0
+    # Jadval zichligi: rotatsiya ehtimolini oshiradi. Bu **jazo emas**,
+    # noaniqlikka tortish — zich haftada mumkin bo'lgan tarkiblar soni ortadi,
+    # ya'ni mustahkam o'yinchi biroz yo'qotadi, chetdagi biroz yutadi.
+    rotation = max(0.0, min(1.0, getattr(fx, "rotation", 0.0) or 0.0))
+    p_start, p60, share = _rotation_adjust(profile, rotation)
 
     # uchrashuv koeffitsiyentlari: neytral holatga nisbatan
     att_mult = fx.lam_for / team_neutral_lam_for if team_neutral_lam_for else 1.0
@@ -372,23 +526,30 @@ def fixture_ev(
 
     # toza darvoza — 60+ daqiqa talab qilinadi
     p_cs = math.exp(-fx.lam_against)
-    pts_cs = p_cs * CS_POINTS[pos] * profile.p60
+    pts_cs = p_cs * CS_POINTS[pos] * p60
 
     # kiritilgan gollar (faqat GK/DEF)
     pts_conceded = 0.0
     if pos in (GK, DEF):
         pts_conceded = -expected_conceded_penalty(fx.lam_against * share)
 
-    # darvozabon to'xtatishlari
+    # darvozabon to'xtatishlari (har 3 tasi = 1 ochko) va penalti to'xtatish
     pts_saves = 0.0
+    lam_saves = 0.0
     if pos == GK:
-        pts_saves = (profile.saves90 * share * def_mult) / 3.0
+        lam_saves = profile.saves90 * share * def_mult
+        pts_saves = expected_floor(lam_saves, SAVES_PER_POINT)
+        pts_saves += profile.pensave90 * share * def_mult * PEN_SAVE_POINTS
 
-    # DefCon
+    # DefCon. Uchrashuv qiyinligi bu yerda **teskari** ishlaydi: kuchli
+    # raqibga qarshi toza darvoza ehtimoli tushadi, lekin himoya harakatlari
+    # (CBIT/CBIRT) ortadi — to'p ko'proq o'z yarim maydonimizda bo'ladi.
+    # Bitta "qiyinlik koeffitsiyenti" ni butun o'yinchiga qo'llash shu yerda
+    # xato bo'lardi.
     pts_dc = 0.0
     if pos in DEFCON_THRESHOLD:
         thr = DEFCON_THRESHOLD[pos]
-        lam_actions = profile.dc90 * share
+        lam_actions = profile.dc90 * share * (1.0 + DC_FIXTURE_TILT * (def_mult - 1.0))
         p_model = negbinom_tail(thr, lam_actions)
         if profile.dc_hit_rate is not None:
             p_dc = 0.5 * p_model + 0.5 * (profile.dc_hit_rate * min(1.0, share / 0.75))
@@ -396,13 +557,33 @@ def fixture_ev(
             p_dc = p_model
         pts_dc = p_dc * DEFCON_POINTS
 
-    pts_bonus = profile.bonus90 * share * (0.6 + 0.4 * att_mult)
-    pts_cards = -profile.yellow90 * share
-    pts_appearance = profile.p_appear * 1.0 + profile.p60 * 1.0
+    # Bonus. Avval bu shunchaki 90 daqiqalik o'rtacha edi — ya'ni bonus
+    # o'yinda nima bo'lishidan qat'i nazar bir xil chiqardi. Aslida bonus
+    # **voqeaga bog'liq**: gol yoki uzatma bergan o'yinchi BPS reytingida
+    # deyarli har doim yuqoriga chiqadi, toza darvoza esa himoyachiga +12 BPS
+    # beradi. Shuning uchun o'rtacha tezlik shartli holatlarga taqsimlanadi.
+    p_goal_pre = 1 - math.exp(-xg)
+    p_assist_pre = 1 - math.exp(-xa)
+    p_ret = 1 - (1 - p_goal_pre) * (1 - p_assist_pre)
+    p_cs_eff = p_cs * p60 if pos in (GK, DEF) else 0.0
+    # Voqea ro'y berganda bonus tezligi bir necha barobar ortadi
+    event_lift = (1.0
+                  + BONUS_RETURN_LIFT * p_ret
+                  + BONUS_CS_LIFT * p_cs_eff) / BONUS_NORMALISER
+    pts_bonus = profile.bonus90 * share * (0.6 + 0.4 * att_mult) * event_lift
+    # Kartochkalar: sariq −1, qizil −3. Qizil kam uchraydi, lekin bor.
+    pts_cards = -(profile.yellow90 * share) + profile.red90 * share * RED_POINTS
+    # O'z darvozasiga gol va o'tkazib yuborilgan penalti
+    pts_misc = (profile.og90 * share * OG_POINTS
+                + profile.penmiss90 * share * PEN_MISS_POINTS)
+    # Ishtirok: zaxiradan chiqish ehtimoli rotatsiya bilan birga siljiydi
+    p_appear = min(1.0, max(p_start, profile.p_appear
+                            - (profile.p_start - p_start) * 0.4))
+    pts_appearance = p_appear * 1.0 + p60 * 1.0
 
     total = (
         pts_appearance + pts_goals + pts_assists + pts_cs
-        + pts_conceded + pts_saves + pts_dc + pts_bonus + pts_cards
+        + pts_conceded + pts_saves + pts_dc + pts_bonus + pts_cards + pts_misc
     )
 
     p_goal = 1 - math.exp(-xg)
@@ -436,10 +617,14 @@ def fixture_ev(
             "defcon": round(pts_dc, 2),
             "bonus": round(pts_bonus, 2),
             "kartochka": round(pts_cards, 2),
+            "boshqa": round(pts_misc, 2),
         },
         p_haul=round(p_haul, 3),
         p_return=round(p_return, 3),
         inputs=inputs,
+        fdr=getattr(fx, "fdr", 3),
+        eff_fdr=getattr(fx, "eff_fdr", 3.0),
+        opp_position=getattr(fx, "opp_position", 0),
     )
 
 

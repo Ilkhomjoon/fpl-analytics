@@ -75,6 +75,14 @@ def make_bootstrap(seed: int = 7, played: int = 2) -> dict:
                     "element_type_name": pos,
                 })
 
+    # `form` va `points_per_game` — FPL ularni MATN sifatida beradi. Qiymat
+    # mavjud raqamlardan keltirib chiqariladi: bu yerda `rng` dan yangi son
+    # olish butun soxta dunyoni siljitadi, testlar esa aynan shunga tayanadi.
+    for el in elements:
+        turlar = max(1, played)
+        el["points_per_game"] = str(round(el["total_points"] / turlar, 1))
+        el["form"] = str(round(el["total_points"] / min(turlar, 4), 1))
+
     events = []
     for gw in range(1, 39):
         events.append({

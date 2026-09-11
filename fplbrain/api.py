@@ -73,6 +73,7 @@ class FplClient:
         max_workers: int = 4,
         offline: bool = False,
         cookie: str = "",
+        token: str = "",
     ) -> None:
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
@@ -88,15 +89,34 @@ class FplClient:
         # Yopishtirishda kirib qolgan satr ko'chishi/ortiqcha bo'shliqni tozalaymiz —
         # HTTP sarlavhasida `\n` bo'lsa `requests` xato beradi
         self.cookie = re.sub(r"\s+", " ", (cookie or "").strip())
+        self.token = (token or "").strip()
+        self._apply_credentials()
+
+    def _apply_credentials(self) -> None:
+        """Sessiya sarlavhalarini joriy cookie/token ga moslaydi."""
+        for header in ("Cookie", "X-Api-Authorization", "Authorization"):
+            self._session.headers.pop(header, None)
         if self.cookie:
             # Shaxsiy endpointlar (my-team) uchun brauzerdan olingan sessiya cookie si
             self._session.headers["Cookie"] = self.cookie
+        if self.token:
+            # SSO orqali olingan Bearer token — FPL aynan shu sarlavhani kutadi
+            self._session.headers["X-Api-Authorization"] = f"Bearer {self.token}"
+            self._session.headers["Authorization"] = f"Bearer {self.token}"
+        if self.cookie or self.token:
             self._session.headers["Referer"] = "https://fantasy.premierleague.com/"
             self._session.headers["X-Requested-With"] = "XMLHttpRequest"
 
+    def set_credentials(self, cookie: str = "", token: str = "") -> None:
+        """Ish paytida (web sahifada login qilinganda) kirishni yangilaydi."""
+        self.cookie = re.sub(r"\s+", " ", (cookie or "").strip())
+        self.token = (token or "").strip()
+        self.last_auth_error = None
+        self._apply_credentials()
+
     @property
     def authenticated(self) -> bool:
-        return bool(self.cookie)
+        return bool(self.cookie or self.token)
 
     # ------------------------------------------------------------------ kesh
     def _cache_path(self, url: str) -> Path:
@@ -213,7 +233,7 @@ class FplClient:
         Cookie bo'lmasa yoki sessiya eskirgan bo'lsa None qaytaradi — dastur
         ochiq ma'lumot bilan davom etaveradi.
         """
-        if not self.cookie:
+        if not self.authenticated:
             return None
         try:
             return self.get(f"my-team/{entry_id}/", ttl=300)

@@ -5,6 +5,11 @@
 __pycache__/
 config.yaml
 cookie.txt
+data/browser/
 data/cache/
 data/demo_store/
+data/profiles/
+data/session.json
+data/sessions/
+data/sso_probe.json
 hisobot.html

@@ -56,6 +56,8 @@ class Config:
     entry_id: int = 0                      # FPL jamoa ID (URL dagi raqam)
     mini_league_ids: list[int] = field(default_factory=list)
     fpl_cookie: str = ""                   # brauzerdan olingan sessiya cookie (ixtiyoriy)
+    fpl_client_id: str = ""                # SSO client_id — avtomatik topilmasa qo'lda
+    fpl_redirect_uri: str = ""             # SSO redirect_uri — topilmasa qo'lda
     free_transfers_override: int = 0       # 0 = avtomatik aniqlansin
 
     # --- telegram ---
@@ -82,7 +84,28 @@ class Config:
     # jamoa kuchi
     home_base_goals: float = 1.55
     away_base_goals: float = 1.22
-    team_form_shrink_matches: float = 6.0  # joriy mavsum xG ma'lumotiga ishonch
+    team_form_shrink_matches: float = 4.0  # joriy mavsum natijasiga ishonch (kichik = tezroq)
+    # FPL ning strength qiymatlari juda siqilgan (eng kuchli va eng zaif jamoa
+    # orasida atigi ~15% farq), haqiqiy gol tezliklari esa ikki barobar farq
+    # qiladi. Nisbatni shu darajaga ko'tarib tarqalishni tiklaymiz.
+    # 1.0 = eski (tekis) xatti-harakat.
+    strength_spread: float = 2.3
+    table_weight: float = 0.45             # samarali qiyinlikda jadval o'rnining maks. vazni
+    # Forma (FPL "form" — so'nggi 30 kunlik ochko) hujum tezliklariga qancha
+    # ta'sir qiladi. 0.10 = eng ko'pi bilan ±10%. 0 = umuman hisobga olinmaydi.
+    # Kattaroq qilish tavsiya etilmaydi: forma natija, bashorat emas.
+    form_weight: float = 0.10
+
+    # --- jadval zichligi (rotatsiya) ---
+    # Yevropa kubogida o'ynayotgan jamoalar. FPL API bu ma'lumotni BERMAYDI,
+    # shuning uchun qo'lda beriladi — qisqa nom (ARS), to'liq nom (Arsenal)
+    # yoki ID bo'lishi mumkin. Har mavsum o'zgargani uchun kodga yozilmagan.
+    european_teams: list = field(default_factory=list)
+
+    # --- asosiy 11 lik ---
+    xi_risk_aversion: float = 0.35         # 0 = faqat EV; kattasi = ishonchli o'yinchiga urg'u
+    xi_nailed_start: float = 0.75          # shundan yuqorisi — mustahkam asosiy tarkib
+    xi_fringe_start: float = 0.55          # shundan pasti — tarkibga kirishi shubhali
 
     # --- raqiblar tahlili ---
     overall_league_id: int = 314           # "Overall" klassik liga
@@ -126,6 +149,11 @@ class Config:
         if os.getenv("FPL_LEAGUE_IDS"):
             cfg.mini_league_ids = [
                 int(x) for x in os.environ["FPL_LEAGUE_IDS"].replace(" ", "").split(",") if x
+            ]
+        # Yevropada o'ynayotgan jamoalar — vergul bilan ajratilgan qisqa nomlar
+        if os.getenv("FPL_EUROPEAN_TEAMS"):
+            cfg.european_teams = [
+                x for x in os.environ["FPL_EUROPEAN_TEAMS"].replace(" ", "").split(",") if x
             ]
         # config.yaml bo'lmaganda ham (masalan GitHub Actions da) erkin transfer
         # sonini qo'lda berish imkoni — Secrets orqali

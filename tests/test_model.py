@@ -115,6 +115,64 @@ def test_himoyachi_defcon_va_toza_darvoza_oladi(world):
     assert sample.parts["kiritilgan"] <= 0
 
 
+def test_penaltichi_koproq_gol_kutadi(world):
+    """Penalti huquqi EV ga TA'SIR QILISHI kerak.
+
+    Avval `is_pen_taker` faqat izohda ishlatilardi — modelga umuman
+    kirmasdi. Ta'sir prior orqali: FPL ning xG si penaltilarni allaqachon
+    o'z ichiga oladi, ustiga qo'shish ikki marta hisoblash bo'lardi.
+    """
+    cfg, bs, engine, events = world["cfg"], world["bs"], world["engine"], world["events"]
+    oddiy = next(e for e in bs["elements"]
+                 if e["element_type"] == MID and not e.get("penalties_order"))
+    penaltichi = dict(oddiy, penalties_order=1)
+
+    a = engine.evaluate(build_profile(oddiy, None, cfg, 2), events)
+    b = engine.evaluate(build_profile(penaltichi, None, cfg, 2), events)
+    assert b.next_ev > a.next_ev
+
+
+def test_standart_pozitsiya_uzatma_kutimini_oshiradi(world):
+    cfg, bs, engine, events = world["cfg"], world["bs"], world["engine"], world["events"]
+    oddiy = next(e for e in bs["elements"]
+                 if e["element_type"] == MID
+                 and not e.get("corners_and_indirect_freekicks_order"))
+    standart = dict(oddiy, corners_and_indirect_freekicks_order=1)
+
+    a = engine.evaluate(build_profile(oddiy, None, cfg, 2), events)
+    b = engine.evaluate(build_profile(standart, None, cfg, 2), events)
+    assert b.fixtures[3][0].parts["uzatma"] > a.fixtures[3][0].parts["uzatma"]
+
+
+def test_qizil_kartochka_va_oz_goli_ochkoni_kamaytiradi(world):
+    cfg, bs, engine, events = world["cfg"], world["bs"], world["engine"], world["events"]
+    toza = next(e for e in bs["elements"] if e["element_type"] == DEF)
+    yomon = dict(toza, red_cards=2, own_goals=2)
+
+    a = engine.evaluate(build_profile(toza, None, cfg, 2), events)
+    b = engine.evaluate(build_profile(yomon, None, cfg, 2), events)
+    assert b.next_ev < a.next_ev
+    assert b.fixtures[3][0].parts["boshqa"] < 0        # o'z goli
+    assert b.fixtures[3][0].parts["kartochka"] < a.fixtures[3][0].parts["kartochka"]
+
+
+def test_darvozabon_penalti_toxtatgani_hisobga_olinadi(world):
+    cfg, bs, engine, events = world["cfg"], world["bs"], world["engine"], world["events"]
+    gk = next(e for e in bs["elements"] if e["element_type"] == GK)
+    qahramon = dict(gk, penalties_saved=3)
+
+    a = engine.evaluate(build_profile(gk, None, cfg, 2), events)
+    b = engine.evaluate(build_profile(qahramon, None, cfg, 2), events)
+    assert b.fixtures[3][0].parts["to'xtatish"] > a.fixtures[3][0].parts["to'xtatish"]
+
+
+def test_sariq_kartochkalar_soni_saqlanadi(world):
+    """5 ta sariq — diskvalifikatsiya. EV ga emas, ogohlantirishga kerak."""
+    cfg, bs = world["cfg"], world["bs"]
+    e = dict(bs["elements"][3], yellow_cards=4)
+    assert build_profile(e, None, cfg, 2).yellow_total == 4
+
+
 def test_ojiz_oyinchi_past_ev(world):
     ev = world["ev"]
     benchers = [p for p in ev.values() if p.profile.p_start < 0.3]
@@ -216,11 +274,214 @@ def test_my_team_ishlatilsa_aniq_narx_olinadi(world):
 
     squad = load_squad(AuthClient(), world["cfg"], 1, 3, ev, by_id)
     assert squad.authenticated is True
-    assert squad.free_transfers == 4
+    assert squad.free_transfers == 4          # `made` yo'q — hammasi qoldi
     assert squad.bank == 2.5
     assert squad.chips_available == ["bboost"]
     first = squad.players[0]
     assert first.selling_price == round((by_id[first.element]["now_cost"] - 2) / 10, 1)
+
+
+def test_ishlatilgan_transferlar_ft_dan_ayriladi(world):
+    """Transfer qilib bo'lingan bo'lsa, FT qoldig'i kamayishi SHART.
+
+    Haqiqiy xato: 2 ta transfer qilingandan keyin ham "2 FT bor" ko'rsatardi,
+    chunki faqat `limit` olinardi, `made` esa e'tiborsiz qolardi.
+    """
+    from fplbrain.squad import load_squad
+
+    bs, ev = world["bs"], world["ev"]
+    by_id = {e["id"]: e for e in bs["elements"]}
+    picks = make_picks(bs)
+
+    def client(transfers):
+        class C:
+            def my_team(self, entry_id):
+                return {"picks": picks, "transfers": transfers, "chips": []}
+
+            def entry_history(self, entry_id):
+                return {"current": [], "chips": []}
+        return C()
+
+    squad = load_squad(client({"limit": 2, "made": 2, "bank": 0}),
+                       world["cfg"], 1, 3, ev, by_id)
+    assert squad.free_transfers == 0
+    assert squad.transfers_made == 2
+    assert squad.unlimited_transfers is False
+
+    squad = load_squad(client({"limit": 5, "made": 1, "bank": 0}),
+                       world["cfg"], 1, 3, ev, by_id)
+    assert squad.free_transfers == 4
+
+    # wildcard/free hit: `limit` bo'lmaydi — cheksiz
+    squad = load_squad(client({"limit": None, "made": 3, "bank": 0}),
+                       world["cfg"], 1, 3, ev, by_id)
+    assert squad.unlimited_transfers is True
+    assert squad.free_transfers > 5
+
+
+def test_haqiqiy_javob_togri_oqiladi(world):
+    """FPL ning HAQIQIY javobi (jamoa 34191, GW3) to'g'ri talqin qilinsin.
+
+        {"bank": 30, "cost": 4, "limit": 2, "made": 2,
+         "status": "cost", "value": 976}
+
+    Kutilgan: tekin transfer 0, jamoa qiymati 97.6 + 3.0 = 100.6.
+    """
+    from fplbrain.squad import load_squad
+
+    bs, ev = world["bs"], world["ev"]
+    by_id = {e["id"]: e for e in bs["elements"]}
+    picks = [{**p, "selling_price": 65, "purchase_price": 65}
+             for p in make_picks(bs)]
+
+    class C:
+        def my_team(self, entry_id):
+            return {"picks": picks, "chips": [], "transfers": {
+                "bank": 30, "cost": 4, "limit": 2, "made": 2,
+                "status": "cost", "value": 976}}
+
+        def entry_history(self, entry_id):
+            return {"current": [], "chips": []}
+
+    squad = load_squad(C(), world["cfg"], 34191, 3, ev, by_id)
+    assert squad.free_transfers == 0        # sahifada 2 turgan edi
+    assert squad.transfers_made == 2
+    assert squad.bank == 3.0
+    assert squad.value == pytest.approx(100.6, abs=0.05)
+
+
+def test_qolda_berilgan_ft_serverni_bosib_ketmaydi(world):
+    """`free_transfers_override` — bilmaganda ishlatiladigan zaxira, tuzatuvchi emas.
+
+    Aynan shu narsa sahifada "2 FT" ko'rsatgan edi: `config.yaml` da bir marta
+    yozilgan qiymat login qilingandan keyin ham my-team dan kelgan aniq
+    raqamni bosib ketardi.
+    """
+    from fplbrain.config import Config
+    from fplbrain.squad import load_squad
+
+    bs, ev = world["bs"], world["ev"]
+    by_id = {e["id"]: e for e in bs["elements"]}
+    picks = make_picks(bs)
+    cfg = Config()
+    cfg.free_transfers_override = 2
+
+    class Auth:
+        def my_team(self, entry_id):
+            return {"picks": picks, "chips": [], "transfers": {
+                "limit": 2, "made": 2, "status": "cost", "cost": 4, "bank": 0}}
+
+        def entry_history(self, entry_id):
+            return {"current": [], "chips": []}
+
+    squad = load_squad(Auth(), cfg, 1, 3, ev, by_id)
+    assert squad.free_transfers == 0        # server ustun
+    assert squad.override_used is False
+
+    class Public:
+        def entry_history(self, entry_id):
+            return {"current": [{"event": 3, "event_transfers": 0}], "chips": []}
+
+        def entry_picks(self, entry_id, event):
+            return {"picks": picks, "entry_history": {"bank": 0}}
+
+        def entry_transfers(self, entry_id):
+            return []
+
+    squad = load_squad(Public(), cfg, 1, 3, ev, by_id)
+    assert squad.free_transfers == 2        # login yo'q — zaxira ishlaydi
+    assert squad.override_used is True
+
+
+def test_status_cost_bolsa_tekin_transfer_yoq(world):
+    """`status` hal qiluvchi: "cost" — keyingi transfer ochko turadi.
+
+    Haqiqiy holat: `limit` 2 turgan, `made` esa 0 kelgan, ammo foydalanuvchida
+    tekin transfer qolmagan edi. `limit - made` bunda 2 beradi va model hit ni
+    umuman ko'rsatmaydi. `status` esa aniq javob beradi.
+    """
+    from fplbrain.squad import load_squad
+
+    bs, ev = world["bs"], world["ev"]
+    by_id = {e["id"]: e for e in bs["elements"]}
+    picks = make_picks(bs)
+
+    def client(transfers):
+        class C:
+            def my_team(self, entry_id):
+                return {"picks": picks, "transfers": transfers, "chips": []}
+
+            def entry_history(self, entry_id):
+                return {"current": [], "chips": []}
+        return C()
+
+    squad = load_squad(
+        client({"limit": 2, "made": 0, "status": "cost", "cost": 4, "bank": 0}),
+        world["cfg"], 1, 3, ev, by_id)
+    assert squad.free_transfers == 0
+    assert squad.transfers_status == "cost"
+    assert squad.transfers_cost == 4
+
+    # Teskarisi: server "free" desa, ayirma 0 chiqsa ham bittasi bor
+    squad = load_squad(
+        client({"limit": 1, "made": 1, "status": "free", "cost": 0, "bank": 0}),
+        world["cfg"], 1, 3, ev, by_id)
+    assert squad.free_transfers == 1
+
+
+def test_jamoa_qiymati_fpl_raqamiga_mos(world):
+    """FPL `value` ga bank kiradimi-yo'qmi — taxmin emas, tekshirib aniqlanadi."""
+    from fplbrain.squad import load_squad
+
+    bs, ev = world["bs"], world["ev"]
+    by_id = {e["id"]: e for e in bs["elements"]}
+    picks = [{**p, "selling_price": 50, "purchase_price": 50} for p in make_picks(bs)]
+    sotish = 15 * 5.0          # 75.0m
+    bank = 3.0
+
+    def client(value_tenths):
+        class C:
+            def my_team(self, entry_id):
+                return {"picks": picks, "chips": [],
+                        "transfers": {"limit": 1, "made": 0, "bank": int(bank * 10),
+                                      "value": value_tenths}}
+
+            def entry_history(self, entry_id):
+                return {"current": [], "chips": []}
+        return C()
+
+    # `value` banksiz kelsa — bank qo'shiladi
+    squad = load_squad(client(int(sotish * 10)), world["cfg"], 1, 3, ev, by_id)
+    assert squad.value == pytest.approx(sotish + bank, abs=0.05)
+
+    # `value` bank bilan kelsa — ikki marta qo'shilmaydi
+    squad = load_squad(client(int((sotish + bank) * 10)), world["cfg"], 1, 3, ev, by_id)
+    assert squad.value == pytest.approx(sotish + bank, abs=0.05)
+
+    # `value` umuman kelmasa — o'zimiz hisoblaymiz
+    squad = load_squad(client(0), world["cfg"], 1, 3, ev, by_id)
+    assert squad.value == pytest.approx(sotish + bank, abs=0.05)
+
+
+def test_ft_taxmini_shu_turdagi_transferni_hisobga_oladi():
+    """Loginsiz taxmin ham ishlatilgan transferni ko'rishi kerak."""
+    from fplbrain.squad import estimate_free_transfers
+
+    tarix = {"current": [
+        {"event": 1, "event_transfers": 0},
+        {"event": 2, "event_transfers": 0},
+        {"event": 3, "event_transfers": 2},      # shu turda ikkitasi ishlatildi
+    ], "chips": []}
+    # 3 tur = 3 FT yig'ildi, 2 tasi ishlatildi → 1 qoldi (avval 4 chiqardi)
+    assert estimate_free_transfers(tarix, 3) == 1
+
+    tarix["current"][2]["event_transfers"] = 0
+    assert estimate_free_transfers(tarix, 3) == 3
+
+    # wildcard turida FT sarflanmaydi
+    tarix["current"][2]["event_transfers"] = 8
+    tarix["chips"] = [{"event": 3, "name": "wildcard"}]
+    assert estimate_free_transfers(tarix, 3) == 3
 
 
 # ---------------------------------------------------------------- transferlar

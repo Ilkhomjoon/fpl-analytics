@@ -19,13 +19,15 @@ from pathlib import Path
 from fplbrain import captain as captain_mod
 from fplbrain import chips as chips_mod
 from fplbrain import (
+    congestion,
     explain, insight, market, rating as rating_mod, ratings, report, rivals,
+    table as table_mod,
     target as target_mod,
     transfers,
 )
 from fplbrain.api import FplClient
 from fplbrain.config import Config
-from fplbrain.ev import EVEngine, PlayerEV, build_profile
+from fplbrain.ev import EVEngine, PlayerEV, build_profile, form_baseline
 from fplbrain.squad import load_squad, squad_ev
 from fplbrain.sections import Report
 from fplbrain.store import Store
@@ -80,11 +82,14 @@ def build_all_ev(cfg, client, bootstrap, engine, events, focus_ids: set[int],
     """Ikki bosqichli EV: avval bootstrap ma'lumoti, keyin muhim o'yinchilar uchun batafsil tarix."""
     elements = bootstrap["elements"]
     ev_by_element: dict[int, PlayerEV] = {}
+    # Forma bazasi — o'ynayotgan o'yinchilarning medianasi, bir marta hisoblanadi
+    form_base = form_baseline(elements)
 
     for e in elements:
         if e.get("status") == "u":                  # klubdan ketgan
             continue
-        profile = build_profile(e, None, cfg, played.get(e["team"], 0))
+        profile = build_profile(e, None, cfg, played.get(e["team"], 0),
+                                form_base=form_base)
         ev_by_element[e["id"]] = engine.evaluate(profile, events)
 
     # kimlar uchun batafsil tarix kerak: mening tarkibim + eng istiqbolli o'yinchilar
@@ -101,7 +106,8 @@ def build_all_ev(cfg, client, bootstrap, engine, events, focus_ids: set[int],
     for el, summary in summaries.items():
         if not summary or el not in by_id:
             continue
-        profile = build_profile(by_id[el], summary, cfg, played.get(by_id[el]["team"], 0))
+        profile = build_profile(by_id[el], summary, cfg,
+                                played.get(by_id[el]["team"], 0), form_base=form_base)
         ev_by_element[el] = engine.evaluate(profile, events)
     return ev_by_element
 
@@ -281,8 +287,21 @@ def main() -> int:
     log.info("Rejim: %s · GW%s · deadline'gacha %.1f soat", mode, next_event, hours_left)
 
     # ---- model ----
-    team_ratings = ratings.build_team_ratings(bootstrap, cfg)
-    views = ratings.build_fixture_views(fixtures, team_ratings, cfg, events[0], events[-1])
+    # Jadval avval quriladi: uchrashuv qiyinligi endi rasmiy FDR bilan
+    # cheklanmaydi, raqibning joriy o'rni va natijalari ham hisobga olinadi.
+    league_table = table_mod.build_table(bootstrap, fixtures)
+    leaders = table_mod.rank(league_table)[:4]
+    if leaders and leaders[0].played:
+        log.info("Jadval boshi: %s", ", ".join(
+            f"{r.position}.{r.short} {r.points}o [{r.form_string}]" for r in leaders
+        ))
+    team_ratings = ratings.build_team_ratings(bootstrap, cfg, league_table)
+    views = ratings.build_fixture_views(
+        fixtures, team_ratings, cfg, events[0], events[-1],
+        schedules=congestion.build_schedules(fixtures),
+        european=congestion.european_team_ids(cfg, bootstrap.get("teams", [])),
+        table=league_table,
+    )
     engine = EVEngine(cfg, team_ratings, views)
 
     played = team_matches_played(bootstrap, fixtures)
@@ -306,7 +325,9 @@ def main() -> int:
 
         element = matches[0]
         summary = client.element_summary(element["id"])
-        profile = build_profile(element, summary, cfg, played.get(element["team"], 0))
+        profile = build_profile(
+            element, summary, cfg, played.get(element["team"], 0),
+            form_base=form_baseline(bootstrap["elements"]))
         pev = engine.evaluate(profile, events)
         print(explain.explain_player(
             profile, pev, element, summary, events,

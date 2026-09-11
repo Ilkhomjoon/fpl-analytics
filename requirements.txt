@@ -1,4 +1,10 @@
 requests>=2.31
 PyYAML>=6.0
+Flask>=3.0
 tzdata>=2024.1 ; sys_platform == "win32"
 pytest>=8.0
+
+# Brauzer orqali FPL ga kirish uchun. Ixtiyoriy, lekin amalda ishlaydigan
+# yagona login yo'li shu. Yoqish uchun quyidagi satrdan # ni oling va
+# o'rnatgandan keyin bir marta: python -m playwright install chromium
+# playwright>=1.40

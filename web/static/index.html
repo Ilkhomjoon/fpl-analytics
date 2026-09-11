@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FPL — O'yinchilar</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#ffffff; --line:#e2e5ea; --ink:#14171c; --muted:#697386;
+    --accent:#00a887; --accent-ink:#04322a; --warn:#c2410c; --bad:#b91c1c;
+    --good:#047857; --chip:#eef1f5; --shadow:0 1px 2px rgba(16,24,40,.06);
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1116; --panel:#161b22; --line:#262d38; --ink:#e6e9ee; --muted:#8b94a5;
+      --accent:#2dd4a7; --accent-ink:#03211c; --warn:#fb923c; --bad:#f87171;
+      --good:#34d399; --chip:#1d232c; --shadow:none;
+    }
+  }
+  *{box-sizing:border-box}
+  /* `hidden` atributi `display:flex` dan kuchliroq bo'lsin */
+  [hidden]{display:none !important}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  header{
+    position:sticky; top:0; z-index:20; background:var(--panel);
+    border-bottom:1px solid var(--line); padding:10px 16px;
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  h1{font-size:15px; margin:0; font-weight:650; letter-spacing:-.01em}
+  h1 span{color:var(--muted); font-weight:400}
+  .grow{flex:1}
+  button{
+    font:inherit; padding:6px 12px; border-radius:7px; border:1px solid var(--line);
+    background:var(--panel); color:var(--ink); cursor:pointer;
+  }
+  button:hover{border-color:var(--muted)}
+  button.primary{background:var(--accent); color:var(--accent-ink); border-color:transparent; font-weight:600}
+  button.primary:disabled{opacity:.55; cursor:default}
+  input,select{
+    font:inherit; padding:6px 9px; border-radius:7px; border:1px solid var(--line);
+    background:var(--panel); color:var(--ink); min-width:0;
+  }
+  input:focus,select:focus{outline:2px solid var(--accent); outline-offset:-1px}
+  .pill{
+    font-size:12px; padding:3px 9px; border-radius:999px; background:var(--chip);
+    color:var(--muted); white-space:nowrap;
+  }
+  .pill.on{background:var(--accent); color:var(--accent-ink); font-weight:600}
+
+  main{padding:14px 16px 60px}
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:11px;
+    padding:14px; margin-bottom:14px; box-shadow:var(--shadow);
+  }
+  .card h2{font-size:13px; margin:0 0 10px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted)}
+  .note{color:var(--muted); font-size:13px; margin:8px 0 0}
+  .filters{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  .filters label{display:flex; align-items:center; gap:6px; font-size:13px; color:var(--muted)}
+  .filters input[type=search]{min-width:190px}
+  .filters input[type=number]{width:78px}
+
+  .tablewrap{overflow:auto; max-height:calc(100vh - 250px); border:1px solid var(--line); border-radius:11px; background:var(--panel)}
+  table{border-collapse:separate; border-spacing:0; width:100%; font-size:13px}
+  th,td{padding:7px 9px; text-align:right; white-space:nowrap; border-bottom:1px solid var(--line)}
+  th{
+    position:sticky; top:0; z-index:2; background:var(--panel); cursor:pointer;
+    font-weight:600; color:var(--muted); user-select:none; font-size:12px;
+  }
+  th:hover{color:var(--ink)}
+  th.sorted{color:var(--accent)}
+  th[data-k="name"],td.name{text-align:left; position:sticky; left:0; background:var(--panel); z-index:1}
+  th[data-k="name"]{z-index:3}
+  td.name{font-weight:600}
+  tbody tr:hover td{background:var(--chip)}
+  tbody tr:hover td.name{background:var(--chip)}
+  .num{font-variant-numeric:tabular-nums; font-family:var(--mono); font-size:12.5px}
+  .pos{display:inline-block; min-width:34px; text-align:center; border-radius:5px; padding:1px 5px; font-size:11px; font-weight:600; background:var(--chip); color:var(--muted)}
+  .up{color:var(--good)} .down{color:var(--bad)} .dim{color:var(--muted)}
+  .flag{font-size:11px; padding:1px 5px; border-radius:5px; background:var(--chip); color:var(--warn); margin-left:5px}
+  .bar{display:inline-block; height:5px; border-radius:3px; background:var(--accent); vertical-align:middle}
+  .msg{padding:10px 12px; border-radius:8px; font-size:13px; margin-top:10px; white-space:pre-wrap}
+  /* pre-wrap faqat server javobi uchun kerak (unda \n bor); oddiy matn HTML bo'ylab oqsin */
+  .msg.prose{white-space:normal; line-height:1.55}
+  .msg.prose p{margin:0 0 8px}
+  .msg.prose p:last-child{margin:0}
+  .msg.err{background:rgba(185,28,28,.1); color:var(--bad)}
+  .msg.ok{background:rgba(4,120,87,.12); color:var(--good)}
+  .msg.info{background:var(--chip); color:var(--muted)}
+  details summary{cursor:pointer; color:var(--muted); font-size:13px}
+  .loginrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px}
+  code{font-family:var(--mono); font-size:12px; background:var(--chip); padding:1px 5px; border-radius:4px}
+
+  /* --- ko'rinishlar --- */
+  .tabs{display:flex; gap:4px; background:var(--chip); padding:3px; border-radius:9px}
+  .tab{border:none; background:transparent; padding:5px 12px; border-radius:7px; color:var(--muted); font-weight:600; font-size:13px}
+  .tab.on{background:var(--panel); color:var(--ink); box-shadow:var(--shadow)}
+  .stats{display:flex; gap:18px; flex-wrap:wrap}
+  .stat b{display:block; font-size:18px; font-variant-numeric:tabular-nums; letter-spacing:-.02em}
+  .stat span{font-size:12px; color:var(--muted)}
+  .row{display:grid; grid-template-columns:44px 1fr 52px 52px 56px 58px 62px 1fr; gap:9px;
+       align-items:center;
+       padding:7px 4px; border-bottom:1px solid var(--line); font-size:13px}
+  .row:last-child{border-bottom:none}
+  .row .who{font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .row .who small{color:var(--muted); font-weight:400; margin-left:5px}
+  .row .ev{font-family:var(--mono); font-weight:700; text-align:right}
+  .row .meta{font-family:var(--mono); color:var(--muted); text-align:right; font-size:12px}
+  .row .fix{color:var(--muted); font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .row.head{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:600}
+  .row.head span,.row.head div{font-family:inherit; font-weight:600}
+  .easy{color:var(--good)} .hard{color:var(--bad)}
+  .cap{background:var(--accent); color:var(--accent-ink); border-radius:4px; padding:0 4px; font-size:10px; font-weight:700; margin-left:5px}
+  .why{color:var(--warn); font-size:12px}
+  .row{cursor:pointer}
+  .badge{background:var(--line); color:var(--muted); border-radius:4px; padding:0 4px;
+         font-size:10px; font-weight:700; margin-left:4px}
+  .badge.warn{background:var(--warn); color:#fff}
+  .detail{padding:2px 4px 10px 54px; border-bottom:1px solid var(--line)}
+  .parts{display:flex; flex-wrap:wrap; gap:4px 14px; font-size:12px; color:var(--muted)}
+  .parts b{font-family:var(--mono); color:var(--ink)}
+  .parts.sum{margin-top:5px}
+  .move{padding:10px 4px; border-bottom:1px solid var(--line)}
+  .move:last-child{border-bottom:none}
+  .move.dim{opacity:.55}
+  .movehead{display:flex; align-items:baseline; gap:8px}
+  .movehead b{font-family:var(--mono); font-size:17px}
+  .movehead small{color:var(--muted); font-size:12px}
+  .movebody{margin-top:3px; font-size:13px}
+  .movebody .mv small{color:var(--muted); font-weight:400}
+  .movebody .arrow{color:var(--muted); margin:0 6px}
+  .movefoot{margin-top:3px; font-size:12px; color:var(--muted); font-family:var(--mono)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FPL <span id="gw">—</span></h1>
+  <span class="pill" id="deadline"></span>
+  <span class="pill" id="count"></span>
+  <span class="tabs">
+    <button class="tab on" data-view="players">O'yinchilar</button>
+    <button class="tab" data-view="squad">Jamoam</button>
+    <button class="tab" data-view="transfers">Transferlar</button>
+    <button class="tab" data-view="draft">Jamoa tuzish</button>
+  </span>
+  <span class="grow"></span>
+  <span class="pill" id="authpill">login yo'q</span>
+  <button id="toggleLogin">Kirish</button>
+  <button id="refresh">Yangilash</button>
+</header>
+
+<main>
+  <section class="card" id="loginCard" hidden>
+    <h2>FPL hisobiga kirish</h2>
+    <div class="loginrow">
+      <input type="email" id="email" placeholder="email" autocomplete="username">
+      <input type="password" id="password" placeholder="parol" autocomplete="current-password">
+      <button class="primary" id="doLogin">Kirish</button>
+      <button id="doLogout">Chiqish</button>
+    </div>
+    <div id="loginMsg"></div>
+    <div class="loginrow" id="fallbackRow" hidden>
+      <button id="doBrowser">Brauzer orqali davom etish</button>
+      <span class="pill">oyna ochiladi, ~20 soniya</span>
+    </div>
+
+    <details style="margin-top:12px">
+      <summary>Boshqa yo'llar</summary>
+      <div class="loginrow" style="margin-top:8px">
+        <input type="number" id="entryId" placeholder="Jamoa ID (parolsiz, cheklangan)">
+        <button id="doConnect">Ulanish</button>
+      </div>
+      <div class="loginrow" style="margin-top:8px">
+        <input type="password" id="token" placeholder="Bearer eyJ... yoki cookie satri" style="flex:1; min-width:240px">
+        <button id="doToken">Token bilan</button>
+        <button id="doQuick">Saqlangan profil</button>
+      </div>
+      <p class="note">
+        Jamoa ID deadline'dan keyingi tarkibni beradi; jonli tarkib, aniq sotish
+        narxlari va erkin transferlar soni uchun login kerak.
+      </p>
+    </details>
+  </section>
+
+  <div id="viewPlayers">
+  <section class="card">
+    <h2>Saralash</h2>
+    <div class="filters">
+      <input type="search" id="q" placeholder="Ism yoki jamoa…">
+      <select id="pos"><option value="">Barcha pozitsiya</option></select>
+      <select id="team"><option value="">Barcha jamoa</option></select>
+      <label>narx ≤ <input type="number" id="maxPrice" step="0.1" min="3.5" placeholder="15.0"></label>
+      <label>egalik ≥ <input type="number" id="minOwn" step="0.5" min="0" placeholder="0"></label>
+      <label>daqiqa % ≥ <input type="number" id="minMin" step="5" min="0" placeholder="0"></label>
+      <label><input type="checkbox" id="hideEnabler" checked> byudjet to'ldiruvchilarsiz</label>
+      <label><input type="checkbox" id="onlyAvailable" checked> faqat sog'lomlar</label>
+      <button id="reset">Tozalash</button>
+    </div>
+    <p class="note" id="explain">
+      <b>Ball</b> = rol × 90 daqiqalik chiqim. Egalik faqat dalil kam bo'lganda va
+      narxga qarab hisobga olinadi — arzon «byudjet to'ldiruvchi» yuqoriga chiqmaydi.
+    </p>
+  </section>
+
+  <div class="tablewrap">
+    <table id="tbl">
+      <thead><tr id="head"></tr></thead>
+      <tbody id="body"></tbody>
+    </table>
+  </div>
+  <div id="tableMsg"></div>
+  </div>
+
+  <div id="viewSquad" hidden>
+    <section class="card" id="squadTop"></section>
+    <section class="card" id="squadXi"></section>
+    <section class="card" id="squadBench"></section>
+    <div id="squadMsg"></div>
+  </div>
+
+  <div id="viewTransfers" hidden>
+    <section class="card" id="trTop"></section>
+    <section class="card" id="trMoves"></section>
+    <section class="card" id="trWeak"></section>
+    <div id="trMsg"></div>
+  </div>
+
+  <div id="viewDraft" hidden>
+    <section class="card" id="drTop"></section>
+    <section class="card" id="drXi"></section>
+    <section class="card" id="drBench"></section>
+    <div id="drMsg"></div>
+  </div>
+</main>
+
+<script>
+const COLUMNS = [
+  {k:"name",  t:"O'yinchi", type:"text"},
+  {k:"team",  t:"Jamoa",    type:"text"},
+  {k:"pos_short", t:"Poz",  type:"text"},
+  {k:"price", t:"Narx",     d:1},
+  {k:"ownership", t:"Egalik %", d:1},
+  {k:"starts", t:"Boshl.",  d:0},
+  {k:"minutes", t:"Daqiqa", d:0},
+  {k:"minutes_share", t:"Daq %", d:0, bar:true},
+  {k:"goals", t:"G", d:0},
+  {k:"assists", t:"A", d:0},
+  {k:"ga", t:"G+A", d:0},
+  {k:"xg", t:"xG", d:2},
+  {k:"xa", t:"xA", d:2},
+  {k:"xgi", t:"xGI", d:2},
+  {k:"in_event", t:"Kirdi", d:0},
+  {k:"out_event", t:"Chiqdi", d:0},
+  {k:"net", t:"Sof", d:0, signed:true},
+  {k:"momentum", t:"Oqim %", d:1, signed:true},
+  {k:"role", t:"Rol %", d:0, bar:true},
+  {k:"output90", t:"Chiqim/90", d:2},
+  {k:"over", t:"Farq", d:2, signed:true},
+  {k:"value", t:"Samara", d:2},
+  {k:"points", t:"Ochko", d:0},
+  {k:"score", t:"Ball", d:1, bar:true},
+];
+
+let DATA = {players:[], teams:[], positions:[]};
+let sortKey = "score", sortDir = -1;
+
+const $ = (id) => document.getElementById(id);
+const fmt = (v, d) => (v === null || v === undefined || v === "") ? "—"
+  : (typeof v === "number" ? v.toFixed(d ?? 0) : v);
+
+async function api(path, opts) {
+  const r = await fetch(path, Object.assign({headers:{"Content-Type":"application/json"}}, opts||{}));
+  const body = await r.json().catch(() => ({}));
+  return {ok:r.ok, status:r.status, body};
+}
+
+function message(el, kind, text){
+  el.innerHTML = text ? `<div class="msg ${kind}">${text}</div>` : "";
+}
+
+// ------------------------------------------------------------------ chizish
+function buildHead(){
+  $("head").innerHTML = COLUMNS.map(c =>
+    `<th data-k="${c.k}" class="${c.k===sortKey?'sorted':''}">${c.t}${
+      c.k===sortKey ? (sortDir<0?" ↓":" ↑") : ""}</th>`
+  ).join("");
+  $("head").querySelectorAll("th").forEach(th => th.onclick = () => {
+    const k = th.dataset.k;
+    if (k === sortKey) sortDir = -sortDir;
+    else { sortKey = k; sortDir = (COLUMNS.find(c=>c.k===k)||{}).type === "text" ? 1 : -1; }
+    buildHead(); render();
+  });
+}
+
+function visible(){
+  const q = $("q").value.trim().toLowerCase();
+  const pos = $("pos").value, team = $("team").value;
+  const maxPrice = parseFloat($("maxPrice").value);
+  const minOwn = parseFloat($("minOwn").value);
+  const minMin = parseFloat($("minMin").value);
+  const hideEnabler = $("hideEnabler").checked;
+  const onlyAvailable = $("onlyAvailable").checked;
+
+  return DATA.players.filter(p => {
+    if (q && !(p.name.toLowerCase().includes(q) || p.full_name.toLowerCase().includes(q)
+      || p.team.toLowerCase().includes(q))) return false;
+    if (pos && String(p.pos) !== pos) return false;
+    if (team && String(p.team_id) !== team) return false;
+    if (!isNaN(maxPrice) && p.price > maxPrice) return false;
+    if (!isNaN(minOwn) && p.ownership < minOwn) return false;
+    if (!isNaN(minMin) && p.minutes_share < minMin) return false;
+    if (hideEnabler && p.enabler) return false;
+    if (onlyAvailable && (p.status !== "a" && p.status !== "d")) return false;
+    return true;
+  });
+}
+
+function cell(p, c){
+  const v = p[c.k];
+  if (c.k === "name"){
+    const flag = p.status !== "a" ? `<span class="flag" title="${(p.news||"").replace(/"/g,"")}">${p.status}</span>` : "";
+    const enab = p.enabler ? `<span class="flag" title="byudjet to'ldiruvchi">₿</span>` : "";
+    return `<td class="name" title="${p.full_name}">${p.name}${flag}${enab}</td>`;
+  }
+  if (c.type === "text") return `<td>${v ?? "—"}</td>`;
+
+  let cls = "num";
+  if (c.signed && typeof v === "number") cls += v > 0 ? " up" : (v < 0 ? " down" : " dim");
+  let inner = fmt(v, c.d);
+  if (c.signed && typeof v === "number" && v > 0) inner = "+" + inner;
+  if (c.bar && typeof v === "number"){
+    const w = Math.max(0, Math.min(100, v)) * 0.34;
+    inner += ` <span class="bar" style="width:${w.toFixed(0)}px"></span>`;
+  }
+  return `<td class="${cls}">${inner}</td>`;
+}
+
+function render(){
+  const rows = visible();
+  const col = COLUMNS.find(c => c.k === sortKey) || {};
+  rows.sort((a,b) => {
+    const x = a[sortKey], y = b[sortKey];
+    if (col.type === "text") return String(x).localeCompare(String(y)) * sortDir;
+    return ((x ?? -1e9) - (y ?? -1e9)) * sortDir;
+  });
+  const shown = rows.slice(0, 300);
+  $("body").innerHTML = shown.map(p =>
+    `<tr>${COLUMNS.map(c => cell(p, c)).join("")}</tr>`).join("");
+  $("count").textContent = `${rows.length} o'yinchi` + (rows.length > 300 ? " (300 tasi ko'rsatildi)" : "");
+  message($("tableMsg"), "info", rows.length ? "" : "Bu shartlarga mos o'yinchi yo'q.");
+}
+
+function fillSelects(){
+  $("pos").innerHTML = `<option value="">Barcha pozitsiya</option>` +
+    DATA.positions.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
+  $("team").innerHTML = `<option value="">Barcha jamoa</option>` +
+    DATA.teams.map(t => `<option value="${t.id}">${t.short} — ${t.name}</option>`).join("");
+}
+
+function countdown(iso){
+  if (!iso) return "";
+  const left = new Date(iso) - new Date();
+  if (left <= 0) return "deadline o'tdi";
+  const h = Math.floor(left/3.6e6), d = Math.floor(h/24);
+  return d ? `deadline: ${d} kun ${h%24} soat` : `deadline: ${h} soat ${Math.floor(left/6e4)%60} daq`;
+}
+
+// -------------------------------------------------------------- ma'lumot
+async function load(force){
+  message($("tableMsg"), "info", "Yuklanmoqda…");
+  const r = await api("/api/players" + (force ? "?refresh=1" : ""));
+  if (!r.ok){
+    message($("tableMsg"), "err", "Ma'lumot olinmadi: " + (r.body.error || r.status));
+    return;
+  }
+  DATA = r.body;
+  fillSelects();
+  $("gw").textContent = DATA.event ? `GW${DATA.event}` : "";
+  $("deadline").textContent = countdown(DATA.deadline);
+  buildHead();
+  render();
+}
+
+let polling = null;
+
+async function refreshStatus(){
+  const r = await api("/api/status");
+  const s = r.body || {};
+  const pill = $("authpill");
+  if (s.logged_in){
+    const left = s.seconds_left
+      ? ` · ${s.seconds_left > 3600
+          ? Math.round(s.seconds_left / 3600) + " soat"
+          : Math.max(1, Math.round(s.seconds_left / 60)) + " daq"}` : "";
+    pill.textContent = (s.name || "kirdingiz")
+      + (s.entry_id ? ` · ${s.entry_id}` : "") + left;
+    pill.classList.add("on");
+  } else if (s.public_only){
+    pill.textContent = `jamoa ${s.entry_id} · ochiq`;
+    pill.classList.remove("on");
+  } else if (s.job_running){
+    pill.textContent = `brauzer ochiq · ${s.job_seconds}s`;
+    pill.classList.remove("on");
+  } else {
+    pill.textContent = s.demo ? "demo rejimi" : "login yo'q";
+    pill.classList.remove("on");
+  }
+  return s;
+}
+
+/** Kirish fonda ishlaydi — natija chiqquncha holatni so'rab turamiz. */
+function pollLogin(){
+  if (polling) clearInterval(polling);
+  polling = setInterval(async () => {
+    const s = await refreshStatus();
+    if (s.job_running){
+      const extra = s.job_seconds > 12
+        ? " Brauzer oynasi ochilgan bo'lsa — o'sha yerda kiring, captcha chiqsa bosing."
+        : "";
+      message($("loginMsg"), "info", `Kirilmoqda… (${s.job_seconds}s)${extra}`);
+      return;
+    }
+    clearInterval(polling); polling = null;
+    ["doLogin", "doBrowser", "doQuick"].forEach(id => $(id).disabled = false);
+    if (s.last_login){
+      message($("loginMsg"), s.last_login.ok ? "ok" : "err", loginReport(s.last_login));
+      // DaVinci o'tmasa — brauzer zaxirasini taklif qilamiz
+      $("fallbackRow").hidden = !!s.last_login.ok;
+      if (s.last_login.ok){ lastPassword = ""; SQUAD = null; }
+    }
+    if (s.logged_in){ SQUAD = null; if (view === "squad") loadSquad(true); }
+  }, 2000);
+}
+
+function stageLine(s){
+  const bits = [s.stage || "?"];
+  if (s.status) bits.push("HTTP " + s.status);
+  if (s.hint) bits.push(s.hint);
+  if (s.detail) bits.push(s.detail);
+  return "  • " + bits.join(" · ");
+}
+
+function loginReport(body){
+  if (!body) return "";
+  if (body.ok) return `Kirdingiz: ${body.name || ""} — jamoa ${body.entry_id}`;
+  const parts = [body.hint || "Kirish amalga oshmadi."];
+  const detail = body.detail || (body.tried || []).map(s => s.detail).filter(Boolean)[0];
+  if (detail) parts.push(detail);
+  return parts.join("\n");
+}
+
+// ------------------------------------------------------------- jamoam
+let SQUAD = null, view = "players";
+
+function diffClass(v){ return v == null ? "" : (v <= 2.6 ? "easy" : (v >= 3.6 ? "hard" : "")); }
+
+function playerRow(p, withReason){
+  const fx = p.fixture || {};
+  const place = fx.opp_position ? ` ${fx.opp_position}-o'r` : "";
+  // Qiyinlik pozitsiyaga bog'liq: DRV/HIM uchun raqibning hujumi,
+  // YAR/HUJ uchun raqibning himoyasi hal qiladi
+  const himoya = p.pos <= 2;
+  const izoh = himoya ? "raqib gol uradimi" : "raqib gol o'tkazadimi";
+  const diff = fx.eff_fdr != null
+    ? ` · <span class="${diffClass(fx.eff_fdr)}" title="${izoh}">qiy ${fx.eff_fdr.toFixed(1)}</span>` : "";
+  // Zich jadval — tarkib kutilganidan boshqacha bo'lishi mumkin
+  const rot = (fx.rotation ?? 0) >= 0.45
+    ? ` · <span class="hard" title="zich jadval — rotatsiya ehtimoli">zich</span>` : "";
+  const cap = p.is_captain ? '<span class="cap">C</span>'
+            : (p.is_vice ? '<span class="cap">V</span>' : "");
+  const flag = p.status !== "a"
+    ? `<span class="flag" title="${(p.news||"").replace(/"/g,"")}">${p.status}</span>` : "";
+  const last = withReason
+    ? `<div class="why">${p.reason || ""}</div>`
+    : `<div class="fix">${fx.opponent || "—"}${place}${diff}${rot}</div>`;
+  // Forma va egalik — FPL ning xolis raqamlari. EV model bahosi bo'lgani
+  // uchun, ular yonma-yon turganda modelga ishonish yoki ishonmaslik oson.
+  const form = (p.form ?? 0).toFixed(1);
+  const own = (p.ownership ?? 0).toFixed(1);
+  const pen = p.pen ? '<span class="badge" title="penaltichi">P</span>' : "";
+  const sp = p.set_piece ? '<span class="badge" title="standart pozitsiyalar">S</span>' : "";
+  const ban = p.ban_risk
+    ? '<span class="badge warn" title="4 ta sariq — yana bittasi diskvalifikatsiya">4🟨</span>' : "";
+  return `<div class="row" data-el="${p.element}" onclick="toggleDetail(${p.element})">
+    <span class="pos">${p.pos_short}</span>
+    <div class="who">${p.name}${cap}${pen}${sp}${ban}${flag}<small>${p.team}</small></div>
+    <div class="meta">${p.price.toFixed(1)}</div>
+    <div class="meta ${p.form >= 5 ? "easy" : (p.form < 2 ? "hard" : "")}">${form}</div>
+    <div class="meta">${own}%</div>
+    <div class="meta">${p.p_start.toFixed(0)}%</div>
+    <div class="ev">${p.ev.toFixed(1)}</div>
+    ${last}
+  </div>${detailRow(p)}`;
+}
+
+// EV qismlari. EV — o'rtacha qiymat: toza darvoza bo'lgan va bo'lmagan
+// holatlarning aralashmasi. Shuning uchun yonida "toza darvoza bo'lsa"
+// degan shartli raqam ham turadi — kutilayotgan yaxshi natija shu.
+const PART_NAMES = {
+  ishtirok: "ishtirok", gol: "gol", uzatma: "uzatma",
+  toza_darvoza: "toza darvoza", kiritilgan: "o'tkazilgan gol",
+  "to'xtatish": "to'xtatish", defcon: "DefCon", bonus: "bonus",
+  kartochka: "kartochka", boshqa: "boshqa",
+};
+
+function detailRow(p){
+  const d = p.detail || {};
+  const parts = d.parts || {};
+  const items = Object.keys(PART_NAMES)
+    .filter(k => Math.abs(parts[k] ?? 0) >= 0.01)
+    .map(k => `<span><b>${(parts[k] > 0 ? "+" : "") + parts[k].toFixed(2)}</b> ${PART_NAMES[k]}</span>`)
+    .join("");
+  const cs = (p.pos <= 3 && d.p_cs)
+    ? `<span>toza darvoza <b>${d.p_cs.toFixed(0)}%</b> → bo'lsa <b>${d.if_cs.toFixed(1)}</b> ochko</span>` : "";
+  const ret = d.p_return
+    ? `<span>gol/uzatma <b>${d.p_return.toFixed(0)}%</b></span>` : "";
+  // Ikki xil qiyinlik yonma-yon: bitta uchrashuv himoyachiga oson,
+  // hujumchiga qiyin bo'lishi mumkin
+  const f = p.fixture || {};
+  const qiy = (f.eff_fdr_def != null && f.eff_fdr_att != null)
+    ? `<span>qiyinlik — himoyaga <b class="${diffClass(f.eff_fdr_def)}">${
+        f.eff_fdr_def.toFixed(1)}</b>, hujumga <b class="${diffClass(f.eff_fdr_att)}">${
+        f.eff_fdr_att.toFixed(1)}</b></span>` : "";
+  return `<div class="detail" id="d${p.element}" hidden>
+    <div class="parts">${items}</div>
+    <div class="parts sum">${cs}${ret}${qiy}</div>
+  </div>`;
+}
+
+function toggleDetail(el){
+  const box = document.getElementById("d" + el);
+  if (box) box.hidden = !box.hidden;
+}
+
+const HEAD_ROW = (last) => `<div class="row head">
+  <span></span><div>O'yinchi</div><div class="meta">Narx</div>
+  <div class="meta">Forma</div><div class="meta">Egalik</div>
+  <div class="meta">Tarkib</div><div class="ev">EV</div><div>${last}</div></div>`;
+
+function renderSquad(){
+  if (!SQUAD) return;
+  const s = SQUAD;
+  // Bitta raqam yetarli: berilgan FT dan shu turda ishlatilgani ayirilgan.
+  // Ikkovini alohida ko'rsatish ortiqcha edi.
+  const ft = s.unlimited_transfers ? "∞"
+           : (s.authenticated ? String(s.free_transfers) : `${s.free_transfers}?`);
+  $("squadTop").innerHTML = `
+    <h2>GW${s.event} · jamoa ${s.entry_id}</h2>
+    <div class="stats">
+      <div class="stat"><b>${Math.round(s.xi_ev_captain ?? s.xi_ev)}</b>
+        <span>kutilayotgan ochko${s.captain ? " (C: " + s.captain + ")" : ""}</span></div>
+      <div class="stat"><b>${s.formation}</b><span>sxema</span></div>
+      <div class="stat"><b>${s.value.toFixed(1)}m</b><span>qiymat</span></div>
+      <div class="stat"><b>${s.bank.toFixed(1)}m</b><span>bank</span></div>
+      <div class="stat"><b>${ft}</b><span>transferlar</span></div>
+    </div>
+    <p class="note">${s.ft_override
+      ? "<b>Diqqat:</b> transferlar soni <code>config.yaml</code> dagi "
+        + "<code>free_transfers_override</code> dan olindi. "
+      : ""}${s.authenticated
+      ? "Sotish narxlari va FT <b>aniq</b> — my-team dan olindi."
+      : "Login yo'q: sotish narxlari va FT <b>taxminiy</b>."}
+      Qiyinlik rasmiy FDR emas — raqibning jadvaldagi o'rni va joriy natijalari
+      bilan tuzatilgan baho.
+      <b>EV — o'rtacha</b>, ya'ni toza darvoza bo'lgan va bo'lmagan
+      holatlarning aralashmasi. O'yinchi ustiga bosing: ochko qismlarga
+      ajraladi va «toza darvoza bo'lsa nechta» degan raqam ham chiqadi.</p>`;
+
+  const xi = s.players.filter(p => p.in_xi);
+  const bench = s.players.filter(p => !p.in_xi);
+  $("squadXi").innerHTML = `<h2>Tavsiya etilgan 11 lik</h2>`
+    + HEAD_ROW("Raqib · qiyinlik") + xi.map(p => playerRow(p, false)).join("");
+  $("squadBench").innerHTML = `<h2>Zaxira — avtoalmashtirish tartibida</h2>`
+    + HEAD_ROW("Nima uchun zaxirada") + bench.map(p => playerRow(p, true)).join("");
+}
+
+async function loadSquad(force){
+  message($("squadMsg"), "info", "Tarkib yuklanmoqda…");
+  const r = await api("/api/squad" + (force ? "?refresh=1" : ""));
+  if (!r.ok){
+    SQUAD = null;
+    $("squadTop").innerHTML = "<h2>Jamoam</h2>";
+    $("squadXi").innerHTML = ""; $("squadBench").innerHTML = "";
+    message($("squadMsg"), r.status === 401 ? "info" : "err",
+      (r.body.error || "olinmadi") + (r.body.hint ? "\n" + r.body.hint : ""));
+    return;
+  }
+  SQUAD = r.body;
+  message($("squadMsg"), "info", "");
+  renderSquad();
+}
+
+// ------------------------------------------------------------- transferlar
+let TRANSFERS = null;
+
+function movePlayer(p, sotish){
+  const narx = sotish ? p.selling : p.price;
+  return `<span class="mv"><b>${p.name}</b> <small>${p.pos_short} ${narx.toFixed(1)}
+    · EV ${p.ev.toFixed(1)}</small></span>`;
+}
+
+function moveRow(m){
+  const outs = m.out.map(p => movePlayer(p, true)).join(" + ");
+  const ins = m.in.map(p => movePlayer(p, false)).join(" + ");
+  const hit = m.hit ? ` <span class="hard">−${m.hit} hit</span>` : "";
+  const pul = m.cost > 0 ? `+${m.cost.toFixed(1)}m` : `${m.cost.toFixed(1)}m`;
+  return `<div class="move ${m.worth_it ? "" : "dim"}">
+    <div class="movehead">
+      <b class="${m.gain > 0 ? "easy" : "hard"}">${m.gain > 0 ? "+" : ""}${m.gain.toFixed(1)}</b>
+      <small>sof foyda · ${TRANSFERS ? TRANSFERS.horizon : 5} tur${hit}</small>
+    </div>
+    <div class="movebody">${outs} <span class="arrow">➜</span> ${ins}</div>
+    <div class="movefoot">narx ${pul} · bank ${m.bank_after.toFixed(1)}m${
+      m.hit ? ` · hit siz ${m.raw_gain.toFixed(1)}` : ""}</div>
+  </div>`;
+}
+
+function renderTransfers(){
+  if (!TRANSFERS) return;
+  const t = TRANSFERS;
+  const ft = t.unlimited_transfers ? "∞"
+           : (t.authenticated ? String(t.free_transfers) : `${t.free_transfers}?`);
+  $("trTop").innerHTML = `
+    <h2>GW${t.event} · transferlar</h2>
+    <div class="stats">
+      <div class="stat"><b>${ft}</b><span>transferlar</span></div>
+      <div class="stat"><b>${t.bank.toFixed(1)}m</b><span>bank</span></div>
+      <div class="stat"><b>${t.value.toFixed(1)}m</b><span>qiymat</span></div>
+      <div class="stat"><b>${t.hit_cost}</b><span>hit narxi</span></div>
+    </div>
+    <p class="note">${t.free_transfers === 0
+      ? `<b>Tekin transfer yo'q</b> — har biri −${t.hit_cost} ochko turadi. `
+      : ""}${t.recommendation === "hold"
+      ? "<b>Hozircha ushlab turing.</b> Hech bir variant hit va xavfni oqlamayapti."
+      : "Foyda <b>gorizontdagi barcha turlar</b> bo'yicha hisoblangan, hit ayirilgan."}
+      ${t.authenticated ? "Sotish narxlari aniq."
+                        : "Login yo'q: sotish narxlari <b>taxminiy</b>."}</p>`;
+
+  $("trMoves").innerHTML = `<h2>Takliflar</h2>` + (t.moves.length
+    ? t.moves.map(moveRow).join("")
+    : `<p class="note">Byudjetga sig'adigan yaxshiroq variant topilmadi.</p>`);
+
+  $("trWeak").innerHTML = `<h2>Zaif bo'g'inlar</h2>`
+    + t.weak.map(p => `<div class="row">
+        <span class="pos">${p.pos_short}</span>
+        <div class="who">${p.name}<small>${p.selling.toFixed(1)}m</small></div>
+        <div class="ev">${p.ev.toFixed(1)}</div>
+        <div class="why">${p.reason}</div>
+      </div>`).join("");
+}
+
+async function loadTransfers(force){
+  message($("trMsg"), "info", "Variantlar hisoblanmoqda… (bir necha soniya)");
+  const r = await api("/api/transfers" + (force ? "?refresh=1" : ""));
+  if (!r.ok){
+    TRANSFERS = null;
+    $("trTop").innerHTML = "<h2>Transferlar</h2>";
+    $("trMoves").innerHTML = ""; $("trWeak").innerHTML = "";
+    message($("trMsg"), r.status === 401 ? "info" : "err",
+      (r.body.error || "olinmadi") + (r.body.hint ? "\n" + r.body.hint : ""));
+    return;
+  }
+  TRANSFERS = r.body;
+  message($("trMsg"), "info", "");
+  renderTransfers();
+}
+
+// ----------------------------------------------------------- jamoa tuzish
+let DRAFT = null;
+
+function draftRow(p){
+  const cap = p.is_captain ? '<span class="cap">C</span>' : "";
+  return `<div class="row">
+    <span class="pos">${p.pos_short}</span>
+    <div class="who">${p.name}${cap}<small>${p.team_short || ""}</small></div>
+    <div class="meta">${p.price.toFixed(1)}</div>
+    <div class="meta">${(p.form ?? 0).toFixed(1)}</div>
+    <div class="meta">${(p.ownership ?? 0).toFixed(1)}%</div>
+    <div class="meta">${p.p_start.toFixed(0)}%</div>
+    <div class="ev">${p.ev.toFixed(1)}</div>
+    <div class="fix">${p.ev_horizon.toFixed(1)} (${DRAFT ? DRAFT.horizonLabel : ""})</div>
+  </div>`;
+}
+
+const DRAFT_HEAD = `<div class="row head">
+  <span></span><div>O'yinchi</div><div class="meta">Narx</div>
+  <div class="meta">Forma</div><div class="meta">Egalik</div>
+  <div class="meta">Tarkib</div><div class="ev">EV</div><div>Gorizont</div></div>`;
+
+function renderDraft(){
+  if (!DRAFT) return;
+  const d = DRAFT;
+  d.horizonLabel = "jami";
+  const clubs = d.clubs.length
+    ? d.clubs.map(c => `${c.team}×${c.count}`).join(", ")
+    : "hamma klubdan bittadan";
+  $("drTop").innerHTML = `
+    <h2>GW${d.event} · noldan tuzilgan jamoa</h2>
+    <div class="stats">
+      <div class="stat"><b>${Math.round(d.expected_points)}</b>
+        <span>kutilayotgan ochko (C: ${d.captain})</span></div>
+      <div class="stat"><b>${d.formation}</b><span>sxema</span></div>
+      <div class="stat"><b>${d.cost.toFixed(1)}m</b><span>sarflandi</span></div>
+      <div class="stat"><b>${d.bank.toFixed(1)}m</b><span>qoldi</span></div>
+    </div>
+    <p class="note">
+      Byudjet <b>${d.budget.toFixed(1)}m</b>, qoidalar tekshirildi:
+      <b class="${d.legal ? "easy" : "hard"}">${d.legal ? "mos" : "MOS EMAS"}</b>
+      — 2 DRV / 5 HIM / 5 YAR / 3 HUJ, bitta klubdan ko'pi 3 ta.
+      Klublar: ${clubs}.
+      <br>Bu jamoa mavjud tarkibingizdan mustaqil — wildcard uchun ham,
+      ekspertlar bilan H2H sinov uchun ham shu ro'yxat ishlatiladi.</p>`;
+
+  const xi = d.players.filter(p => p.in_xi);
+  const bench = d.players.filter(p => !p.in_xi);
+  $("drXi").innerHTML = `<h2>Asosiy 11 lik</h2>` + DRAFT_HEAD
+    + xi.map(draftRow).join("");
+  $("drBench").innerHTML = `<h2>Zaxira</h2>` + DRAFT_HEAD
+    + bench.map(draftRow).join("");
+}
+
+async function loadDraft(force){
+  message($("drMsg"), "info", "Jamoa tuzilmoqda… (bir necha soniya)");
+  const r = await api("/api/draft" + (force ? "?refresh=1" : ""));
+  if (!r.ok || r.body.error){
+    DRAFT = null;
+    $("drTop").innerHTML = "<h2>Jamoa tuzish</h2>";
+    $("drXi").innerHTML = ""; $("drBench").innerHTML = "";
+    message($("drMsg"), "err", r.body.error || "tuzilmadi");
+    return;
+  }
+  DRAFT = r.body;
+  message($("drMsg"), "info", "");
+  renderDraft();
+}
+
+function setView(name){
+  view = name;
+  $("viewPlayers").hidden = name !== "players";
+  $("viewSquad").hidden = name !== "squad";
+  $("viewTransfers").hidden = name !== "transfers";
+  $("viewDraft").hidden = name !== "draft";
+  document.querySelectorAll(".tab").forEach(b =>
+    b.classList.toggle("on", b.dataset.view === name));
+  if (name === "squad" && !SQUAD) loadSquad(false);
+  if (name === "transfers" && !TRANSFERS) loadTransfers(false);
+  if (name === "draft" && !DRAFT) loadDraft(false);
+}
+
+document.querySelectorAll(".tab").forEach(b =>
+  b.onclick = () => setView(b.dataset.view));
+
+// -------------------------------------------------------------- hodisalar
+$("toggleLogin").onclick = () => { $("loginCard").hidden = !$("loginCard").hidden; };
+$("refresh").onclick = () => {
+  if (view === "squad") return loadSquad(true);
+  if (view === "transfers") return loadTransfers(true);
+  return load(true);
+};
+$("reset").onclick = () => {
+  ["q","maxPrice","minOwn","minMin"].forEach(id => $(id).value = "");
+  $("pos").value = ""; $("team").value = "";
+  $("hideEnabler").checked = true; $("onlyAvailable").checked = true;
+  render();
+};
+["q","maxPrice","minOwn","minMin"].forEach(id => $(id).oninput = render);
+["pos","team","hideEnabler","onlyAvailable"].forEach(id => $(id).onchange = render);
+
+let lastPassword = "";
+
+async function startLogin(mode, button){
+  button.disabled = true;
+  $("fallbackRow").hidden = true;
+  message($("loginMsg"), "info", "Kirilmoqda…");
+  const pass = $("password").value || lastPassword;
+  lastPassword = pass;                       // brauzer zaxirasi uchun saqlab turamiz
+  const r = await api("/api/login", {method:"POST", body:JSON.stringify({
+    mode, email: $("email").value, password: pass,
+  })});
+  $("password").value = "";
+  if (r.status === 202){ message($("loginMsg"), "info", r.body.hint || ""); pollLogin(); return; }
+  button.disabled = false;
+  message($("loginMsg"), r.body.ok ? "ok" : "err", loginReport(r.body));
+  refreshStatus();
+}
+
+$("doLogin").onclick = () => startLogin("sso", $("doLogin"));
+$("doBrowser").onclick = () => startLogin("browser", $("doBrowser"));
+
+$("doConnect").onclick = async () => {
+  const btn = $("doConnect"); btn.disabled = true;
+  const r = await api("/api/connect", {method:"POST", body:JSON.stringify({
+    entry_id: parseInt($("entryId").value, 10) || 0,
+  })});
+  btn.disabled = false;
+  if (r.body.ok){
+    message($("loginMsg"), "ok",
+      `Ulandi: ${r.body.team_name || ""} (${r.body.name || ""}) — jamoa ${r.body.entry_id}.\n` +
+      `Ochiq ma'lumot bilan ishlanmoqda; aniq sotish narxlari uchun login kerak.`);
+    SQUAD = null;
+    if (view === "squad") loadSquad(true);
+  } else {
+    message($("loginMsg"), "err",
+      (r.body.hint || "ulanmadi") + (r.body.detail ? "\n" + r.body.detail : ""));
+  }
+  refreshStatus();
+};
+
+$("doQuick").onclick = async () => {
+  const btn = $("doQuick"); btn.disabled = true;
+  message($("loginMsg"), "info", "Saqlangan profil bilan kirilmoqda — oyna ochilmaydi…");
+  const r = await api("/api/reconnect", {method:"POST"});
+  if (r.status === 202){ pollLogin(); return; }
+  btn.disabled = false;
+  message($("loginMsg"), r.body.ok ? "ok" : "err", loginReport(r.body));
+  refreshStatus();
+};
+
+$("doToken").onclick = async () => {
+  const btn = $("doToken"); btn.disabled = true;
+  const r = await api("/api/login", {method:"POST", body:JSON.stringify({token: $("token").value})});
+  message($("loginMsg"), r.body.ok ? "ok" : "err", loginReport(r.body));
+  if (r.body.ok) $("token").value = "";
+  btn.disabled = false;
+  refreshStatus();
+};
+
+$("doLogout").onclick = async () => {
+  await api("/api/logout", {method:"POST"});
+  message($("loginMsg"), "info", "Chiqdingiz.");
+  SQUAD = null;
+  refreshStatus();
+};
+
+refreshStatus();
+load(false);
+</script>
+</body>
+</html>

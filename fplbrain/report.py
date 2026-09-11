@@ -11,7 +11,7 @@ from .chips import CHIP_NAMES, ChipAdvice
 from .ev import DEF, FWD, GK, MID
 from .market import NewsSignal, PriceSignal
 from .rivals import Comparison, GroupStats
-from .squad import Squad, best_eleven
+from .squad import Squad, bench_reason, best_eleven
 from .telegram import escape
 from .transfers import TransferMove
 
@@ -115,19 +115,55 @@ def squad_section(squad: Squad, events: list[int], horizon_ev: float, weak: list
     return "\n".join(lines)
 
 
+def _fixture_note(player, event: int) -> str:
+    """`AVL(u) 17-o'r · qiy 2.1` — raqib, uning jadvaldagi o'rni va qiyinlik."""
+    fixtures = player.ev.fixtures.get(event, [])
+    if not fixtures:
+        return "bo'sh tur"
+    parts = []
+    for f in fixtures:
+        side = "u" if f.is_home else "m"
+        chunk = f"{f.opponent}({side})"
+        place = getattr(f, "opp_position", 0) or 0
+        if place:
+            chunk += f" {place}-o'r"
+        eff = getattr(f, "eff_fdr", None)
+        if eff:
+            chunk += f" · qiy {eff:.1f}"
+        parts.append(chunk)
+    return ", ".join(parts)
+
+
 def xi_section(squad: Squad, event: int) -> str:
     xi, bench, form, xi_ev = best_eleven(squad.players, event)
     order = {GK: 0, DEF: 1, MID: 2, FWD: 3}
     xi = sorted(xi, key=lambda p: (order[p.position], -p.ev.per_event.get(event, 0)))
-    lines = [f"<b>📋 GW{event} TAVSIYA ETILGAN 11 LIK</b>"]
+    lines = [
+        f"<b>📋 GW{event} TAVSIYA ETILGAN 11 LIK</b>",
+        f"Sxema {form[1]}-{form[2]}-{form[3]} · kutilayotgan <b>{xi_ev:.1f}</b> ochko",
+        "",
+    ]
     for p in xi:
         ev = p.ev.per_event.get(event, 0.0)
-        fx = p.ev.fixtures.get(event, [])
-        opp = ", ".join(f"{f.opponent}{'(u)' if f.is_home else '(m)'}" for f in fx) or "—"
-        lines.append(f"{POS_SHORT[p.position]} {_p(p.name)} — {ev:.1f} · {opp}")
-    lines.append("<i>Zaxira:</i> " + ", ".join(
-        f"{_p(p.name)} ({p.ev.per_event.get(event, 0.0):.1f})" for p in bench
-    ))
+        start = p.ev.profile.p_start
+        lines.append(
+            f"{POS_SHORT[p.position]} {_p(p.name)} — <b>{ev:.1f}</b> · "
+            f"{_fixture_note(p, event)} · tarkib {start * 100:.0f}%"
+        )
+
+    xi_min_ev = min((p.ev.per_event.get(event, 0.0) for p in xi), default=0.0)
+    lines.append("\n<i>Zaxira (avtoalmashtirish tartibida):</i>")
+    for i, p in enumerate(bench, start=1):
+        ev = p.ev.per_event.get(event, 0.0)
+        lines.append(
+            f"{i}. {POS_SHORT[p.position]} {_p(p.name)} ({ev:.1f}) — "
+            f"{bench_reason(p, event, xi_min_ev)}"
+        )
+    lines.append(
+        "\n<i>Tanlov faqat EV bo'yicha emas: tarkibga tushishi shubhali o'yinchi "
+        "arzimas EV ustunligi bilan 11 likka kirmaydi. Qiyinlik — rasmiy FDR emas, "
+        "raqibning jadvaldagi o'rni va joriy natijalari bilan tuzatilgan baho.</i>"
+    )
     return "\n".join(lines)
 
 
@@ -661,8 +697,11 @@ def fdr_section(rows, events: list[int], top_label: int = 3) -> str:
     span = f"GW{events[0]}–{events[-1]}"
     lines = [
         f"<b>🗓 ENG QULAY JADVAL — TOP {top_label} ({span})</b>",
-        "<i>Saralash Σ(6−FDR) bo'yicha: qo'sh tur ikki marta, bo'sh tur nol "
-        "qo'shadi. Oddiy o'rtacha bo'sh turi bor jamoani asossiz ko'taradi.</i>",
+        "<i>Saralash Σ(6−qiyinlik) bo'yicha: qo'sh tur ikki marta, bo'sh tur nol "
+        "qo'shadi. Qiyinlik rasmiy FDR emas — u mavsum boshida qotib qoladi. "
+        "Model unga raqibning jadvaldagi o'rni va joriy natijalarini qo'shadi. "
+        "Belgi: <code>AVL(u)·17 4→2.4</code> = raqib, uy/mehmon, uning o'rni, "
+        "rasmiy FDR → model bahosi.</i>",
     ]
     medals = ["🥇", "🥈", "🥉"]
     for i, row in enumerate(rows):
@@ -672,10 +711,14 @@ def fdr_section(rows, events: list[int], top_label: int = 3) -> str:
             extra.append(f"{row.doubles} qo'sh tur")
         if row.blanks:
             extra.append(f"{row.blanks} bo'sh tur")
+        if row.position:
+            extra.append(f"jadvalda {row.position}-o'rin")
+        if row.form_string:
+            extra.append(f"forma {row.form_string}")
         suffix = f" · {', '.join(extra)}" if extra else ""
         lines.append(
-            f"\n{medal} <b>{escape(row.name)}</b> — ball <b>{row.attractiveness}</b> · "
-            f"o'rtacha FDR {row.avg_fdr}{suffix}"
+            f"\n{medal} <b>{escape(row.name)}</b> — ball <b>{row.attractiveness:.1f}</b> · "
+            f"model qiyinligi {row.avg_eff} (rasmiy FDR {row.avg_fdr}){suffix}"
         )
         lines.append(f"    {' · '.join(row.marks)}")
         if row.my_players:
