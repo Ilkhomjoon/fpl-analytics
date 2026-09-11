@@ -126,5 +126,13 @@
   "horizon_ev": 222.606,
   "best_move": "James (5.4) + Hume (4.5) ➜ Guéhi (6.0) + Tarkowski (6.0)",
   "captain": "B.Fernandes"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-11T10:29:55.672662+05:00",
+  "event": 4,
+  "horizon_ev": 222.663,
+  "best_move": "James (5.4) + Hume (4.4) ➜ Guéhi (6.0) + Tarkowski (6.0)",
+  "captain": "B.Fernandes"
  }
 ]
