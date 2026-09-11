@@ -34,7 +34,7 @@ from fplbrain import rating as rating_mod
 from fplbrain import session_store
 from fplbrain.api import FplClient
 from fplbrain.config import Config
-from web import draftview, squadview, transferview
+from web import draftview, paceview, squadview, transferview
 
 log = logging.getLogger("fplweb")
 
@@ -164,6 +164,8 @@ def create_app(cfg: Config | None = None, client=None, demo: bool = False) -> Fl
     transfer_cache: dict = {"at": 0.0, "payload": None, "entry": 0}
     draft_lock = threading.Lock()
     draft_cache: dict = {"at": 0.0, "payload": None, "budget": 0.0}
+    pace_lock = threading.Lock()
+    pace_cache: dict = {"at": 0.0, "payload": None, "entry": 0}
 
     # ------------------------------------------------------------- ma'lumot
     def snapshot(force: bool = False) -> dict:
@@ -577,6 +579,29 @@ def create_app(cfg: Config | None = None, client=None, demo: bool = False) -> Fl
                 log.exception("transfer tahlili olinmadi")
                 return jsonify({"error": f"{type(exc).__name__}: {exc}"}), 502
             transfer_cache.update(payload=payload, at=time.time(), entry=entry_id)
+        return jsonify(payload)
+
+    @app.get("/api/pace")
+    def pace():
+        """Mavsum sur'ati: maqsadga nisbatan progress va birinchi o'rin bilan farq."""
+        entry_id = _S().entry_id or cfg.entry_id
+        if not entry_id:
+            return jsonify({
+                "error": "entry_id noma'lum",
+                "hint": "Jamoa ID bering yoki kirish qiling.",
+            }), 401
+        with pace_lock:
+            fresh = (pace_cache.get("payload") is not None
+                     and pace_cache.get("entry") == entry_id
+                     and (time.time() - float(pace_cache["at"])) < 600)
+            if fresh and request.args.get("refresh") != "1":
+                return jsonify(pace_cache["payload"])
+            try:
+                payload = paceview.build(client_for(_S()), cfg, entry_id)
+            except Exception as exc:
+                log.exception("sur'at olinmadi")
+                return jsonify({"error": f"{type(exc).__name__}: {exc}"}), 502
+            pace_cache.update(payload=payload, at=time.time(), entry=entry_id)
         return jsonify(payload)
 
     @app.get("/api/draft")

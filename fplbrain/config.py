@@ -79,7 +79,7 @@ class Config:
     minutes_prior_matches: float = 1.2     # daqiqalar priori necha o'yinga teng dalil sanaladi
     use_last_season: bool = False          # o'tgan mavsum ma'lumotini ishlatishmi (odatda yo'q)
     detail_players: int = 130              # nechta o'yinchi uchun batafsil tarix yuklanadi
-    season_target: int = 2508              # mavsum maqsadi (38 x 66 = o'tgan yil g'olibi)
+    season_target: int = 2810              # mavsum maqsadi (38 x 74)
 
     # jamoa kuchi
     home_base_goals: float = 1.55

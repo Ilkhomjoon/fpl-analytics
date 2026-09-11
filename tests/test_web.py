@@ -814,3 +814,43 @@ def test_jamoa_tuzish_keshlanadi(client):
     first = client.get("/api/draft").get_json()
     assert client.get("/api/draft").get_json() == first
     assert client.get("/api/draft?refresh=1").status_code == 200
+
+
+# ------------------------------------------------------------- mavsum sur'ati
+@pytest.fixture(scope="module")
+def pace_payload(client):
+    r = client.get("/api/pace")
+    assert r.status_code == 200, r.get_data(as_text=True)
+    return r.get_json()
+
+
+def test_surat_kerakli_raqamlarni_beradi(pace_payload):
+    p = pace_payload
+    for key in ("target", "points", "played", "per_event_needed", "on_pace_points",
+                "delta", "average", "needed_per_event", "projected", "grade",
+                "status", "progress", "season_progress", "events"):
+        assert key in p, f"«{key}» yo'q"
+    assert p["target"] == 2810
+    assert p["per_event_needed"] == pytest.approx(2810 / 38, abs=0.1)
+
+
+def test_surat_ichki_mantiqi_ziddiyatsiz(pace_payload):
+    p = pace_payload
+    assert p["on_pace_points"] == pytest.approx(
+        p["per_event_needed"] * p["played"], abs=1.0)
+    assert p["delta"] == pytest.approx(p["points"] - p["on_pace_points"], abs=1.0)
+    assert p["status"] in ("good", "warning", "serious", "critical")
+
+
+def test_surat_birinchi_orin_bilan_solishtiradi(pace_payload):
+    """Taqqoslash bo'lmasa ham yiqilmasin, bo'lsa — farq hisoblansin."""
+    leader = pace_payload.get("leader")
+    if leader:
+        assert leader["average"] > 0
+        assert pace_payload["leader_gap"] == pytest.approx(
+            pace_payload["average"] - leader["average"], abs=0.1)
+
+
+def test_surat_entry_id_siz_401():
+    app = create_app(Config(), demo=False)
+    assert app.test_client().get("/api/pace").status_code == 401

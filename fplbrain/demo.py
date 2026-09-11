@@ -56,13 +56,26 @@ class FakeClient:
         }
 
     def entry_history(self, entry_id: int) -> dict:
-        return {
-            "current": [
-                {"event": gw, "event_transfers": 0 if gw == 1 else 1, "points": 55}
-                for gw in range(1, self.played + 1)
-            ],
-            "chips": [],
-        }
+        """Tur natijalari. Sur'at moduliga `total_points` va minus ham kerak.
+
+        Birinchi o'rindagi menejer (ID 100_000 dan katta) kuchliroq o'ynaydi —
+        taqqoslash demo da ham mazmunli ko'rinsin.
+        """
+        kuchli = entry_id >= 100_000
+        current, total = [], 0
+        for gw in range(1, self.played + 1):
+            points = (72 if kuchli else 55) + (gw % 3) * 4
+            hit = 4 if (gw > 1 and gw % 4 == 0) else 0
+            total += points - hit
+            current.append({
+                "event": gw, "event_transfers": 0 if gw == 1 else 1,
+                "points": points, "event_transfers_cost": hit,
+                "total_points": total, "overall_rank": max(1, 250_000 - gw * 1000),
+                "rank": max(1, 900_000 - gw * 7000),
+                "points_on_bench": (gw * 3) % 14,
+                "value": 1000 + gw * 2, "bank": 5 + (gw % 4),
+            })
+        return {"current": current, "chips": []}
 
     def entry_transfers(self, entry_id: int) -> list[dict]:
         return []

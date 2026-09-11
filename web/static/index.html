@@ -133,6 +133,106 @@
   .movebody .mv small{color:var(--muted); font-weight:400}
   .movebody .arrow{color:var(--muted); margin:0 6px}
   .movefoot{margin-top:3px; font-size:12px; color:var(--muted); font-family:var(--mono)}
+
+  /* --- mavsum sur'ati --- */
+  /* Holat ranglari o'zgarmas va faqat holat uchun — seriya rangi sifatida
+     ishlatilmaydi. Rang yolg'iz ma'no tashimaydi: yonida har doim matn turadi. */
+  :root{--st-good:#0ca30c; --st-warn:#fab219; --st-serious:#ec835a; --st-crit:#d03b3b}
+  .hero{font-size:48px; line-height:1.05; font-weight:650; letter-spacing:-.03em}
+  .hero small{font-size:15px; font-weight:400; color:var(--muted); letter-spacing:0}
+  /* O'lchagich: to'ldirilmagan qism — shu rampaning ochroq pog'onasi,
+     shunda holat butun chiziq bo'ylab o'qiladi */
+  /* To'ldirilmagan qism — holat rangining ochroq pog'onasi, shunda holat
+     butun chiziq bo'ylab o'qiladi (dataviz: "same-ramp track") */
+  .meter{position:relative; height:14px; border-radius:7px;
+         margin:34px 0 6px}
+  .meter .track{position:absolute; inset:0; border-radius:7px; opacity:.18}
+  .meter .fill{position:relative; height:100%; border-radius:7px;
+               transition:width .4s ease}
+  .meter .good{background:var(--st-good)}
+  .meter .warning{background:var(--st-warn)}
+  .meter .serious{background:var(--st-serious)}
+  .meter .critical{background:var(--st-crit)}
+  /* Reja belgisi — shu paytgacha qayerda bo'lish kerak edi. Yorliq PASTDA:
+     tepada sarlavha raqami turadi va ustma-ust tushib qolardi. */
+  .meter .mark{position:absolute; top:-6px; bottom:-6px; width:2px;
+               background:var(--ink); opacity:.6}
+  .meter .mark span{position:absolute; top:20px; left:50%; transform:translateX(-50%);
+                    font-size:10px; color:var(--muted); white-space:nowrap}
+  /* Birinchi o'rindagi menejer — xuddi shu 2810 shkalasida. Ustunlar
+     grafigida emas: farq aynan maqsadga nisbatan o'lchanadi. */
+  .meter .lead{position:absolute; top:-7px; bottom:-7px; width:2px;
+               background:#3b82f6}
+  .meter .lead span{position:absolute; bottom:22px; left:50%;
+                    transform:translateX(-50%); font-size:10px; color:#3b82f6;
+                    white-space:nowrap; font-weight:600}
+  .meterfoot{display:flex; justify-content:space-between; font-size:12px;
+             color:var(--muted); font-family:var(--mono); margin-top:18px}
+  .state{display:inline-flex; align-items:center; gap:5px; font-weight:600;
+         font-size:13px}
+  .state .dot{width:9px; height:9px; border-radius:50%}
+
+  /* --- turlar bo'yicha ustunlar --- */
+  /* Ixcham: balandlik 92px. Grafik asosiy emas, sur'atning qo'shimchasi —
+     sahifaning yarmini egallashi shart emas. */
+  .chart{position:relative; margin-top:16px}
+  .bars{position:relative; display:flex; align-items:flex-end; height:92px}
+  /* Ustunning o'zi — nishon emas. Nishon `.slot`: u to'liq balandlikda va
+     ustundan kengroq, shuning uchun sichqoncha aniq tegishi shart emas.
+     Oraliq `gap` emas, `padding` bilan beriladi: shunda ustun markazlari
+     teng masofada turadi va chiziqli qatlam ular bilan aniq mos tushadi. */
+  .slot{flex:1; min-width:8px; height:100%; display:flex; align-items:flex-end;
+        position:relative; cursor:default; padding:0 2px}
+  .slot:hover,.slot:focus-visible{background:var(--chip); outline:none}
+  .slot .b{width:100%; border-radius:2px 2px 0 0; background:var(--muted);
+           opacity:.45; transition:opacity .15s}
+  .slot .b.on{background:var(--st-good); opacity:.85}
+  .slot:hover .b,.slot:focus-visible .b{opacity:1}
+  .slot .lbl{position:absolute; bottom:-17px; left:0; right:0; text-align:center;
+             font-size:9px; color:var(--muted); font-variant-numeric:tabular-nums}
+  .slot .chip2{position:absolute; top:2px; left:50%; transform:translateX(-50%);
+               font-size:8px; color:var(--accent); font-weight:700}
+  /* Chiziqli qatlam — yetakchi va o'rtacha menejer. Ustunlar ustida turadi,
+     lekin sichqonchani to'smaydi. */
+  .lines{position:absolute; inset:0; width:100%; height:100%; overflow:visible;
+         pointer-events:none; z-index:4}
+  .lines polyline{fill:none; stroke-width:2; vector-effect:non-scaling-stroke}
+  .lines .lead{stroke:#3b82f6}
+  .lines .avg{stroke:var(--muted); stroke-dasharray:1 3; stroke-width:2;
+              stroke-linecap:round}
+  /* Havolalar: norma va o'rtacha menejer */
+  .refline{position:absolute; left:0; right:0; height:0; pointer-events:none; z-index:3}
+  .refline.norm{border-top:1px dashed var(--muted); opacity:.85}
+  .refline.avg{border-top:2px solid var(--accent); opacity:.75}
+  .key i.lead{height:0; border-top:2px solid #3b82f6}
+  .refline span{position:absolute; left:0; top:-15px; font-size:10px;
+                color:var(--muted); background:var(--panel); padding:0 4px;
+                border-radius:3px}
+  .chartfoot{margin-top:26px; display:flex; gap:16px; flex-wrap:wrap;
+             font-size:12px; color:var(--muted)}
+  .key{display:inline-flex; align-items:center; gap:5px}
+  .key i{width:14px; height:9px; border-radius:2px; display:inline-block}
+  .key i.line{height:0; border-top:2px solid var(--accent)}
+  .key i.dash{height:0; border-top:1px dashed var(--muted)}
+  .key i.dot{height:0; border-top:2px dotted var(--muted)}
+  /* Tooltip: qiymat yetakchi, yorliq ikkinchi darajali */
+  .tip{position:fixed; z-index:50; pointer-events:none; opacity:0;
+       transform:translate(-50%,-100%); transition:opacity .12s;
+       background:var(--panel); border:1px solid var(--line); border-radius:9px;
+       box-shadow:0 6px 24px rgba(16,24,40,.18); padding:9px 11px; min-width:170px}
+  .tip.on{opacity:1}
+  .tip h4{margin:0 0 6px; font-size:12px; color:var(--muted); font-weight:600;
+          text-transform:uppercase; letter-spacing:.04em}
+  /* Qiymat yetakchi, yorliq ikkinchi darajali — shuning uchun qiymat
+     birinchi ustunda va to'q rangda. `order` ISHLATILMAYDI: u butun
+     panjarani qayta tartiblab, hamma qiymatni hamma yorliqdan oldinga
+     surib yuborgan edi. */
+  .tip dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:3px 10px;
+          font-size:12.5px; align-items:baseline}
+  .tip dd{margin:0; font-family:var(--mono); font-weight:700; text-align:right;
+          font-variant-numeric:tabular-nums; color:var(--ink)}
+  .tip dt{color:var(--muted)}
+  .tip .sep{grid-column:1/-1; border-top:1px solid var(--line); margin:3px 0 1px}
 </style>
 </head>
 <body>
@@ -146,6 +246,7 @@
     <button class="tab" data-view="squad">Jamoam</button>
     <button class="tab" data-view="transfers">Transferlar</button>
     <button class="tab" data-view="draft">Jamoa tuzish</button>
+    <button class="tab" data-view="pace">Sur'at</button>
   </span>
   <span class="grow"></span>
   <span class="pill" id="authpill">login yo'q</span>
@@ -229,6 +330,13 @@
     <div id="trMsg"></div>
   </div>
 
+  <div id="viewPace" hidden>
+    <section class="card" id="paceCard" hidden></section>
+    <section class="card" id="paceStats" hidden></section>
+    <section class="card" id="paceChart" hidden></section>
+    <div id="paceMsg"></div>
+  </div>
+
   <div id="viewDraft" hidden>
     <section class="card" id="drTop"></section>
     <section class="card" id="drXi"></section>
@@ -236,6 +344,8 @@
     <div id="drMsg"></div>
   </div>
 </main>
+
+<div class="tip" id="tip" role="tooltip"></div>
 
 <script>
 const COLUMNS = [
@@ -578,6 +688,233 @@ function renderSquad(){
     + HEAD_ROW("Nima uchun zaxirada") + bench.map(p => playerRow(p, true)).join("");
 }
 
+// ------------------------------------------------------------ mavsum sur'ati
+// Shakl: bitta nisbat bitta chegaraga qarshi → **o'lchagich** (meter).
+// Yonida bir nechta sarlavha raqam → stat tile qatori. Grafik emas: bu
+// yerda taqqoslanadigan seriya yo'q, bitta progress bor.
+let PACE = null;
+
+const STATE_COLOR = {good: "var(--st-good)", warning: "var(--st-warn)",
+                     serious: "var(--st-serious)", critical: "var(--st-crit)"};
+
+// Tooltip matni **textContent** bilan qo'yiladi: qiymatlar server javobidan
+// keladi va ularni HTML sifatida qo'shish xavfli bo'lardi.
+function tipRow(dl, label, value, cls){
+  const dd = document.createElement("dd");
+  dd.textContent = value;
+  if (cls) dd.className = cls;
+  const dt = document.createElement("dt");
+  dt.textContent = label;
+  dl.append(dd, dt);
+}
+
+function showTip(el, e){
+  const tip = $("tip");
+  tip.innerHTML = "";
+  const h = document.createElement("h4");
+  h.textContent = `GW${e.event}${e.chip ? " · " + e.chip : ""}`;
+  const dl = document.createElement("dl");
+  tipRow(dl, "sof ochko", e.net);
+  if (e.hit) tipRow(dl, "minus", `−${e.hit}`, "hard");
+  if (e.average){
+    tipRow(dl, "o'rtacha menejer", e.average);
+    tipRow(dl, "farq", (e.vs_average > 0 ? "+" : "") + e.vs_average,
+           e.vs_average >= 0 ? "easy" : "hard");
+  }
+  const sep = document.createElement("div"); sep.className = "sep";
+  dl.append(sep);
+  if (e.rank) tipRow(dl, "umumiy o'rin", e.rank.toLocaleString("ru"));
+  if (e.bench) tipRow(dl, "zaxirada qoldi", e.bench);
+  if (e.transfers) tipRow(dl, "transfer", e.transfers);
+  if (e.value) tipRow(dl, "qiymat", e.value.toFixed(1) + "m");
+  tipRow(dl, "jami", e.total);
+  tip.append(h, dl);
+
+  // Ekran chetiga chiqib ketmasin
+  tip.classList.add("on");
+  const r = el.getBoundingClientRect();
+  const w = tip.offsetWidth || 190;
+  const x = Math.max(w / 2 + 8, Math.min(window.innerWidth - w / 2 - 8,
+                                         r.left + r.width / 2));
+  tip.style.left = x + "px";
+  tip.style.top = Math.max(tip.offsetHeight + 8, r.top - 10) + "px";
+}
+
+function hideTip(){ $("tip").classList.remove("on"); }
+
+function paceChart(events, norm, avgLine){
+  if (!events.length) return "";
+  // Shkala hamma seriyani sig'dirsin: o'z ochkom, yetakchi, norma, o'rtacha
+  const vals = events.flatMap(e => [e.net, e.average].filter(v => v != null));
+  const max = Math.max(norm, ...vals) * 1.12;
+  const h = v => Math.max(2, Math.round(100 * v / (max || 1)));
+
+  // Ustun markazlari teng masofada (oraliq `padding` bilan berilgan), shuning
+  // uchun i-chi markaz aynan (i+0.5)/n — chiziq ular bilan aniq mos tushadi
+  const n = events.length;
+  const x = i => ((i + 0.5) / n * 100).toFixed(3);
+  const y = v => (100 - 100 * v / (max || 1)).toFixed(3);
+  const line = (key, cls) => {
+    const pts = events.map((e, i) => e[key] != null ? `${x(i)},${y(e[key])}` : null)
+                      .filter(Boolean);
+    return pts.length > 1 ? `<polyline class="${cls}" points="${pts.join(" ")}"/>` : "";
+  };
+  const avgSeries = line("average", "avg");
+
+  const bars = events.map((e, i) => `
+    <div class="slot" tabindex="0" data-i="${i}">
+      ${e.chip ? '<span class="chip2">chip</span>' : ""}
+      <div class="b ${e.net >= norm ? "on" : ""}" style="height:${h(e.net)}%"></div>
+      <span class="lbl">${e.event}</span>
+    </div>`).join("");
+
+  return `<div class="chart">
+    <div class="bars">
+      <div class="refline norm" style="bottom:${h(norm)}%"><span>norma ${norm.toFixed(0)}</span></div>
+      ${bars}
+      <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+        ${avgSeries}
+      </svg>
+    </div>
+    <div class="chartfoot">
+      <span class="key"><i style="background:var(--st-good)"></i> normadan yuqori</span>
+      <span class="key"><i style="background:var(--muted);opacity:.45"></i> normadan past</span>
+      <span class="key"><i class="dash"></i> norma ${norm.toFixed(0)}</span>
+      ${avgSeries ? '<span class="key"><i class="dot"></i> o\'rtacha menejer</span>' : ""}
+    </div>
+  </div>`;
+}
+
+// Hover/fokus — ustunga emas, kengroq "slot" ga bog'lanadi
+function bindChart(container, events){
+  container.querySelectorAll(".slot").forEach(slot => {
+    const e = events[+slot.dataset.i];
+    if (!e) return;
+    slot.addEventListener("pointerenter", () => showTip(slot, e));
+    slot.addEventListener("focus", () => showTip(slot, e));
+    slot.addEventListener("pointerleave", hideTip);
+    slot.addEventListener("blur", hideTip);
+  });
+}
+
+function renderPace(){
+  const card = $("paceCard"), stats = $("paceStats"), chart = $("paceChart");
+  if (!PACE){ card.hidden = stats.hidden = chart.hidden = true; return; }
+  const p = PACE;
+  card.hidden = stats.hidden = chart.hidden = false;
+
+  // --- 1-karta: o'lchagich (bitta nisbat bitta chegaraga qarshi) ---
+  const fill = Math.max(0, Math.min(100, p.progress * 100));
+  const mark = Math.max(0, Math.min(100, p.season_progress * 100));
+  const oldinda = p.delta >= 0;
+  const dot = STATE_COLOR[p.status] || "var(--muted)";
+  // Birinchi o'rindagi menejer XUDDI SHU shkalada: fill oxiri bilan ko'k
+  // chiziq orasidagi masofa — undan qancha ortdaligingiz
+  const leadMark = (p.leader && p.leader.points)
+    ? `<div class="lead" style="left:${
+        Math.max(0, Math.min(100, p.leader.points / p.target * 100))}%">
+         <span>1-o'rin ${p.leader.points}</span></div>`
+    : "";
+  const gap = (p.leader_gap != null)
+    ? `<p class="note">Birinchi o'rindagi menejerdan turiga
+        <b class="${p.leader_gap >= 0 ? "easy" : "hard"}">${
+          p.leader_gap >= 0 ? "+" : ""}${p.leader_gap.toFixed(1)}</b> ochko
+        ${p.leader_gap >= 0 ? "oldinda" : "ortda"}siz${
+          p.leader.name ? " (" + p.leader.name + ")" : ""}.
+        Yig'indida undan <b class="${p.leader_total_gap >= 0 ? "easy" : "hard"}">${
+          Math.abs(p.leader_total_gap)}</b> ochko
+        ${p.leader_total_gap >= 0 ? "oldindasiz" : "ortdasiz"}; u shu sur'atda
+        mavsumni <b>${Math.round(p.leader.projected)}</b> ochko bilan tugatadi.</p>`
+    : "";
+
+  card.innerHTML = `
+    <h2>Mavsum sur'ati · maqsad ${p.target}</h2>
+    <div class="hero">${p.points}
+      <small>/ ${p.target} ochko · GW${p.played}/${p.total_events}</small></div>
+
+    <div class="meter">
+      <div class="track ${p.status}"></div>
+      <div class="fill ${p.status}" style="width:${fill}%"></div>
+      <div class="mark" style="left:${mark}%"><span>reja ${Math.round(p.on_pace_points)}</span></div>
+      ${leadMark}
+    </div>
+    <div class="meterfoot"><span>0</span><span>${p.target}</span></div>
+
+    <div class="stats" style="margin-top:14px">
+      <div class="stat">
+        <b><span class="state"><span class="dot" style="background:${dot}"></span>${p.grade}</span></b>
+        <span>rejadan ${oldinda ? "+" : ""}${Math.round(p.delta)} ochko</span></div>
+      <div class="stat"><b>${p.average.toFixed(1)}</b><span>turiga o'rtacha</span></div>
+      <div class="stat"><b>${p.per_event_needed.toFixed(1)}</b><span>norma (maqsad/38)</span></div>
+      <div class="stat"><b>${p.needed_per_event == null ? "—"
+          : p.needed_per_event.toFixed(1)}</b>
+        <span>qolgan ${p.remaining_events} turda kerak</span></div>
+      <div class="stat"><b>${Math.round(p.projected)}</b><span>shu sur'atda yakun</span></div>
+      ${p.leader && p.leader.average
+        ? `<div class="stat"><b>${p.leader.average.toFixed(1)}</b>
+             <span>1-o'rin turiga o'rtacha</span></div>` : ""}
+    </div>
+    ${gap}`;
+
+  // --- 2-karta: jamoa ko'rsatkichlari ---
+  // Maqsad "nima bo'layapti" ni aytadi, bu yer esa "nega" ni.
+  const vsAvg = p.vs_average_total;
+  const rank = p.rank ? p.rank.toLocaleString("ru") : "—";
+  stats.innerHTML = `
+    <h2>Jamoa ko'rsatkichlari</h2>
+    <div class="stats">
+      <div class="stat"><b>${rank}</b><span>umumiy o'rin${
+        p.best_rank ? " (eng yaxshisi " + p.best_rank.toLocaleString("ru") + ")" : ""}</span></div>
+      <div class="stat"><b class="${vsAvg >= 0 ? "easy" : "hard"}">${
+        vsAvg >= 0 ? "+" : ""}${vsAvg}</b>
+        <span>o'rtacha menejerdan · ${p.beat_average}/${p.played} turda ustun</span></div>
+      <div class="stat"><b class="${p.hits_paid ? "hard" : ""}">−${p.hits_paid}</b>
+        <span>minusga ketdi (${p.transfers_made} transfer)</span></div>
+      <div class="stat"><b>${p.bench_lost}</b><span>zaxirada qoldi</span></div>
+      <div class="stat"><b>${p.best ? p.best.net : "—"}</b>
+        <span>eng yaxshi tur${p.best ? " (GW" + p.best.event + ")" : ""}</span></div>
+      <div class="stat"><b>${p.worst ? p.worst.net : "—"}</b>
+        <span>eng yomon tur${p.worst ? " (GW" + p.worst.event + ")" : ""}</span></div>
+      <div class="stat"><b>${p.consistency.toFixed(1)}</b><span>tebranish (±)</span></div>
+      <div class="stat"><b>${p.value ? p.value.toFixed(1) + "m" : "—"}</b>
+        <span>jamoa qiymati</span></div>
+    </div>
+    <p class="note"><b>Minus</b> — to'g'ridan-to'g'ri yo'qotish, uni kamaytirish
+      qo'lingizda. <b>Zaxirada qolgan</b> ochko yo'qotish emas (har doim ham
+      taxmin qilib bo'lmaydi), lekin katta son tarkib tanlashda muammo borligini
+      aytadi. <b>Tebranish</b> — natijalarning standart chetlanishi: kichik son
+      barqarorlik, katta son "portlash va qulash" degani.</p>`;
+
+  // --- 3-karta: turlar bo'yicha grafik ---
+  chart.innerHTML = `<h2>Turlar bo'yicha · har ustunga sichqonchani olib boring</h2>`
+    + paceChart(p.events, p.per_event_needed)
+    + `<details style="margin-top:14px"><summary>Jadval ko'rinishi</summary>
+        <div class="tablewrap" style="max-height:320px;margin-top:8px">
+        <table><thead><tr>
+          <th style="text-align:left">GW</th><th>Ochko</th><th>Minus</th><th>Sof</th>
+          <th>O'rtacha</th><th>Farq</th><th>Zaxira</th><th>O'rin</th><th>Jami</th>
+        </tr></thead><tbody>
+        ${p.events.slice().reverse().map(e => `<tr>
+          <td class="name">GW${e.event}${e.chip ? " · " + e.chip : ""}</td>
+          <td class="num">${e.points}</td>
+          <td class="num ${e.hit ? "down" : "dim"}">${e.hit ? "−" + e.hit : "—"}</td>
+          <td class="num"><b>${e.net}</b></td>
+          <td class="num dim">${e.average || "—"}</td>
+          <td class="num ${e.vs_average >= 0 ? "up" : "down"}">${
+            e.average ? (e.vs_average > 0 ? "+" : "") + e.vs_average : "—"}</td>
+          <td class="num dim">${e.bench || "—"}</td>
+          <td class="num">${e.rank ? e.rank.toLocaleString("ru") : "—"}</td>
+          <td class="num">${e.total}</td></tr>`).join("")}
+        </tbody></table></div></details>`;
+  bindChart(chart, p.events);
+}
+
+async function loadPace(force){
+  const r = await api("/api/pace" + (force ? "?refresh=1" : ""));
+  PACE = (r.ok && !r.body.error) ? r.body : null;
+  renderPace();
+}
+
 async function loadSquad(force){
   message($("squadMsg"), "info", "Tarkib yuklanmoqda…");
   const r = await api("/api/squad" + (force ? "?refresh=1" : ""));
@@ -744,9 +1081,11 @@ function setView(name){
   $("viewSquad").hidden = name !== "squad";
   $("viewTransfers").hidden = name !== "transfers";
   $("viewDraft").hidden = name !== "draft";
+  $("viewPace").hidden = name !== "pace";
   document.querySelectorAll(".tab").forEach(b =>
     b.classList.toggle("on", b.dataset.view === name));
   if (name === "squad" && !SQUAD) loadSquad(false);
+  if (name === "pace" && !PACE) loadPace(false);
   if (name === "transfers" && !TRANSFERS) loadTransfers(false);
   if (name === "draft" && !DRAFT) loadDraft(false);
 }
@@ -758,6 +1097,7 @@ document.querySelectorAll(".tab").forEach(b =>
 $("toggleLogin").onclick = () => { $("loginCard").hidden = !$("loginCard").hidden; };
 $("refresh").onclick = () => {
   if (view === "squad") return loadSquad(true);
+  if (view === "pace") return loadPace(true);
   if (view === "transfers") return loadTransfers(true);
   return load(true);
 };

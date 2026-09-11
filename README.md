@@ -26,6 +26,39 @@ Sahifada ikki ko'rinish: **O'yinchilar** va **Jamoam**.
 **forma**, **egalik %**, tarkibga tushish ehtimoli, EV, raqib va model
 qiyinligi. Forma va egalik — FPL ning o'z raqamlari, EV esa model bahosi:
 yonma-yon turgani uchun modelga qachon ishonish kerakligi ko'rinadi.
+**Sur'at** — alohida bo'lim, uch qismdan:
+
+1. **O'lchagich** — maqsad (**2810** ochko = 38 x 74) shkalasida uchta
+   nuqta yonma-yon turadi:
+   - to'ldirilgan qism — **sizning yig'indingiz**;
+   - kulrang belgi — **reja** (shu paytgacha qancha bo'lishi kerak edi);
+   - **ko'k belgi** — birinchi o'rindagi menejerning yig'indisi.
+
+   Ya'ni to'ldirilgan qism oxiri bilan ko'k chiziq orasidagi masofa —
+   yetakchidan qancha ortdaligingiz. Yonida **qolgan turlarda turiga nechta
+   kerak** (eng foydalisi: orqada qolgan sari talab o'sadi va maqsad qachon
+   real emasligini o'zi ko'rsatadi) va yetakchining turiga o'rtachasi.
+
+2. **Jamoa ko'rsatkichlari** — maqsad "nima bo'layapti" ni aytadi, bu yer esa
+   **"nega"** ni: o'rtacha menejerdan farq (nechta turda ustun chiqqaningiz),
+   minusga ketgan ochko, zaxirada qolgani, eng yaxshi/yomon tur, o'rin
+   harakati, jamoa qiymati va **tebranish** (natijalarning standart
+   chetlanishi).
+
+3. **Turlar bo'yicha grafik** (ixcham) — ustunlar sizning sof ochkongiz,
+   ustidan ikki havola chizig'i o'tadi: **punktir** norma (maqsad/38) va
+   **nuqtali** o'rtacha menejer. Yetakchi bu yerda YO'Q — u maqsad
+   o'lchagichida, chunki savol boshqa: bu yerda "shu hafta normani berdimmi",
+   u yerda esa "yetakchidan qancha ortdaman".
+
+   Har ustunga sichqoncha olib borilsa (yoki Tab bilan fokus berilsa) o'sha
+   turning to'liq tafsiloti chiqadi: sof ochko, minus, o'rtacha menejer va
+   undan farq, umumiy o'rin, zaxirada qolgani, transfer, jamoa qiymati.
+   Pastda **jadval ko'rinishi** — sichqonchasiz ham hamma raqam ko'rinadi.
+
+> «Minusga 24 ochko ketdi va zaxirada 51 ochko qoldi» — bu **sabab**.
+> «191 ochko ortdasiz» — bu faqat natija. Shuning uchun ikkinchi karta bor.
+
 **Jamoa tuzish** — noldan 15 lik: 100.0m byudjet, 2/5/5/3 taqsimot, bitta
 klubdan ko'pi 3 o'yinchi. Mavjud tarkibingizga umuman bog'liq emas.
 Ikki maqsad: **wildcard** va **H2H sinov** — algoritm tuzgan jamoani
@@ -271,7 +304,7 @@ python run.py --full-text
 | ⭐ Reyting | Har pozitsiya bo'yicha eng yaxshi o'yinchilar: **rol × chiqim**. Byudjet to'ldiruvchilar belgilanadi |
 | 💎 Samara | 1 million evaziga eng ko'p chiqim beradiganlar |
 | 📊 Bozor | Shu tur oldidan kim olinmoqda, kim sotilmoqda — egalar soniga nisbatan |
-| 📈 Sur'at | Mavsum maqsadiga (2508 ochko) nisbatan holat: sizning o'rtachangiz, yetakchiniki, qolgan turlarda kerakli o'rtacha |
+| 📈 Sur'at | Mavsum maqsadiga (2810 ochko) nisbatan holat: sizning o'rtachangiz, yetakchiniki, qolgan turlarda kerakli o'rtacha |
 | 🔄 Shablon | Top-100 da ommaviy, sizda yo'q o'yinchilar — kimni sotib kimni olish, EV va EO farqi bilan |
 | 🎯 Strategiya | O'ringa mos yondashuv + **11 likka 11 lik** solishtiruv: shablon jamoadan qancha orqadasiz va aynan kim sizni har tur ortga tortyapti |
 | 🩺 Yangi xabarlar | Kechadan beri paydo bo'lgan jarohat/diskvalifikatsiya xabarlari — sizdagi o'yinchilar birinchi |

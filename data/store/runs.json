@@ -17,18 +17,127 @@
  },
  {
   "mode": "daily",
+<<<<<<< HEAD
   "at": "2026-09-02T15:06:30.494401+05:00",
   "event": 3,
   "horizon_ev": 223.12,
+=======
+  "at": "2026-08-31T11:30:13.582374+05:00",
+  "event": 3,
+  "horizon_ev": 210.113,
+  "best_move": "Calafiori (5.5) + James (5.5) ➜ Guéhi (6.0) + De Cuyper (4.6)",
+  "captain": "B.Fernandes"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-01T10:56:13.191698+05:00",
+  "event": 3,
+  "horizon_ev": 223.084,
+  "best_move": "Maguire (5.0) + James (5.5) ➜ Guéhi (6.0) + Hall (5.0)",
+  "captain": "B.Fernandes"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-02T10:18:39.646207+05:00",
+  "event": 3,
+  "horizon_ev": 223.129,
+>>>>>>> 3e5fb9f0fc4225f466419f10c24550b525e3f629
   "best_move": "Maguire (5.0) + James (5.5) ➜ Guéhi (6.0) + Hall (5.1)",
   "captain": "B.Fernandes"
  },
  {
   "mode": "daily",
+<<<<<<< HEAD
   "at": "2026-09-02T15:12:18.955375+05:00",
   "event": 3,
   "horizon_ev": 223.12,
   "best_move": "Maguire (5.0) + James (5.5) ➜ Guéhi (6.0) + Hall (5.1)",
+=======
+  "at": "2026-09-03T10:23:49.112810+05:00",
+  "event": 3,
+  "horizon_ev": 223.07,
+  "best_move": "James (5.5) + Maguire (5.0) ➜ Hall (5.1) + Guéhi (6.0)",
+  "captain": "B.Fernandes"
+ },
+ {
+  "mode": "deadline",
+  "at": "2026-09-03T21:50:45.595272+05:00",
+  "event": 3,
+  "horizon_ev": 223.028,
+  "best_move": "James (5.5) + Maguire (5.0) ➜ Hall (5.1) + Guéhi (6.0)",
+  "captain": "B.Fernandes"
+ },
+ {
+  "mode": "deadline",
+  "at": "2026-09-04T10:18:32.535970+05:00",
+  "event": 3,
+  "horizon_ev": 223.095,
+  "best_move": "James (5.5) + Maguire (5.0) ➜ Hall (5.1) + Guéhi (6.0)",
+  "captain": "B.Fernandes"
+ },
+ {
+  "mode": "deadline",
+  "at": "2026-09-04T21:41:26.922436+05:00",
+  "event": 3,
+  "horizon_ev": 222.971,
+  "best_move": "James (5.5) + Maguire (5.0) ➜ Hall (5.1) + Guéhi (6.0)",
+  "captain": "B.Fernandes"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-05T10:08:12.469469+05:00",
+  "event": 4,
+  "horizon_ev": 149.204,
+  "best_move": "James (5.5) + Raya (6.0) ➜ Virgil (6.5) + Scherpen (4.5)",
+  "captain": "Szoboszlai"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-06T10:22:41.463291+05:00",
+  "event": 4,
+  "horizon_ev": 167.665,
+  "best_move": "James (5.4) + Maguire (5.0) ➜ Guéhi (6.0) + Virgil (6.5)",
+  "captain": "Szoboszlai"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-07T10:32:08.043317+05:00",
+  "event": 4,
+  "horizon_ev": 222.684,
+  "best_move": "James (5.4) + Hume (4.5) ➜ Guéhi (6.0) + Virgil (6.5)",
+  "captain": "B.Fernandes"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-08T10:30:37.707724+05:00",
+  "event": 4,
+  "horizon_ev": 222.59,
+  "best_move": "James (5.4) + Hume (4.5) ➜ Guéhi (6.0) + Virgil (6.5)",
+  "captain": "B.Fernandes"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-09T10:38:00.970427+05:00",
+  "event": 4,
+  "horizon_ev": 222.599,
+  "best_move": "James (5.4) + Hume (4.5) ➜ Guéhi (6.0) + Tarkowski (6.0)",
+  "captain": "B.Fernandes"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-10T10:28:27.764014+05:00",
+  "event": 4,
+  "horizon_ev": 222.599,
+  "best_move": "James (5.4) + Hume (4.5) ➜ Guéhi (6.0) + Tarkowski (6.0)",
+  "captain": "B.Fernandes"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-10T21:50:46.954753+05:00",
+  "event": 4,
+  "horizon_ev": 222.606,
+  "best_move": "James (5.4) + Hume (4.5) ➜ Guéhi (6.0) + Tarkowski (6.0)",
+>>>>>>> 3e5fb9f0fc4225f466419f10c24550b525e3f629
   "captain": "B.Fernandes"
  }
 ]
