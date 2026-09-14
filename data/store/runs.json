@@ -158,5 +158,13 @@
   "horizon_ev": 200.358,
   "best_move": "Hume (4.4) + Maguire (4.9) ➜ Silva (5.0) + Murillo (5.5)",
   "captain": "Calafiori"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-14T10:36:41.076173+05:00",
+  "event": 5,
+  "horizon_ev": 221.643,
+  "best_move": "Hume (4.4) ➜ Silva (5.0)",
+  "captain": "B.Fernandes"
  }
 ]
