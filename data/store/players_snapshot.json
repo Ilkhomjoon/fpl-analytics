@@ -1,13 +1,13 @@
 {
  "1": {
   "now_cost": 60,
-  "selected_by_percent": 39.9,
+  "selected_by_percent": 40.3,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 89616,
-  "transfers_out_event": 14861,
-  "price_change_percent": 48.7
+  "transfers_in_event": 132468,
+  "transfers_out_event": 22841,
+  "price_change_percent": 59.4
  },
  "2": {
   "now_cost": 49,
@@ -15,9 +15,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 56,
-  "transfers_out_event": 189,
-  "price_change_percent": -17.5
+  "transfers_in_event": 76,
+  "transfers_out_event": 276,
+  "price_change_percent": -21.7
  },
  "3": {
   "now_cost": 49,
@@ -25,29 +25,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 29,
-  "transfers_out_event": 74,
-  "price_change_percent": -13.1
+  "transfers_in_event": 39,
+  "transfers_out_event": 100,
+  "price_change_percent": -15.2
  },
  "4": {
   "now_cost": 80,
-  "selected_by_percent": 23.6,
+  "selected_by_percent": 23.5,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 13981,
-  "transfers_out_event": 33335,
-  "price_change_percent": -67.7
+  "transfers_in_event": 21109,
+  "transfers_out_event": 49127,
+  "price_change_percent": -68.5
  },
  "5": {
   "now_cost": 65,
-  "selected_by_percent": 0.1,
+  "selected_by_percent": 0.2,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 5721,
-  "transfers_out_event": 715,
-  "price_change_percent": 2.0
+  "transfers_in_event": 8419,
+  "transfers_out_event": 1273,
+  "price_change_percent": 2.9
  },
  "6": {
   "now_cost": 59,
@@ -55,9 +55,9 @@
   "status": "i",
   "news": "Back injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 178,
-  "transfers_out_event": 797,
-  "price_change_percent": -7.0
+  "transfers_in_event": 225,
+  "transfers_out_event": 1128,
+  "price_change_percent": -9.5
  },
  "7": {
   "now_cost": 55,
@@ -65,19 +65,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1094,
-  "transfers_out_event": 3711,
-  "price_change_percent": -50.2
+  "transfers_in_event": 1562,
+  "transfers_out_event": 5401,
+  "price_change_percent": -59.5
  },
  "8": {
   "now_cost": 58,
-  "selected_by_percent": 49.8,
+  "selected_by_percent": 50.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 94106,
-  "transfers_out_event": 17246,
-  "price_change_percent": 43.5
+  "transfers_in_event": 130549,
+  "transfers_out_event": 28230,
+  "price_change_percent": 52.3
  },
  "9": {
   "now_cost": 53,
@@ -85,49 +85,49 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 870,
-  "transfers_out_event": 6367,
-  "price_change_percent": -44.3
+  "transfers_in_event": 1258,
+  "transfers_out_event": 8913,
+  "price_change_percent": -55.3
  },
  "10": {
   "now_cost": 55,
-  "selected_by_percent": 7.0,
+  "selected_by_percent": 6.8,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 11254,
-  "transfers_out_event": 70271,
-  "price_change_percent": 55.5
+  "transfers_in_event": 14861,
+  "transfers_out_event": 93424,
+  "price_change_percent": 48.0
  },
  "11": {
   "now_cost": 54,
-  "selected_by_percent": 2.2,
+  "selected_by_percent": 2.1,
   "status": "d",
   "news": "Muscular injury - 50% chance of playing",
   "chance": 50,
-  "transfers_in_event": 71,
-  "transfers_out_event": 30094,
-  "price_change_percent": -80.8
+  "transfers_in_event": 96,
+  "transfers_out_event": 42490,
+  "price_change_percent": -100.3
  },
  "12": {
   "now_cost": 95,
-  "selected_by_percent": 11.8,
+  "selected_by_percent": 12.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 49199,
-  "transfers_out_event": 16075,
-  "price_change_percent": 36.0
+  "transfers_in_event": 78947,
+  "transfers_out_event": 24397,
+  "price_change_percent": 42.1
  },
  "13": {
   "now_cost": 74,
-  "selected_by_percent": 12.8,
+  "selected_by_percent": 12.7,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 8189,
-  "transfers_out_event": 25276,
-  "price_change_percent": -13.7
+  "transfers_in_event": 12751,
+  "transfers_out_event": 36992,
+  "price_change_percent": -15.5
  },
  "14": {
   "now_cost": 63,
@@ -135,29 +135,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 825,
-  "transfers_out_event": 6713,
-  "price_change_percent": -29.8
+  "transfers_in_event": 1305,
+  "transfers_out_event": 9354,
+  "price_change_percent": -39.3
  },
  "15": {
   "now_cost": 67,
-  "selected_by_percent": 18.9,
+  "selected_by_percent": 19.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 99566,
-  "transfers_out_event": 31713,
-  "price_change_percent": 61.8
+  "transfers_in_event": 147671,
+  "transfers_out_event": 50328,
+  "price_change_percent": 74.2
  },
  "16": {
-  "now_cost": 63,
+  "now_cost": 62,
   "selected_by_percent": 0.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 171,
-  "transfers_out_event": 1412,
-  "price_change_percent": -101.3
+  "transfers_in_event": 292,
+  "transfers_out_event": 1995,
+  "price_change_percent": -0.4
  },
  "17": {
   "now_cost": 58,
@@ -165,9 +165,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 413,
-  "transfers_out_event": 2531,
-  "price_change_percent": -26.2
+  "transfers_in_event": 603,
+  "transfers_out_event": 3527,
+  "price_change_percent": -35.6
  },
  "18": {
   "now_cost": 63,
@@ -176,7 +176,7 @@
   "news": "Has joined Al Hilal permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 641,
+  "transfers_out_event": 847,
   "price_change_percent": 0.0
  },
  "19": {
@@ -185,9 +185,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 469,
-  "transfers_out_event": 3300,
-  "price_change_percent": -7.5
+  "transfers_in_event": 705,
+  "transfers_out_event": 4666,
+  "price_change_percent": -12.2
  },
  "20": {
   "now_cost": 53,
@@ -195,9 +195,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 127,
-  "transfers_out_event": 389,
-  "price_change_percent": -27.4
+  "transfers_in_event": 183,
+  "transfers_out_event": 555,
+  "price_change_percent": -35.7
  },
  "22": {
   "now_cost": 54,
@@ -206,7 +206,7 @@
   "news": "Has joined Borussia Dortmund on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 56,
+  "transfers_out_event": 70,
   "price_change_percent": 0.0
  },
  "23": {
@@ -216,7 +216,7 @@
   "news": "Has joined Hamburger SV permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 34,
+  "transfers_out_event": 44,
   "price_change_percent": 0.0
  },
  "24": {
@@ -226,28 +226,28 @@
   "news": "has departed the club as a free agent.",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 18,
+  "transfers_out_event": 26,
   "price_change_percent": 0.0
  },
  "25": {
   "now_cost": 72,
-  "selected_by_percent": 3.5,
+  "selected_by_percent": 3.4,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1159,
-  "transfers_out_event": 20033,
-  "price_change_percent": -39.2
+  "transfers_in_event": 1650,
+  "transfers_out_event": 28280,
+  "price_change_percent": -51.1
  },
  "26": {
   "now_cost": 76,
-  "selected_by_percent": 8.0,
+  "selected_by_percent": 7.9,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 29383,
-  "transfers_out_event": 28873,
-  "price_change_percent": -2.7
+  "transfers_in_event": 39571,
+  "transfers_out_event": 45179,
+  "price_change_percent": -5.0
  },
  "27": {
   "now_cost": 59,
@@ -256,18 +256,18 @@
   "news": "Has joined FC Barcelona permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 931,
+  "transfers_out_event": 1272,
   "price_change_percent": 0.0
  },
  "31": {
   "now_cost": 45,
-  "selected_by_percent": 17.6,
+  "selected_by_percent": 17.9,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 110871,
-  "transfers_out_event": 14127,
-  "price_change_percent": 50.8
+  "transfers_in_event": 154479,
+  "transfers_out_event": 22964,
+  "price_change_percent": 62.7
  },
  "452": {
   "now_cost": 67,
@@ -275,19 +275,19 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 5548,
-  "transfers_out_event": 3211,
-  "price_change_percent": 1.4
+  "transfers_in_event": 8321,
+  "transfers_out_event": 4444,
+  "price_change_percent": 2.2
  },
  "557": {
   "now_cost": 64,
-  "selected_by_percent": 15.2,
+  "selected_by_percent": 14.9,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 10145,
-  "transfers_out_event": 89068,
-  "price_change_percent": -27.3
+  "transfers_in_event": 16169,
+  "transfers_out_event": 126130,
+  "price_change_percent": -34.8
  },
  "29": {
   "now_cost": 45,
@@ -295,9 +295,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 135,
-  "transfers_out_event": 395,
-  "price_change_percent": -21.2
+  "transfers_in_event": 232,
+  "transfers_out_event": 576,
+  "price_change_percent": -23.3
  },
  "30": {
   "now_cost": 45,
@@ -306,18 +306,18 @@
   "news": "Has joined Paris Saint-Germain permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 173,
+  "transfers_out_event": 247,
   "price_change_percent": 0.0
  },
  "32": {
   "now_cost": 45,
-  "selected_by_percent": 5.7,
+  "selected_by_percent": 5.5,
   "status": "d",
   "news": "Muscular injury - 75% chance of playing",
   "chance": 75,
-  "transfers_in_event": 359,
-  "transfers_out_event": 44044,
-  "price_change_percent": -79.3
+  "transfers_in_event": 500,
+  "transfers_out_event": 64344,
+  "price_change_percent": -90.8
  },
  "33": {
   "now_cost": 45,
@@ -325,9 +325,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 870,
-  "transfers_out_event": 1466,
-  "price_change_percent": 0.7
+  "transfers_in_event": 1248,
+  "transfers_out_event": 2203,
+  "price_change_percent": 0.6
  },
  "34": {
   "now_cost": 45,
@@ -335,9 +335,9 @@
   "status": "d",
   "news": "Hamstring injury - 75% chance of playing",
   "chance": 75,
-  "transfers_in_event": 167,
-  "transfers_out_event": 2488,
-  "price_change_percent": -33.5
+  "transfers_in_event": 186,
+  "transfers_out_event": 3735,
+  "price_change_percent": -43.2
  },
  "35": {
   "now_cost": 50,
@@ -345,19 +345,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 187,
-  "transfers_out_event": 340,
-  "price_change_percent": -57.0
+  "transfers_in_event": 260,
+  "transfers_out_event": 480,
+  "price_change_percent": -61.9
  },
  "36": {
   "now_cost": 45,
-  "selected_by_percent": 0.8,
+  "selected_by_percent": 0.7,
   "status": "d",
   "news": "Ankle injury - 25% chance of playing",
   "chance": 25,
-  "transfers_in_event": 476,
-  "transfers_out_event": 8701,
-  "price_change_percent": -1.2
+  "transfers_in_event": 492,
+  "transfers_out_event": 12571,
+  "price_change_percent": -15.2
  },
  "37": {
   "now_cost": 45,
@@ -365,9 +365,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 871,
-  "transfers_out_event": 815,
-  "price_change_percent": 1.0
+  "transfers_in_event": 1279,
+  "transfers_out_event": 1361,
+  "price_change_percent": 0.9
  },
  "38": {
   "now_cost": 40,
@@ -375,9 +375,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2913,
-  "transfers_out_event": 4341,
-  "price_change_percent": -11.3
+  "transfers_in_event": 3873,
+  "transfers_out_event": 6595,
+  "price_change_percent": -13.6
  },
  "39": {
   "now_cost": 40,
@@ -386,7 +386,7 @@
   "news": "Has joined Rangers on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 396,
+  "transfers_out_event": 591,
   "price_change_percent": 0.0
  },
  "41": {
@@ -395,9 +395,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1068,
-  "transfers_out_event": 6851,
-  "price_change_percent": -23.7
+  "transfers_in_event": 1895,
+  "transfers_out_event": 9644,
+  "price_change_percent": -32.4
  },
  "44": {
   "now_cost": 54,
@@ -406,7 +406,7 @@
   "news": "Has joined Olympiakos permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 620,
+  "transfers_out_event": 870,
   "price_change_percent": 0.0
  },
  "45": {
@@ -415,9 +415,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 4637,
-  "transfers_out_event": 6327,
-  "price_change_percent": -15.3
+  "transfers_in_event": 7397,
+  "transfers_out_event": 9539,
+  "price_change_percent": -15.0
  },
  "46": {
   "now_cost": 50,
@@ -425,9 +425,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 647,
-  "transfers_out_event": 1109,
-  "price_change_percent": 1.3
+  "transfers_in_event": 976,
+  "transfers_out_event": 1682,
+  "price_change_percent": 1.2
  },
  "47": {
   "now_cost": 50,
@@ -435,9 +435,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 599,
-  "transfers_out_event": 1506,
-  "price_change_percent": -43.6
+  "transfers_in_event": 943,
+  "transfers_out_event": 2191,
+  "price_change_percent": -47.8
  },
  "48": {
   "now_cost": 49,
@@ -445,9 +445,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 25,
-  "transfers_out_event": 73,
-  "price_change_percent": -1.6
+  "transfers_in_event": 30,
+  "transfers_out_event": 107,
+  "price_change_percent": -3.6
  },
  "49": {
   "now_cost": 50,
@@ -456,7 +456,7 @@
   "news": "Has joined Bolton Wanderers on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 8,
+  "transfers_out_event": 12,
   "price_change_percent": 0.0
  },
  "50": {
@@ -465,9 +465,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 829,
-  "transfers_out_event": 2378,
-  "price_change_percent": -24.9
+  "transfers_in_event": 1091,
+  "transfers_out_event": 3452,
+  "price_change_percent": -29.8
  },
  "51": {
   "now_cost": 45,
@@ -475,19 +475,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 5014,
-  "transfers_out_event": 4870,
-  "price_change_percent": 15.6
+  "transfers_in_event": 7127,
+  "transfers_out_event": 7216,
+  "price_change_percent": 15.5
  },
  "52": {
   "now_cost": 50,
-  "selected_by_percent": 0.0,
+  "selected_by_percent": 0.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 513,
-  "transfers_out_event": 155,
-  "price_change_percent": 0.0
+  "transfers_in_event": 772,
+  "transfers_out_event": 235,
+  "price_change_percent": 0.1
  },
  "53": {
   "now_cost": 59,
@@ -495,8 +495,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 541,
-  "transfers_out_event": 345,
+  "transfers_in_event": 823,
+  "transfers_out_event": 502,
   "price_change_percent": 0.0
  },
  "54": {
@@ -505,18 +505,18 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 154,
-  "transfers_out_event": 83,
+  "transfers_in_event": 239,
+  "transfers_out_event": 123,
   "price_change_percent": 0.0
  },
  "55": {
   "now_cost": 78,
-  "selected_by_percent": 2.9,
+  "selected_by_percent": 2.8,
   "status": "u",
   "news": "Has joined Al Hilal permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 13482,
+  "transfers_out_event": 18391,
   "price_change_percent": 0.0
  },
  "56": {
@@ -525,29 +525,29 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 689,
-  "transfers_out_event": 756,
+  "transfers_in_event": 1021,
+  "transfers_out_event": 1173,
   "price_change_percent": 2.3
  },
  "160": {
   "now_cost": 58,
-  "selected_by_percent": 0.4,
+  "selected_by_percent": 0.3,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 231,
-  "transfers_out_event": 2806,
-  "price_change_percent": -12.5
+  "transfers_in_event": 379,
+  "transfers_out_event": 3845,
+  "price_change_percent": -19.6
  },
  "166": {
   "now_cost": 65,
-  "selected_by_percent": 1.3,
+  "selected_by_percent": 1.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 4163,
-  "transfers_out_event": 10447,
-  "price_change_percent": 37.5
+  "transfers_in_event": 6041,
+  "transfers_out_event": 15234,
+  "price_change_percent": 36.1
  },
  "582": {
   "now_cost": 54,
@@ -555,9 +555,9 @@
   "status": "i",
   "news": "Unspecified injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 102,
-  "transfers_out_event": 1364,
-  "price_change_percent": -2.8
+  "transfers_in_event": 149,
+  "transfers_out_event": 2032,
+  "price_change_percent": -5.3
  },
  "596": {
   "now_cost": 45,
@@ -565,9 +565,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 170,
-  "transfers_out_event": 403,
-  "price_change_percent": -74.8
+  "transfers_in_event": 245,
+  "transfers_out_event": 578,
+  "price_change_percent": -80.3
  },
  "597": {
   "now_cost": 50,
@@ -575,9 +575,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 5299,
-  "transfers_out_event": 5167,
-  "price_change_percent": 24.4
+  "transfers_in_event": 7335,
+  "transfers_out_event": 7868,
+  "price_change_percent": 24.1
  },
  "606": {
   "now_cost": 40,
@@ -585,9 +585,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 710,
-  "transfers_out_event": 535,
-  "price_change_percent": 0.4
+  "transfers_in_event": 942,
+  "transfers_out_event": 790,
+  "price_change_percent": 0.3
  },
  "607": {
   "now_cost": 45,
@@ -596,7 +596,7 @@
   "news": "Has joined Oxford United on loan until January",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 531,
+  "transfers_out_event": 761,
   "price_change_percent": 0.0
  },
  "611": {
@@ -605,9 +605,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1489,
-  "transfers_out_event": 549,
-  "price_change_percent": 1.1
+  "transfers_in_event": 2145,
+  "transfers_out_event": 884,
+  "price_change_percent": 1.3
  },
  "618": {
   "now_cost": 60,
@@ -615,9 +615,9 @@
   "status": "i",
   "news": "Knee injury - Expected back 10 Oct",
   "chance": 0,
-  "transfers_in_event": 19,
-  "transfers_out_event": 651,
-  "price_change_percent": -78.1
+  "transfers_in_event": 26,
+  "transfers_out_event": 865,
+  "price_change_percent": -94.9
  },
  "630": {
   "now_cost": 45,
@@ -625,8 +625,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 104,
-  "transfers_out_event": 125,
+  "transfers_in_event": 144,
+  "transfers_out_event": 181,
   "price_change_percent": 0.0
  },
  "631": {
@@ -635,8 +635,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 621,
-  "transfers_out_event": 462,
+  "transfers_in_event": 963,
+  "transfers_out_event": 658,
   "price_change_percent": 0.0
  },
  "57": {
@@ -645,9 +645,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2024,
-  "transfers_out_event": 7626,
-  "price_change_percent": 5.8
+  "transfers_in_event": 2981,
+  "transfers_out_event": 11407,
+  "price_change_percent": 5.0
  },
  "58": {
   "now_cost": 40,
@@ -655,8 +655,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 6526,
-  "transfers_out_event": 3982,
+  "transfers_in_event": 9859,
+  "transfers_out_event": 6280,
   "price_change_percent": 3.9
  },
  "59": {
@@ -666,7 +666,7 @@
   "news": "Has joined MK Dons permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 344,
+  "transfers_out_event": 489,
   "price_change_percent": 0.0
  },
  "60": {
@@ -675,9 +675,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1002,
-  "transfers_out_event": 3071,
-  "price_change_percent": 0.0
+  "transfers_in_event": 1424,
+  "transfers_out_event": 4590,
+  "price_change_percent": -4.6
  },
  "61": {
   "now_cost": 55,
@@ -685,9 +685,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1884,
-  "transfers_out_event": 8949,
-  "price_change_percent": -59.9
+  "transfers_in_event": 2775,
+  "transfers_out_event": 13934,
+  "price_change_percent": -65.1
  },
  "62": {
   "now_cost": 50,
@@ -695,9 +695,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 299,
-  "transfers_out_event": 833,
-  "price_change_percent": -72.4
+  "transfers_in_event": 445,
+  "transfers_out_event": 1192,
+  "price_change_percent": -77.8
  },
  "63": {
   "now_cost": 49,
@@ -705,9 +705,9 @@
   "status": "i",
   "news": "Thigh injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 11,
-  "transfers_out_event": 25,
-  "price_change_percent": -0.5
+  "transfers_in_event": 20,
+  "transfers_out_event": 42,
+  "price_change_percent": -1.7
  },
  "64": {
   "now_cost": 45,
@@ -715,9 +715,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 266,
-  "transfers_out_event": 557,
-  "price_change_percent": 0.7
+  "transfers_in_event": 390,
+  "transfers_out_event": 839,
+  "price_change_percent": 0.6
  },
  "65": {
   "now_cost": 44,
@@ -725,9 +725,9 @@
   "status": "i",
   "news": "Thigh injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 15,
-  "transfers_out_event": 40,
-  "price_change_percent": -6.8
+  "transfers_in_event": 27,
+  "transfers_out_event": 65,
+  "price_change_percent": -8.3
  },
  "66": {
   "now_cost": 40,
@@ -735,8 +735,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 884,
-  "transfers_out_event": 716,
+  "transfers_in_event": 1177,
+  "transfers_out_event": 1097,
   "price_change_percent": 1.3
  },
  "67": {
@@ -745,19 +745,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 939,
-  "transfers_out_event": 12332,
-  "price_change_percent": -43.0
+  "transfers_in_event": 1581,
+  "transfers_out_event": 17386,
+  "price_change_percent": -55.0
  },
  "68": {
   "now_cost": 61,
-  "selected_by_percent": 4.6,
+  "selected_by_percent": 5.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 91452,
-  "transfers_out_event": 9697,
-  "price_change_percent": 0.7
+  "transfers_in_event": 145012,
+  "transfers_out_event": 17030,
+  "price_change_percent": 7.4
  },
  "69": {
   "now_cost": 61,
@@ -765,9 +765,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 27849,
-  "transfers_out_event": 22274,
-  "price_change_percent": 14.0
+  "transfers_in_event": 38590,
+  "transfers_out_event": 33060,
+  "price_change_percent": 13.8
  },
  "70": {
   "now_cost": 60,
@@ -775,9 +775,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 3878,
-  "transfers_out_event": 2592,
-  "price_change_percent": -48.4
+  "transfers_in_event": 6012,
+  "transfers_out_event": 4011,
+  "price_change_percent": -44.3
  },
  "71": {
   "now_cost": 50,
@@ -785,9 +785,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 260,
-  "transfers_out_event": 1333,
-  "price_change_percent": 1.0
+  "transfers_in_event": 388,
+  "transfers_out_event": 1835,
+  "price_change_percent": 0.8
  },
  "72": {
   "now_cost": 49,
@@ -795,9 +795,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 98,
-  "transfers_out_event": 249,
-  "price_change_percent": -13.9
+  "transfers_in_event": 138,
+  "transfers_out_event": 377,
+  "price_change_percent": -19.8
  },
  "73": {
   "now_cost": 50,
@@ -805,9 +805,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 991,
-  "transfers_out_event": 1270,
-  "price_change_percent": 1.8
+  "transfers_in_event": 1476,
+  "transfers_out_event": 1892,
+  "price_change_percent": 1.7
  },
  "74": {
   "now_cost": 50,
@@ -815,9 +815,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 145,
-  "transfers_out_event": 308,
-  "price_change_percent": 0.1
+  "transfers_in_event": 216,
+  "transfers_out_event": 426,
+  "price_change_percent": 0.0
  },
  "75": {
   "now_cost": 50,
@@ -825,8 +825,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 158,
-  "transfers_out_event": 212,
+  "transfers_in_event": 250,
+  "transfers_out_event": 305,
   "price_change_percent": 0.3
  },
  "76": {
@@ -835,9 +835,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 17,
-  "transfers_out_event": 39,
-  "price_change_percent": -88.4
+  "transfers_in_event": 27,
+  "transfers_out_event": 55,
+  "price_change_percent": -90.6
  },
  "77": {
   "now_cost": 49,
@@ -845,9 +845,9 @@
   "status": "i",
   "news": "Calf injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 11,
-  "transfers_out_event": 89,
-  "price_change_percent": -47.5
+  "transfers_in_event": 12,
+  "transfers_out_event": 123,
+  "price_change_percent": -52.5
  },
  "78": {
   "now_cost": 74,
@@ -855,9 +855,9 @@
   "status": "i",
   "news": "Foot injury - Expected back 7 Nov",
   "chance": 0,
-  "transfers_in_event": 45,
-  "transfers_out_event": 662,
-  "price_change_percent": -44.4
+  "transfers_in_event": 69,
+  "transfers_out_event": 902,
+  "price_change_percent": -47.0
  },
  "79": {
   "now_cost": 60,
@@ -865,9 +865,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 15948,
-  "transfers_out_event": 10525,
-  "price_change_percent": 48.6
+  "transfers_in_event": 21947,
+  "transfers_out_event": 17486,
+  "price_change_percent": 48.5
  },
  "80": {
   "now_cost": 55,
@@ -876,7 +876,7 @@
   "news": "Has joined Getafe permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 41,
+  "transfers_out_event": 55,
   "price_change_percent": 0.0
  },
  "81": {
@@ -885,9 +885,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 262,
-  "transfers_out_event": 413,
-  "price_change_percent": -24.5
+  "transfers_in_event": 367,
+  "transfers_out_event": 625,
+  "price_change_percent": -28.5
  },
  "566": {
   "now_cost": 50,
@@ -895,9 +895,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 508,
-  "transfers_out_event": 1301,
-  "price_change_percent": 2.8
+  "transfers_in_event": 798,
+  "transfers_out_event": 2071,
+  "price_change_percent": 2.6
  },
  "573": {
   "now_cost": 44,
@@ -905,9 +905,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 61,
-  "transfers_out_event": 376,
-  "price_change_percent": -0.3
+  "transfers_in_event": 125,
+  "transfers_out_event": 592,
+  "price_change_percent": -2.3
  },
  "608": {
   "now_cost": 50,
@@ -915,9 +915,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 624,
-  "transfers_out_event": 589,
-  "price_change_percent": 0.6
+  "transfers_in_event": 926,
+  "transfers_out_event": 919,
+  "price_change_percent": 0.5
  },
  "615": {
   "now_cost": 45,
@@ -925,19 +925,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 122,
-  "transfers_out_event": 192,
-  "price_change_percent": -5.5
+  "transfers_in_event": 175,
+  "transfers_out_event": 271,
+  "price_change_percent": -9.3
  },
  "82": {
   "now_cost": 50,
-  "selected_by_percent": 6.5,
+  "selected_by_percent": 6.4,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 3290,
-  "transfers_out_event": 19838,
-  "price_change_percent": 27.4
+  "transfers_in_event": 4628,
+  "transfers_out_event": 28979,
+  "price_change_percent": 24.8
  },
  "83": {
   "now_cost": 45,
@@ -945,19 +945,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 82,
-  "transfers_out_event": 238,
-  "price_change_percent": -46.3
+  "transfers_in_event": 136,
+  "transfers_out_event": 368,
+  "price_change_percent": -49.3
  },
  "84": {
   "now_cost": 55,
-  "selected_by_percent": 1.3,
+  "selected_by_percent": 1.2,
   "status": "i",
   "news": "Calf injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 30,
-  "transfers_out_event": 14008,
-  "price_change_percent": -84.4
+  "transfers_in_event": 54,
+  "transfers_out_event": 19423,
+  "price_change_percent": -95.8
  },
  "85": {
   "now_cost": 49,
@@ -965,39 +965,39 @@
   "status": "i",
   "news": "Groin injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 8,
-  "transfers_out_event": 262,
-  "price_change_percent": -43.0
+  "transfers_in_event": 14,
+  "transfers_out_event": 372,
+  "price_change_percent": -46.2
  },
  "86": {
   "now_cost": 55,
-  "selected_by_percent": 2.0,
+  "selected_by_percent": 1.9,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1958,
-  "transfers_out_event": 14779,
-  "price_change_percent": 41.9
+  "transfers_in_event": 2849,
+  "transfers_out_event": 20430,
+  "price_change_percent": 39.9
  },
  "87": {
   "now_cost": 45,
-  "selected_by_percent": 4.5,
+  "selected_by_percent": 4.4,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 3426,
-  "transfers_out_event": 18123,
-  "price_change_percent": 47.3
+  "transfers_in_event": 4724,
+  "transfers_out_event": 26684,
+  "price_change_percent": 44.6
  },
  "88": {
   "now_cost": 46,
-  "selected_by_percent": 8.5,
+  "selected_by_percent": 8.3,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 6893,
-  "transfers_out_event": 48238,
-  "price_change_percent": 6.8
+  "transfers_in_event": 9746,
+  "transfers_out_event": 67659,
+  "price_change_percent": 0.3
  },
  "89": {
   "now_cost": 44,
@@ -1005,9 +1005,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 75,
-  "transfers_out_event": 540,
-  "price_change_percent": -0.6
+  "transfers_in_event": 163,
+  "transfers_out_event": 794,
+  "price_change_percent": -2.4
  },
  "90": {
   "now_cost": 45,
@@ -1015,9 +1015,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 105,
-  "transfers_out_event": 179,
-  "price_change_percent": -17.3
+  "transfers_in_event": 149,
+  "transfers_out_event": 274,
+  "price_change_percent": -19.7
  },
  "92": {
   "now_cost": 45,
@@ -1025,9 +1025,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 21,
-  "transfers_out_event": 55,
-  "price_change_percent": -79.7
+  "transfers_in_event": 33,
+  "transfers_out_event": 77,
+  "price_change_percent": -83.0
  },
  "93": {
   "now_cost": 45,
@@ -1035,19 +1035,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 99,
-  "transfers_out_event": 176,
-  "price_change_percent": -51.9
+  "transfers_in_event": 148,
+  "transfers_out_event": 272,
+  "price_change_percent": -53.3
  },
  "94": {
   "now_cost": 60,
-  "selected_by_percent": 4.9,
+  "selected_by_percent": 5.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 121577,
-  "transfers_out_event": 9887,
-  "price_change_percent": 78.5
+  "transfers_in_event": 192124,
+  "transfers_out_event": 16631,
+  "price_change_percent": 103.6
  },
  "95": {
   "now_cost": 64,
@@ -1055,9 +1055,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 151,
-  "transfers_out_event": 4616,
-  "price_change_percent": -77.8
+  "transfers_in_event": 285,
+  "transfers_out_event": 6363,
+  "price_change_percent": -92.6
  },
  "96": {
   "now_cost": 55,
@@ -1065,9 +1065,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 378,
-  "transfers_out_event": 2371,
-  "price_change_percent": -75.0
+  "transfers_in_event": 583,
+  "transfers_out_event": 3433,
+  "price_change_percent": -84.0
  },
  "97": {
   "now_cost": 54,
@@ -1075,9 +1075,9 @@
   "status": "i",
   "news": "Unspecified injury - Expected back 18 Sep",
   "chance": 0,
-  "transfers_in_event": 3,
-  "transfers_out_event": 594,
-  "price_change_percent": -12.0
+  "transfers_in_event": 7,
+  "transfers_out_event": 834,
+  "price_change_percent": -15.7
  },
  "98": {
   "now_cost": 50,
@@ -1085,9 +1085,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 13478,
-  "transfers_out_event": 9212,
-  "price_change_percent": 66.5
+  "transfers_in_event": 19403,
+  "transfers_out_event": 13822,
+  "price_change_percent": 66.8
  },
  "99": {
   "now_cost": 50,
@@ -1095,9 +1095,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 7,
-  "transfers_out_event": 10,
-  "price_change_percent": -26.8
+  "transfers_in_event": 8,
+  "transfers_out_event": 11,
+  "price_change_percent": -26.4
  },
  "100": {
   "now_cost": 50,
@@ -1105,19 +1105,19 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 69,
-  "transfers_out_event": 116,
+  "transfers_in_event": 97,
+  "transfers_out_event": 168,
   "price_change_percent": 0.1
  },
  "102": {
-  "now_cost": 49,
+  "now_cost": 48,
   "selected_by_percent": 0.7,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 265,
-  "transfers_out_event": 2512,
-  "price_change_percent": -94.8
+  "transfers_in_event": 410,
+  "transfers_out_event": 3852,
+  "price_change_percent": -0.5
  },
  "103": {
   "now_cost": 49,
@@ -1126,8 +1126,8 @@
   "news": "Hamstring injury - Expected back 10 Oct",
   "chance": 0,
   "transfers_in_event": 3,
-  "transfers_out_event": 92,
-  "price_change_percent": -12.0
+  "transfers_out_event": 140,
+  "price_change_percent": -17.6
  },
  "105": {
   "now_cost": 59,
@@ -1135,29 +1135,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 137,
-  "transfers_out_event": 731,
-  "price_change_percent": -7.5
+  "transfers_in_event": 220,
+  "transfers_out_event": 1010,
+  "price_change_percent": -11.3
  },
  "106": {
   "now_cost": 79,
-  "selected_by_percent": 10.0,
+  "selected_by_percent": 9.7,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 3306,
-  "transfers_out_event": 71331,
-  "price_change_percent": -55.2
+  "transfers_in_event": 4975,
+  "transfers_out_event": 101281,
+  "price_change_percent": -69.5
  },
  "107": {
   "now_cost": 45,
   "selected_by_percent": 1.1,
-  "status": "a",
-  "news": "",
-  "chance": null,
-  "transfers_in_event": 4529,
-  "transfers_out_event": 3315,
-  "price_change_percent": 8.9
+  "status": "i",
+  "news": "Unspecified injury - Unknown return date",
+  "chance": 0,
+  "transfers_in_event": 5451,
+  "transfers_out_event": 7085,
+  "price_change_percent": 7.8
  },
  "108": {
   "now_cost": 55,
@@ -1165,19 +1165,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 427,
-  "transfers_out_event": 1926,
-  "price_change_percent": -65.5
+  "transfers_in_event": 637,
+  "transfers_out_event": 2908,
+  "price_change_percent": -77.5
  },
  "565": {
   "now_cost": 57,
-  "selected_by_percent": 12.5,
+  "selected_by_percent": 12.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 9135,
-  "transfers_out_event": 62326,
-  "price_change_percent": -64.1
+  "transfers_in_event": 13792,
+  "transfers_out_event": 88905,
+  "price_change_percent": -73.0
  },
  "620": {
   "now_cost": 45,
@@ -1185,9 +1185,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 387,
-  "transfers_out_event": 623,
-  "price_change_percent": -5.0
+  "transfers_in_event": 550,
+  "transfers_out_event": 866,
+  "price_change_percent": -8.4
  },
  "657": {
   "now_cost": 45,
@@ -1195,19 +1195,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 942,
-  "transfers_out_event": 153,
+  "transfers_in_event": 1201,
+  "transfers_out_event": 228,
   "price_change_percent": 0.0
  },
  "109": {
   "now_cost": 45,
-  "selected_by_percent": 22.1,
+  "selected_by_percent": 22.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 21460,
-  "transfers_out_event": 37137,
-  "price_change_percent": 59.3
+  "transfers_in_event": 36977,
+  "transfers_out_event": 54024,
+  "price_change_percent": 58.7
  },
  "111": {
   "now_cost": 40,
@@ -1215,9 +1215,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 5433,
-  "transfers_out_event": 5513,
-  "price_change_percent": 2.7
+  "transfers_in_event": 8165,
+  "transfers_out_event": 8781,
+  "price_change_percent": 2.5
  },
  "113": {
   "now_cost": 44,
@@ -1225,9 +1225,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 1210,
-  "transfers_out_event": 4861,
-  "price_change_percent": -35.0
+  "transfers_in_event": 1989,
+  "transfers_out_event": 7125,
+  "price_change_percent": -37.1
  },
  "114": {
   "now_cost": 45,
@@ -1235,19 +1235,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 392,
-  "transfers_out_event": 662,
+  "transfers_in_event": 626,
+  "transfers_out_event": 968,
   "price_change_percent": 2.0
  },
  "115": {
   "now_cost": 48,
-  "selected_by_percent": 22.8,
+  "selected_by_percent": 23.4,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 111424,
-  "transfers_out_event": 31333,
-  "price_change_percent": 55.5
+  "transfers_in_event": 187371,
+  "transfers_out_event": 45103,
+  "price_change_percent": 77.6
  },
  "116": {
   "now_cost": 45,
@@ -1255,9 +1255,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 7514,
-  "transfers_out_event": 2689,
-  "price_change_percent": 13.6
+  "transfers_in_event": 13219,
+  "transfers_out_event": 4234,
+  "price_change_percent": 15.3
  },
  "117": {
   "now_cost": 45,
@@ -1265,9 +1265,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 75,
-  "transfers_out_event": 76,
-  "price_change_percent": -11.8
+  "transfers_in_event": 105,
+  "transfers_out_event": 115,
+  "price_change_percent": -12.4
  },
  "118": {
   "now_cost": 45,
@@ -1276,7 +1276,7 @@
   "news": "Has joined Burnley permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 301,
+  "transfers_out_event": 438,
   "price_change_percent": 0.0
  },
  "119": {
@@ -1285,9 +1285,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 55,
-  "transfers_out_event": 82,
-  "price_change_percent": -1.3
+  "transfers_in_event": 84,
+  "transfers_out_event": 136,
+  "price_change_percent": -2.0
  },
  "120": {
   "now_cost": 50,
@@ -1295,9 +1295,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 217,
-  "transfers_out_event": 300,
-  "price_change_percent": 0.1
+  "transfers_in_event": 305,
+  "transfers_out_event": 464,
+  "price_change_percent": 0.0
  },
  "121": {
   "now_cost": 59,
@@ -1305,9 +1305,9 @@
   "status": "i",
   "news": "Hamstring injury - Expected back 10 Oct",
   "chance": 0,
-  "transfers_in_event": 21,
-  "transfers_out_event": 108,
-  "price_change_percent": -11.0
+  "transfers_in_event": 29,
+  "transfers_out_event": 151,
+  "price_change_percent": -12.9
  },
  "122": {
   "now_cost": 59,
@@ -1315,29 +1315,29 @@
   "status": "i",
   "news": "Leg injury - Expected back 28 Nov",
   "chance": 0,
-  "transfers_in_event": 9,
-  "transfers_out_event": 171,
-  "price_change_percent": -69.8
+  "transfers_in_event": 12,
+  "transfers_out_event": 239,
+  "price_change_percent": -74.8
  },
  "123": {
   "now_cost": 59,
-  "selected_by_percent": 0.8,
+  "selected_by_percent": 0.7,
   "status": "i",
   "news": "Ankle injury - Expected back 10 Oct",
   "chance": 0,
-  "transfers_in_event": 48,
-  "transfers_out_event": 11297,
-  "price_change_percent": -0.9
+  "transfers_in_event": 68,
+  "transfers_out_event": 14914,
+  "price_change_percent": -6.1
  },
  "124": {
   "now_cost": 56,
-  "selected_by_percent": 17.1,
+  "selected_by_percent": 18.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 122091,
-  "transfers_out_event": 28570,
-  "price_change_percent": 39.9
+  "transfers_in_event": 236336,
+  "transfers_out_event": 38860,
+  "price_change_percent": 81.6
  },
  "125": {
   "now_cost": 54,
@@ -1345,9 +1345,9 @@
   "status": "d",
   "news": "Unspecified injury - 75% chance of playing",
   "chance": 75,
-  "transfers_in_event": 331,
-  "transfers_out_event": 4138,
-  "price_change_percent": -19.9
+  "transfers_in_event": 478,
+  "transfers_out_event": 6136,
+  "price_change_percent": -28.9
  },
  "126": {
   "now_cost": 55,
@@ -1355,19 +1355,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 178,
-  "transfers_out_event": 393,
-  "price_change_percent": -91.2
+  "transfers_in_event": 269,
+  "transfers_out_event": 571,
+  "price_change_percent": -95.0
  },
  "127": {
   "now_cost": 50,
-  "selected_by_percent": 4.7,
+  "selected_by_percent": 4.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 4227,
-  "transfers_out_event": 21262,
-  "price_change_percent": 50.6
+  "transfers_in_event": 6177,
+  "transfers_out_event": 31204,
+  "price_change_percent": 47.9
  },
  "128": {
   "now_cost": 50,
@@ -1376,7 +1376,7 @@
   "news": "Has joined Elche on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 6,
+  "transfers_out_event": 9,
   "price_change_percent": 0.0
  },
  "129": {
@@ -1385,9 +1385,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 867,
-  "transfers_out_event": 1264,
-  "price_change_percent": -50.8
+  "transfers_in_event": 1565,
+  "transfers_out_event": 1837,
+  "price_change_percent": -47.5
  },
  "130": {
   "now_cost": 50,
@@ -1395,9 +1395,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 16,
-  "transfers_out_event": 2516,
-  "price_change_percent": -88.3
+  "transfers_in_event": 26,
+  "transfers_out_event": 3597,
+  "price_change_percent": -100.9
  },
  "132": {
   "now_cost": 45,
@@ -1406,7 +1406,7 @@
   "news": "Has joined Leicester City on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 139,
+  "transfers_out_event": 210,
   "price_change_percent": 0.0
  },
  "133": {
@@ -1425,9 +1425,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 365,
-  "transfers_out_event": 868,
-  "price_change_percent": -25.5
+  "transfers_in_event": 512,
+  "transfers_out_event": 1312,
+  "price_change_percent": -29.7
  },
  "135": {
   "now_cost": 49,
@@ -1435,9 +1435,9 @@
   "status": "i",
   "news": "Unspecified injury - Expected back 10 Oct",
   "chance": 0,
-  "transfers_in_event": 9,
-  "transfers_out_event": 425,
-  "price_change_percent": -29.3
+  "transfers_in_event": 15,
+  "transfers_out_event": 608,
+  "price_change_percent": -37.1
  },
  "137": {
   "now_cost": 54,
@@ -1445,19 +1445,19 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 16,
-  "transfers_out_event": 27,
-  "price_change_percent": -0.6
+  "transfers_in_event": 25,
+  "transfers_out_event": 37,
+  "price_change_percent": -0.2
  },
  "138": {
   "now_cost": 55,
-  "selected_by_percent": 0.6,
+  "selected_by_percent": 0.7,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 11074,
-  "transfers_out_event": 2624,
-  "price_change_percent": 16.9
+  "transfers_in_event": 19810,
+  "transfers_out_event": 4948,
+  "price_change_percent": 19.5
  },
  "139": {
   "now_cost": 50,
@@ -1465,19 +1465,19 @@
   "status": "i",
   "news": "Ankle injury - Expected back 10 Oct",
   "chance": 0,
-  "transfers_in_event": 75,
-  "transfers_out_event": 139,
-  "price_change_percent": -37.8
+  "transfers_in_event": 126,
+  "transfers_out_event": 209,
+  "price_change_percent": -38.7
  },
  "328": {
-  "now_cost": 50,
+  "now_cost": 49,
   "selected_by_percent": 0.2,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 234,
-  "transfers_out_event": 735,
-  "price_change_percent": -93.2
+  "transfers_in_event": 358,
+  "transfers_out_event": 1183,
+  "price_change_percent": -0.7
  },
  "504": {
   "now_cost": 50,
@@ -1485,9 +1485,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 8952,
-  "transfers_out_event": 8484,
-  "price_change_percent": 34.2
+  "transfers_in_event": 13815,
+  "transfers_out_event": 13371,
+  "price_change_percent": 34.4
  },
  "594": {
   "now_cost": 60,
@@ -1495,9 +1495,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 622,
-  "transfers_out_event": 1551,
-  "price_change_percent": -63.5
+  "transfers_in_event": 924,
+  "transfers_out_event": 2360,
+  "price_change_percent": -75.4
  },
  "600": {
   "now_cost": 50,
@@ -1505,19 +1505,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 47,
-  "transfers_out_event": 68,
-  "price_change_percent": -41.8
+  "transfers_in_event": 69,
+  "transfers_out_event": 101,
+  "price_change_percent": -43.9
  },
  "605": {
   "now_cost": 45,
-  "selected_by_percent": 3.5,
+  "selected_by_percent": 3.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 32149,
-  "transfers_out_event": 9829,
-  "price_change_percent": 30.5
+  "transfers_in_event": 54759,
+  "transfers_out_event": 15257,
+  "price_change_percent": 35.9
  },
  "614": {
   "now_cost": 45,
@@ -1525,9 +1525,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 131,
-  "transfers_out_event": 224,
-  "price_change_percent": -10.7
+  "transfers_in_event": 159,
+  "transfers_out_event": 356,
+  "price_change_percent": -24.6
  },
  "624": {
   "now_cost": 50,
@@ -1536,7 +1536,7 @@
   "news": "Has joined Middlesbrough on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 7,
+  "transfers_out_event": 9,
   "price_change_percent": 0.0
  },
  "639": {
@@ -1545,8 +1545,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 102,
-  "transfers_out_event": 53,
+  "transfers_in_event": 179,
+  "transfers_out_event": 98,
   "price_change_percent": 0.0
  },
  "652": {
@@ -1555,8 +1555,8 @@
   "status": "d",
   "news": "Hamstring injury - 75% chance of playing",
   "chance": 75,
-  "transfers_in_event": 28,
-  "transfers_out_event": 12,
+  "transfers_in_event": 41,
+  "transfers_out_event": 20,
   "price_change_percent": 0.0
  },
  "658": {
@@ -1565,29 +1565,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 308,
-  "transfers_out_event": 51,
+  "transfers_in_event": 654,
+  "transfers_out_event": 114,
   "price_change_percent": 0.0
  },
  "28": {
   "now_cost": 50,
-  "selected_by_percent": 5.1,
+  "selected_by_percent": 5.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 7110,
-  "transfers_out_event": 19037,
-  "price_change_percent": 11.1
+  "transfers_in_event": 9925,
+  "transfers_out_event": 27027,
+  "price_change_percent": 9.2
  },
  "40": {
   "now_cost": 77,
-  "selected_by_percent": 36.4,
+  "selected_by_percent": 37.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 241809,
-  "transfers_out_event": 11132,
-  "price_change_percent": 18.8
+  "transfers_in_event": 336639,
+  "transfers_out_event": 19568,
+  "price_change_percent": 31.1
  },
  "101": {
   "now_cost": 49,
@@ -1595,9 +1595,9 @@
   "status": "i",
   "news": "Wrist injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 13,
-  "transfers_out_event": 193,
-  "price_change_percent": -15.6
+  "transfers_in_event": 18,
+  "transfers_out_event": 249,
+  "price_change_percent": -19.3
  },
  "136": {
   "now_cost": 59,
@@ -1605,9 +1605,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 1458,
-  "transfers_out_event": 3650,
-  "price_change_percent": -52.4
+  "transfers_in_event": 2083,
+  "transfers_out_event": 5463,
+  "price_change_percent": -60.0
  },
  "140": {
   "now_cost": 49,
@@ -1616,7 +1616,7 @@
   "news": "Has joined Como on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 5541,
+  "transfers_out_event": 7647,
   "price_change_percent": 0.0
  },
  "141": {
@@ -1626,18 +1626,18 @@
   "news": "Has joined RC Strasbourg on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 20,
+  "transfers_out_event": 28,
   "price_change_percent": 0.0
  },
  "142": {
   "now_cost": 54,
-  "selected_by_percent": 7.4,
+  "selected_by_percent": 7.3,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 6608,
-  "transfers_out_event": 39569,
-  "price_change_percent": -19.8
+  "transfers_in_event": 9585,
+  "transfers_out_event": 55264,
+  "price_change_percent": -27.0
  },
  "143": {
   "now_cost": 55,
@@ -1646,18 +1646,18 @@
   "news": "Has joined Como permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 280,
+  "transfers_out_event": 391,
   "price_change_percent": 0.0
  },
  "144": {
   "now_cost": 50,
-  "selected_by_percent": 1.1,
+  "selected_by_percent": 1.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1360,
-  "transfers_out_event": 4881,
-  "price_change_percent": -53.0
+  "transfers_in_event": 1938,
+  "transfers_out_event": 7100,
+  "price_change_percent": -60.1
  },
  "145": {
   "now_cost": 50,
@@ -1665,8 +1665,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 986,
-  "transfers_out_event": 888,
+  "transfers_in_event": 1401,
+  "transfers_out_event": 1357,
   "price_change_percent": 3.5
  },
  "146": {
@@ -1676,7 +1676,7 @@
   "news": "Has joined Napoli on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 49,
+  "transfers_out_event": 65,
   "price_change_percent": 0.0
  },
  "148": {
@@ -1685,9 +1685,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1960,
-  "transfers_out_event": 7315,
-  "price_change_percent": 18.5
+  "transfers_in_event": 2563,
+  "transfers_out_event": 10175,
+  "price_change_percent": 17.6
  },
  "149": {
   "now_cost": 49,
@@ -1695,9 +1695,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 673,
-  "transfers_out_event": 6852,
-  "price_change_percent": -43.3
+  "transfers_in_event": 936,
+  "transfers_out_event": 9322,
+  "price_change_percent": -53.3
  },
  "150": {
   "now_cost": 45,
@@ -1706,7 +1706,7 @@
   "news": "Has joined Real Sociedad on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 145,
+  "transfers_out_event": 214,
   "price_change_percent": 0.0
  },
  "151": {
@@ -1715,19 +1715,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 496,
-  "transfers_out_event": 2042,
-  "price_change_percent": 1.6
+  "transfers_in_event": 699,
+  "transfers_out_event": 2906,
+  "price_change_percent": 1.3
  },
  "152": {
   "now_cost": 53,
-  "selected_by_percent": 0.8,
+  "selected_by_percent": 0.7,
   "status": "i",
   "news": "Thigh injury - Expected back 18 Sep",
   "chance": 0,
-  "transfers_in_event": 41,
-  "transfers_out_event": 7705,
-  "price_change_percent": -5.4
+  "transfers_in_event": 73,
+  "transfers_out_event": 10268,
+  "price_change_percent": -8.7
  },
  "154": {
   "now_cost": 97,
@@ -1735,9 +1735,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 48150,
-  "transfers_out_event": 46062,
-  "price_change_percent": 34.4
+  "transfers_in_event": 73929,
+  "transfers_out_event": 68447,
+  "price_change_percent": 33.8
  },
  "156": {
   "now_cost": 65,
@@ -1745,9 +1745,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 3699,
-  "transfers_out_event": 6855,
-  "price_change_percent": 1.9
+  "transfers_in_event": 5926,
+  "transfers_out_event": 9858,
+  "price_change_percent": 1.7
  },
  "157": {
   "now_cost": 63,
@@ -1755,9 +1755,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 688,
-  "transfers_out_event": 3937,
-  "price_change_percent": -7.3
+  "transfers_in_event": 1155,
+  "transfers_out_event": 5430,
+  "price_change_percent": -11.3
  },
  "158": {
   "now_cost": 59,
@@ -1765,19 +1765,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 42,
-  "transfers_out_event": 155,
-  "price_change_percent": -74.8
+  "transfers_in_event": 63,
+  "transfers_out_event": 215,
+  "price_change_percent": -82.0
  },
  "159": {
-  "now_cost": 54,
+  "now_cost": 53,
   "selected_by_percent": 1.3,
   "status": "i",
   "news": "Calf injury - Expected back 18 Sep",
   "chance": 0,
-  "transfers_in_event": 198,
-  "transfers_out_event": 12768,
-  "price_change_percent": -101.5
+  "transfers_in_event": 290,
+  "transfers_out_event": 17373,
+  "price_change_percent": -0.5
  },
  "161": {
   "now_cost": 50,
@@ -1785,9 +1785,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 849,
-  "transfers_out_event": 1473,
-  "price_change_percent": 5.4
+  "transfers_in_event": 1274,
+  "transfers_out_event": 2150,
+  "price_change_percent": 5.3
  },
  "163": {
   "now_cost": 45,
@@ -1796,7 +1796,7 @@
   "news": "Has joined RC Strasbourg on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 719,
+  "transfers_out_event": 1013,
   "price_change_percent": 0.0
  },
  "164": {
@@ -1805,19 +1805,19 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 32,
-  "transfers_out_event": 214,
-  "price_change_percent": -0.6
+  "transfers_in_event": 63,
+  "transfers_out_event": 291,
+  "price_change_percent": -3.8
  },
  "165": {
   "now_cost": 78,
-  "selected_by_percent": 74.7,
+  "selected_by_percent": 75.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 116230,
-  "transfers_out_event": 7114,
-  "price_change_percent": 10.4
+  "transfers_in_event": 163893,
+  "transfers_out_event": 11660,
+  "price_change_percent": 16.7
  },
  "168": {
   "now_cost": 50,
@@ -1826,7 +1826,7 @@
   "news": "Has joined RB Leipzig permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 1356,
+  "transfers_out_event": 1906,
   "price_change_percent": 0.0
  },
  "169": {
@@ -1835,9 +1835,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1441,
-  "transfers_out_event": 1622,
-  "price_change_percent": 1.8
+  "transfers_in_event": 2732,
+  "transfers_out_event": 2518,
+  "price_change_percent": 2.0
  },
  "170": {
   "now_cost": 50,
@@ -1845,19 +1845,19 @@
   "status": "i",
   "news": "Hamstring injury - Expected back 18 Sep",
   "chance": 0,
-  "transfers_in_event": 40,
-  "transfers_out_event": 1174,
-  "price_change_percent": -41.4
+  "transfers_in_event": 59,
+  "transfers_out_event": 1580,
+  "price_change_percent": -47.9
  },
  "200": {
   "now_cost": 60,
-  "selected_by_percent": 7.6,
+  "selected_by_percent": 7.5,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2849,
-  "transfers_out_event": 43430,
-  "price_change_percent": -65.8
+  "transfers_in_event": 4024,
+  "transfers_out_event": 60930,
+  "price_change_percent": -76.7
  },
  "560": {
   "now_cost": 44,
@@ -1865,9 +1865,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 227,
-  "transfers_out_event": 206,
-  "price_change_percent": -0.3
+  "transfers_in_event": 357,
+  "transfers_out_event": 310,
+  "price_change_percent": 0.0
  },
  "561": {
   "now_cost": 45,
@@ -1875,19 +1875,19 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 78,
-  "transfers_out_event": 66,
+  "transfers_in_event": 118,
+  "transfers_out_event": 99,
   "price_change_percent": 0.0
  },
  "568": {
-  "now_cost": 55,
+  "now_cost": 54,
   "selected_by_percent": 0.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 182,
-  "transfers_out_event": 431,
-  "price_change_percent": -96.1
+  "transfers_in_event": 240,
+  "transfers_out_event": 653,
+  "price_change_percent": -0.4
  },
  "583": {
   "now_cost": 49,
@@ -1895,9 +1895,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 142,
-  "transfers_out_event": 551,
-  "price_change_percent": -22.7
+  "transfers_in_event": 209,
+  "transfers_out_event": 812,
+  "price_change_percent": -28.1
  },
  "91": {
   "now_cost": 45,
@@ -1905,9 +1905,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 152,
-  "transfers_out_event": 187,
-  "price_change_percent": -60.3
+  "transfers_in_event": 209,
+  "transfers_out_event": 289,
+  "price_change_percent": -63.3
  },
  "104": {
   "now_cost": 49,
@@ -1915,9 +1915,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 128,
-  "transfers_out_event": 398,
-  "price_change_percent": -16.0
+  "transfers_in_event": 179,
+  "transfers_out_event": 579,
+  "price_change_percent": -21.0
  },
  "110": {
   "now_cost": 45,
@@ -1925,9 +1925,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 372,
-  "transfers_out_event": 2507,
-  "price_change_percent": -29.7
+  "transfers_in_event": 501,
+  "transfers_out_event": 4436,
+  "price_change_percent": -33.7
  },
  "171": {
   "now_cost": 40,
@@ -1936,7 +1936,7 @@
   "news": "Has joined Leyton Orient on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 3421,
+  "transfers_out_event": 4858,
   "price_change_percent": 0.0
  },
  "172": {
@@ -1945,19 +1945,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 48,
-  "transfers_out_event": 464,
-  "price_change_percent": -96.4
+  "transfers_in_event": 77,
+  "transfers_out_event": 774,
+  "price_change_percent": -100.1
  },
  "173": {
   "now_cost": 40,
-  "selected_by_percent": 9.1,
+  "selected_by_percent": 9.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 11619,
-  "transfers_out_event": 18200,
-  "price_change_percent": 24.6
+  "transfers_in_event": 15512,
+  "transfers_out_event": 29742,
+  "price_change_percent": 22.5
  },
  "174": {
   "now_cost": 40,
@@ -1966,18 +1966,18 @@
   "news": "Has joined Sheffield United on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 1603,
+  "transfers_out_event": 2345,
   "price_change_percent": 0.0
  },
  "175": {
   "now_cost": 40,
-  "selected_by_percent": 10.3,
+  "selected_by_percent": 10.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 5275,
-  "transfers_out_event": 30264,
-  "price_change_percent": -32.8
+  "transfers_in_event": 7153,
+  "transfers_out_event": 46893,
+  "price_change_percent": -36.6
  },
  "176": {
   "now_cost": 40,
@@ -1985,9 +1985,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 305,
-  "transfers_out_event": 1253,
-  "price_change_percent": -36.2
+  "transfers_in_event": 414,
+  "transfers_out_event": 2028,
+  "price_change_percent": -39.9
  },
  "177": {
   "now_cost": 40,
@@ -1995,9 +1995,9 @@
   "status": "i",
   "news": "Hamstring injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 20,
-  "transfers_out_event": 140,
-  "price_change_percent": -91.3
+  "transfers_in_event": 52,
+  "transfers_out_event": 205,
+  "price_change_percent": -92.8
  },
  "178": {
   "now_cost": 40,
@@ -2005,9 +2005,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 155,
-  "transfers_out_event": 214,
-  "price_change_percent": -19.6
+  "transfers_in_event": 213,
+  "transfers_out_event": 320,
+  "price_change_percent": -21.5
  },
  "179": {
   "now_cost": 40,
@@ -2015,9 +2015,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 61,
-  "transfers_out_event": 101,
-  "price_change_percent": -46.8
+  "transfers_in_event": 77,
+  "transfers_out_event": 142,
+  "price_change_percent": -49.5
  },
  "180": {
   "now_cost": 40,
@@ -2025,9 +2025,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 78,
-  "transfers_out_event": 368,
-  "price_change_percent": -64.4
+  "transfers_in_event": 113,
+  "transfers_out_event": 566,
+  "price_change_percent": -67.0
  },
  "181": {
   "now_cost": 40,
@@ -2036,7 +2036,7 @@
   "news": "Has joined Academico de Viseu on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 85,
+  "transfers_out_event": 118,
   "price_change_percent": 0.0
  },
  "182": {
@@ -2045,9 +2045,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 732,
-  "transfers_out_event": 1384,
-  "price_change_percent": -33.0
+  "transfers_in_event": 993,
+  "transfers_out_event": 2204,
+  "price_change_percent": -35.8
  },
  "183": {
   "now_cost": 50,
@@ -2055,9 +2055,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 138,
-  "transfers_out_event": 433,
-  "price_change_percent": -78.3
+  "transfers_in_event": 198,
+  "transfers_out_event": 655,
+  "price_change_percent": -84.9
  },
  "184": {
   "now_cost": 49,
@@ -2065,9 +2065,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 158,
-  "transfers_out_event": 632,
-  "price_change_percent": -3.8
+  "transfers_in_event": 266,
+  "transfers_out_event": 930,
+  "price_change_percent": -6.4
  },
  "185": {
   "now_cost": 49,
@@ -2075,9 +2075,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 37,
-  "transfers_out_event": 296,
-  "price_change_percent": -75.7
+  "transfers_in_event": 45,
+  "transfers_out_event": 439,
+  "price_change_percent": -85.3
  },
  "186": {
   "now_cost": 54,
@@ -2085,9 +2085,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 38,
-  "transfers_out_event": 260,
-  "price_change_percent": -48.2
+  "transfers_in_event": 55,
+  "transfers_out_event": 389,
+  "price_change_percent": -53.9
  },
  "187": {
   "now_cost": 49,
@@ -2095,9 +2095,9 @@
   "status": "i",
   "news": "Unspecified injury - Expected back 12 Oct",
   "chance": 0,
-  "transfers_in_event": 6,
-  "transfers_out_event": 107,
-  "price_change_percent": -41.1
+  "transfers_in_event": 8,
+  "transfers_out_event": 150,
+  "price_change_percent": -49.8
  },
  "188": {
   "now_cost": 54,
@@ -2105,9 +2105,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 11,
-  "transfers_out_event": 336,
-  "price_change_percent": -75.5
+  "transfers_in_event": 15,
+  "transfers_out_event": 510,
+  "price_change_percent": -82.6
  },
  "189": {
   "now_cost": 45,
@@ -2115,9 +2115,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 180,
-  "transfers_out_event": 782,
-  "price_change_percent": -84.8
+  "transfers_in_event": 247,
+  "transfers_out_event": 1177,
+  "price_change_percent": -90.7
  },
  "190": {
   "now_cost": 54,
@@ -2126,8 +2126,8 @@
   "news": "",
   "chance": null,
   "transfers_in_event": 17,
-  "transfers_out_event": 312,
-  "price_change_percent": -18.9
+  "transfers_out_event": 453,
+  "price_change_percent": -24.9
  },
  "191": {
   "now_cost": 45,
@@ -2136,7 +2136,7 @@
   "news": "Has joined Burton Albion on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 624,
+  "transfers_out_event": 890,
   "price_change_percent": 0.0
  },
  "192": {
@@ -2146,7 +2146,7 @@
   "news": "Has joined Oxford United on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 1813,
+  "transfers_out_event": 2560,
   "price_change_percent": 0.0
  },
  "193": {
@@ -2155,9 +2155,9 @@
   "status": "i",
   "news": "Thigh injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 18,
-  "transfers_out_event": 384,
-  "price_change_percent": -50.4
+  "transfers_in_event": 30,
+  "transfers_out_event": 583,
+  "price_change_percent": -55.6
  },
  "194": {
   "now_cost": 50,
@@ -2165,19 +2165,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2473,
-  "transfers_out_event": 3318,
-  "price_change_percent": 3.0
+  "transfers_in_event": 3704,
+  "transfers_out_event": 5191,
+  "price_change_percent": 2.7
  },
  "195": {
   "now_cost": 50,
-  "selected_by_percent": 0.8,
+  "selected_by_percent": 0.7,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 936,
-  "transfers_out_event": 3288,
-  "price_change_percent": -27.1
+  "transfers_in_event": 1307,
+  "transfers_out_event": 5204,
+  "price_change_percent": -35.4
  },
  "196": {
   "now_cost": 50,
@@ -2186,7 +2186,7 @@
   "news": "Has joined Shabab Al-Ahli Dubai permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 43,
+  "transfers_out_event": 64,
   "price_change_percent": 0.0
  },
  "197": {
@@ -2196,7 +2196,7 @@
   "news": "Has joined KVC Westerlo on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 106,
+  "transfers_out_event": 143,
   "price_change_percent": 0.0
  },
  "492": {
@@ -2205,9 +2205,9 @@
   "status": "s",
   "news": "Suspended until 19 Oct",
   "chance": 0,
-  "transfers_in_event": 468,
-  "transfers_out_event": 5660,
-  "price_change_percent": -51.5
+  "transfers_in_event": 490,
+  "transfers_out_event": 9025,
+  "price_change_percent": -65.0
  },
  "575": {
   "now_cost": 49,
@@ -2215,9 +2215,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 94,
-  "transfers_out_event": 770,
-  "price_change_percent": -26.0
+  "transfers_in_event": 133,
+  "transfers_out_event": 1146,
+  "price_change_percent": -35.4
  },
  "584": {
   "now_cost": 54,
@@ -2225,9 +2225,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 28,
-  "transfers_out_event": 295,
-  "price_change_percent": -21.0
+  "transfers_in_event": 37,
+  "transfers_out_event": 443,
+  "price_change_percent": -27.9
  },
  "599": {
   "now_cost": 50,
@@ -2235,9 +2235,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 403,
-  "transfers_out_event": 399,
-  "price_change_percent": -7.7
+  "transfers_in_event": 633,
+  "transfers_out_event": 600,
+  "price_change_percent": -6.1
  },
  "623": {
   "now_cost": 40,
@@ -2245,9 +2245,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2110,
-  "transfers_out_event": 584,
-  "price_change_percent": 0.6
+  "transfers_in_event": 3940,
+  "transfers_out_event": 990,
+  "price_change_percent": 0.7
  },
  "655": {
   "now_cost": 55,
@@ -2255,8 +2255,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 51,
-  "transfers_out_event": 11,
+  "transfers_in_event": 67,
+  "transfers_out_event": 13,
   "price_change_percent": 0.0
  },
  "656": {
@@ -2265,8 +2265,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 3596,
-  "transfers_out_event": 542,
+  "transfers_in_event": 4103,
+  "transfers_out_event": 780,
   "price_change_percent": 0.0
  },
  "42": {
@@ -2275,9 +2275,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 111,
-  "transfers_out_event": 303,
-  "price_change_percent": -75.3
+  "transfers_in_event": 145,
+  "transfers_out_event": 434,
+  "price_change_percent": -87.2
  },
  "153": {
   "now_cost": 45,
@@ -2285,9 +2285,9 @@
   "status": "s",
   "news": "Suspended until 25 Oct",
   "chance": 0,
-  "transfers_in_event": 71,
-  "transfers_out_event": 1671,
-  "price_change_percent": 1.2
+  "transfers_in_event": 90,
+  "transfers_out_event": 2256,
+  "price_change_percent": 0.9
  },
  "198": {
   "now_cost": 50,
@@ -2295,9 +2295,9 @@
   "status": "i",
   "news": "Foot injury - Expected back 11 Oct",
   "chance": 0,
-  "transfers_in_event": 106,
-  "transfers_out_event": 22795,
-  "price_change_percent": -15.0
+  "transfers_in_event": 128,
+  "transfers_out_event": 30489,
+  "price_change_percent": -23.8
  },
  "199": {
   "now_cost": 45,
@@ -2305,9 +2305,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 403,
-  "transfers_out_event": 222,
-  "price_change_percent": -54.2
+  "transfers_in_event": 576,
+  "transfers_out_event": 347,
+  "price_change_percent": -51.7
  },
  "202": {
   "now_cost": 50,
@@ -2315,9 +2315,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 605,
-  "transfers_out_event": 2312,
-  "price_change_percent": -38.8
+  "transfers_in_event": 887,
+  "transfers_out_event": 3539,
+  "price_change_percent": -45.7
  },
  "203": {
   "now_cost": 49,
@@ -2325,19 +2325,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 74,
-  "transfers_out_event": 1313,
-  "price_change_percent": -35.3
+  "transfers_in_event": 117,
+  "transfers_out_event": 1884,
+  "price_change_percent": -46.3
  },
  "204": {
   "now_cost": 45,
-  "selected_by_percent": 6.5,
+  "selected_by_percent": 6.4,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 9657,
-  "transfers_out_event": 18418,
-  "price_change_percent": 38.6
+  "transfers_in_event": 12670,
+  "transfers_out_event": 28405,
+  "price_change_percent": 36.3
  },
  "205": {
   "now_cost": 45,
@@ -2346,7 +2346,7 @@
   "news": "Has joined FC Cologne on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 107,
+  "transfers_out_event": 142,
   "price_change_percent": 0.0
  },
  "206": {
@@ -2355,9 +2355,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 6,
-  "transfers_out_event": 138,
-  "price_change_percent": -81.6
+  "transfers_in_event": 20,
+  "transfers_out_event": 177,
+  "price_change_percent": -84.2
  },
  "207": {
   "now_cost": 44,
@@ -2365,9 +2365,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 82,
-  "transfers_out_event": 314,
-  "price_change_percent": -28.5
+  "transfers_in_event": 125,
+  "transfers_out_event": 458,
+  "price_change_percent": -35.6
  },
  "208": {
   "now_cost": 62,
@@ -2375,9 +2375,9 @@
   "status": "i",
   "news": "Groin injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 24,
-  "transfers_out_event": 4655,
-  "price_change_percent": -4.2
+  "transfers_in_event": 36,
+  "transfers_out_event": 6667,
+  "price_change_percent": -7.4
  },
  "210": {
   "now_cost": 55,
@@ -2385,29 +2385,29 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 888,
-  "transfers_out_event": 3767,
-  "price_change_percent": -35.5
+  "transfers_in_event": 1310,
+  "transfers_out_event": 5508,
+  "price_change_percent": -43.3
  },
  "211": {
   "now_cost": 55,
-  "selected_by_percent": 0.5,
+  "selected_by_percent": 0.4,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 538,
-  "transfers_out_event": 3460,
-  "price_change_percent": 9.4
+  "transfers_in_event": 772,
+  "transfers_out_event": 5012,
+  "price_change_percent": 8.8
  },
  "212": {
-  "now_cost": 45,
-  "selected_by_percent": 8.2,
+  "now_cost": 44,
+  "selected_by_percent": 8.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 3895,
-  "transfers_out_event": 28636,
-  "price_change_percent": -100.1
+  "transfers_in_event": 6417,
+  "transfers_out_event": 43687,
+  "price_change_percent": -0.3
  },
  "213": {
   "now_cost": 49,
@@ -2415,9 +2415,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 53,
-  "transfers_out_event": 236,
-  "price_change_percent": -52.6
+  "transfers_in_event": 82,
+  "transfers_out_event": 363,
+  "price_change_percent": -58.1
  },
  "214": {
   "now_cost": 50,
@@ -2425,9 +2425,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 7476,
-  "transfers_out_event": 1480,
-  "price_change_percent": 6.7
+  "transfers_in_event": 10654,
+  "transfers_out_event": 2491,
+  "price_change_percent": 7.5
  },
  "215": {
   "now_cost": 50,
@@ -2436,7 +2436,7 @@
   "news": "Has joined Stoke City permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 45,
+  "transfers_out_event": 54,
   "price_change_percent": 0.0
  },
  "216": {
@@ -2446,7 +2446,7 @@
   "news": "Has joined Millwall on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 153,
+  "transfers_out_event": 215,
   "price_change_percent": 0.0
  },
  "217": {
@@ -2456,7 +2456,7 @@
   "news": "Has joined Alverca on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 277,
+  "transfers_out_event": 372,
   "price_change_percent": 0.0
  },
  "218": {
@@ -2465,9 +2465,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 81,
-  "transfers_out_event": 268,
-  "price_change_percent": -46.4
+  "transfers_in_event": 121,
+  "transfers_out_event": 403,
+  "price_change_percent": -54.3
  },
  "219": {
   "now_cost": 49,
@@ -2476,7 +2476,7 @@
   "news": "has joined  Kasimpasa on loan for the rest of the seaon.",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 53,
+  "transfers_out_event": 66,
   "price_change_percent": 0.0
  },
  "220": {
@@ -2486,7 +2486,7 @@
   "news": "Has joined Bristol City on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 2,
+  "transfers_out_event": 5,
   "price_change_percent": 0.0
  },
  "221": {
@@ -2495,9 +2495,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 113,
-  "transfers_out_event": 291,
-  "price_change_percent": -40.5
+  "transfers_in_event": 158,
+  "transfers_out_event": 446,
+  "price_change_percent": -46.2
  },
  "222": {
   "now_cost": 60,
@@ -2505,29 +2505,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 5064,
-  "transfers_out_event": 1947,
-  "price_change_percent": 3.6
+  "transfers_in_event": 6896,
+  "transfers_out_event": 3321,
+  "price_change_percent": 3.8
  },
  "223": {
   "now_cost": 63,
-  "selected_by_percent": 1.6,
+  "selected_by_percent": 1.5,
   "status": "i",
   "news": "Hamstring injury - Expected back 11 Oct",
   "chance": 0,
-  "transfers_in_event": 62,
-  "transfers_out_event": 9357,
-  "price_change_percent": -3.8
+  "transfers_in_event": 89,
+  "transfers_out_event": 13348,
+  "price_change_percent": -6.5
  },
  "224": {
   "now_cost": 55,
-  "selected_by_percent": 0.7,
+  "selected_by_percent": 0.6,
   "status": "d",
   "news": "Unspecified injury - 75% chance of playing",
   "chance": 75,
-  "transfers_in_event": 173,
-  "transfers_out_event": 7414,
-  "price_change_percent": 7.2
+  "transfers_in_event": 213,
+  "transfers_out_event": 10905,
+  "price_change_percent": 5.5
  },
  "225": {
   "now_cost": 50,
@@ -2545,9 +2545,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 49,
-  "transfers_out_event": 446,
-  "price_change_percent": -25.0
+  "transfers_in_event": 72,
+  "transfers_out_event": 690,
+  "price_change_percent": -33.7
  },
  "555": {
   "now_cost": 40,
@@ -2555,9 +2555,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 915,
-  "transfers_out_event": 1714,
-  "price_change_percent": -2.8
+  "transfers_in_event": 1420,
+  "transfers_out_event": 2655,
+  "price_change_percent": -3.3
  },
  "577": {
   "now_cost": 45,
@@ -2565,9 +2565,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 114,
-  "transfers_out_event": 861,
-  "price_change_percent": -93.0
+  "transfers_in_event": 172,
+  "transfers_out_event": 1290,
+  "price_change_percent": -99.8
  },
  "588": {
   "now_cost": 50,
@@ -2575,8 +2575,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2497,
-  "transfers_out_event": 941,
+  "transfers_in_event": 3294,
+  "transfers_out_event": 1544,
   "price_change_percent": 6.9
  },
  "595": {
@@ -2585,9 +2585,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 31,
-  "transfers_out_event": 52,
-  "price_change_percent": -38.2
+  "transfers_in_event": 42,
+  "transfers_out_event": 89,
+  "price_change_percent": -45.9
  },
  "633": {
   "now_cost": 45,
@@ -2595,8 +2595,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 285,
-  "transfers_out_event": 51,
+  "transfers_in_event": 380,
+  "transfers_out_event": 81,
   "price_change_percent": 0.0
  },
  "643": {
@@ -2605,8 +2605,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1360,
-  "transfers_out_event": 2748,
+  "transfers_in_event": 1853,
+  "transfers_out_event": 4027,
   "price_change_percent": 0.0
  },
  "644": {
@@ -2615,8 +2615,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 499,
-  "transfers_out_event": 149,
+  "transfers_in_event": 727,
+  "transfers_out_event": 232,
   "price_change_percent": 0.0
  },
  "647": {
@@ -2625,8 +2625,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 30,
-  "transfers_out_event": 61,
+  "transfers_in_event": 39,
+  "transfers_out_event": 79,
   "price_change_percent": 0.0
  },
  "21": {
@@ -2635,9 +2635,9 @@
   "status": "i",
   "news": "Groin injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 15,
-  "transfers_out_event": 239,
-  "price_change_percent": -50.7
+  "transfers_in_event": 20,
+  "transfers_out_event": 355,
+  "price_change_percent": -55.9
  },
  "209": {
   "now_cost": 59,
@@ -2645,19 +2645,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 414,
-  "transfers_out_event": 400,
-  "price_change_percent": -49.5
+  "transfers_in_event": 739,
+  "transfers_out_event": 610,
+  "price_change_percent": -44.0
  },
  "226": {
   "now_cost": 55,
-  "selected_by_percent": 8.7,
+  "selected_by_percent": 8.8,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 19086,
-  "transfers_out_event": 11793,
-  "price_change_percent": 8.7
+  "transfers_in_event": 28486,
+  "transfers_out_event": 18035,
+  "price_change_percent": 10.0
  },
  "227": {
   "now_cost": 50,
@@ -2665,9 +2665,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 179,
-  "transfers_out_event": 153,
-  "price_change_percent": -45.6
+  "transfers_in_event": 254,
+  "transfers_out_event": 211,
+  "price_change_percent": -41.0
  },
  "228": {
   "now_cost": 45,
@@ -2675,29 +2675,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 62,
-  "transfers_out_event": 82,
-  "price_change_percent": -32.3
+  "transfers_in_event": 95,
+  "transfers_out_event": 131,
+  "price_change_percent": -32.6
  },
  "229": {
   "now_cost": 61,
-  "selected_by_percent": 12.6,
+  "selected_by_percent": 13.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 105577,
-  "transfers_out_event": 9815,
-  "price_change_percent": 0.8
+  "transfers_in_event": 143642,
+  "transfers_out_event": 16703,
+  "price_change_percent": 5.3
  },
  "230": {
   "now_cost": 55,
-  "selected_by_percent": 2.0,
+  "selected_by_percent": 2.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 12052,
-  "transfers_out_event": 3084,
-  "price_change_percent": 13.1
+  "transfers_in_event": 18835,
+  "transfers_out_event": 5044,
+  "price_change_percent": 15.2
  },
  "231": {
   "now_cost": 48,
@@ -2705,9 +2705,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 536,
-  "transfers_out_event": 4020,
-  "price_change_percent": -6.9
+  "transfers_in_event": 816,
+  "transfers_out_event": 5767,
+  "price_change_percent": -11.3
  },
  "232": {
   "now_cost": 49,
@@ -2715,19 +2715,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 272,
-  "transfers_out_event": 826,
-  "price_change_percent": -77.5
+  "transfers_in_event": 447,
+  "transfers_out_event": 1228,
+  "price_change_percent": -80.9
  },
  "233": {
   "now_cost": 45,
-  "selected_by_percent": 2.6,
+  "selected_by_percent": 2.9,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 61211,
-  "transfers_out_event": 3994,
-  "price_change_percent": 37.5
+  "transfers_in_event": 88614,
+  "transfers_out_event": 7095,
+  "price_change_percent": 46.5
  },
  "234": {
   "now_cost": 45,
@@ -2736,7 +2736,7 @@
   "news": "Has joined Torino permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 121,
+  "transfers_out_event": 169,
   "price_change_percent": 0.0
  },
  "235": {
@@ -2746,18 +2746,18 @@
   "news": "Has joined Malaga on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 572,
+  "transfers_out_event": 826,
   "price_change_percent": 0.0
  },
  "236": {
   "now_cost": 65,
-  "selected_by_percent": 4.8,
+  "selected_by_percent": 5.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 31063,
-  "transfers_out_event": 17133,
-  "price_change_percent": 45.4
+  "transfers_in_event": 54128,
+  "transfers_out_event": 25133,
+  "price_change_percent": 51.6
  },
  "238": {
   "now_cost": 65,
@@ -2765,29 +2765,29 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 2418,
-  "transfers_out_event": 1848,
-  "price_change_percent": 5.3
+  "transfers_in_event": 3898,
+  "transfers_out_event": 2797,
+  "price_change_percent": 5.6
  },
  "239": {
   "now_cost": 60,
-  "selected_by_percent": 0.1,
+  "selected_by_percent": 0.2,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 2027,
-  "transfers_out_event": 588,
-  "price_change_percent": -25.2
+  "transfers_in_event": 3631,
+  "transfers_out_event": 1065,
+  "price_change_percent": 0.1
  },
  "242": {
   "now_cost": 55,
-  "selected_by_percent": 0.7,
+  "selected_by_percent": 0.8,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 11429,
-  "transfers_out_event": 2441,
-  "price_change_percent": 15.6
+  "transfers_in_event": 18444,
+  "transfers_out_event": 4016,
+  "price_change_percent": 18.0
  },
  "243": {
   "now_cost": 49,
@@ -2795,9 +2795,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 132,
-  "transfers_out_event": 331,
-  "price_change_percent": -12.3
+  "transfers_in_event": 199,
+  "transfers_out_event": 467,
+  "price_change_percent": -16.5
  },
  "244": {
   "now_cost": 50,
@@ -2805,9 +2805,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2441,
-  "transfers_out_event": 1967,
-  "price_change_percent": 10.6
+  "transfers_in_event": 3741,
+  "transfers_out_event": 2860,
+  "price_change_percent": 10.8
  },
  "245": {
   "now_cost": 54,
@@ -2815,9 +2815,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 51,
-  "transfers_out_event": 112,
-  "price_change_percent": -70.7
+  "transfers_in_event": 82,
+  "transfers_out_event": 172,
+  "price_change_percent": -74.2
  },
  "246": {
   "now_cost": 49,
@@ -2825,9 +2825,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 89,
-  "transfers_out_event": 321,
-  "price_change_percent": -0.4
+  "transfers_in_event": 168,
+  "transfers_out_event": 448,
+  "price_change_percent": -2.4
  },
  "247": {
   "now_cost": 55,
@@ -2835,9 +2835,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 216,
-  "transfers_out_event": 609,
-  "price_change_percent": -60.5
+  "transfers_in_event": 308,
+  "transfers_out_event": 924,
+  "price_change_percent": -65.6
  },
  "248": {
   "now_cost": 54,
@@ -2846,27 +2846,27 @@
   "news": "Has joined Fiorentina permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 8512,
+  "transfers_out_event": 11931,
   "price_change_percent": 0.0
  },
  "249": {
   "now_cost": 56,
-  "selected_by_percent": 6.4,
+  "selected_by_percent": 6.5,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 38840,
-  "transfers_out_event": 19978,
-  "price_change_percent": 16.9
+  "transfers_in_event": 59943,
+  "transfers_out_event": 33420,
+  "price_change_percent": 19.5
  },
  "649": {
   "now_cost": 45,
-  "selected_by_percent": 0.5,
+  "selected_by_percent": 0.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 16808,
-  "transfers_out_event": 1342,
+  "transfers_in_event": 23904,
+  "transfers_out_event": 2366,
   "price_change_percent": 0.0
  },
  "654": {
@@ -2875,8 +2875,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 915,
-  "transfers_out_event": 731,
+  "transfers_in_event": 1090,
+  "transfers_out_event": 1116,
   "price_change_percent": 0.0
  },
  "250": {
@@ -2885,9 +2885,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 11068,
-  "transfers_out_event": 3975,
-  "price_change_percent": 1.8
+  "transfers_in_event": 15724,
+  "transfers_out_event": 6345,
+  "price_change_percent": 2.2
  },
  "251": {
   "now_cost": 40,
@@ -2895,9 +2895,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1050,
-  "transfers_out_event": 1103,
-  "price_change_percent": -16.0
+  "transfers_in_event": 1558,
+  "transfers_out_event": 1692,
+  "price_change_percent": -16.6
  },
  "252": {
   "now_cost": 40,
@@ -2906,7 +2906,7 @@
   "news": "Has joined York City on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 302,
+  "transfers_out_event": 441,
   "price_change_percent": 0.0
  },
  "253": {
@@ -2915,8 +2915,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 541,
-  "transfers_out_event": 583,
+  "transfers_in_event": 804,
+  "transfers_out_event": 887,
   "price_change_percent": 0.1
  },
  "254": {
@@ -2925,8 +2925,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 3164,
-  "transfers_out_event": 2781,
+  "transfers_in_event": 4639,
+  "transfers_out_event": 4420,
   "price_change_percent": -35.6
  },
  "255": {
@@ -2935,9 +2935,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 30,
-  "transfers_out_event": 105,
-  "price_change_percent": -30.8
+  "transfers_in_event": 40,
+  "transfers_out_event": 154,
+  "price_change_percent": -37.2
  },
  "256": {
   "now_cost": 44,
@@ -2945,9 +2945,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 123,
-  "transfers_out_event": 509,
-  "price_change_percent": -13.1
+  "transfers_in_event": 174,
+  "transfers_out_event": 723,
+  "price_change_percent": -16.7
  },
  "257": {
   "now_cost": 45,
@@ -2955,9 +2955,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1273,
-  "transfers_out_event": 984,
-  "price_change_percent": -18.9
+  "transfers_in_event": 1781,
+  "transfers_out_event": 1574,
+  "price_change_percent": -18.6
  },
  "258": {
   "now_cost": 45,
@@ -2965,9 +2965,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 4569,
-  "transfers_out_event": 1727,
-  "price_change_percent": 8.8
+  "transfers_in_event": 6268,
+  "transfers_out_event": 2795,
+  "price_change_percent": 9.0
  },
  "261": {
   "now_cost": 54,
@@ -2975,9 +2975,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 860,
-  "transfers_out_event": 2925,
-  "price_change_percent": -23.4
+  "transfers_in_event": 1328,
+  "transfers_out_event": 4277,
+  "price_change_percent": -29.0
  },
  "262": {
   "now_cost": 54,
@@ -2985,9 +2985,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 158,
-  "transfers_out_event": 1132,
-  "price_change_percent": -35.3
+  "transfers_in_event": 253,
+  "transfers_out_event": 1609,
+  "price_change_percent": -42.0
  },
  "263": {
   "now_cost": 53,
@@ -2995,8 +2995,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 179,
-  "transfers_out_event": 210,
+  "transfers_in_event": 289,
+  "transfers_out_event": 314,
   "price_change_percent": 0.0
  },
  "264": {
@@ -3005,9 +3005,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 637,
-  "transfers_out_event": 1235,
-  "price_change_percent": -46.4
+  "transfers_in_event": 954,
+  "transfers_out_event": 1788,
+  "price_change_percent": -49.7
  },
  "265": {
   "now_cost": 49,
@@ -3015,9 +3015,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 601,
-  "transfers_out_event": 915,
-  "price_change_percent": -6.0
+  "transfers_in_event": 838,
+  "transfers_out_event": 1352,
+  "price_change_percent": -8.0
  },
  "266": {
   "now_cost": 50,
@@ -3025,9 +3025,9 @@
   "status": "i",
   "news": "Knee injury - Expected back 10 Oct",
   "chance": 0,
-  "transfers_in_event": 6,
-  "transfers_out_event": 11,
-  "price_change_percent": -90.8
+  "transfers_in_event": 7,
+  "transfers_out_event": 21,
+  "price_change_percent": -99.2
  },
  "268": {
   "now_cost": 55,
@@ -3035,29 +3035,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 21206,
-  "transfers_out_event": 5583,
-  "price_change_percent": 37.0
+  "transfers_in_event": 33218,
+  "transfers_out_event": 9053,
+  "price_change_percent": 39.8
  },
  "269": {
   "now_cost": 44,
   "selected_by_percent": 0.3,
-  "status": "a",
-  "news": "",
-  "chance": null,
-  "transfers_in_event": 171,
-  "transfers_out_event": 1094,
-  "price_change_percent": -14.3
+  "status": "d",
+  "news": "Groin injury - 75% chance of playing",
+  "chance": 75,
+  "transfers_in_event": 200,
+  "transfers_out_event": 1887,
+  "price_change_percent": -14.0
  },
  "270": {
   "now_cost": 44,
-  "selected_by_percent": 1.1,
+  "selected_by_percent": 1.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1324,
-  "transfers_out_event": 4370,
-  "price_change_percent": 0.1
+  "transfers_in_event": 7863,
+  "transfers_out_event": 6953,
+  "price_change_percent": 1.4
  },
  "271": {
   "now_cost": 54,
@@ -3065,29 +3065,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 927,
-  "transfers_out_event": 1631,
-  "price_change_percent": -12.4
+  "transfers_in_event": 1405,
+  "transfers_out_event": 2583,
+  "price_change_percent": -16.7
  },
  "272": {
   "now_cost": 45,
-  "selected_by_percent": 6.0,
+  "selected_by_percent": 5.9,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 7592,
-  "transfers_out_event": 15968,
-  "price_change_percent": -23.7
+  "transfers_in_event": 12143,
+  "transfers_out_event": 25593,
+  "price_change_percent": -25.9
  },
  "569": {
   "now_cost": 60,
-  "selected_by_percent": 3.8,
+  "selected_by_percent": 3.7,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 7542,
-  "transfers_out_event": 21585,
-  "price_change_percent": 53.3
+  "transfers_in_event": 11106,
+  "transfers_out_event": 32700,
+  "price_change_percent": 50.1
  },
  "570": {
   "now_cost": 54,
@@ -3095,9 +3095,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 124,
-  "transfers_out_event": 813,
-  "price_change_percent": -0.7
+  "transfers_in_event": 203,
+  "transfers_out_event": 1138,
+  "price_change_percent": -4.8
  },
  "580": {
   "now_cost": 50,
@@ -3105,9 +3105,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 217,
-  "transfers_out_event": 163,
-  "price_change_percent": -90.2
+  "transfers_in_event": 318,
+  "transfers_out_event": 272,
+  "price_change_percent": -89.2
  },
  "610": {
   "now_cost": 40,
@@ -3116,7 +3116,7 @@
   "news": "has joined  Real Salt Lake on loan for the rest of the seaon.",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 434,
+  "transfers_out_event": 624,
   "price_change_percent": 0.0
  },
  "626": {
@@ -3125,9 +3125,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 661,
-  "transfers_out_event": 1694,
-  "price_change_percent": -12.8
+  "transfers_in_event": 800,
+  "transfers_out_event": 2434,
+  "price_change_percent": -21.3
  },
  "635": {
   "now_cost": 50,
@@ -3135,8 +3135,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 55,
-  "transfers_out_event": 33,
+  "transfers_in_event": 82,
+  "transfers_out_event": 50,
   "price_change_percent": 0.0
  },
  "636": {
@@ -3145,8 +3145,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 21,
-  "transfers_out_event": 24,
+  "transfers_in_event": 37,
+  "transfers_out_event": 32,
   "price_change_percent": 0.0
  },
  "650": {
@@ -3155,8 +3155,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 820,
-  "transfers_out_event": 131,
+  "transfers_in_event": 1126,
+  "transfers_out_event": 189,
   "price_change_percent": 0.0
  },
  "240": {
@@ -3165,8 +3165,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 145,
-  "transfers_out_event": 89,
+  "transfers_in_event": 218,
+  "transfers_out_event": 126,
   "price_change_percent": 0.1
  },
  "273": {
@@ -3175,9 +3175,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1347,
-  "transfers_out_event": 1873,
-  "price_change_percent": -19.2
+  "transfers_in_event": 2132,
+  "transfers_out_event": 2967,
+  "price_change_percent": -20.0
  },
  "274": {
   "now_cost": 45,
@@ -3185,9 +3185,9 @@
   "status": "i",
   "news": "Arm injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 26,
-  "transfers_out_event": 211,
-  "price_change_percent": -79.0
+  "transfers_in_event": 41,
+  "transfers_out_event": 303,
+  "price_change_percent": -81.3
  },
  "275": {
   "now_cost": 40,
@@ -3196,7 +3196,7 @@
   "news": "Has joined Grimsby Town on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 19,
+  "transfers_out_event": 25,
   "price_change_percent": 0.0
  },
  "276": {
@@ -3206,18 +3206,18 @@
   "news": "Has joined Colchester United on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 55,
+  "transfers_out_event": 71,
   "price_change_percent": 0.0
  },
  "277": {
   "now_cost": 41,
-  "selected_by_percent": 6.6,
+  "selected_by_percent": 6.7,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 35348,
-  "transfers_out_event": 10918,
-  "price_change_percent": 11.1
+  "transfers_in_event": 50763,
+  "transfers_out_event": 17439,
+  "price_change_percent": 13.8
  },
  "278": {
   "now_cost": 39,
@@ -3225,19 +3225,19 @@
   "status": "i",
   "news": "Groin injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 7384,
-  "transfers_out_event": 1313,
-  "price_change_percent": 1.9
+  "transfers_in_event": 9414,
+  "transfers_out_event": 2218,
+  "price_change_percent": 2.2
  },
  "279": {
   "now_cost": 42,
-  "selected_by_percent": 13.4,
+  "selected_by_percent": 13.6,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 97671,
-  "transfers_out_event": 22131,
-  "price_change_percent": 35.1
+  "transfers_in_event": 131883,
+  "transfers_out_event": 36219,
+  "price_change_percent": 42.5
  },
  "280": {
   "now_cost": 40,
@@ -3245,9 +3245,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 3776,
-  "transfers_out_event": 1062,
-  "price_change_percent": -29.3
+  "transfers_in_event": 5594,
+  "transfers_out_event": 1721,
+  "price_change_percent": -21.2
  },
  "281": {
   "now_cost": 40,
@@ -3256,18 +3256,18 @@
   "news": "Has joined Genoa permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 243,
+  "transfers_out_event": 348,
   "price_change_percent": 0.0
  },
  "282": {
   "now_cost": 40,
-  "selected_by_percent": 2.1,
+  "selected_by_percent": 2.3,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 48718,
-  "transfers_out_event": 4463,
-  "price_change_percent": 36.9
+  "transfers_in_event": 68423,
+  "transfers_out_event": 7888,
+  "price_change_percent": 41.9
  },
  "283": {
   "now_cost": 40,
@@ -3276,7 +3276,7 @@
   "news": "Has joined Newport County on loan until January",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 38,
+  "transfers_out_event": 50,
   "price_change_percent": 0.0
  },
  "284": {
@@ -3285,9 +3285,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 433,
-  "transfers_out_event": 285,
-  "price_change_percent": 0.2
+  "transfers_in_event": 639,
+  "transfers_out_event": 424,
+  "price_change_percent": 0.3
  },
  "285": {
   "now_cost": 40,
@@ -3295,19 +3295,19 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 218,
-  "transfers_out_event": 268,
-  "price_change_percent": -28.7
+  "transfers_in_event": 316,
+  "transfers_out_event": 409,
+  "price_change_percent": -29.8
  },
  "286": {
   "now_cost": 50,
-  "selected_by_percent": 2.3,
+  "selected_by_percent": 2.8,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 124013,
-  "transfers_out_event": 6102,
-  "price_change_percent": 70.8
+  "transfers_in_event": 176582,
+  "transfers_out_event": 10379,
+  "price_change_percent": 90.6
  },
  "287": {
   "now_cost": 50,
@@ -3316,7 +3316,7 @@
   "news": "Has joined Birmingham on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 389,
+  "transfers_out_event": 544,
   "price_change_percent": 0.0
  },
  "288": {
@@ -3325,9 +3325,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 459,
-  "transfers_out_event": 1442,
-  "price_change_percent": -40.9
+  "transfers_in_event": 723,
+  "transfers_out_event": 2029,
+  "price_change_percent": -44.3
  },
  "289": {
   "now_cost": 45,
@@ -3335,9 +3335,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 1399,
-  "transfers_out_event": 1681,
-  "price_change_percent": -91.2
+  "transfers_in_event": 2084,
+  "transfers_out_event": 2497,
+  "price_change_percent": -90.6
  },
  "290": {
   "now_cost": 45,
@@ -3345,9 +3345,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 22004,
-  "transfers_out_event": 17186,
-  "price_change_percent": 74.4
+  "transfers_in_event": 31159,
+  "transfers_out_event": 25473,
+  "price_change_percent": 74.8
  },
  "291": {
   "now_cost": 45,
@@ -3355,9 +3355,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 16,
-  "transfers_out_event": 26,
-  "price_change_percent": -8.9
+  "transfers_in_event": 23,
+  "transfers_out_event": 34,
+  "price_change_percent": -9.2
  },
  "292": {
   "now_cost": 49,
@@ -3365,8 +3365,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 100,
-  "transfers_out_event": 117,
+  "transfers_in_event": 158,
+  "transfers_out_event": 159,
   "price_change_percent": 0.0
  },
  "293": {
@@ -3376,7 +3376,7 @@
   "news": "Has joined Portsmouth permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 13,
+  "transfers_out_event": 17,
   "price_change_percent": 0.0
  },
  "294": {
@@ -3385,8 +3385,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 500,
-  "transfers_out_event": 356,
+  "transfers_in_event": 729,
+  "transfers_out_event": 534,
   "price_change_percent": 0.0
  },
  "295": {
@@ -3395,9 +3395,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 10960,
-  "transfers_out_event": 7125,
-  "price_change_percent": 25.1
+  "transfers_in_event": 15638,
+  "transfers_out_event": 11172,
+  "price_change_percent": 25.7
  },
  "296": {
   "now_cost": 50,
@@ -3406,7 +3406,7 @@
   "news": "Has joined Omonoia FC permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 573,
+  "transfers_out_event": 745,
   "price_change_percent": 0.0
  },
  "297": {
@@ -3415,9 +3415,9 @@
   "status": "i",
   "news": "Thigh injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 16,
-  "transfers_out_event": 71,
-  "price_change_percent": -74.6
+  "transfers_in_event": 24,
+  "transfers_out_event": 98,
+  "price_change_percent": -76.3
  },
  "298": {
   "now_cost": 45,
@@ -3426,7 +3426,7 @@
   "news": "Has joined Konyaspor permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 886,
+  "transfers_out_event": 1301,
   "price_change_percent": 0.0
  },
  "299": {
@@ -3436,7 +3436,7 @@
   "news": "Has joined Sheffield Wednesday on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 141,
+  "transfers_out_event": 195,
   "price_change_percent": 0.0
  },
  "340": {
@@ -3445,8 +3445,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 100,
-  "transfers_out_event": 70,
+  "transfers_in_event": 141,
+  "transfers_out_event": 113,
   "price_change_percent": 0.0
  },
  "556": {
@@ -3455,9 +3455,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1768,
-  "transfers_out_event": 5074,
-  "price_change_percent": -62.1
+  "transfers_in_event": 2463,
+  "transfers_out_event": 7618,
+  "price_change_percent": -65.8
  },
  "563": {
   "now_cost": 50,
@@ -3465,19 +3465,19 @@
   "status": "i",
   "news": "Calf injury - Expected back 11 Oct",
   "chance": 0,
-  "transfers_in_event": 1,
-  "transfers_out_event": 188,
-  "price_change_percent": -37.1
+  "transfers_in_event": 8,
+  "transfers_out_event": 246,
+  "price_change_percent": -43.0
  },
  "572": {
   "now_cost": 46,
-  "selected_by_percent": 10.5,
+  "selected_by_percent": 10.7,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 53618,
-  "transfers_out_event": 15829,
-  "price_change_percent": 58.2
+  "transfers_in_event": 76293,
+  "transfers_out_event": 24283,
+  "price_change_percent": 61.7
  },
  "574": {
   "now_cost": 49,
@@ -3485,9 +3485,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 83,
-  "transfers_out_event": 275,
-  "price_change_percent": -18.6
+  "transfers_in_event": 128,
+  "transfers_out_event": 368,
+  "price_change_percent": -21.4
  },
  "576": {
   "now_cost": 50,
@@ -3495,9 +3495,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 171,
-  "transfers_out_event": 258,
-  "price_change_percent": -24.6
+  "transfers_in_event": 257,
+  "transfers_out_event": 381,
+  "price_change_percent": -25.8
  },
  "585": {
   "now_cost": 40,
@@ -3505,19 +3505,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1266,
-  "transfers_out_event": 1022,
-  "price_change_percent": -20.8
+  "transfers_in_event": 1740,
+  "transfers_out_event": 1563,
+  "price_change_percent": -20.9
  },
  "586": {
   "now_cost": 41,
-  "selected_by_percent": 7.7,
+  "selected_by_percent": 7.5,
   "status": "d",
   "news": "Concussion - 50% chance of playing",
   "chance": 50,
-  "transfers_in_event": 10439,
-  "transfers_out_event": 46994,
-  "price_change_percent": -10.2
+  "transfers_in_event": 11459,
+  "transfers_out_event": 68154,
+  "price_change_percent": -17.4
  },
  "589": {
   "now_cost": 50,
@@ -3525,8 +3525,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 43,
-  "transfers_out_event": 86,
+  "transfers_in_event": 74,
+  "transfers_out_event": 120,
   "price_change_percent": -37.3
  },
  "617": {
@@ -3535,8 +3535,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 100,
-  "transfers_out_event": 75,
+  "transfers_in_event": 168,
+  "transfers_out_event": 115,
   "price_change_percent": 0.0
  },
  "632": {
@@ -3545,8 +3545,8 @@
   "status": "i",
   "news": "Back injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 46,
-  "transfers_out_event": 525,
+  "transfers_in_event": 63,
+  "transfers_out_event": 711,
   "price_change_percent": 0.0
  },
  "637": {
@@ -3555,8 +3555,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1664,
-  "transfers_out_event": 383,
+  "transfers_in_event": 2547,
+  "transfers_out_event": 630,
   "price_change_percent": 0.0
  },
  "638": {
@@ -3565,8 +3565,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2192,
-  "transfers_out_event": 1062,
+  "transfers_in_event": 2839,
+  "transfers_out_event": 1677,
   "price_change_percent": 0.0
  },
  "642": {
@@ -3575,8 +3575,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 355,
-  "transfers_out_event": 144,
+  "transfers_in_event": 584,
+  "transfers_out_event": 213,
   "price_change_percent": 0.0
  },
  "645": {
@@ -3585,19 +3585,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 72,
-  "transfers_out_event": 36,
+  "transfers_in_event": 104,
+  "transfers_out_event": 48,
   "price_change_percent": 0.0
  },
  "259": {
   "now_cost": 40,
-  "selected_by_percent": 14.0,
+  "selected_by_percent": 13.9,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 6298,
-  "transfers_out_event": 30905,
-  "price_change_percent": -28.4
+  "transfers_in_event": 9239,
+  "transfers_out_event": 46453,
+  "price_change_percent": -30.4
  },
  "267": {
   "now_cost": 50,
@@ -3605,9 +3605,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 65,
-  "transfers_out_event": 370,
-  "price_change_percent": -67.7
+  "transfers_in_event": 115,
+  "transfers_out_event": 548,
+  "price_change_percent": -73.2
  },
  "300": {
   "now_cost": 44,
@@ -3615,9 +3615,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 274,
-  "transfers_out_event": 629,
-  "price_change_percent": -3.6
+  "transfers_in_event": 403,
+  "transfers_out_event": 947,
+  "price_change_percent": -5.1
  },
  "301": {
   "now_cost": 40,
@@ -3625,9 +3625,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2610,
-  "transfers_out_event": 5655,
-  "price_change_percent": -15.4
+  "transfers_in_event": 3977,
+  "transfers_out_event": 8687,
+  "price_change_percent": -16.2
  },
  "302": {
   "now_cost": 40,
@@ -3635,19 +3635,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 736,
-  "transfers_out_event": 613,
+  "transfers_in_event": 1118,
+  "transfers_out_event": 947,
   "price_change_percent": 1.0
  },
  "303": {
   "now_cost": 39,
-  "selected_by_percent": 0.5,
+  "selected_by_percent": 0.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1180,
-  "transfers_out_event": 1032,
-  "price_change_percent": 0.3
+  "transfers_in_event": 11535,
+  "transfers_out_event": 2458,
+  "price_change_percent": 3.0
  },
  "304": {
   "now_cost": 40,
@@ -3655,19 +3655,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1851,
-  "transfers_out_event": 5385,
-  "price_change_percent": -18.1
+  "transfers_in_event": 2812,
+  "transfers_out_event": 8035,
+  "price_change_percent": -19.6
  },
  "305": {
   "now_cost": 40,
-  "selected_by_percent": 5.8,
+  "selected_by_percent": 6.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 71768,
-  "transfers_out_event": 6126,
-  "price_change_percent": 26.2
+  "transfers_in_event": 99442,
+  "transfers_out_event": 10868,
+  "price_change_percent": 33.6
  },
  "306": {
   "now_cost": 40,
@@ -3675,9 +3675,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 427,
-  "transfers_out_event": 1746,
-  "price_change_percent": -54.9
+  "transfers_in_event": 621,
+  "transfers_out_event": 2726,
+  "price_change_percent": -57.4
  },
  "307": {
   "now_cost": 40,
@@ -3686,7 +3686,7 @@
   "news": "Has joined Stoke City on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 388,
+  "transfers_out_event": 559,
   "price_change_percent": 0.0
  },
  "308": {
@@ -3695,19 +3695,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 100,
-  "transfers_out_event": 826,
-  "price_change_percent": -88.9
+  "transfers_in_event": 158,
+  "transfers_out_event": 1315,
+  "price_change_percent": -92.8
  },
  "309": {
-  "now_cost": 50,
+  "now_cost": 49,
   "selected_by_percent": 0.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 87,
-  "transfers_out_event": 601,
-  "price_change_percent": -94.6
+  "transfers_in_event": 121,
+  "transfers_out_event": 862,
+  "price_change_percent": -1.1
  },
  "310": {
   "now_cost": 49,
@@ -3715,8 +3715,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 16,
-  "transfers_out_event": 10,
+  "transfers_in_event": 25,
+  "transfers_out_event": 16,
   "price_change_percent": 0.0
  },
  "311": {
@@ -3726,7 +3726,7 @@
   "news": "Has joined Leicester City permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 5,
+  "transfers_out_event": 11,
   "price_change_percent": 0.0
  },
  "312": {
@@ -3735,9 +3735,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 21,
-  "transfers_out_event": 129,
-  "price_change_percent": -84.1
+  "transfers_in_event": 35,
+  "transfers_out_event": 179,
+  "price_change_percent": -86.6
  },
  "313": {
   "now_cost": 54,
@@ -3745,9 +3745,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 123,
-  "transfers_out_event": 949,
-  "price_change_percent": -21.0
+  "transfers_in_event": 190,
+  "transfers_out_event": 1307,
+  "price_change_percent": -26.9
  },
  "314": {
   "now_cost": 49,
@@ -3756,7 +3756,7 @@
   "news": "Has joined Lincoln City on loan until January",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 56,
+  "transfers_out_event": 77,
   "price_change_percent": 0.0
  },
  "315": {
@@ -3765,19 +3765,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 167,
-  "transfers_out_event": 850,
-  "price_change_percent": -81.3
+  "transfers_in_event": 266,
+  "transfers_out_event": 1200,
+  "price_change_percent": -88.0
  },
  "316": {
   "now_cost": 55,
-  "selected_by_percent": 2.3,
+  "selected_by_percent": 2.5,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 54283,
-  "transfers_out_event": 5004,
-  "price_change_percent": 33.7
+  "transfers_in_event": 77041,
+  "transfers_out_event": 9639,
+  "price_change_percent": 41.3
  },
  "317": {
   "now_cost": 50,
@@ -3786,7 +3786,7 @@
   "news": "Has joined Stoke City permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 368,
+  "transfers_out_event": 543,
   "price_change_percent": 0.0
  },
  "318": {
@@ -3795,8 +3795,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 31,
-  "transfers_out_event": 103,
+  "transfers_in_event": 40,
+  "transfers_out_event": 165,
   "price_change_percent": 0.0
  },
  "319": {
@@ -3806,7 +3806,7 @@
   "news": "Has joined Derby County on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 22,
+  "transfers_out_event": 25,
   "price_change_percent": 0.0
  },
  "320": {
@@ -3815,8 +3815,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 6905,
-  "transfers_out_event": 6198,
+  "transfers_in_event": 10087,
+  "transfers_out_event": 9532,
   "price_change_percent": 23.4
  },
  "321": {
@@ -3825,9 +3825,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 17392,
-  "transfers_out_event": 11189,
-  "price_change_percent": 36.4
+  "transfers_in_event": 26538,
+  "transfers_out_event": 18428,
+  "price_change_percent": 37.0
  },
  "322": {
   "now_cost": 50,
@@ -3836,18 +3836,18 @@
   "news": "Has joined Sheffield Wednesday on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 295,
+  "transfers_out_event": 422,
   "price_change_percent": 0.0
  },
  "323": {
   "now_cost": 45,
-  "selected_by_percent": 1.2,
+  "selected_by_percent": 1.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 786,
-  "transfers_out_event": 4152,
-  "price_change_percent": -47.4
+  "transfers_in_event": 1165,
+  "transfers_out_event": 6059,
+  "price_change_percent": -52.6
  },
  "324": {
   "now_cost": 49,
@@ -3855,9 +3855,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 10,
-  "transfers_out_event": 112,
-  "price_change_percent": -70.8
+  "transfers_in_event": 18,
+  "transfers_out_event": 150,
+  "price_change_percent": -74.7
  },
  "554": {
   "now_cost": 45,
@@ -3866,7 +3866,7 @@
   "news": "Has joined Valencia on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 80,
+  "transfers_out_event": 118,
   "price_change_percent": 0.0
  },
  "562": {
@@ -3875,9 +3875,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 70,
-  "transfers_out_event": 1266,
-  "price_change_percent": -34.1
+  "transfers_in_event": 105,
+  "transfers_out_event": 1795,
+  "price_change_percent": -42.8
  },
  "564": {
   "now_cost": 45,
@@ -3885,9 +3885,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 638,
-  "transfers_out_event": 934,
-  "price_change_percent": -17.2
+  "transfers_in_event": 949,
+  "transfers_out_event": 1478,
+  "price_change_percent": -18.5
  },
  "571": {
   "now_cost": 49,
@@ -3895,9 +3895,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 49,
-  "transfers_out_event": 190,
-  "price_change_percent": -48.7
+  "transfers_in_event": 74,
+  "transfers_out_event": 298,
+  "price_change_percent": -53.6
  },
  "591": {
   "now_cost": 55,
@@ -3905,9 +3905,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 2290,
-  "transfers_out_event": 4404,
-  "price_change_percent": 10.8
+  "transfers_in_event": 3588,
+  "transfers_out_event": 6399,
+  "price_change_percent": 10.6
  },
  "592": {
   "now_cost": 40,
@@ -3915,9 +3915,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 945,
-  "transfers_out_event": 1477,
-  "price_change_percent": -14.5
+  "transfers_in_event": 1299,
+  "transfers_out_event": 2295,
+  "price_change_percent": -16.1
  },
  "602": {
   "now_cost": 45,
@@ -3926,7 +3926,7 @@
   "news": "Has joined Huddersfield Town on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 200,
+  "transfers_out_event": 274,
   "price_change_percent": 0.0
  },
  "619": {
@@ -3935,9 +3935,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 475,
-  "transfers_out_event": 229,
-  "price_change_percent": 0.2
+  "transfers_in_event": 697,
+  "transfers_out_event": 344,
+  "price_change_percent": 0.3
  },
  "640": {
   "now_cost": 55,
@@ -3945,28 +3945,28 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1445,
-  "transfers_out_event": 270,
+  "transfers_in_event": 1998,
+  "transfers_out_event": 451,
   "price_change_percent": 0.0
  },
  "260": {
   "now_cost": 63,
-  "selected_by_percent": 2.6,
+  "selected_by_percent": 2.5,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 729,
-  "transfers_out_event": 15005,
-  "price_change_percent": -48.6
+  "transfers_in_event": 1388,
+  "transfers_out_event": 25476,
+  "price_change_percent": -67.6
  },
  "326": {
   "now_cost": 45,
-  "selected_by_percent": 0.4,
+  "selected_by_percent": 0.3,
   "status": "u",
   "news": "Has joined Torino on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 1129,
+  "transfers_out_event": 1610,
   "price_change_percent": 0.0
  },
  "327": {
@@ -3975,9 +3975,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 861,
-  "transfers_out_event": 2555,
-  "price_change_percent": 9.6
+  "transfers_in_event": 1457,
+  "transfers_out_event": 5262,
+  "price_change_percent": 8.7
  },
  "329": {
   "now_cost": 44,
@@ -3985,19 +3985,19 @@
   "status": "i",
   "news": "Hamstring injury - Expected back 21 Nov",
   "chance": 0,
-  "transfers_in_event": 23,
-  "transfers_out_event": 8384,
-  "price_change_percent": -44.3
+  "transfers_in_event": 33,
+  "transfers_out_event": 12272,
+  "price_change_percent": -51.2
  },
  "330": {
   "now_cost": 45,
-  "selected_by_percent": 2.1,
+  "selected_by_percent": 2.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 10916,
-  "transfers_out_event": 4082,
-  "price_change_percent": 34.5
+  "transfers_in_event": 55985,
+  "transfers_out_event": 6598,
+  "price_change_percent": 50.2
  },
  "331": {
   "now_cost": 45,
@@ -4005,8 +4005,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 201,
-  "transfers_out_event": 91,
+  "transfers_in_event": 491,
+  "transfers_out_event": 187,
   "price_change_percent": 0.3
  },
  "332": {
@@ -4015,9 +4015,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1885,
-  "transfers_out_event": 2639,
-  "price_change_percent": 16.3
+  "transfers_in_event": 3515,
+  "transfers_out_event": 4791,
+  "price_change_percent": 16.2
  },
  "333": {
   "now_cost": 45,
@@ -4026,7 +4026,7 @@
   "news": "Has joined Hamburg SV on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 8,
+  "transfers_out_event": 12,
   "price_change_percent": 0.0
  },
  "334": {
@@ -4035,9 +4035,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 5673,
-  "transfers_out_event": 5667,
-  "price_change_percent": 17.1
+  "transfers_in_event": 14424,
+  "transfers_out_event": 9063,
+  "price_change_percent": 19.0
  },
  "335": {
   "now_cost": 60,
@@ -4045,9 +4045,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2924,
-  "transfers_out_event": 8741,
-  "price_change_percent": 20.3
+  "transfers_in_event": 6286,
+  "transfers_out_event": 13810,
+  "price_change_percent": 19.7
  },
  "336": {
   "now_cost": 58,
@@ -4055,9 +4055,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 402,
-  "transfers_out_event": 1283,
-  "price_change_percent": -3.5
+  "transfers_in_event": 3351,
+  "transfers_out_event": 1875,
+  "price_change_percent": 0.9
  },
  "337": {
   "now_cost": 54,
@@ -4065,9 +4065,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 208,
-  "transfers_out_event": 1975,
-  "price_change_percent": -31.0
+  "transfers_in_event": 340,
+  "transfers_out_event": 3311,
+  "price_change_percent": -40.7
  },
  "338": {
   "now_cost": 54,
@@ -4075,9 +4075,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 371,
-  "transfers_out_event": 3288,
-  "price_change_percent": -14.3
+  "transfers_in_event": 1187,
+  "transfers_out_event": 4701,
+  "price_change_percent": -15.7
  },
  "339": {
   "now_cost": 49,
@@ -4085,9 +4085,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 117,
-  "transfers_out_event": 363,
-  "price_change_percent": -22.0
+  "transfers_in_event": 190,
+  "transfers_out_event": 593,
+  "price_change_percent": -29.1
  },
  "341": {
   "now_cost": 50,
@@ -4096,7 +4096,7 @@
   "news": "Has joined ACF Fiorentina on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 59,
+  "transfers_out_event": 88,
   "price_change_percent": 0.0
  },
  "342": {
@@ -4106,7 +4106,7 @@
   "news": "Has joined New England Revolution permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 3,
+  "transfers_out_event": 4,
   "price_change_percent": 0.0
  },
  "343": {
@@ -4115,9 +4115,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 174,
-  "transfers_out_event": 365,
-  "price_change_percent": -2.7
+  "transfers_in_event": 297,
+  "transfers_out_event": 594,
+  "price_change_percent": -4.8
  },
  "344": {
   "now_cost": 50,
@@ -4125,9 +4125,9 @@
   "status": "d",
   "news": "Knee injury - 25% chance of playing",
   "chance": 25,
-  "transfers_in_event": 3,
-  "transfers_out_event": 12,
-  "price_change_percent": -39.3
+  "transfers_in_event": 7,
+  "transfers_out_event": 17,
+  "price_change_percent": -39.6
  },
  "345": {
   "now_cost": 49,
@@ -4135,19 +4135,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 616,
-  "transfers_out_event": 766,
-  "price_change_percent": 1.1
+  "transfers_in_event": 2263,
+  "transfers_out_event": 1201,
+  "price_change_percent": 1.6
  },
  "346": {
   "now_cost": 60,
-  "selected_by_percent": 21.7,
+  "selected_by_percent": 22.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 17449,
-  "transfers_out_event": 57503,
-  "price_change_percent": -61.8
+  "transfers_in_event": 85065,
+  "transfers_out_event": 78713,
+  "price_change_percent": -50.9
  },
  "347": {
   "now_cost": 54,
@@ -4155,9 +4155,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1701,
-  "transfers_out_event": 1544,
-  "price_change_percent": 0.3
+  "transfers_in_event": 2608,
+  "transfers_out_event": 2894,
+  "price_change_percent": 0.1
  },
  "348": {
   "now_cost": 50,
@@ -4166,7 +4166,7 @@
   "news": "Has joined West Ham United on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 329,
+  "transfers_out_event": 468,
   "price_change_percent": 0.0
  },
  "349": {
@@ -4175,9 +4175,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 172,
-  "transfers_out_event": 187,
-  "price_change_percent": -30.9
+  "transfers_in_event": 262,
+  "transfers_out_event": 286,
+  "price_change_percent": -31.0
  },
  "385": {
   "now_cost": 50,
@@ -4185,9 +4185,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 6078,
-  "transfers_out_event": 9244,
-  "price_change_percent": 25.9
+  "transfers_in_event": 10778,
+  "transfers_out_event": 14572,
+  "price_change_percent": 25.8
  },
  "598": {
   "now_cost": 45,
@@ -4195,8 +4195,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 146,
-  "transfers_out_event": 79,
+  "transfers_in_event": 296,
+  "transfers_out_event": 160,
   "price_change_percent": 0.3
  },
  "603": {
@@ -4205,8 +4205,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 380,
-  "transfers_out_event": 258,
+  "transfers_in_event": 580,
+  "transfers_out_event": 424,
   "price_change_percent": 0.2
  },
  "604": {
@@ -4215,9 +4215,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 441,
-  "transfers_out_event": 467,
-  "price_change_percent": 0.4
+  "transfers_in_event": 672,
+  "transfers_out_event": 854,
+  "price_change_percent": 0.3
  },
  "625": {
   "now_cost": 40,
@@ -4225,19 +4225,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 981,
-  "transfers_out_event": 373,
-  "price_change_percent": 0.1
+  "transfers_in_event": 1539,
+  "transfers_out_event": 616,
+  "price_change_percent": 0.2
  },
  "629": {
   "now_cost": 40,
-  "selected_by_percent": 0.5,
+  "selected_by_percent": 0.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 5854,
-  "transfers_out_event": 1112,
-  "price_change_percent": 0.0
+  "transfers_in_event": 8886,
+  "transfers_out_event": 1936,
+  "price_change_percent": 0.4
  },
  "641": {
   "now_cost": 45,
@@ -4245,8 +4245,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 108,
-  "transfers_out_event": 32,
+  "transfers_in_event": 174,
+  "transfers_out_event": 57,
   "price_change_percent": 0.0
  },
  "648": {
@@ -4255,8 +4255,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 94,
-  "transfers_out_event": 73,
+  "transfers_in_event": 165,
+  "transfers_out_event": 161,
   "price_change_percent": 0.0
  },
  "350": {
@@ -4265,9 +4265,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 7653,
-  "transfers_out_event": 6308,
-  "price_change_percent": 3.2
+  "transfers_in_event": 10492,
+  "transfers_out_event": 9670,
+  "price_change_percent": 3.1
  },
  "351": {
   "now_cost": 49,
@@ -4275,9 +4275,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 101,
-  "transfers_out_event": 511,
-  "price_change_percent": -60.3
+  "transfers_in_event": 162,
+  "transfers_out_event": 722,
+  "price_change_percent": -65.8
  },
  "352": {
   "now_cost": 40,
@@ -4285,9 +4285,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 774,
-  "transfers_out_event": 1431,
-  "price_change_percent": -17.7
+  "transfers_in_event": 1197,
+  "transfers_out_event": 2121,
+  "price_change_percent": -18.6
  },
  "353": {
   "now_cost": 40,
@@ -4296,7 +4296,7 @@
   "news": "Has joined TSV Hartberg on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 35,
+  "transfers_out_event": 50,
   "price_change_percent": 0.0
  },
  "354": {
@@ -4305,8 +4305,8 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 66,
-  "transfers_out_event": 41,
+  "transfers_in_event": 101,
+  "transfers_out_event": 61,
   "price_change_percent": 0.0
  },
  "355": {
@@ -4315,8 +4315,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 257,
-  "transfers_out_event": 233,
+  "transfers_in_event": 406,
+  "transfers_out_event": 376,
   "price_change_percent": 0.1
  },
  "356": {
@@ -4325,39 +4325,39 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 12759,
-  "transfers_out_event": 22335,
-  "price_change_percent": -40.2
+  "transfers_in_event": 17819,
+  "transfers_out_event": 34820,
+  "price_change_percent": -41.4
  },
  "357": {
   "now_cost": 54,
-  "selected_by_percent": 2.1,
+  "selected_by_percent": 2.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 880,
-  "transfers_out_event": 14645,
-  "price_change_percent": -66.0
+  "transfers_in_event": 1320,
+  "transfers_out_event": 20235,
+  "price_change_percent": -78.4
  },
  "358": {
   "now_cost": 54,
-  "selected_by_percent": 2.6,
+  "selected_by_percent": 2.5,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 810,
-  "transfers_out_event": 15157,
-  "price_change_percent": -28.8
+  "transfers_in_event": 1183,
+  "transfers_out_event": 20915,
+  "price_change_percent": -38.2
  },
  "359": {
   "now_cost": 49,
   "selected_by_percent": 0.0,
-  "status": "i",
-  "news": "Muscular injury - Unknown return date",
-  "chance": 0,
-  "transfers_in_event": 13,
-  "transfers_out_event": 48,
-  "price_change_percent": -0.1
+  "status": "d",
+  "news": "Muscular injury - 75% chance of playing",
+  "chance": 75,
+  "transfers_in_event": 20,
+  "transfers_out_event": 72,
+  "price_change_percent": 0.0
  },
  "360": {
   "now_cost": 50,
@@ -4365,9 +4365,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 13,
-  "transfers_out_event": 40,
-  "price_change_percent": -67.2
+  "transfers_in_event": 20,
+  "transfers_out_event": 57,
+  "price_change_percent": -69.4
  },
  "361": {
   "now_cost": 40,
@@ -4375,19 +4375,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 274,
-  "transfers_out_event": 392,
-  "price_change_percent": -28.0
+  "transfers_in_event": 382,
+  "transfers_out_event": 555,
+  "price_change_percent": -29.1
  },
  "362": {
   "now_cost": 50,
-  "selected_by_percent": 3.0,
+  "selected_by_percent": 3.1,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 27933,
-  "transfers_out_event": 4537,
-  "price_change_percent": 29.5
+  "transfers_in_event": 38465,
+  "transfers_out_event": 7341,
+  "price_change_percent": 32.7
  },
  "363": {
   "now_cost": 40,
@@ -4395,9 +4395,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 52,
-  "transfers_out_event": 131,
-  "price_change_percent": -39.4
+  "transfers_in_event": 73,
+  "transfers_out_event": 185,
+  "price_change_percent": -41.1
  },
  "364": {
   "now_cost": 49,
@@ -4405,9 +4405,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 136,
-  "transfers_out_event": 194,
-  "price_change_percent": -9.8
+  "transfers_in_event": 185,
+  "transfers_out_event": 297,
+  "price_change_percent": -13.1
  },
  "365": {
   "now_cost": 40,
@@ -4416,18 +4416,18 @@
   "news": "Has joined St Mirren on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 367,
+  "transfers_out_event": 547,
   "price_change_percent": 0.0
  },
  "366": {
   "now_cost": 74,
-  "selected_by_percent": 7.3,
+  "selected_by_percent": 7.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1644,
-  "transfers_out_event": 54092,
-  "price_change_percent": -58.9
+  "transfers_in_event": 2537,
+  "transfers_out_event": 74731,
+  "price_change_percent": -72.4
  },
  "367": {
   "now_cost": 72,
@@ -4435,19 +4435,19 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 40347,
-  "transfers_out_event": 62596,
-  "price_change_percent": -1.1
+  "transfers_in_event": 58693,
+  "transfers_out_event": 86666,
+  "price_change_percent": -3.5
  },
  "368": {
   "now_cost": 70,
-  "selected_by_percent": 37.2,
+  "selected_by_percent": 36.5,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 18909,
-  "transfers_out_event": 155609,
-  "price_change_percent": -31.7
+  "transfers_in_event": 29574,
+  "transfers_out_event": 227477,
+  "price_change_percent": -38.9
  },
  "369": {
   "now_cost": 58,
@@ -4455,29 +4455,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 552,
-  "transfers_out_event": 3579,
-  "price_change_percent": -48.9
+  "transfers_in_event": 809,
+  "transfers_out_event": 5139,
+  "price_change_percent": -60.7
  },
  "370": {
   "now_cost": 54,
-  "selected_by_percent": 0.1,
+  "selected_by_percent": 0.0,
   "status": "i",
   "news": "Back injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 6,
-  "transfers_out_event": 257,
-  "price_change_percent": -76.4
+  "transfers_in_event": 11,
+  "transfers_out_event": 361,
+  "price_change_percent": -81.6
  },
  "371": {
   "now_cost": 59,
-  "selected_by_percent": 1.3,
+  "selected_by_percent": 1.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1079,
-  "transfers_out_event": 7876,
-  "price_change_percent": -50.0
+  "transfers_in_event": 1677,
+  "transfers_out_event": 11316,
+  "price_change_percent": -61.4
  },
  "372": {
   "now_cost": 54,
@@ -4485,9 +4485,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2460,
-  "transfers_out_event": 6822,
-  "price_change_percent": -17.1
+  "transfers_in_event": 3719,
+  "transfers_out_event": 9674,
+  "price_change_percent": -22.5
  },
  "373": {
   "now_cost": 55,
@@ -4496,7 +4496,7 @@
   "news": "Has joined Internazionale permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 56,
+  "transfers_out_event": 76,
   "price_change_percent": 0.0
  },
  "374": {
@@ -4505,9 +4505,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 114,
-  "transfers_out_event": 317,
-  "price_change_percent": -15.6
+  "transfers_in_event": 180,
+  "transfers_out_event": 440,
+  "price_change_percent": -19.8
  },
  "375": {
   "now_cost": 49,
@@ -4515,9 +4515,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 53,
-  "transfers_out_event": 196,
-  "price_change_percent": -23.7
+  "transfers_in_event": 76,
+  "transfers_out_event": 275,
+  "price_change_percent": -31.0
  },
  "376": {
   "now_cost": 50,
@@ -4526,7 +4526,7 @@
   "news": "Has joined Celta Vigo permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 2,
+  "transfers_out_event": 4,
   "price_change_percent": 0.0
  },
  "377": {
@@ -4535,29 +4535,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1848,
-  "transfers_out_event": 10996,
-  "price_change_percent": 17.5
+  "transfers_in_event": 2755,
+  "transfers_out_event": 14890,
+  "price_change_percent": 16.1
  },
  "378": {
-  "now_cost": 45,
+  "now_cost": 44,
   "selected_by_percent": 0.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 172,
-  "transfers_out_event": 668,
-  "price_change_percent": -96.3
+  "transfers_in_event": 328,
+  "transfers_out_event": 1003,
+  "price_change_percent": 0.0
  },
  "379": {
   "now_cost": 91,
-  "selected_by_percent": 22.4,
+  "selected_by_percent": 22.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 36952,
-  "transfers_out_event": 69380,
-  "price_change_percent": 15.1
+  "transfers_in_event": 51010,
+  "transfers_out_event": 106515,
+  "price_change_percent": 6.5
  },
  "380": {
   "now_cost": 74,
@@ -4565,9 +4565,9 @@
   "status": "i",
   "news": "Achilles injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 138,
-  "transfers_out_event": 441,
-  "price_change_percent": -8.3
+  "transfers_in_event": 190,
+  "transfers_out_event": 601,
+  "price_change_percent": -9.9
  },
  "381": {
   "now_cost": 50,
@@ -4575,19 +4575,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 54,
-  "transfers_out_event": 92,
-  "price_change_percent": -78.2
+  "transfers_in_event": 79,
+  "transfers_out_event": 130,
+  "price_change_percent": -80.1
  },
  "382": {
   "now_cost": 45,
-  "selected_by_percent": 0.1,
+  "selected_by_percent": 0.2,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 1800,
-  "transfers_out_event": 674,
-  "price_change_percent": 0.7
+  "transfers_in_event": 3181,
+  "transfers_out_event": 1154,
+  "price_change_percent": 1.1
  },
  "383": {
   "now_cost": 54,
@@ -4596,7 +4596,7 @@
   "news": "Has joined Valencia on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 240,
+  "transfers_out_event": 327,
   "price_change_percent": 0.0
  },
  "579": {
@@ -4605,9 +4605,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 14927,
-  "transfers_out_event": 4275,
-  "price_change_percent": 21.7
+  "transfers_in_event": 20378,
+  "transfers_out_event": 6853,
+  "price_change_percent": 23.2
  },
  "627": {
   "now_cost": 80,
@@ -4615,9 +4615,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 8706,
-  "transfers_out_event": 14774,
-  "price_change_percent": 0.0
+  "transfers_in_event": 12411,
+  "transfers_out_event": 21066,
+  "price_change_percent": -4.8
  },
  "155": {
   "now_cost": 69,
@@ -4625,19 +4625,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 12869,
-  "transfers_out_event": 9140,
-  "price_change_percent": -48.4
+  "transfers_in_event": 22021,
+  "transfers_out_event": 14075,
+  "price_change_percent": -41.5
  },
  "237": {
   "now_cost": 59,
-  "selected_by_percent": 8.3,
+  "selected_by_percent": 8.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 8766,
-  "transfers_out_event": 59015,
-  "price_change_percent": -61.3
+  "transfers_in_event": 15773,
+  "transfers_out_event": 86380,
+  "price_change_percent": -73.2
  },
  "384": {
   "now_cost": 55,
@@ -4645,9 +4645,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 11145,
-  "transfers_out_event": 12907,
-  "price_change_percent": -46.2
+  "transfers_in_event": 19015,
+  "transfers_out_event": 18954,
+  "price_change_percent": -44.8
  },
  "386": {
   "now_cost": 45,
@@ -4655,19 +4655,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 23,
-  "transfers_out_event": 64,
-  "price_change_percent": -61.2
+  "transfers_in_event": 35,
+  "transfers_out_event": 96,
+  "price_change_percent": -65.2
  },
  "387": {
   "now_cost": 64,
-  "selected_by_percent": 12.8,
+  "selected_by_percent": 12.5,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 4467,
-  "transfers_out_event": 52390,
-  "price_change_percent": -27.1
+  "transfers_in_event": 5917,
+  "transfers_out_event": 80794,
+  "price_change_percent": -36.6
  },
  "388": {
   "now_cost": 60,
@@ -4675,19 +4675,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 23851,
-  "transfers_out_event": 20712,
-  "price_change_percent": 53.1
+  "transfers_in_event": 37614,
+  "transfers_out_event": 31994,
+  "price_change_percent": 55.6
  },
  "389": {
   "now_cost": 59,
-  "selected_by_percent": 0.9,
+  "selected_by_percent": 1.0,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 1364,
-  "transfers_out_event": 1377,
-  "price_change_percent": -41.8
+  "transfers_in_event": 2602,
+  "transfers_out_event": 1890,
+  "price_change_percent": -37.6
  },
  "390": {
   "now_cost": 55,
@@ -4695,19 +4695,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 4965,
-  "transfers_out_event": 3035,
-  "price_change_percent": 0.1
+  "transfers_in_event": 8502,
+  "transfers_out_event": 4655,
+  "price_change_percent": 1.1
  },
  "391": {
   "now_cost": 57,
-  "selected_by_percent": 21.6,
+  "selected_by_percent": 22.5,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 132003,
-  "transfers_out_event": 12288,
-  "price_change_percent": 2.1
+  "transfers_in_event": 225157,
+  "transfers_out_event": 16794,
+  "price_change_percent": 13.9
  },
  "392": {
   "now_cost": 53,
@@ -4715,9 +4715,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 467,
-  "transfers_out_event": 1943,
-  "price_change_percent": -27.1
+  "transfers_in_event": 660,
+  "transfers_out_event": 2977,
+  "price_change_percent": -36.3
  },
  "393": {
   "now_cost": 55,
@@ -4725,9 +4725,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1324,
-  "transfers_out_event": 5398,
-  "price_change_percent": -83.9
+  "transfers_in_event": 1757,
+  "transfers_out_event": 9118,
+  "price_change_percent": -95.6
  },
  "394": {
   "now_cost": 50,
@@ -4736,7 +4736,7 @@
   "news": "Has joined Burnley on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 9,
+  "transfers_out_event": 18,
   "price_change_percent": 0.0
  },
  "395": {
@@ -4745,9 +4745,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 413,
-  "transfers_out_event": 833,
-  "price_change_percent": -10.5
+  "transfers_in_event": 583,
+  "transfers_out_event": 1322,
+  "price_change_percent": -17.0
  },
  "396": {
   "now_cost": 45,
@@ -4755,39 +4755,39 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 60,
-  "transfers_out_event": 81,
-  "price_change_percent": -60.7
+  "transfers_in_event": 84,
+  "transfers_out_event": 125,
+  "price_change_percent": -63.3
  },
  "397": {
   "now_cost": 84,
-  "selected_by_percent": 15.8,
+  "selected_by_percent": 15.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 8220,
-  "transfers_out_event": 48078,
-  "price_change_percent": -26.6
+  "transfers_in_event": 13503,
+  "transfers_out_event": 73519,
+  "price_change_percent": -31.1
  },
  "398": {
   "now_cost": 70,
-  "selected_by_percent": 3.5,
+  "selected_by_percent": 3.2,
   "status": "s",
   "news": "Suspended until 17 Oct",
   "chance": 0,
-  "transfers_in_event": 1862,
-  "transfers_out_event": 54805,
-  "price_change_percent": -31.5
+  "transfers_in_event": 1909,
+  "transfers_out_event": 82744,
+  "price_change_percent": -49.7
  },
  "399": {
   "now_cost": 78,
-  "selected_by_percent": 28.9,
+  "selected_by_percent": 28.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 42311,
-  "transfers_out_event": 83017,
-  "price_change_percent": -32.2
+  "transfers_in_event": 62009,
+  "transfers_out_event": 131896,
+  "price_change_percent": -43.9
  },
  "400": {
   "now_cost": 74,
@@ -4795,9 +4795,9 @@
   "status": "i",
   "news": "Calf injury - Expected back 20 Sep",
   "chance": 0,
-  "transfers_in_event": 92,
-  "transfers_out_event": 2361,
-  "price_change_percent": -63.2
+  "transfers_in_event": 129,
+  "transfers_out_event": 3436,
+  "price_change_percent": -66.9
  },
  "402": {
   "now_cost": 65,
@@ -4806,7 +4806,7 @@
   "news": "Has joined Barcelona permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 25,
+  "transfers_out_event": 30,
   "price_change_percent": 0.0
  },
  "404": {
@@ -4816,7 +4816,7 @@
   "news": "Has joined Al Qadsiah permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 90,
+  "transfers_out_event": 124,
   "price_change_percent": 0.0
  },
  "406": {
@@ -4825,9 +4825,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 86,
-  "transfers_out_event": 338,
-  "price_change_percent": -31.3
+  "transfers_in_event": 118,
+  "transfers_out_event": 487,
+  "price_change_percent": -38.6
  },
  "407": {
   "now_cost": 49,
@@ -4836,7 +4836,7 @@
   "news": "Has joined Benfica on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 54,
+  "transfers_out_event": 75,
   "price_change_percent": 0.0
  },
  "408": {
@@ -4846,7 +4846,7 @@
   "news": "Has joined Sheffield United on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 16,
+  "transfers_out_event": 20,
   "price_change_percent": 0.0
  },
  "409": {
@@ -4856,7 +4856,7 @@
   "news": "has joined West Ham on loan for the rest of the seaon.",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 567,
+  "transfers_out_event": 804,
   "price_change_percent": 0.0
  },
  "410": {
@@ -4866,18 +4866,18 @@
   "news": "Has joined Swansea City on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 43,
+  "transfers_out_event": 65,
   "price_change_percent": 0.0
  },
  "411": {
   "now_cost": 155,
-  "selected_by_percent": 71.9,
+  "selected_by_percent": 72.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 45930,
-  "transfers_out_event": 9926,
-  "price_change_percent": 78.2
+  "transfers_in_event": 74235,
+  "transfers_out_event": 13039,
+  "price_change_percent": 85.1
  },
  "481": {
   "now_cost": 63,
@@ -4885,9 +4885,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 5498,
-  "transfers_out_event": 11934,
-  "price_change_percent": -19.9
+  "transfers_in_event": 11344,
+  "transfers_out_event": 17072,
+  "price_change_percent": -17.9
  },
  "587": {
   "now_cost": 50,
@@ -4895,9 +4895,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 54,
-  "transfers_out_event": 64,
-  "price_change_percent": -73.3
+  "transfers_in_event": 78,
+  "transfers_out_event": 92,
+  "price_change_percent": -73.5
  },
  "616": {
   "now_cost": 55,
@@ -4905,9 +4905,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1308,
-  "transfers_out_event": 1287,
-  "price_change_percent": 0.6
+  "transfers_in_event": 1630,
+  "transfers_out_event": 2005,
+  "price_change_percent": 0.4
  },
  "621": {
   "now_cost": 45,
@@ -4915,9 +4915,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 444,
-  "transfers_out_event": 641,
-  "price_change_percent": -2.6
+  "transfers_in_event": 605,
+  "transfers_out_event": 985,
+  "price_change_percent": -9.6
  },
  "622": {
   "now_cost": 40,
@@ -4925,8 +4925,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 977,
-  "transfers_out_event": 894,
+  "transfers_in_event": 1291,
+  "transfers_out_event": 1345,
   "price_change_percent": 0.1
  },
  "628": {
@@ -4935,8 +4935,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 77,
-  "transfers_out_event": 67,
+  "transfers_in_event": 124,
+  "transfers_out_event": 107,
   "price_change_percent": 0.0
  },
  "653": {
@@ -4945,19 +4945,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 269,
-  "transfers_out_event": 316,
+  "transfers_in_event": 363,
+  "transfers_out_event": 466,
   "price_change_percent": 0.0
  },
  "43": {
-  "now_cost": 59,
+  "now_cost": 58,
   "selected_by_percent": 1.6,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 2640,
-  "transfers_out_event": 7329,
-  "price_change_percent": -101.3
+  "transfers_in_event": 3983,
+  "transfers_out_event": 11518,
+  "price_change_percent": -0.5
  },
  "131": {
   "now_cost": 49,
@@ -4965,19 +4965,19 @@
   "status": "i",
   "news": "Ankle injury - Expected back 19 Sep",
   "chance": 0,
-  "transfers_in_event": 193,
-  "transfers_out_event": 673,
-  "price_change_percent": -0.2
+  "transfers_in_event": 300,
+  "transfers_out_event": 924,
+  "price_change_percent": -1.4
  },
  "162": {
   "now_cost": 48,
-  "selected_by_percent": 0.7,
+  "selected_by_percent": 0.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 690,
-  "transfers_out_event": 4360,
-  "price_change_percent": -0.9
+  "transfers_in_event": 1378,
+  "transfers_out_event": 6270,
+  "price_change_percent": -5.6
  },
  "325": {
   "now_cost": 45,
@@ -4985,19 +4985,19 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 58,
-  "transfers_out_event": 104,
-  "price_change_percent": -10.6
+  "transfers_in_event": 86,
+  "transfers_out_event": 139,
+  "price_change_percent": -10.8
  },
  "412": {
   "now_cost": 49,
-  "selected_by_percent": 11.1,
+  "selected_by_percent": 10.9,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 5224,
-  "transfers_out_event": 37283,
-  "price_change_percent": -3.2
+  "transfers_in_event": 7277,
+  "transfers_out_event": 55097,
+  "price_change_percent": -5.4
  },
  "413": {
   "now_cost": 45,
@@ -5006,7 +5006,7 @@
   "news": "Has joined Celta Vigo on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 28,
+  "transfers_out_event": 47,
   "price_change_percent": 0.0
  },
  "414": {
@@ -5015,9 +5015,9 @@
   "status": "i",
   "news": "Hamstring injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 89,
-  "transfers_out_event": 132,
-  "price_change_percent": -27.5
+  "transfers_in_event": 150,
+  "transfers_out_event": 202,
+  "price_change_percent": -27.7
  },
  "415": {
   "now_cost": 58,
@@ -5025,9 +5025,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 945,
-  "transfers_out_event": 2802,
-  "price_change_percent": -29.4
+  "transfers_in_event": 1483,
+  "transfers_out_event": 3990,
+  "price_change_percent": -33.9
  },
  "416": {
   "now_cost": 50,
@@ -5035,9 +5035,9 @@
   "status": "i",
   "news": "Back injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 32,
-  "transfers_out_event": 84,
-  "price_change_percent": -75.9
+  "transfers_in_event": 43,
+  "transfers_out_event": 113,
+  "price_change_percent": -77.3
  },
  "417": {
   "now_cost": 49,
@@ -5045,19 +5045,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1284,
-  "transfers_out_event": 5097,
-  "price_change_percent": -23.8
+  "transfers_in_event": 1868,
+  "transfers_out_event": 8051,
+  "price_change_percent": -28.7
  },
  "418": {
   "now_cost": 49,
-  "selected_by_percent": 10.4,
+  "selected_by_percent": 10.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 4865,
-  "transfers_out_event": 35608,
-  "price_change_percent": -28.5
+  "transfers_in_event": 7054,
+  "transfers_out_event": 55185,
+  "price_change_percent": -34.8
  },
  "419": {
   "now_cost": 50,
@@ -5065,9 +5065,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 3878,
-  "transfers_out_event": 2456,
-  "price_change_percent": -79.7
+  "transfers_in_event": 5604,
+  "transfers_out_event": 3939,
+  "price_change_percent": -77.3
  },
  "420": {
   "now_cost": 49,
@@ -5075,9 +5075,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 263,
-  "transfers_out_event": 1565,
-  "price_change_percent": -74.9
+  "transfers_in_event": 325,
+  "transfers_out_event": 2377,
+  "price_change_percent": -82.8
  },
  "421": {
   "now_cost": 44,
@@ -5085,29 +5085,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 250,
-  "transfers_out_event": 1112,
-  "price_change_percent": -32.2
+  "transfers_in_event": 332,
+  "transfers_out_event": 1723,
+  "price_change_percent": -40.4
  },
  "422": {
   "now_cost": 44,
-  "selected_by_percent": 0.6,
+  "selected_by_percent": 0.5,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1109,
-  "transfers_out_event": 2483,
-  "price_change_percent": -14.6
+  "transfers_in_event": 1476,
+  "transfers_out_event": 3794,
+  "price_change_percent": -21.4
  },
  "423": {
   "now_cost": 44,
-  "selected_by_percent": 11.0,
+  "selected_by_percent": 10.6,
   "status": "d",
   "news": "Unspecified injury - 75% chance of playing",
   "chance": 75,
-  "transfers_in_event": 1052,
-  "transfers_out_event": 88144,
-  "price_change_percent": -31.1
+  "transfers_in_event": 1395,
+  "transfers_out_event": 132190,
+  "price_change_percent": -41.4
  },
  "424": {
   "now_cost": 40,
@@ -5115,9 +5115,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 516,
-  "transfers_out_event": 559,
-  "price_change_percent": -28.3
+  "transfers_in_event": 696,
+  "transfers_out_event": 808,
+  "price_change_percent": -29.8
  },
  "425": {
   "now_cost": 40,
@@ -5126,38 +5126,38 @@
   "news": "Has joined Lausanne-Sport permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 45,
+  "transfers_out_event": 64,
   "price_change_percent": 0.0
  },
  "426": {
   "now_cost": 120,
-  "selected_by_percent": 42.4,
+  "selected_by_percent": 41.9,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 23150,
-  "transfers_out_event": 73377,
-  "price_change_percent": -65.6
+  "transfers_in_event": 32861,
+  "transfers_out_event": 124118,
+  "price_change_percent": -69.1
  },
  "427": {
   "now_cost": 79,
-  "selected_by_percent": 23.3,
+  "selected_by_percent": 23.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 26638,
-  "transfers_out_event": 61018,
-  "price_change_percent": -19.1
+  "transfers_in_event": 39444,
+  "transfers_out_event": 102059,
+  "price_change_percent": -23.8
  },
  "428": {
   "now_cost": 79,
-  "selected_by_percent": 6.3,
+  "selected_by_percent": 6.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 4058,
-  "transfers_out_event": 23002,
-  "price_change_percent": -38.4
+  "transfers_in_event": 5729,
+  "transfers_out_event": 36699,
+  "price_change_percent": -47.4
  },
  "429": {
   "now_cost": 70,
@@ -5165,9 +5165,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 5586,
-  "transfers_out_event": 5857,
-  "price_change_percent": -68.6
+  "transfers_in_event": 8837,
+  "transfers_out_event": 9444,
+  "price_change_percent": -69.3
  },
  "430": {
   "now_cost": 54,
@@ -5175,8 +5175,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 104,
-  "transfers_out_event": 85,
+  "transfers_in_event": 134,
+  "transfers_out_event": 129,
   "price_change_percent": 0.0
  },
  "431": {
@@ -5185,9 +5185,9 @@
   "status": "i",
   "news": "Unspecified injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 30,
-  "transfers_out_event": 1906,
-  "price_change_percent": -93.8
+  "transfers_in_event": 42,
+  "transfers_out_event": 2677,
+  "price_change_percent": -99.9
  },
  "432": {
   "now_cost": 55,
@@ -5195,9 +5195,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 9409,
-  "transfers_out_event": 3071,
-  "price_change_percent": 9.5
+  "transfers_in_event": 15935,
+  "transfers_out_event": 5104,
+  "price_change_percent": 11.3
  },
  "433": {
   "now_cost": 50,
@@ -5205,9 +5205,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 8,
-  "transfers_out_event": 13,
-  "price_change_percent": -54.1
+  "transfers_in_event": 9,
+  "transfers_out_event": 16,
+  "price_change_percent": -54.6
  },
  "434": {
   "now_cost": 49,
@@ -5215,9 +5215,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 20,
-  "transfers_out_event": 48,
-  "price_change_percent": -13.2
+  "transfers_in_event": 27,
+  "transfers_out_event": 67,
+  "price_change_percent": -19.2
  },
  "435": {
   "now_cost": 49,
@@ -5225,9 +5225,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 55,
-  "transfers_out_event": 202,
-  "price_change_percent": -19.2
+  "transfers_in_event": 79,
+  "transfers_out_event": 291,
+  "price_change_percent": -24.3
  },
  "436": {
   "now_cost": 50,
@@ -5236,7 +5236,7 @@
   "news": "Has joined West Brom permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 41,
+  "transfers_out_event": 62,
   "price_change_percent": 0.0
  },
  "437": {
@@ -5245,9 +5245,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 234,
-  "transfers_out_event": 566,
-  "price_change_percent": -61.8
+  "transfers_in_event": 342,
+  "transfers_out_event": 840,
+  "price_change_percent": -66.1
  },
  "438": {
   "now_cost": 45,
@@ -5255,19 +5255,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 226,
-  "transfers_out_event": 852,
-  "price_change_percent": -92.2
+  "transfers_in_event": 315,
+  "transfers_out_event": 1283,
+  "price_change_percent": -97.4
  },
  "439": {
   "now_cost": 70,
-  "selected_by_percent": 1.8,
+  "selected_by_percent": 1.7,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 8770,
-  "transfers_out_event": 5876,
-  "price_change_percent": -12.9
+  "transfers_in_event": 11361,
+  "transfers_out_event": 9708,
+  "price_change_percent": -15.7
  },
  "440": {
   "now_cost": 54,
@@ -5275,29 +5275,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 951,
-  "transfers_out_event": 1810,
-  "price_change_percent": -73.6
+  "transfers_in_event": 1328,
+  "transfers_out_event": 2716,
+  "price_change_percent": -79.7
  },
  "441": {
   "now_cost": 45,
   "selected_by_percent": 1.2,
-  "status": "a",
-  "news": "",
-  "chance": null,
-  "transfers_in_event": 4223,
-  "transfers_out_event": 3714,
-  "price_change_percent": 0.5
+  "status": "u",
+  "news": "Has joined Willem II on loan for the rest of the season",
+  "chance": 0,
+  "transfers_in_event": 5061,
+  "transfers_out_event": 7706,
+  "price_change_percent": 0.0
  },
  "405": {
   "now_cost": 55,
-  "selected_by_percent": 0.3,
-  "status": "a",
-  "news": "",
-  "chance": null,
-  "transfers_in_event": 747,
-  "transfers_out_event": 715,
-  "price_change_percent": 4.0
+  "selected_by_percent": 0.2,
+  "status": "d",
+  "news": "Concussion - 50% chance of playing",
+  "chance": 50,
+  "transfers_in_event": 1046,
+  "transfers_out_event": 1653,
+  "price_change_percent": 3.7
  },
  "442": {
   "now_cost": 49,
@@ -5305,9 +5305,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 609,
-  "transfers_out_event": 1964,
-  "price_change_percent": -11.4
+  "transfers_in_event": 875,
+  "transfers_out_event": 3278,
+  "price_change_percent": -15.6
  },
  "443": {
   "now_cost": 45,
@@ -5315,9 +5315,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 51,
-  "transfers_out_event": 56,
-  "price_change_percent": -29.5
+  "transfers_in_event": 79,
+  "transfers_out_event": 93,
+  "price_change_percent": -29.7
  },
  "444": {
   "now_cost": 45,
@@ -5325,9 +5325,9 @@
   "status": "d",
   "news": "Ankle injury - 50% chance of playing",
   "chance": 50,
-  "transfers_in_event": 8,
-  "transfers_out_event": 83,
-  "price_change_percent": -76.4
+  "transfers_in_event": 10,
+  "transfers_out_event": 122,
+  "price_change_percent": -81.6
  },
  "445": {
   "now_cost": 50,
@@ -5335,9 +5335,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 5851,
-  "transfers_out_event": 4627,
-  "price_change_percent": 15.2
+  "transfers_in_event": 8911,
+  "transfers_out_event": 9527,
+  "price_change_percent": 14.5
  },
  "446": {
   "now_cost": 50,
@@ -5345,9 +5345,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 432,
-  "transfers_out_event": 539,
-  "price_change_percent": -90.5
+  "transfers_in_event": 582,
+  "transfers_out_event": 1031,
+  "price_change_percent": -98.4
  },
  "447": {
   "now_cost": 50,
@@ -5355,29 +5355,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1802,
-  "transfers_out_event": 1390,
-  "price_change_percent": 6.9
+  "transfers_in_event": 2659,
+  "transfers_out_event": 2596,
+  "price_change_percent": 6.8
  },
  "448": {
   "now_cost": 49,
-  "selected_by_percent": 0.9,
+  "selected_by_percent": 0.8,
   "status": "i",
-  "news": "Ankle injury - Expected back 14 Sep",
+  "news": "Ankle injury - Expected back 19 Sep",
   "chance": 0,
-  "transfers_in_event": 60,
-  "transfers_out_event": 3812,
-  "price_change_percent": -64.4
+  "transfers_in_event": 97,
+  "transfers_out_event": 5631,
+  "price_change_percent": -69.1
  },
  "449": {
   "now_cost": 52,
-  "selected_by_percent": 14.5,
+  "selected_by_percent": 14.4,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 69397,
-  "transfers_out_event": 15081,
-  "price_change_percent": 27.0
+  "transfers_in_event": 95303,
+  "transfers_out_event": 40649,
+  "price_change_percent": 27.4
  },
  "450": {
   "now_cost": 49,
@@ -5385,9 +5385,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 865,
-  "transfers_out_event": 234,
-  "price_change_percent": 0.1
+  "transfers_in_event": 1260,
+  "transfers_out_event": 427,
+  "price_change_percent": 0.2
  },
  "451": {
   "now_cost": 40,
@@ -5396,28 +5396,28 @@
   "news": "Has joined FC Kaiserslautern on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 233,
+  "transfers_out_event": 311,
   "price_change_percent": 0.0
  },
  "453": {
   "now_cost": 60,
-  "selected_by_percent": 2.8,
+  "selected_by_percent": 3.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 25866,
-  "transfers_out_event": 5204,
-  "price_change_percent": 57.7
+  "transfers_in_event": 48554,
+  "transfers_out_event": 12405,
+  "price_change_percent": 64.1
  },
  "454": {
   "now_cost": 62,
-  "selected_by_percent": 11.5,
-  "status": "a",
-  "news": "",
-  "chance": null,
-  "transfers_in_event": 42077,
-  "transfers_out_event": 28272,
-  "price_change_percent": 8.1
+  "selected_by_percent": 10.4,
+  "status": "i",
+  "news": "Unspecified injury - Unknown return date",
+  "chance": 0,
+  "transfers_in_event": 53036,
+  "transfers_out_event": 148110,
+  "price_change_percent": -15.0
  },
  "456": {
   "now_cost": 49,
@@ -5425,9 +5425,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1243,
-  "transfers_out_event": 1141,
-  "price_change_percent": 0.9
+  "transfers_in_event": 1677,
+  "transfers_out_event": 2052,
+  "price_change_percent": 0.7
  },
  "457": {
   "now_cost": 59,
@@ -5435,9 +5435,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 245,
-  "transfers_out_event": 428,
-  "price_change_percent": -52.4
+  "transfers_in_event": 483,
+  "transfers_out_event": 701,
+  "price_change_percent": -53.4
  },
  "458": {
   "now_cost": 54,
@@ -5445,9 +5445,9 @@
   "status": "i",
   "news": "Unspecified injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 8,
-  "transfers_out_event": 64,
-  "price_change_percent": -36.1
+  "transfers_in_event": 12,
+  "transfers_out_event": 88,
+  "price_change_percent": -38.7
  },
  "459": {
   "now_cost": 55,
@@ -5455,8 +5455,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 232,
-  "transfers_out_event": 261,
+  "transfers_in_event": 359,
+  "transfers_out_event": 495,
   "price_change_percent": 0.5
  },
  "460": {
@@ -5465,9 +5465,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1932,
-  "transfers_out_event": 1835,
-  "price_change_percent": 11.1
+  "transfers_in_event": 2721,
+  "transfers_out_event": 3368,
+  "price_change_percent": 10.8
  },
  "461": {
   "now_cost": 58,
@@ -5475,9 +5475,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 101,
-  "transfers_out_event": 521,
-  "price_change_percent": -26.0
+  "transfers_in_event": 307,
+  "transfers_out_event": 772,
+  "price_change_percent": -27.6
  },
  "462": {
   "now_cost": 49,
@@ -5485,9 +5485,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 88,
-  "transfers_out_event": 294,
-  "price_change_percent": -22.2
+  "transfers_in_event": 129,
+  "transfers_out_event": 446,
+  "price_change_percent": -27.8
  },
  "463": {
   "now_cost": 59,
@@ -5496,18 +5496,18 @@
   "news": "Has joined Juventus on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 4566,
+  "transfers_out_event": 6264,
   "price_change_percent": 0.0
  },
  "464": {
   "now_cost": 62,
-  "selected_by_percent": 18.6,
+  "selected_by_percent": 18.4,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 73739,
-  "transfers_out_event": 30676,
-  "price_change_percent": 41.5
+  "transfers_in_event": 103243,
+  "transfers_out_event": 76673,
+  "price_change_percent": 35.3
  },
  "465": {
   "now_cost": 59,
@@ -5515,9 +5515,9 @@
   "status": "i",
   "news": "Foot injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 61,
-  "transfers_out_event": 2000,
-  "price_change_percent": -76.7
+  "transfers_in_event": 91,
+  "transfers_out_event": 2906,
+  "price_change_percent": -82.6
  },
  "466": {
   "now_cost": 45,
@@ -5526,7 +5526,7 @@
   "news": "Has joined Wolves on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 2957,
+  "transfers_out_event": 4355,
   "price_change_percent": 0.0
  },
  "559": {
@@ -5535,29 +5535,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 98,
-  "transfers_out_event": 326,
-  "price_change_percent": -19.4
+  "transfers_in_event": 154,
+  "transfers_out_event": 476,
+  "price_change_percent": -23.3
  },
  "567": {
   "now_cost": 50,
-  "selected_by_percent": 1.5,
+  "selected_by_percent": 1.4,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 7711,
-  "transfers_out_event": 2924,
-  "price_change_percent": 18.8
+  "transfers_in_event": 10436,
+  "transfers_out_event": 6204,
+  "price_change_percent": 18.7
  },
  "593": {
   "now_cost": 45,
   "selected_by_percent": 2.9,
-  "status": "d",
-  "news": "Hamstring injury - 75% chance of playing",
-  "chance": 75,
-  "transfers_in_event": 3210,
-  "transfers_out_event": 14250,
-  "price_change_percent": 47.0
+  "status": "a",
+  "news": "",
+  "chance": 100,
+  "transfers_in_event": 5566,
+  "transfers_out_event": 22368,
+  "price_change_percent": 44.7
  },
  "609": {
   "now_cost": 40,
@@ -5566,7 +5566,7 @@
   "news": "has joined Arouca on loan for the rest of the seaon.",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 2433,
+  "transfers_out_event": 3268,
   "price_change_percent": 0.0
  },
  "634": {
@@ -5575,19 +5575,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 950,
-  "transfers_out_event": 384,
+  "transfers_in_event": 1438,
+  "transfers_out_event": 843,
+  "price_change_percent": 0.0
+ },
+ "659": {
+  "now_cost": 45,
+  "selected_by_percent": 0.0,
+  "status": "a",
+  "news": "",
+  "chance": null,
+  "transfers_in_event": 194,
+  "transfers_out_event": 20,
   "price_change_percent": 0.0
  },
  "167": {
   "now_cost": 55,
-  "selected_by_percent": 1.2,
+  "selected_by_percent": 1.3,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 33452,
-  "transfers_out_event": 2808,
-  "price_change_percent": 28.7
+  "transfers_in_event": 51004,
+  "transfers_out_event": 5606,
+  "price_change_percent": 35.1
  },
  "201": {
   "now_cost": 54,
@@ -5595,9 +5605,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 7864,
-  "transfers_out_event": 14718,
-  "price_change_percent": -74.7
+  "transfers_in_event": 15049,
+  "transfers_out_event": 22268,
+  "price_change_percent": -74.4
  },
  "467": {
   "now_cost": 50,
@@ -5605,9 +5615,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 8161,
-  "transfers_out_event": 2352,
-  "price_change_percent": -17.3
+  "transfers_in_event": 12876,
+  "transfers_out_event": 3960,
+  "price_change_percent": -8.3
  },
  "468": {
   "now_cost": 45,
@@ -5615,19 +5625,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 48,
-  "transfers_out_event": 94,
-  "price_change_percent": -53.5
+  "transfers_in_event": 75,
+  "transfers_out_event": 150,
+  "price_change_percent": -55.3
  },
  "469": {
   "now_cost": 50,
-  "selected_by_percent": 8.3,
+  "selected_by_percent": 8.4,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 21765,
-  "transfers_out_event": 11527,
-  "price_change_percent": -13.4
+  "transfers_in_event": 36237,
+  "transfers_out_event": 18348,
+  "price_change_percent": -9.1
  },
  "470": {
   "now_cost": 50,
@@ -5636,18 +5646,18 @@
   "news": "Has joined West Ham on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 143,
+  "transfers_out_event": 209,
   "price_change_percent": 0.0
  },
  "471": {
   "now_cost": 55,
-  "selected_by_percent": 1.5,
-  "status": "d",
-  "news": "Hamstring injury - 75% chance of playing",
-  "chance": 75,
-  "transfers_in_event": 155,
-  "transfers_out_event": 11447,
-  "price_change_percent": -48.9
+  "selected_by_percent": 1.4,
+  "status": "i",
+  "news": "Hamstring injury - Expected back 11 Oct",
+  "chance": 0,
+  "transfers_in_event": 179,
+  "transfers_out_event": 18574,
+  "price_change_percent": -43.0
  },
  "472": {
   "now_cost": 55,
@@ -5655,9 +5665,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 12765,
-  "transfers_out_event": 1947,
-  "price_change_percent": 4.1
+  "transfers_in_event": 20191,
+  "transfers_out_event": 3405,
+  "price_change_percent": 6.6
  },
  "473": {
   "now_cost": 45,
@@ -5665,19 +5675,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 4928,
-  "transfers_out_event": 7152,
-  "price_change_percent": -84.4
+  "transfers_in_event": 7601,
+  "transfers_out_event": 10582,
+  "price_change_percent": -83.8
  },
  "474": {
   "now_cost": 45,
   "selected_by_percent": 0.2,
   "status": "d",
-  "news": "Hamstring injury - 75% chance of playing",
-  "chance": 75,
-  "transfers_in_event": 103,
-  "transfers_out_event": 1324,
-  "price_change_percent": -15.7
+  "news": "Hamstring injury - 50% chance of playing",
+  "chance": 50,
+  "transfers_in_event": 127,
+  "transfers_out_event": 2041,
+  "price_change_percent": -24.9
  },
  "475": {
   "now_cost": 45,
@@ -5685,9 +5695,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 6,
-  "transfers_out_event": 5,
-  "price_change_percent": -1.7
+  "transfers_in_event": 8,
+  "transfers_out_event": 10,
+  "price_change_percent": -4.4
  },
  "476": {
   "now_cost": 40,
@@ -5695,9 +5705,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 298,
-  "transfers_out_event": 447,
-  "price_change_percent": -44.8
+  "transfers_in_event": 451,
+  "transfers_out_event": 703,
+  "price_change_percent": -46.3
  },
  "477": {
   "now_cost": 40,
@@ -5706,7 +5716,7 @@
   "news": "Has joined Southampton on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 733,
+  "transfers_out_event": 1060,
   "price_change_percent": 0.0
  },
  "478": {
@@ -5715,9 +5725,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 52,
-  "transfers_out_event": 107,
-  "price_change_percent": 0.0
+  "transfers_in_event": 91,
+  "transfers_out_event": 160,
+  "price_change_percent": -0.5
  },
  "479": {
   "now_cost": 40,
@@ -5726,18 +5736,18 @@
   "news": "Has joined Charlton Athletic on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 419,
+  "transfers_out_event": 634,
   "price_change_percent": 0.0
  },
  "480": {
   "now_cost": 79,
-  "selected_by_percent": 10.4,
+  "selected_by_percent": 11.3,
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 106047,
-  "transfers_out_event": 10333,
-  "price_change_percent": 47.8
+  "transfers_in_event": 195283,
+  "transfers_out_event": 15260,
+  "price_change_percent": 81.3
  },
  "482": {
   "now_cost": 58,
@@ -5745,9 +5755,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 388,
-  "transfers_out_event": 850,
-  "price_change_percent": -3.9
+  "transfers_in_event": 726,
+  "transfers_out_event": 1223,
+  "price_change_percent": -4.4
  },
  "483": {
   "now_cost": 55,
@@ -5755,9 +5765,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 4118,
-  "transfers_out_event": 3452,
-  "price_change_percent": 6.9
+  "transfers_in_event": 7666,
+  "transfers_out_event": 4998,
+  "price_change_percent": 8.0
  },
  "484": {
   "now_cost": 54,
@@ -5766,7 +5776,7 @@
   "news": "Has joined AC Milan on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 383,
+  "transfers_out_event": 547,
   "price_change_percent": 0.0
  },
  "485": {
@@ -5776,7 +5786,7 @@
   "news": "Has joined Lille on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 22,
+  "transfers_out_event": 36,
   "price_change_percent": 0.0
  },
  "486": {
@@ -5785,9 +5795,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 729,
-  "transfers_out_event": 390,
-  "price_change_percent": 1.4
+  "transfers_in_event": 1273,
+  "transfers_out_event": 622,
+  "price_change_percent": 1.5
  },
  "487": {
   "now_cost": 49,
@@ -5795,9 +5805,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 73,
-  "transfers_out_event": 233,
-  "price_change_percent": -19.6
+  "transfers_in_event": 114,
+  "transfers_out_event": 335,
+  "price_change_percent": -23.9
  },
  "488": {
   "now_cost": 49,
@@ -5805,9 +5815,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 410,
-  "transfers_out_event": 1442,
-  "price_change_percent": -24.1
+  "transfers_in_event": 669,
+  "transfers_out_event": 2198,
+  "price_change_percent": -27.7
  },
  "489": {
   "now_cost": 45,
@@ -5815,9 +5825,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 1219,
-  "transfers_out_event": 5138,
-  "price_change_percent": -27.2
+  "transfers_in_event": 1720,
+  "transfers_out_event": 7372,
+  "price_change_percent": -31.9
  },
  "490": {
   "now_cost": 58,
@@ -5825,19 +5835,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1172,
-  "transfers_out_event": 5037,
-  "price_change_percent": -5.8
+  "transfers_in_event": 1927,
+  "transfers_out_event": 7130,
+  "price_change_percent": -9.2
  },
  "491": {
   "now_cost": 58,
-  "selected_by_percent": 2.5,
+  "selected_by_percent": 2.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 14151,
-  "transfers_out_event": 7999,
-  "price_change_percent": 3.6
+  "transfers_in_event": 22680,
+  "transfers_out_event": 11842,
+  "price_change_percent": 6.1
  },
  "493": {
   "now_cost": 54,
@@ -5845,8 +5855,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 185,
-  "transfers_out_event": 272,
+  "transfers_in_event": 253,
+  "transfers_out_event": 387,
   "price_change_percent": 0.2
  },
  "558": {
@@ -5855,9 +5865,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 648,
-  "transfers_out_event": 292,
-  "price_change_percent": -16.1
+  "transfers_in_event": 1094,
+  "transfers_out_event": 490,
+  "price_change_percent": -3.1
  },
  "581": {
   "now_cost": 54,
@@ -5865,9 +5875,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 967,
-  "transfers_out_event": 955,
-  "price_change_percent": -51.8
+  "transfers_in_event": 1497,
+  "transfers_out_event": 1514,
+  "price_change_percent": -50.9
  },
  "590": {
   "now_cost": 45,
@@ -5875,8 +5885,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 128,
-  "transfers_out_event": 149,
+  "transfers_in_event": 198,
+  "transfers_out_event": 253,
   "price_change_percent": 0.1
  },
  "112": {
@@ -5885,9 +5895,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 12288,
-  "transfers_out_event": 10135,
-  "price_change_percent": -21.5
+  "transfers_in_event": 17909,
+  "transfers_out_event": 16060,
+  "price_change_percent": -20.6
  },
  "147": {
   "now_cost": 44,
@@ -5895,9 +5905,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 142,
-  "transfers_out_event": 301,
-  "price_change_percent": -9.5
+  "transfers_in_event": 192,
+  "transfers_out_event": 436,
+  "price_change_percent": -11.5
  },
  "401": {
   "now_cost": 70,
@@ -5905,9 +5915,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 5378,
-  "transfers_out_event": 15836,
-  "price_change_percent": 36.9
+  "transfers_in_event": 8009,
+  "transfers_out_event": 22366,
+  "price_change_percent": 35.3
  },
  "403": {
   "now_cost": 65,
@@ -5915,19 +5925,19 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 2636,
-  "transfers_out_event": 4080,
+  "transfers_in_event": 4335,
+  "transfers_out_event": 5779,
   "price_change_percent": 10.3
  },
  "455": {
   "now_cost": 54,
-  "selected_by_percent": 2.4,
-  "status": "a",
-  "news": "",
-  "chance": null,
-  "transfers_in_event": 2262,
-  "transfers_out_event": 12030,
-  "price_change_percent": -85.4
+  "selected_by_percent": 2.3,
+  "status": "d",
+  "news": "Knock - 75% chance of playing",
+  "chance": 75,
+  "transfers_in_event": 2842,
+  "transfers_out_event": 22505,
+  "price_change_percent": -59.0
  },
  "494": {
   "now_cost": 45,
@@ -5936,7 +5946,7 @@
   "news": "Has joined Juventus on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 655,
+  "transfers_out_event": 933,
   "price_change_percent": 0.0
  },
  "495": {
@@ -5945,9 +5955,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1833,
-  "transfers_out_event": 1310,
-  "price_change_percent": 1.8
+  "transfers_in_event": 2766,
+  "transfers_out_event": 2018,
+  "price_change_percent": 1.9
  },
  "496": {
   "now_cost": 45,
@@ -5955,9 +5965,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 26104,
-  "transfers_out_event": 22162,
-  "price_change_percent": -37.4
+  "transfers_in_event": 38923,
+  "transfers_out_event": 35054,
+  "price_change_percent": -36.7
  },
  "497": {
   "now_cost": 40,
@@ -5965,29 +5975,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 14900,
-  "transfers_out_event": 23976,
-  "price_change_percent": -14.3
+  "transfers_in_event": 22820,
+  "transfers_out_event": 36743,
+  "price_change_percent": -15.2
  },
  "498": {
   "now_cost": 58,
-  "selected_by_percent": 4.2,
+  "selected_by_percent": 4.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 829,
-  "transfers_out_event": 25817,
-  "price_change_percent": -10.7
+  "transfers_in_event": 1175,
+  "transfers_out_event": 36106,
+  "price_change_percent": -17.4
  },
  "499": {
   "now_cost": 55,
-  "selected_by_percent": 9.8,
+  "selected_by_percent": 9.4,
   "status": "d",
   "news": "Unspecified injury - 75% chance of playing",
   "chance": 75,
-  "transfers_in_event": 751,
-  "transfers_out_event": 82248,
-  "price_change_percent": -60.3
+  "transfers_in_event": 1002,
+  "transfers_out_event": 121268,
+  "price_change_percent": -73.0
  },
  "500": {
   "now_cost": 50,
@@ -5996,7 +6006,7 @@
   "news": "Has joined Atletico Madrid permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 236,
+  "transfers_out_event": 329,
   "price_change_percent": 0.0
  },
  "502": {
@@ -6005,9 +6015,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 6012,
-  "transfers_out_event": 5629,
-  "price_change_percent": 0.2
+  "transfers_in_event": 9026,
+  "transfers_out_event": 8542,
+  "price_change_percent": 0.6
  },
  "503": {
   "now_cost": 50,
@@ -6015,29 +6025,29 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 10416,
-  "transfers_out_event": 4982,
-  "price_change_percent": -12.4
+  "transfers_in_event": 14717,
+  "transfers_out_event": 8086,
+  "price_change_percent": -10.3
  },
  "505": {
   "now_cost": 45,
-  "selected_by_percent": 0.3,
+  "selected_by_percent": 0.2,
   "status": "u",
   "news": "Has joined Internazionale permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 1102,
+  "transfers_out_event": 1456,
   "price_change_percent": 0.0
  },
  "506": {
-  "now_cost": 45,
+  "now_cost": 44,
   "selected_by_percent": 0.4,
-  "status": "d",
-  "news": "Unspecified injury - 75% chance of playing",
-  "chance": 75,
-  "transfers_in_event": 27,
-  "transfers_out_event": 2493,
-  "price_change_percent": -86.4
+  "status": "a",
+  "news": "",
+  "chance": 100,
+  "transfers_in_event": 95,
+  "transfers_out_event": 3316,
+  "price_change_percent": -0.4
  },
  "507": {
   "now_cost": 45,
@@ -6046,7 +6056,7 @@
   "news": "Has joined Middlesbrough permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 29,
+  "transfers_out_event": 47,
   "price_change_percent": 0.0
  },
  "508": {
@@ -6055,9 +6065,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 666,
-  "transfers_out_event": 2278,
-  "price_change_percent": -82.5
+  "transfers_in_event": 980,
+  "transfers_out_event": 3414,
+  "price_change_percent": -86.5
  },
  "509": {
   "now_cost": 40,
@@ -6065,8 +6075,8 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 181,
-  "transfers_out_event": 166,
+  "transfers_in_event": 266,
+  "transfers_out_event": 252,
   "price_change_percent": 0.0
  },
  "510": {
@@ -6075,9 +6085,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 218,
-  "transfers_out_event": 194,
-  "price_change_percent": -5.1
+  "transfers_in_event": 302,
+  "transfers_out_event": 312,
+  "price_change_percent": -6.5
  },
  "511": {
   "now_cost": 40,
@@ -6086,7 +6096,7 @@
   "news": "Has joined FC Porto on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 805,
+  "transfers_out_event": 1132,
   "price_change_percent": 0.0
  },
  "512": {
@@ -6095,8 +6105,8 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 489,
-  "transfers_out_event": 888,
+  "transfers_in_event": 804,
+  "transfers_out_event": 1283,
   "price_change_percent": 1.2
  },
  "513": {
@@ -6105,9 +6115,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 21,
-  "transfers_out_event": 50,
-  "price_change_percent": -4.5
+  "transfers_in_event": 28,
+  "transfers_out_event": 71,
+  "price_change_percent": -6.2
  },
  "514": {
   "now_cost": 58,
@@ -6115,9 +6125,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 196,
-  "transfers_out_event": 1853,
-  "price_change_percent": -49.5
+  "transfers_in_event": 304,
+  "transfers_out_event": 2587,
+  "price_change_percent": -63.1
  },
  "515": {
   "now_cost": 63,
@@ -6125,9 +6135,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 349,
-  "transfers_out_event": 1390,
-  "price_change_percent": -26.0
+  "transfers_in_event": 575,
+  "transfers_out_event": 2036,
+  "price_change_percent": -30.2
  },
  "516": {
   "now_cost": 55,
@@ -6135,9 +6145,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 337,
-  "transfers_out_event": 434,
-  "price_change_percent": -80.2
+  "transfers_in_event": 573,
+  "transfers_out_event": 670,
+  "price_change_percent": -79.1
  },
  "517": {
   "now_cost": 55,
@@ -6145,8 +6155,8 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 7,
-  "transfers_out_event": 5,
+  "transfers_in_event": 10,
+  "transfers_out_event": 8,
   "price_change_percent": 0.0
  },
  "518": {
@@ -6156,7 +6166,7 @@
   "news": "Has joined Juventus on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 818,
+  "transfers_out_event": 1132,
   "price_change_percent": 0.0
  },
  "519": {
@@ -6165,19 +6175,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 94,
-  "transfers_out_event": 878,
-  "price_change_percent": -79.4
+  "transfers_in_event": 131,
+  "transfers_out_event": 1222,
+  "price_change_percent": -88.6
  },
  "520": {
   "now_cost": 54,
-  "selected_by_percent": 0.2,
+  "selected_by_percent": 0.1,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 71,
-  "transfers_out_event": 372,
-  "price_change_percent": -60.7
+  "transfers_in_event": 97,
+  "transfers_out_event": 550,
+  "price_change_percent": -65.5
  },
  "521": {
   "now_cost": 65,
@@ -6185,9 +6195,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 24,
-  "transfers_out_event": 29,
-  "price_change_percent": -73.1
+  "transfers_in_event": 31,
+  "transfers_out_event": 42,
+  "price_change_percent": -74.7
  },
  "522": {
   "now_cost": 49,
@@ -6195,9 +6205,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 477,
-  "transfers_out_event": 651,
-  "price_change_percent": -0.2
+  "transfers_in_event": 725,
+  "transfers_out_event": 973,
+  "price_change_percent": -1.0
  },
  "523": {
   "now_cost": 50,
@@ -6206,18 +6216,18 @@
   "news": "Has joined FC Köln on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 660,
+  "transfers_out_event": 909,
   "price_change_percent": 0.0
  },
  "524": {
   "now_cost": 44,
-  "selected_by_percent": 0.9,
+  "selected_by_percent": 1.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 17513,
-  "transfers_out_event": 4543,
-  "price_change_percent": 5.4
+  "transfers_in_event": 22009,
+  "transfers_out_event": 6874,
+  "price_change_percent": 6.3
  },
  "525": {
   "now_cost": 58,
@@ -6225,19 +6235,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 436,
-  "transfers_out_event": 4511,
-  "price_change_percent": -34.7
+  "transfers_in_event": 716,
+  "transfers_out_event": 6485,
+  "price_change_percent": -43.8
  },
  "526": {
-  "now_cost": 59,
+  "now_cost": 58,
   "selected_by_percent": 0.9,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1286,
-  "transfers_out_event": 3741,
-  "price_change_percent": -99.6
+  "transfers_in_event": 1941,
+  "transfers_out_event": 5728,
+  "price_change_percent": -0.5
  },
  "527": {
   "now_cost": 59,
@@ -6246,7 +6256,7 @@
   "news": "not included in squad.",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 7055,
+  "transfers_out_event": 9958,
   "price_change_percent": 0.0
  },
  "528": {
@@ -6256,7 +6266,7 @@
   "news": "Has joined Leyton Orient permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 5974,
+  "transfers_out_event": 8775,
   "price_change_percent": 0.0
  },
  "578": {
@@ -6265,9 +6275,9 @@
   "status": "i",
   "news": "Ankle injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 14,
-  "transfers_out_event": 994,
-  "price_change_percent": -36.5
+  "transfers_in_event": 18,
+  "transfers_out_event": 1303,
+  "price_change_percent": -49.9
  },
  "601": {
   "now_cost": 45,
@@ -6275,9 +6285,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 259,
-  "transfers_out_event": 564,
-  "price_change_percent": 0.0
+  "transfers_in_event": 357,
+  "transfers_out_event": 836,
+  "price_change_percent": -5.3
  },
  "501": {
   "now_cost": 50,
@@ -6285,19 +6295,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 518,
-  "transfers_out_event": 452,
-  "price_change_percent": -86.9
+  "transfers_in_event": 731,
+  "transfers_out_event": 691,
+  "price_change_percent": -87.2
  },
  "529": {
   "now_cost": 49,
-  "selected_by_percent": 2.8,
+  "selected_by_percent": 2.7,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 692,
-  "transfers_out_event": 12167,
-  "price_change_percent": -0.5
+  "transfers_in_event": 1104,
+  "transfers_out_event": 17130,
+  "price_change_percent": -3.1
  },
  "530": {
   "now_cost": 40,
@@ -6306,7 +6316,7 @@
   "news": "Has joined Wrexham permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 285,
+  "transfers_out_event": 421,
   "price_change_percent": 0.0
  },
  "531": {
@@ -6315,19 +6325,19 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 38,
-  "transfers_out_event": 148,
-  "price_change_percent": -75.7
+  "transfers_in_event": 61,
+  "transfers_out_event": 228,
+  "price_change_percent": -78.0
  },
  "532": {
   "now_cost": 49,
-  "selected_by_percent": 3.0,
+  "selected_by_percent": 2.9,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2512,
-  "transfers_out_event": 13255,
-  "price_change_percent": -24.1
+  "transfers_in_event": 3512,
+  "transfers_out_event": 19909,
+  "price_change_percent": -30.6
  },
  "533": {
   "now_cost": 54,
@@ -6335,19 +6345,19 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 1977,
-  "transfers_out_event": 8738,
-  "price_change_percent": -0.7
+  "transfers_in_event": 2792,
+  "transfers_out_event": 12937,
+  "price_change_percent": -4.2
  },
  "534": {
   "now_cost": 44,
-  "selected_by_percent": 3.7,
+  "selected_by_percent": 3.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 614,
-  "transfers_out_event": 26822,
-  "price_change_percent": -33.3
+  "transfers_in_event": 938,
+  "transfers_out_event": 37482,
+  "price_change_percent": -43.0
  },
  "535": {
   "now_cost": 49,
@@ -6355,9 +6365,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 92,
-  "transfers_out_event": 1326,
-  "price_change_percent": -44.9
+  "transfers_in_event": 128,
+  "transfers_out_event": 1901,
+  "price_change_percent": -54.4
  },
  "536": {
   "now_cost": 45,
@@ -6365,9 +6375,9 @@
   "status": "s",
   "news": "Suspended until 10 Oct",
   "chance": 0,
-  "transfers_in_event": 105,
-  "transfers_out_event": 2897,
-  "price_change_percent": -43.6
+  "transfers_in_event": 111,
+  "transfers_out_event": 4232,
+  "price_change_percent": -52.0
  },
  "537": {
   "now_cost": 45,
@@ -6376,7 +6386,7 @@
   "news": "Has joined Swansea City on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 14,
+  "transfers_out_event": 25,
   "price_change_percent": 0.0
  },
  "538": {
@@ -6386,18 +6396,18 @@
   "news": "Has joined KV Mechelen on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 96,
+  "transfers_out_event": 144,
   "price_change_percent": 0.0
  },
  "539": {
   "now_cost": 40,
-  "selected_by_percent": 2.6,
+  "selected_by_percent": 2.5,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 802,
-  "transfers_out_event": 6615,
-  "price_change_percent": -81.0
+  "transfers_in_event": 1126,
+  "transfers_out_event": 10121,
+  "price_change_percent": -85.8
  },
  "540": {
   "now_cost": 40,
@@ -6406,7 +6416,7 @@
   "news": "Has joined Konyaspor permanently",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 456,
+  "transfers_out_event": 672,
   "price_change_percent": 0.0
  },
  "541": {
@@ -6415,19 +6425,19 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 356,
-  "transfers_out_event": 588,
-  "price_change_percent": -24.6
+  "transfers_in_event": 505,
+  "transfers_out_event": 935,
+  "price_change_percent": -27.2
  },
  "542": {
   "now_cost": 58,
-  "selected_by_percent": 4.2,
+  "selected_by_percent": 4.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 1585,
-  "transfers_out_event": 27708,
-  "price_change_percent": -30.8
+  "transfers_in_event": 2440,
+  "transfers_out_event": 39805,
+  "price_change_percent": -41.9
  },
  "543": {
   "now_cost": 54,
@@ -6436,18 +6446,18 @@
   "news": "Hamstring injury - Unknown return date",
   "chance": 0,
   "transfers_in_event": 2,
-  "transfers_out_event": 223,
-  "price_change_percent": -35.6
+  "transfers_out_event": 309,
+  "price_change_percent": -41.4
  },
  "544": {
   "now_cost": 55,
-  "selected_by_percent": 4.1,
+  "selected_by_percent": 4.0,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 4706,
-  "transfers_out_event": 17782,
-  "price_change_percent": -9.9
+  "transfers_in_event": 6843,
+  "transfers_out_event": 26242,
+  "price_change_percent": -16.0
  },
  "545": {
   "now_cost": 49,
@@ -6455,9 +6465,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 453,
-  "transfers_out_event": 1082,
-  "price_change_percent": -15.3
+  "transfers_in_event": 625,
+  "transfers_out_event": 1591,
+  "price_change_percent": -20.2
  },
  "546": {
   "now_cost": 49,
@@ -6466,7 +6476,7 @@
   "news": "Has joined Ajax on loan for the rest of the season",
   "chance": 0,
   "transfers_in_event": 0,
-  "transfers_out_event": 216,
+  "transfers_out_event": 313,
   "price_change_percent": 0.0
  },
  "547": {
@@ -6475,9 +6485,9 @@
   "status": "i",
   "news": "Knee injury - Unknown return date",
   "chance": 0,
-  "transfers_in_event": 5,
-  "transfers_out_event": 47,
-  "price_change_percent": -21.1
+  "transfers_in_event": 8,
+  "transfers_out_event": 68,
+  "price_change_percent": -27.8
  },
  "548": {
   "now_cost": 49,
@@ -6485,9 +6495,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 21,
-  "transfers_out_event": 144,
-  "price_change_percent": -17.1
+  "transfers_in_event": 25,
+  "transfers_out_event": 230,
+  "price_change_percent": -24.7
  },
  "549": {
   "now_cost": 53,
@@ -6495,9 +6505,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 55,
-  "transfers_out_event": 566,
-  "price_change_percent": -0.9
+  "transfers_in_event": 129,
+  "transfers_out_event": 791,
+  "price_change_percent": -3.4
  },
  "550": {
   "now_cost": 50,
@@ -6505,9 +6515,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 22,
-  "transfers_out_event": 25,
-  "price_change_percent": -56.0
+  "transfers_in_event": 29,
+  "transfers_out_event": 35,
+  "price_change_percent": -58.1
  },
  "551": {
   "now_cost": 50,
@@ -6515,29 +6525,29 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 256,
-  "transfers_out_event": 692,
-  "price_change_percent": 1.7
+  "transfers_in_event": 388,
+  "transfers_out_event": 985,
+  "price_change_percent": 1.6
  },
  "552": {
   "now_cost": 58,
-  "selected_by_percent": 6.4,
+  "selected_by_percent": 6.2,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 3980,
-  "transfers_out_event": 43469,
-  "price_change_percent": -32.7
+  "transfers_in_event": 5815,
+  "transfers_out_event": 64738,
+  "price_change_percent": -46.1
  },
  "553": {
   "now_cost": 55,
-  "selected_by_percent": 1.5,
+  "selected_by_percent": 1.4,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 2831,
-  "transfers_out_event": 7219,
-  "price_change_percent": 13.0
+  "transfers_in_event": 3688,
+  "transfers_out_event": 11093,
+  "price_change_percent": 11.7
  },
  "612": {
   "now_cost": 45,
@@ -6545,9 +6555,9 @@
   "status": "a",
   "news": "",
   "chance": 100,
-  "transfers_in_event": 45,
-  "transfers_out_event": 23,
-  "price_change_percent": -12.7
+  "transfers_in_event": 67,
+  "transfers_out_event": 41,
+  "price_change_percent": -7.4
  },
  "613": {
   "now_cost": 45,
@@ -6555,9 +6565,9 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 895,
-  "transfers_out_event": 1180,
-  "price_change_percent": 0.1
+  "transfers_in_event": 1229,
+  "transfers_out_event": 1756,
+  "price_change_percent": -1.9
  },
  "646": {
   "now_cost": 55,
@@ -6565,18 +6575,18 @@
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 185,
-  "transfers_out_event": 219,
+  "transfers_in_event": 252,
+  "transfers_out_event": 314,
   "price_change_percent": 0.0
  },
  "651": {
   "now_cost": 45,
-  "selected_by_percent": 0.5,
+  "selected_by_percent": 0.6,
   "status": "a",
   "news": "",
   "chance": null,
-  "transfers_in_event": 8977,
-  "transfers_out_event": 2548,
+  "transfers_in_event": 14055,
+  "transfers_out_event": 4345,
   "price_change_percent": 0.0
  }
 }
