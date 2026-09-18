@@ -198,5 +198,13 @@
   "horizon_ev": 218.186,
   "best_move": "Hume (4.4) ➜ Hall (5.2)",
   "captain": "B.Fernandes"
+ },
+ {
+  "mode": "deadline",
+  "at": "2026-09-18T10:26:43.339453+05:00",
+  "event": 5,
+  "horizon_ev": 218.179,
+  "best_move": "Hume (4.4) ➜ Hall (5.2)",
+  "captain": "B.Fernandes"
  }
 ]
