@@ -230,5 +230,13 @@
   "horizon_ev": 216.586,
   "best_move": "Maguire (4.9) ➜ Hall (5.2)",
   "captain": "Saka"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-09-21T10:44:31.987715+05:00",
+  "event": 6,
+  "horizon_ev": 237.591,
+  "best_move": "Maguire (4.9) + Konsa (4.5) ➜ Hall (5.2) + Thomas (4.0)",
+  "captain": "Saka"
  }
 ]
