@@ -326,5 +326,13 @@
   "horizon_ev": 231.28,
   "best_move": "Palmer (9.6) + Maguire (4.8) ➜ Mbeumo (7.9) + Hall (5.3)",
   "captain": "Saka"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-10-01T11:43:56.230088+05:00",
+  "event": 6,
+  "horizon_ev": 231.28,
+  "best_move": "Palmer (9.6) + Maguire (4.8) ➜ Mbeumo (7.9) + Hall (5.3)",
+  "captain": "Saka"
  }
 ]
