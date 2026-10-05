@@ -374,5 +374,13 @@
   "horizon_ev": 226.607,
   "best_move": "Mykolenko (4.5) + Palmer (9.6) ➜ Silva (5.0) + Mbeumo (7.9)",
   "captain": "Saka"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-10-05T11:27:26.628194+05:00",
+  "event": 6,
+  "horizon_ev": 226.615,
+  "best_move": "Mykolenko (4.5) + Palmer (9.6) ➜ Silva (5.0) + Mbeumo (7.9)",
+  "captain": "Saka"
  }
 ]
