@@ -414,5 +414,13 @@
   "horizon_ev": 222.381,
   "best_move": "Konsa (4.5) + Mykolenko (4.5) ➜ Silva (5.0) + Thomas (4.0)",
   "captain": "Saka"
+ },
+ {
+  "mode": "deadline",
+  "at": "2026-10-09T12:03:15.568219+05:00",
+  "event": 6,
+  "horizon_ev": 222.401,
+  "best_move": "Konsa (4.5) + Mykolenko (4.5) ➜ Silva (5.0) + Thomas (4.0)",
+  "captain": "Saka"
  }
 ]
