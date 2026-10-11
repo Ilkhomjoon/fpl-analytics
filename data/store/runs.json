@@ -438,5 +438,13 @@
   "horizon_ev": 225.589,
   "best_move": "Konsa (4.5) + Mykolenko (4.5) ➜ Silva (5.0) + Thomas (4.0)",
   "captain": "Saka"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-10-11T11:42:06.414129+05:00",
+  "event": 7,
+  "horizon_ev": 199.449,
+  "best_move": "Barnes (6.0) + Mykolenko (4.5) ➜ Mbeumo (7.9) + Bogle (4.6)",
+  "captain": "De Cuyper"
  }
 ]
