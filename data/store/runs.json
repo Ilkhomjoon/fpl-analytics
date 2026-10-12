@@ -446,5 +446,13 @@
   "horizon_ev": 199.449,
   "best_move": "Barnes (6.0) + Mykolenko (4.5) ➜ Mbeumo (7.9) + Bogle (4.6)",
   "captain": "De Cuyper"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-10-12T11:50:03.721197+05:00",
+  "event": 7,
+  "horizon_ev": 230.178,
+  "best_move": "Mykolenko (4.5) ➜ Tarkowski (6.2)",
+  "captain": "Haaland"
  }
 ]
