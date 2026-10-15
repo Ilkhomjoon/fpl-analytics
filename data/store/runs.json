@@ -470,5 +470,13 @@
   "horizon_ev": 232.264,
   "best_move": "Mykolenko (4.5) ➜ Tarkowski (6.2)",
   "captain": "Haaland"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-10-15T10:26:18.716703+05:00",
+  "event": 7,
+  "horizon_ev": 232.262,
+  "best_move": "Mykolenko (4.5) ➜ Tarkowski (6.2)",
+  "captain": "Haaland"
  }
 ]
