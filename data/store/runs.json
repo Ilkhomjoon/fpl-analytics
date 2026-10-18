@@ -510,5 +510,13 @@
   "horizon_ev": 227.236,
   "best_move": "Mykolenko (4.5) ➜ Tarkowski (6.2)",
   "captain": "Haaland"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-10-18T10:18:04.434127+05:00",
+  "event": 8,
+  "horizon_ev": 182.673,
+  "best_move": "Dubravka (4.0) + Raya (6.0) ➜ Tzolakis (4.7) + Suzuki (5.0)",
+  "captain": "Haaland"
  }
 ]
