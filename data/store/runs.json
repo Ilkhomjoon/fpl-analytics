@@ -566,5 +566,13 @@
   "horizon_ev": 221.279,
   "best_move": "Gibbs-White (7.9) + Mykolenko (4.5) ➜ Mbeumo (7.9) + Hall (5.3)",
   "captain": "Haaland"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-10-23T22:38:58.839701+05:00",
+  "event": 8,
+  "horizon_ev": 219.558,
+  "best_move": "Saka (9.5) + Mykolenko (4.5) ➜ Mbeumo (7.9) + Hall (5.3)",
+  "captain": "Haaland"
  }
 ]
