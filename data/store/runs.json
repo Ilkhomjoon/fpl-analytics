@@ -574,5 +574,13 @@
   "horizon_ev": 219.558,
   "best_move": "Saka (9.5) + Mykolenko (4.5) ➜ Mbeumo (7.9) + Hall (5.3)",
   "captain": "Haaland"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-10-24T10:16:32.151092+05:00",
+  "event": 9,
+  "horizon_ev": 148.326,
+  "best_move": "Ajer (4.5) + Konsa (4.5) ➜ Murillo (5.5) + O'Shea (4.0)",
+  "captain": "Davis"
  }
 ]
