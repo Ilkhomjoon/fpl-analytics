@@ -582,5 +582,13 @@
   "horizon_ev": 148.326,
   "best_move": "Ajer (4.5) + Konsa (4.5) ➜ Murillo (5.5) + O'Shea (4.0)",
   "captain": "Davis"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-10-25T10:33:12.318414+05:00",
+  "event": 9,
+  "horizon_ev": 202.28,
+  "best_move": "Ajer (4.5) + Muharemović (5.0) ➜ Murillo (5.5) + Van Hecke (4.9)",
+  "captain": "Haaland"
  }
 ]
