@@ -622,5 +622,13 @@
   "horizon_ev": 228.416,
   "best_move": "Eze (6.2) + Ajer (4.5) ➜ Tavernier (6.4) + Hall (5.3)",
   "captain": "Haaland"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-10-29T23:45:19.425198+05:00",
+  "event": 9,
+  "horizon_ev": 228.421,
+  "best_move": "Eze (6.2) + Ajer (4.5) ➜ Tavernier (6.4) + Hall (5.3)",
+  "captain": "Haaland"
  }
 ]
