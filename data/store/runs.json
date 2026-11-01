@@ -654,5 +654,13 @@
   "horizon_ev": 228.527,
   "best_move": "Eze (6.2) + Ajer (4.5) ➜ Tavernier (6.5) + Hall (5.3)",
   "captain": "Haaland"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-11-01T12:01:55.145525+05:00",
+  "event": 10,
+  "horizon_ev": 202.396,
+  "best_move": "Dubravka (4.0) + Mykolenko (4.5) ➜ Trafford (5.0) + Van Hecke (5.0)",
+  "captain": "De Cuyper"
  }
 ]
