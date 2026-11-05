@@ -686,5 +686,13 @@
   "horizon_ev": 234.073,
   "best_move": "Mykolenko (4.5) + Maguire (4.7) ➜ Gabriel (8.0) + Van Hecke (5.0)",
   "captain": "De Cuyper"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-11-05T12:37:03.478801+05:00",
+  "event": 10,
+  "horizon_ev": 233.914,
+  "best_move": "Mykolenko (4.5) + Maguire (4.6) ➜ Gabriel (8.0) + Van Hecke (5.0)",
+  "captain": "De Cuyper"
  }
 ]
