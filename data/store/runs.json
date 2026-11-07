@@ -718,5 +718,13 @@
   "horizon_ev": 122.661,
   "best_move": "King (5.5) + Barnes (6.0) ➜ Kamara (5.0) + Janelt (5.0)",
   "captain": "De Cuyper"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-11-07T11:44:36.777631+05:00",
+  "event": 11,
+  "horizon_ev": 140.705,
+  "best_move": "Maguire (4.6) + Davis (4.0) ➜ Tarkowski (6.2) + Pinnock (4.5)",
+  "captain": "Mykolenko"
  }
 ]
