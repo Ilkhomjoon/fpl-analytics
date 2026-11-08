@@ -726,5 +726,13 @@
   "horizon_ev": 140.705,
   "best_move": "Maguire (4.6) + Davis (4.0) ➜ Tarkowski (6.2) + Pinnock (4.5)",
   "captain": "Mykolenko"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-11-08T11:51:35.140847+05:00",
+  "event": 11,
+  "horizon_ev": 183.082,
+  "best_move": "Maguire (4.6) + Davis (4.0) ➜ Van Hecke (5.0) + Hall (5.2)",
+  "captain": "Haaland"
  }
 ]
