@@ -734,5 +734,13 @@
   "horizon_ev": 183.082,
   "best_move": "Maguire (4.6) + Davis (4.0) ➜ Van Hecke (5.0) + Hall (5.2)",
   "captain": "Haaland"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-11-09T12:30:21.947071+05:00",
+  "event": 11,
+  "horizon_ev": 236.264,
+  "best_move": "Maguire (4.6) ➜ Gabriel (8.1)",
+  "captain": "Haaland"
  }
 ]
