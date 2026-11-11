@@ -1,9 +1,9 @@
 {
  "event": 11,
  "mode": "daily",
- "generated": "2026-11-10T12:56:03.075645+05:00",
+ "generated": "2026-11-11T12:25:24.631736+05:00",
  "deadline": "2026-11-21T16:00:00+05:00",
- "summary": "<b>📊 FPL — GW11</b>\n10-noyabr, seshanba · deadline 21.11 16:00 (<b>11 kun 3 soat qoldi</b>)\nO'rin: <b>1,817,800</b> (16.1%) · qiymat 100.8m · 2 FT · bank 4.1m\n🔁 <b>Maguire (4.6) ➜ Gabriel (8.1)</b> (+8.6 EV)\n🅲 <b>Haaland</b> — 6.7 EV · 10+: 23%",
+ "summary": "<b>📊 FPL — GW11</b>\n11-noyabr, chorshanba · deadline 21.11 16:00 (<b>10 kun 3 soat qoldi</b>)\nO'rin: <b>1,817,799</b> (16.1%) · qiymat 100.8m · 2 FT · bank 4.1m\n🔁 <b>Maguire (4.6) ➜ Gabriel (8.1)</b> (+9.2 EV)\n🅲 <b>Haaland</b> — 6.7 EV · 10+: 23%",
  "sections": [
   {
    "key": "risk",
@@ -18,7 +18,7 @@
   {
    "key": "rating",
    "title": "⭐ Reyting",
-   "text": "<b>⭐ O'YINCHI REYTINGI</b>\n<i>Reyting = rol × chiqim. Rol daqiqalar, asosiy tarkib va (narxga qarab chegirilgan) egalikdan; chiqim xG/xA va haqiqiy natijadan.</i>\n\n<u>Hujumchi</u>\n  Haaland (MCI, 15.8m)\n    reyting <b>55</b> · rol 98% · chiqim 3.33/90 · egalik 78.9%\n  Barry (EVE, 5.7m)\n    reyting <b>48</b> · rol 92% · chiqim 3.08/90 · egalik 10.5%\n    <i>bozor olyapti (+15%)</i>\n  Evanilson (BOU, 6.5m)\n    reyting <b>43</b> · rol 94% · chiqim 2.73/90 · egalik 23.4%\n  Isak (LIV, 9.3m)\n    reyting <b>40</b> · rol 85% · chiqim 2.82/90 · egalik 24.9%\n\n<u>Yarim himoyachi</u>\n  Groß (BHA, 6.3m)\n    reyting <b>47</b> · rol 97% · chiqim 2.89/90 · egalik 47.9%\n    <i>natijasi asosdan yuqori — davom etmasligi mumkin</i>\n  B.Fernandes (MUN, 11.6m)\n    reyting <b>43</b> · rol 88% · chiqim 2.90/90 · egalik 20.4%\n  Tavernier (BOU, 6.7m)\n    reyting <b>43</b> · rol 94% · chiqim 2.70/90 · egalik 31.2%\n  Mbeumo (MUN, 7.9m)\n    reyting <b>41</b> · rol 96% · chiqim 2.56/90 · egalik 19.2%\n\n<u>Himoyachi</u>\n  De Cuyper (BHA, 5.5m)\n    reyting <b>36</b> · rol 94% · chiqim 2.30/90 · egalik 47.6%\n  Davis (IPS, 4.0m)\n    reyting <b>21</b> · rol 89% · chiqim 1.43/90 · egalik 6.6%\n  Bogle (LEE, 4.8m)\n    reyting <b>20</b> · rol 87% · chiqim 1.40/90 · egalik 11.2%\n  Van Hecke (TOT, 5.1m)\n    reyting <b>19</b> · rol 94% · chiqim 1.22/90 · egalik 14.4%\n    <i>bozor olyapti (+9%)</i>"
+   "text": "<b>⭐ O'YINCHI REYTINGI</b>\n<i>Reyting = rol × chiqim. Rol daqiqalar, asosiy tarkib va (narxga qarab chegirilgan) egalikdan; chiqim xG/xA va haqiqiy natijadan.</i>\n\n<u>Hujumchi</u>\n  Haaland (MCI, 15.8m)\n    reyting <b>55</b> · rol 98% · chiqim 3.33/90 · egalik 78.9%\n  Barry (EVE, 5.7m)\n    reyting <b>48</b> · rol 92% · chiqim 3.08/90 · egalik 10.6%\n    <i>bozor olyapti (+16%)</i>\n  Evanilson (BOU, 6.5m)\n    reyting <b>43</b> · rol 94% · chiqim 2.73/90 · egalik 23.6%\n  Isak (LIV, 9.3m)\n    reyting <b>40</b> · rol 85% · chiqim 2.82/90 · egalik 25.0%\n\n<u>Yarim himoyachi</u>\n  Groß (BHA, 6.3m)\n    reyting <b>47</b> · rol 97% · chiqim 2.89/90 · egalik 48.0%\n    <i>natijasi asosdan yuqori — davom etmasligi mumkin</i>\n  B.Fernandes (MUN, 11.6m)\n    reyting <b>43</b> · rol 88% · chiqim 2.90/90 · egalik 20.4%\n  Tavernier (BOU, 6.7m)\n    reyting <b>43</b> · rol 94% · chiqim 2.70/90 · egalik 31.3%\n  Mbeumo (MUN, 7.9m)\n    reyting <b>41</b> · rol 96% · chiqim 2.56/90 · egalik 19.2%\n\n<u>Himoyachi</u>\n  De Cuyper (BHA, 5.5m)\n    reyting <b>36</b> · rol 94% · chiqim 2.30/90 · egalik 47.7%\n  Davis (IPS, 4.0m)\n    reyting <b>21</b> · rol 89% · chiqim 1.43/90 · egalik 6.6%\n  Bogle (LEE, 4.8m)\n    reyting <b>20</b> · rol 87% · chiqim 1.40/90 · egalik 11.2%\n  Van Hecke (TOT, 5.1m)\n    reyting <b>19</b> · rol 94% · chiqim 1.22/90 · egalik 14.5%\n    <i>bozor olyapti (+10%)</i>"
   },
   {
    "key": "value",
@@ -28,22 +28,22 @@
   {
    "key": "momentum",
    "title": "📊 Bozor",
-   "text": "<b>📊 BOZOR HARAKATI (shu tur)</b>\n<i>Eng ko'p olinmoqda:</i>\n  ↗ N.Jackson (AVL, 7.1m) <b>+246,204</b> · egalik 30.6% · rol 84%\n  ↗ Barry (EVE, 5.7m) <b>+179,678</b> · egalik 10.5% · rol 92%\n  ↗ Evanilson (BOU, 6.5m) <b>+160,587</b> · egalik 23.4% · rol 94%\n  ↗ Van Hecke (TOT, 5.1m) <b>+146,282</b> · egalik 14.4% · rol 94%\n  ↗ De Cuyper (BHA, 5.5m) <b>+119,124</b> · egalik 47.6% · rol 94%\n<i>Eng ko'p sotilmoqda:</i>\n  ↘ João Pedro (CHE, 7.6m) <b>-264,506</b> · egalik 32.2%\n  ↘ Gvardiol (MCI, 5.6m) <b>-246,245</b> · egalik 23.1%\n  ↘ Guéhi (MCI, 6.0m) <b>-115,952</b> · egalik 14.3%\n  ↘ Calvert-Lewin (LEE, 6.0m) <b>-91,629</b> · egalik 17.7%\n  ↘ Thiago (BRE, 7.8m) <b>-76,915</b> · egalik 8.3%"
+   "text": "<b>📊 BOZOR HARAKATI (shu tur)</b>\n<i>Eng ko'p olinmoqda:</i>\n  ↗ N.Jackson (AVL, 7.1m) <b>+270,054</b> · egalik 30.9% · rol 84%\n  ↗ Barry (EVE, 5.7m) <b>+188,111</b> · egalik 10.6% · rol 92%\n  ↗ Evanilson (BOU, 6.5m) <b>+176,867</b> · egalik 23.6% · rol 94%\n  ↗ Van Hecke (TOT, 5.1m) <b>+156,550</b> · egalik 14.5% · rol 94%\n  ↗ Vuskovic (BHA, 5.3m) <b>+133,269</b> · egalik 9.1% · rol 93%\n<i>Eng ko'p sotilmoqda:</i>\n  ↘ João Pedro (CHE, 7.6m) <b>-285,067</b> · egalik 32.0%\n  ↘ Gvardiol (MCI, 5.6m) <b>-264,233</b> · egalik 22.9%\n  ↘ Guéhi (MCI, 6.0m) <b>-127,164</b> · egalik 14.2%\n  ↘ Calvert-Lewin (LEE, 6.0m) <b>-98,235</b> · egalik 17.6%\n  ↘ Thiago (BRE, 7.8m) <b>-85,632</b> · egalik 8.2%"
   },
   {
    "key": "template",
    "title": "🔄 Shablon",
-   "text": "<b>🔄 SHABLON BILAN TENGLASHISH — Top-100</b>\n<i>Ommaviy o'yinchi ikki tomonlama foyda beradi: EV odatda yuqori, va u ochko olganda siz orqada qolmaysiz.</i>\n<i>Bank: 4.1m</i>\n\n<b>1.</b> King (5.5m, EO 6%) ➜ <b>Groß</b> (6.3m, EO 89%)\n    EV <b>+5.0</b> · EO <b>+83%</b> · EV ham, maydon himoyasi ham yaxshilanadi\n\n<b>2.</b> Davis (4.0m, EO 0%) ➜ <b>Gabriel</b> (8.1m, EO 58%)\n    EV <b>+6.8</b> · EO <b>+58%</b> · EV ham, maydon himoyasi ham yaxshilanadi\n\n<b>3.</b> Mykolenko (4.5m, EO 3%) ➜ <b>Van Hecke</b> (5.1m, EO 50%)\n    EV <b>+5.5</b> · EO <b>+47%</b> · EV ham, maydon himoyasi ham yaxshilanadi\n\n<b>4.</b> Maguire (4.6m, EO 0%) ➜ <b>Calafiori</b> (5.9m, EO 71%)\n    EV <b>+3.2</b> · EO <b>+71%</b> · EV ham, maydon himoyasi ham yaxshilanadi\n\n<b>5.</b> Konsa (4.6m, EO 77%) ➜ <b>Muharemović</b> (5.1m, EO 50%)\n    EV <b>+0.2</b> · EO <b>-27%</b> · EV yuqoriroq"
+   "text": "<b>🔄 SHABLON BILAN TENGLASHISH — Top-100</b>\n<i>Ommaviy o'yinchi ikki tomonlama foyda beradi: EV odatda yuqori, va u ochko olganda siz orqada qolmaysiz.</i>\n<i>Bank: 4.1m</i>\n\n<b>1.</b> Maguire (4.6m, EO 0%) ➜ <b>Calafiori</b> (5.9m, EO 70%)\n    EV <b>+7.1</b> · EO <b>+70%</b> · EV ham, maydon himoyasi ham yaxshilanadi\n\n<b>2.</b> King (5.5m, EO 6%) ➜ <b>Groß</b> (6.3m, EO 89%)\n    EV <b>+5.0</b> · EO <b>+83%</b> · EV ham, maydon himoyasi ham yaxshilanadi\n\n<b>3.</b> Davis (4.0m, EO 0%) ➜ <b>Gabriel</b> (8.1m, EO 59%)\n    EV <b>+6.8</b> · EO <b>+59%</b> · EV ham, maydon himoyasi ham yaxshilanadi\n\n<b>4.</b> Mykolenko (4.5m, EO 3%) ➜ <b>Van Hecke</b> (5.1m, EO 50%)\n    EV <b>+5.5</b> · EO <b>+47%</b> · EV ham, maydon himoyasi ham yaxshilanadi\n\n<b>5.</b> Konsa (4.6m, EO 76%) ➜ <b>Muharemović</b> (5.1m, EO 49%)\n    EV <b>+0.1</b> · EO <b>-27%</b> · EV yuqoriroq"
   },
   {
    "key": "strategy",
    "title": "🎯 Strategiya",
-   "text": "<b>🎯 STRATEGIYA — MUVOZANAT</b>\n<i>yuqori 16.1% dasiz — ommaviy tanlov sizni yuqoriga ko'tarmaydi, o'rin ko'tarish uchun farq kerak · siz «balanced» ni majburan tanladingiz</i>\n\n<b>Top-100</b> bilan 11 likka 11 lik: meniki <b>56.2</b> vs shablon <b>58.3</b> = <b>-2.1 ochko/tur</b> — har tur maydonga yutqazyapsiz\n<i>Menda yo'q, ular har tur shundan yutadi (EO × EV):</i>\n  ▼ Groß — 89% EO · 4.4 EV · <b>-3.93</b>/tur\n  ▼ Gabriel — 58% EO · 6.1 EV · <b>-3.53</b>/tur\n  ▼ Calafiori — 71% EO · 4.5 EV · <b>-3.23</b>/tur\n  ▼ Van Hecke — 50% EO · 6.2 EV · <b>-3.11</b>/tur\n  ▼ Muharemović — 50% EO · 5.5 EV · <b>-2.77</b>/tur\n<i>Mening 11 ligimdagi ustunliklarim:</i>\n  ▲ Davis — 0% EO · 4.5 EV · <b>+4.48</b>/tur\n  ▲ Mykolenko — 3% EO · 4.5 EV · <b>+4.39</b>/tur\n  ▲ Tavernier — 65% EO · 5.3 EV · <b>+1.87</b>/tur\n<i>Yuqoridagi qatorlar farqning izohi — ular qo'shilib umumiy songa aylanmaydi.</i>"
+   "text": "<b>🎯 STRATEGIYA — MUVOZANAT</b>\n<i>yuqori 16.1% dasiz — ommaviy tanlov sizni yuqoriga ko'tarmaydi, o'rin ko'tarish uchun farq kerak · siz «balanced» ni majburan tanladingiz</i>\n\n<b>Top-100</b> bilan 11 likka 11 lik: meniki <b>56.2</b> vs shablon <b>58.3</b> = <b>-2.1 ochko/tur</b> — har tur maydonga yutqazyapsiz\n<i>Menda yo'q, ular har tur shundan yutadi (EO × EV):</i>\n  ▼ Groß — 89% EO · 4.4 EV · <b>-3.93</b>/tur\n  ▼ Gabriel — 59% EO · 6.1 EV · <b>-3.59</b>/tur\n  ▼ Calafiori — 70% EO · 4.5 EV · <b>-3.18</b>/tur\n  ▼ Van Hecke — 50% EO · 6.2 EV · <b>-3.11</b>/tur\n  ▼ Muharemović — 49% EO · 5.5 EV · <b>-2.72</b>/tur\n<i>Mening 11 ligimdagi ustunliklarim:</i>\n  ▲ Davis — 0% EO · 4.5 EV · <b>+4.48</b>/tur\n  ▲ Mykolenko — 3% EO · 4.5 EV · <b>+4.39</b>/tur\n  ▲ Tavernier — 66% EO · 5.3 EV · <b>+1.82</b>/tur\n<i>Yuqoridagi qatorlar farqning izohi — ular qo'shilib umumiy songa aylanmaydi.</i>"
   },
   {
    "key": "transfers",
    "title": "🔁 Transfer",
-   "text": "<b>🔁 TRANSFER REJASI</b> · 2 FT · bank 4.1m\n\n<b>▶ TAVSIYA</b> (1 ta transfer)\n  Maguire (4.6) ➜ Gabriel (8.1)\n  foyda <b>+8.6 EV</b> (kelgusi turlar bo'yicha) · hit yo'q · +3.5m, bank 0.6m\n\n<i>Muqobillar (bir vaqtda emas — har biri bankni o'zicha ishlatadi):</i>\n  • Davis (4.0) ➜ Van Hecke (5.1) — +5.5 EV, bank 3.0m"
+   "text": "<b>🔁 TRANSFER REJASI</b> · 2 FT · bank 4.1m\n\n<b>▶ TAVSIYA</b> (1 ta transfer)\n  Maguire (4.6) ➜ Gabriel (8.1)\n  foyda <b>+9.2 EV</b> (kelgusi turlar bo'yicha) · hit yo'q · +3.5m, bank 0.6m\n\n<i>Muqobillar (bir vaqtda emas — har biri bankni o'zicha ishlatadi):</i>\n  • Davis (4.0) ➜ Van Hecke (5.1) — +5.5 EV, bank 3.0m"
   },
   {
    "key": "captain",
@@ -53,12 +53,12 @@
   {
    "key": "squad",
    "title": "🧠 Jamoam",
-   "text": "<b>🧠 MENING JAMOAM</b>\nQiymat <b>100.8m</b> · bank 4.1m · FT ≈ 2\nGW11 eng yaxshi sxema: <b>4-3-3</b> — 56.2 EV\nKelgusi 5 tur (vaznlangan): <b>236.7 EV</b>\n<i>Eng zaif bo'g'inlar:</i>\n• Dubravka (DRV) — 2.6 EV · asosiy tarkib ehtimoli 5%, shu narxdagi eng yaxshisidan 18.1 EV orqada, kelgusi turlarning hammasi zaif\n• King (YAR) — 13.9 EV · shu narxdagi eng yaxshisidan 4.3 EV orqada\n• Barnes (YAR) — 16.0 EV · tarkibdagi eng past EV, lekin jiddiy muammo yo'q"
+   "text": "<b>🧠 MENING JAMOAM</b>\nQiymat <b>100.8m</b> · bank 4.1m · FT ≈ 2\nGW11 eng yaxshi sxema: <b>4-3-3</b> — 56.2 EV\nKelgusi 5 tur (vaznlangan): <b>236.2 EV</b>\n<i>Eng zaif bo'g'inlar:</i>\n• Dubravka (DRV) — 2.6 EV · asosiy tarkib ehtimoli 5%, shu narxdagi eng yaxshisidan 18.1 EV orqada, kelgusi turlarning hammasi zaif\n• Maguire (HIM) — 12.3 EV · yengil shubha, shu narxdagi eng yaxshisidan 12.3 EV orqada\n• King (YAR) — 13.9 EV · shu narxdagi eng yaxshisidan 4.3 EV orqada"
   },
   {
    "key": "xi",
    "title": "📋 11 lik",
-   "text": "<b>📋 GW11 TAVSIYA ETILGAN 11 LIK</b>\nDRV Raya — 5.3 · NEW(m)\nHIM De Cuyper — 5.7 · HUL(m)\nHIM Konsa — 5.5 · NEW(m)\nHIM Mykolenko — 4.5 · BRE(m)\nHIM Davis — 4.5 · TOT(m)\nYAR Tavernier — 5.3 · NFO(u)\nYAR Rogers — 5.0 · LEE(u)\nYAR Palmer — 4.9 · LEE(u)\nHUJ Haaland — 6.7 · FUL(u)\nHUJ N.Jackson — 4.6 · SUN(u)\nHUJ Barry — 4.3 · BRE(m)\n<i>Zaxira:</i> Barnes (4.0), Maguire (3.8), King (3.3), Dubravka (0.6)"
+   "text": "<b>📋 GW11 TAVSIYA ETILGAN 11 LIK</b>\nDRV Raya — 5.3 · NEW(m)\nHIM De Cuyper — 5.7 · HUL(m)\nHIM Konsa — 5.5 · NEW(m)\nHIM Mykolenko — 4.5 · BRE(m)\nHIM Davis — 4.5 · TOT(m)\nYAR Tavernier — 5.3 · NFO(u)\nYAR Rogers — 5.0 · LEE(u)\nYAR Palmer — 4.9 · LEE(u)\nHUJ Haaland — 6.7 · FUL(u)\nHUJ N.Jackson — 4.6 · SUN(u)\nHUJ Barry — 4.3 · BRE(m)\n<i>Zaxira:</i> Barnes (4.0), King (3.3), Maguire (2.9), Dubravka (0.6)"
   },
   {
    "key": "fdr",
@@ -73,22 +73,22 @@
   {
    "key": "rivals",
    "title": "👥 Raqiblar",
-   "text": "<b>👥 RAQIBLAR TAHLILI</b>\n<i>EO = egalik % + kapitanlik %. Shuning uchun 100% dan oshishi mumkin: hamma egallagan va yarmi kapitan qilgan o'yinchi 150% beradi.</i>\n<u>Mini-liga: FPLUzbekistan</u> (50 jamoa · o'rtacha 677 ochko)\n⛔ Menda yo'q, ularda bor: Calafiori 88% (K 2%), Groß 80%, Verbruggen 40%, Evanilson 36%\n💎 Mening differensiallarim: Maguire 0%, Davis 2%, King 6%, Mykolenko 8%\n🅲 Ularning kapitani: Haaland 80%, Isak 8%, Rogers 6%\n🎴 Chip ishlatganlar: Bench Boost 10, Wildcard 1, Triple Captain 1\n\n<u>Mini-liga: Overall</u> (50 jamoa · o'rtacha 788 ochko)\n⛔ Menda yo'q, ularda bor: Groß 92%, Calafiori 66% (K 10%), Gabriel 42% (K 12%), Van Hecke 50%\n💎 Mening differensiallarim: Maguire 0%, Davis 0%, Mykolenko 2%, King 6%\n🅲 Ularning kapitani: Haaland 48%, Isak 16%, Gabriel 12%\n🎴 Chip ishlatganlar: Bench Boost 12\n\n<u>Mini-liga: Uzbekistan</u> (50 jamoa · o'rtacha 697 ochko)\n⛔ Menda yo'q, ularda bor: Groß 90%, Calafiori 82% (K 2%), Verbruggen 62%, Evanilson 44%\n💎 Mening differensiallarim: King 0%, Maguire 2%, Davis 6%, Mykolenko 10%\n🅲 Ularning kapitani: Haaland 82%, Isak 6%, Gabriel 2%\n🎴 Chip ishlatganlar: Bench Boost 9\n\n<u>Top-100</u> (100 jamoa · o'rtacha 783 ochko)\n⛔ Menda yo'q, ularda bor: Groß 89%, Calafiori 64% (K 7%), Gabriel 45% (K 13%), Van Hecke 50%\n💎 Mening differensiallarim: Maguire 0%, Davis 0%, Mykolenko 3%, King 6%\n🅲 Ularning kapitani: Haaland 54%, Isak 14%, Gabriel 13%\n🎴 Chip ishlatganlar: Bench Boost 18\n\n<u>Mendan ~1% tepada (≈1,705,038)</u> (25 jamoa · o'rtacha 625 ochko)\n⛔ Menda yo'q, ularda bor: Calafiori 72% (K 4%), Groß 72%, Mbeumo 40%, Evanilson 36% (K 4%)\n💎 Mening differensiallarim: Maguire 0%, Mykolenko 4%, King 8%, Barnes 12%\n🅲 Ularning kapitani: Haaland 84%, Calafiori 4%, Isak 4%\n🎴 Chip ishlatganlar: Triple Captain 1, Bench Boost 2\n\n<u>Mendan ~1% pastda (≈1,930,562)</u> (25 jamoa · o'rtacha 620 ochko)\n⛔ Menda yo'q, ularda bor: Groß 84%, Calafiori 68%, Gvardiol 60%, Cherki 60%\n💎 Mening differensiallarim: Maguire 0%, Mykolenko 4%, King 4%, Barnes 8%\n🅲 Ularning kapitani: Haaland 88%, Tavernier 4%, N.Jackson 4%\n🎴 Chip ishlatganlar: Bench Boost 2, Free Hit 1, Triple Captain 1"
+   "text": "<b>👥 RAQIBLAR TAHLILI</b>\n<i>EO = egalik % + kapitanlik %. Shuning uchun 100% dan oshishi mumkin: hamma egallagan va yarmi kapitan qilgan o'yinchi 150% beradi.</i>\n<u>Mini-liga: FPLUzbekistan</u> (50 jamoa · o'rtacha 678 ochko)\n⛔ Menda yo'q, ularda bor: Calafiori 86% (K 2%), Groß 78%, Verbruggen 42%, Evanilson 38%\n💎 Mening differensiallarim: Maguire 0%, Davis 2%, King 6%, Mykolenko 10%\n🅲 Ularning kapitani: Haaland 80%, Isak 8%, Rogers 6%\n🎴 Chip ishlatganlar: Bench Boost 11, Wildcard 1, Triple Captain 1\n\n<u>Mini-liga: Overall</u> (50 jamoa · o'rtacha 788 ochko)\n⛔ Menda yo'q, ularda bor: Groß 92%, Calafiori 64% (K 8%), Gabriel 42% (K 12%), Van Hecke 50%\n💎 Mening differensiallarim: Maguire 0%, Davis 0%, Mykolenko 2%, King 6%\n🅲 Ularning kapitani: Haaland 50%, Isak 16%, Gabriel 12%\n🎴 Chip ishlatganlar: Bench Boost 12\n\n<u>Mini-liga: Uzbekistan</u> (50 jamoa · o'rtacha 697 ochko)\n⛔ Menda yo'q, ularda bor: Groß 90%, Calafiori 80% (K 2%), Verbruggen 60%, Kinsky 46%\n💎 Mening differensiallarim: King 0%, Maguire 2%, Davis 6%, Mykolenko 10%\n🅲 Ularning kapitani: Haaland 82%, Isak 6%, Gabriel 2%\n🎴 Chip ishlatganlar: Bench Boost 9\n\n<u>Top-100</u> (100 jamoa · o'rtacha 783 ochko)\n⛔ Menda yo'q, ularda bor: Groß 89%, Calafiori 63% (K 7%), Gabriel 46% (K 13%), Van Hecke 50%\n💎 Mening differensiallarim: Maguire 0%, Davis 0%, Mykolenko 3%, King 6%\n🅲 Ularning kapitani: Haaland 54%, Isak 14%, Gabriel 13%\n🎴 Chip ishlatganlar: Bench Boost 18\n\n<u>Mendan ~1% tepada (≈1,704,985)</u> (25 jamoa · o'rtacha 625 ochko)\n⛔ Menda yo'q, ularda bor: Groß 76% (K 4%), Calafiori 64%, Evanilson 48% (K 8%), Gvardiol 48%\n💎 Mening differensiallarim: King 0%, Maguire 4%, Mykolenko 4%, Barry 8%\n🅲 Ularning kapitani: Haaland 72%, Evanilson 8%, Isak 4%\n🎴 Chip ishlatganlar: Wildcard 1, Bench Boost 3, Triple Captain 1\n\n<u>Mendan ~1% pastda (≈1,930,613)</u> (25 jamoa · o'rtacha 620 ochko)\n⛔ Menda yo'q, ularda bor: Groß 80%, Calafiori 68% (K 4%), Evanilson 52% (K 8%), Verbruggen 44%\n💎 Mening differensiallarim: Maguire 0%, Mykolenko 0%, Barry 4%, King 8%\n🅲 Ularning kapitani: Haaland 84%, Evanilson 8%, Calafiori 4%\n🎴 Chip ishlatganlar: Wildcard 1, Bench Boost 1"
   },
   {
    "key": "news",
    "title": "🩺 Xabarlar",
-   "text": "<b>🩺 YANGI XABARLAR</b>\n🟢 <b>King</b> (FUL) · 100% — xabar olib tashlandi — o'ynashi mumkin ⚠️ <b>sizda bor</b>\n🔴 <b>Virgil</b> (LIV) · 75% — Unspecified injury - 75% chance of playing"
+   "text": "<b>🩺 YANGI XABARLAR</b>\n🔴 <b>Maguire</b> (MUN) · 75% — Back injury - 75% chance of playing ⚠️ <b>sizda bor</b>\n🔴 <b>Belloumi</b> (HUL) · 75% — Hamstring injury - 75% chance of playing\n🔴 <b>Brobbey</b> (SUN) · 75% — Muscular injury - 75% chance of playing"
   },
   {
    "key": "prices",
    "title": "💷 Narxlar",
-   "text": "<b>💷 NARXLAR</b>\n<i>Kecha o'zgardi:</i>\n↓ Anderson (MCI) 6.2\n↓ Wilson (LEE) 6.1\n↓ Madjo (AVL) 5.3\n↓ Wharton (CRY) 5.3\n↓ Doucouré (CRY) 4.7\n<i>Bugun kechqurun kutilmoqda:</i>\n↑ Verbruggen (BHA) 4.6 — 100% · ~0 soat\n↓ Amass (MUN) 4.0 — 100%\n↑ Dewsbury-Hall (EVE) 6.6 — 100% · ~0 soat\n↓ Steur (NEW) 4.8 — 99%\n↑ Konsa (ARS) 4.8 — 79% · ~4 soat · <b>sizda</b>\n↑ N.Jackson (AVL) 7.1 — 50% · ~4 soat · <b>sizda</b>"
+   "text": "<b>💷 NARXLAR</b>\n<i>Kecha o'zgardi:</i>\n↑ Dewsbury-Hall (EVE) 6.7\n↑ Verbruggen (BHA) 4.7\n↓ Amass (MUN) 3.9\n<i>Bugun kechqurun kutilmoqda:</i>\n↓ Steur (NEW) 4.8 — 100% · <b>bugun</b>\n↑ Konsa (ARS) 4.8 — 85% · ~5 soat · <b>sizda</b>"
   },
   {
    "key": "chips",
    "title": "🎴 Chip",
-   "text": "<b>🎴 CHIP SIGNALI</b>\n• <b>Bench Boost</b> — GW14: +12.1 EV (zaxira 4 o'yinchi, 12.1 EV)"
+   "text": "<b>🎴 CHIP SIGNALI</b>\n• <b>Bench Boost</b> — GW14: +11.1 EV (zaxira 4 o'yinchi, 11.1 EV)"
   }
  ]
 }
