@@ -5,7 +5,8 @@
 > qaysi yo'l sinalib rad etilgani va qaysi xatolar qaytib kelmasligi kerak.
 > Kodni qayta yozish mumkin, bu bilimni esa yo'q.
 
-**Sana:** 2026-11-18 · **Holat:** web sahifada 5 ta modul ishlaydi, 323 ta test o'tadi
+**Sana:** 2026-11-18 · **Holat:** web sahifada 5 ta modul ishlaydi, 348 ta test o'tadi,
+model `tools/backtest.py` bilan haqiqiy ochkoga solishtirilgan (4.1-bo'lim)
 
 ---
 
@@ -82,8 +83,8 @@ Telegram botga ko'chiriladi.
 fpl-analytics/
 ├── fplbrain/          model yadrosi — bot ham, web ham shuni ishlatadi
 ├── web/               Flask ilova + bitta HTML sahifa
-├── tools/             sso_probe.py — DaVinci tashxisi
-├── tests/             323 ta test
+├── tools/             sso_probe.py — DaVinci tashxisi; backtest.py — model tekshiruvi
+├── tests/             348 ta test
 ├── run.py             Telegram bot / CLI hisobot
 └── serve.py           web sahifani ishga tushirish
 ```
@@ -148,9 +149,15 @@ Bu loyihaning yuragi. Har bir qism nima uchun borligi bilan.
 
 ### 3.2 Daqiqalar
 
-Uch manbadan: rol priori (egalik + narx) → so'nggi turlar (ketma-ket 60+
-chiqishlar quyi chegara qo'yadi: 1 tur → 0.75, 2 → 0.82, 3+ → 0.88) →
-xabarlar (`chance_of_playing_next_round`).
+Uch manbadan: rol priori (egalik + narx) → so'nggi o'yinlar → xabarlar
+(`chance_of_playing_next_round`).
+
+So'nggi o'yinlar — **o'lchangan holat modeli** (`state_start_prob`, 3+ o'yin
+tarixi bo'lganda): so'nggi o'yin holati × so'nggi 6 o'yindagi boshlash ulushi.
+Masalan: ketma-ket 3+ marta 60+ → 0.91; bir marta → 0.73; o'tgan turda
+o'ynamadi → 0.09 (zaxira) … 0.41 (doimiy asosiy); zaxiradan qisqa chiqish →
+0.13. Batafsil tarix yo'q bo'lsa (ro'yxat rejimi) — mavsumdagi boshlash ulushi
++ `event_points` (o'tgan turdagi ochko: 0 / 1 / 2+).
 
 Chiqadi: `p_start`, `p_appear`, `p60`, `xmins`.
 
@@ -283,6 +290,37 @@ tekshiradi:
 Model 30 larda javob bersa — biror qism tushib qolgan (odatda: bonus,
 DefCon yoki 60 daqiqalik ochko).
 
+### 4.1 Backtest — haqiqiy ochko bilan solishtirish
+
+`tools/backtest.py` har o'tgan tur uchun **faqat o'sha paytgacha bo'lgan**
+ma'lumotdan bashorat qurib, haqiqiy ochko bilan solishtiradi (qismlar bo'yicha
+ham: ishtirok, gol, toza darvoza, DefCon, bonus…). Modelga tegishdan oldin va
+keyin ishga tushiring:
+
+```powershell
+python tools/backtest.py              # keshdan (data/cache/backtest_raw.json)
+python tools/backtest.py --refresh    # FPL dan qayta yuklash (~460 so'rov)
+```
+
+2026/27, GW3-10, "safdagi" ~2800 o'yinchi-tur (patch040 oldin → keyin):
+
+| Ko'rsatkich | Ro'yxat rejimi | Batafsil tarix rejimi |
+|---|---|---|
+| RMSE | 2.75 → 2.70 | 2.72 → 2.67 |
+| Bias (bashorat − haqiqat) | −0.21 → +0.01 | −0.05 → +0.01 |
+| Har turda top-20 ning haqiqiy ochkosi | 4.59 → 4.86 | 4.81 → 5.15 |
+| Spearman (EV ≥ 2) | 0.217 → 0.223 | 0.196 → 0.233 |
+| Sodda baza (mavsumiy PPG) RMSE | 2.97 | 2.97 |
+
+"Ro'yxat rejimi" — faqat bootstrap (hamma o'yinchi shunday baholanadi);
+"batafsil tarix" — `element-summary` bilan (jamoangiz va transfer nomzodlari).
+
+**Backtestning cheklovlari:** jarohat bayroqlari tarixda yo'q; jamoalarning
+`strength` qiymati va penaltichi belgilari — bugungi. 8 tur — kichik namuna:
+EV ≥ 6 oralig'ida (~20 ta kuzatuv, 4-5 o'yinchi) model hali ~1.5 ochko
+oshirib ko'rsatadi, lekin bu xulosa uchun yetarli emas. Koeffitsiyentlarni
+shu 8 turga moslab "sozlash" — overfit; faqat tuzilmaviy xatolar tuzatilgan.
+
 > **Aniqlik shifti.** FPL Review ning "Ultimate Truth" tahliliga ko'ra
 > **mukammal** model ham RMSE ≈ 2.7–2.9, R² ≈ 0.11–0.19 dan yaxshi
 > qilolmaydi — FPL ochkosi asosan tasodifdan iborat. R² ni quvish befoyda;
@@ -308,6 +346,14 @@ Har biri haqiqatan sodir bo'lgan va test bilan qulflangan.
 | 10 | DaVinci: bo'sh `buttonValue` | Tugma ham maydon |
 | 11 | DaVinci: birinchi tugma (`REGISTER`) | **Tanlanadi**, olinmaydi |
 | 12 | Bitta brauzer profili hamma akkauntga | Har email — **o'z profili** |
+| 13 | FPL `strength_attack/defence` = **0** (2026/27) → hujum priori 0.55 ga yopishadi, gollar −20% | Nol bo'lsa `strength_overall` (2..5) ga o'tiladi, liga o'rtachasi 1.0 ga normallanadi |
+| 14 | DefCon/o'tkazilgan gol/to'xtatish: tezlik × daqiqa ulushi, keyin chegara | **O'ynagan holat** bo'yicha: `p60 × P(chegara \| 85 daqiqa)` — DefCon 3 barobar kam chiqardi |
+| 15 | DefCon priori HIM 6.6 / YAR 5.8, dispersiya 1.8 | HIM 7.7, YAR 6.0–9.3 (narxga teskari), ichki dispersiya 1.4 + tezlik noaniqligi |
+| 16 | Bonus lifti "o'rtacha o'yinchi"ga nisbatan | O'yinchining **o'z neytral uchrashuviga** nisbatan — aks holda premium ikki marta mukofotlanadi |
+| 17 | Uzatma = xA | `xA + 0.22·xG` — FPL uzatmasi kengroq (jami uzatma/xA = 1.37, HUJ da 2.8) |
+| 18 | "O'ynamadi" → boshlash ≤ 0.45; "zaxiradan qisqa" → ≤ 0.55 | O'lchangan: 0.09–0.41 va 0.13–0.24 (`state_start_prob`) |
+| 19 | Toza darvoza = jamoaniki | O'yinchi maydonda bo'lgan vaqt uchun: `exp(−λ × daqiqa/90) × 1.04` |
+| 20 | Ro'yxat rejimida o'rnini yo'qotgan o'yinchi mavsum o'rtachasi bilan | `event_points` — so'nggi o'yin izi (faqat jamoa turni tugatgan bo'lsa) |
 
 ### Haqiqiy FPL javobi (test uchun etalon)
 
@@ -422,6 +468,8 @@ xi_risk_aversion: 0.35         # 11 likda ishonchlilikka urg'u
 bench_weight: 0.14
 horizon_decay: 0.90
 hit_cost: 4.0
+team_form_shrink_matches: 10.0 # backtest: 6.0 so'nggi natijalarga ortiqcha ishonardi
+shrink_defcon_90s: 2.0         # DefCon tezligi o'yinchiga xos, tez barqarorlashadi
 european_teams: [ARS, LIV, MCI, NEW, TOT, AVL, CHE]   # qo'lda, har mavsum
 # free_transfers_override: 0   # login bo'lsa E'TIBORSIZ qoladi
 ```
@@ -432,7 +480,7 @@ european_teams: [ARS, LIV, MCI, NEW, TOT, AVL, CHE]   # qo'lda, har mavsum
 
 ---
 
-## 9. Testlar — 323 ta
+## 9. Testlar — 348 ta
 
 | Fayl | Nimani qulflaydi |
 |---|---|
@@ -446,6 +494,7 @@ european_teams: [ARS, LIV, MCI, NEW, TOT, AVL, CHE]   # qo'lda, har mavsum
 | `test_pl_sso.py` | DaVinci oqimi (soxta PingOne server) |
 | `test_web.py` | Barcha endpointlar, ko'p foydalanuvchi ajratilishi |
 | `test_table.py` | Arsenal/Villa regressiyasi |
+| `test_backtest_fixes.py` | Backtest topgan xatolar (5-bo'lim, 13–20) |
 
 ```powershell
 python -m pytest -q

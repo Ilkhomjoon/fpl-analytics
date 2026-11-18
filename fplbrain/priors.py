@@ -60,17 +60,23 @@ def role_prior(ownership: float, price: float) -> float:
 # Narxdan kutilayotgan hujum chiqimi. Chegara qiymatlar Premier League
 # o'rtachalaridan: eng arzon o'yinchi deyarli hech narsa bermaydi, eng
 # qimmati esa mavsumiga ~20 gol+uzatma darajasida.
+#
+# Qiymatlar 2026/27 ning dastlabki 10 turi bo'yicha tekshirilgan
+# (`tools/backtest.py`, narx oralig'i bo'yicha daqiqa bilan vaznlangan xG/90):
+#   * arzon HUJ ilgari juda past baholangan edi (5.5m: prior 0.18, haqiqat ~0.40)
+#     — maydonga tushayotgan arzon hujumchi ham hujumchi;
+#   * HUJ ning xA si narxga deyarli bog'liq emas va past (~0.06).
 _XG90_RANGE = {                    # (eng arzon, eng qimmat, narx oralig'i)
     GK:  (0.00, 0.00, 1.0),
-    DEF: (0.02, 0.14, 4.0),        # 4.0m → 0.02, 8.0m → 0.14
-    MID: (0.04, 0.48, 9.0),        # 4.5m → 0.04, 13.5m → 0.48
-    FWD: (0.12, 0.72, 10.0),       # 4.5m → 0.12, 14.5m → 0.72
+    DEF: (0.04, 0.13, 3.0),        # 4.0m → 0.04, 7.0m → 0.13
+    MID: (0.08, 0.50, 8.0),        # 4.5m → 0.08, 12.5m → 0.50
+    FWD: (0.22, 0.70, 10.0),       # 4.5m → 0.22, 14.5m → 0.70
 }
 _XA90_RANGE = {
     GK:  (0.01, 0.02, 1.0),
-    DEF: (0.03, 0.18, 4.0),
-    MID: (0.06, 0.38, 9.0),
-    FWD: (0.05, 0.28, 10.0),
+    DEF: (0.045, 0.10, 4.0),
+    MID: (0.06, 0.30, 7.0),
+    FWD: (0.04, 0.14, 10.0),
 }
 _BASE_PRICE = {GK: 4.0, DEF: 4.0, MID: 4.5, FWD: 4.5}
 
@@ -91,24 +97,35 @@ def xa90_prior(price: float, position: int) -> float:
     return _from_price(price, position, _XA90_RANGE)
 
 
-# DefCon harakatlari narxga bog'liq emas — pozitsiya va o'yin uslubiga bog'liq.
-# Arzon himoyachilar ko'proq CBIT to'playdi (ko'proq himoyalanadigan jamoalar).
-_DC90_PRIOR = {GK: 0.0, DEF: 6.6, MID: 5.8, FWD: 3.2}
+# DefCon harakatlari (90 daqiqaga). Ilgari priorlar ancha past edi
+# (HIM 6.6, YAR 5.8) va DefCon ~3 barobar kam baholanardi. O'lchangan
+# qiymatlar: HIM ~7.7 (narxga bog'liq emas), HUJ ~4.6, YAR esa narxga
+# TESKARI bog'liq — arzon yarim himoyachi odatda tayanch (9+), qimmati
+# hujumkor (6). YAR da qaytarib olishlar (recoveries) ham sanaladi.
+_DC90_PRIOR = {GK: 0.0, DEF: 7.7, MID: 7.6, FWD: 4.6}
 
 
 def dc90_prior(price: float, position: int) -> float:
-    """Himoya harakatlari priori. Qimmat himoyachi hujumkorroq — kamroq CBIT."""
-    base = _DC90_PRIOR[position]
-    if position == DEF and price >= 5.5:
-        base *= 0.88            # hujumkor fullbacklar kamroq himoyalanadi
-    return base
+    """Himoya harakatlari priori (CBIT; YAR/HUJ uchun CBIRT) — 90 daqiqaga."""
+    if position == MID:
+        return max(6.0, min(9.3, 9.3 - (price - 4.8) * 1.05))
+    return _DC90_PRIOR[position]
 
 
 def bonus90_prior(price: float, position: int) -> float:
-    """Bonus to'plash moyilligi — narx bilan o'sadi."""
-    base = {GK: 0.28, DEF: 0.24, MID: 0.22, FWD: 0.26}[position]
-    lift = max(0.0, min(1.0, (price - _BASE_PRICE[position]) / 8.0))
-    return base + lift * 0.55
+    """Bonus to'plash moyilligi — narx bilan o'sadi.
+
+    O'lchangan (90 daqiqaga): DRV ~0.28; HIM 4.2m 0.12 → 6.5m 0.37;
+    YAR 4.8m 0.09 → 7.9m 0.63; HUJ 5.3m 0.46 → 7.0m 0.84. Hujumchilar
+    ilgari ikki barobar kam baholangan edi.
+    """
+    if position == GK:
+        return 0.28
+    if position == DEF:
+        return max(0.10, min(0.45, 0.12 + 0.13 * (price - 4.0)))
+    if position == MID:
+        return max(0.08, min(0.65, 0.05 + 0.22 * (price - 4.5)))
+    return max(0.35, min(0.90, 0.40 + 0.20 * (price - 5.0)))
 
 
 def evidence_weight(nineties: float, k: float) -> float:

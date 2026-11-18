@@ -57,6 +57,30 @@ def pick_events(bootstrap: dict, horizon: int) -> tuple[int, int, list[int]]:
     return picks_event, nxt["id"], horizon_events
 
 
+def teams_done_last_event(bootstrap: dict, fixtures: list[dict]) -> set[int]:
+    """Joriy turda o'yinini **tugatgan** jamoalar.
+
+    Bootstrapdagi `event_points` — joriy turdagi ochko. Uni "so'nggi o'yin
+    holati" deb o'qish faqat jamoa shu turda o'ynab bo'lgan bo'lsa to'g'ri:
+    tur davom etayotgan yoki jamoa bo'sh turda bo'lsa, 0 ochko "o'ynamadi"
+    degani emas. Bunday jamoalar to'plamga kirmaydi va model ular uchun
+    mavsum o'rtachasiga qaytadi.
+    """
+    current = next((e["id"] for e in bootstrap.get("events", [])
+                    if e.get("is_current")), None)
+    if current is None:
+        return set()
+    done: dict[int, bool] = {}
+    for f in fixtures or []:
+        if f.get("event") != current:
+            continue
+        finished = bool(f.get("finished") or f.get("finished_provisional"))
+        for side in ("team_h", "team_a"):
+            team = f.get(side)
+            done[team] = done.get(team, True) and finished
+    return {team for team, ok in done.items() if ok}
+
+
 def fixture_note(player, event: int, views=None) -> dict:
     """Raqib, uning jadvaldagi o'rni va **pozitsiyaga mos** qiyinlik.
 
@@ -170,6 +194,7 @@ class World:
         self.played = {tid: row.played for tid, row in self.table.items()}
         # Forma bazasi bir marta — o'ynayotgan o'yinchilarning medianasi
         self.form_base = form_baseline(self.elements)
+        self.last_done = teams_done_last_event(self.bootstrap, self.fixtures)
 
         # 1-bosqich: hamma uchun tez EV (qo'shimcha so'rovsiz)
         self.ev: dict[int, object] = {}
@@ -177,7 +202,8 @@ class World:
             if e.get("status") == "u":                  # klubdan ketgan
                 continue
             profile = build_profile(e, None, cfg, self.played.get(e["team"], 0),
-                                    form_base=self.form_base)
+                                    form_base=self.form_base,
+                                    last_event_played=e["team"] in self.last_done)
             self.ev[e["id"]] = self.engine.evaluate(profile, self.events)
 
         self.my_ids = self._my_ids()
@@ -314,6 +340,14 @@ def build(client, cfg, entry_id: int, world: World | None = None) -> dict:
         # bahosini ~5 ochkoga past ko'rsatardi va haqiqiy o'rtacha bilan
         # (turiga 50-54 ochko) solishtirib bo'lmasdi.
         "xi_ev_captain": round(xi_ev + captain_ev, 2),
+        # Tarkibdagi barcha 15 o'yinchining yig'indisi (kapitansiz, zaxira
+        # bilan). Bu "olinadigan ochko" EMAS — zaxira ochkosi faqat
+        # avtoalmashtirishda hisobga kiradi; u tarkibning umumiy chuqurligini
+        # ko'rsatadi.
+        "squad_ev": round(sum(
+            p.ev.per_event.get(next_event, 0.0) for p in squad.players), 2),
+        "bench_ev": round(sum(
+            p.ev.per_event.get(next_event, 0.0) for p in bench), 2),
         "captain": captain_name,
         "players": rows,
     }

@@ -18,6 +18,12 @@ from . import congestion
 from .config import Config
 from .table import TableRow
 
+# `strength_overall` (2..5) dan prior: nisbat shu darajaga ko'tariladi.
+# 0.65 da eng kuchli jamoa (5) ~1.4, eng zaifi (2) ~0.76 chiqadi.
+# Backtest (GW2-10, 180 jamoa-o'yin): 0.3 dan 0.8 gacha log-ehtimol
+# yaxshilanib boradi; 0.65 — qiyalik 1.0 ga yaqin chiqadigan oraliq.
+OVERALL_STRENGTH_POWER = 0.65
+
 
 @dataclass
 class TeamRating:
@@ -96,19 +102,44 @@ def build_team_ratings(
     # asossiz ravishda zaxiraga tushib qolgan edi.
     gamma = max(1.0, float(getattr(cfg, "strength_spread", 2.3)))
 
-    att_vals = [(t["strength_attack_home"] + t["strength_attack_away"]) / 2 for t in teams]
-    def_vals = [(t["strength_defence_home"] + t["strength_defence_away"]) / 2 for t in teams]
-    att_avg, def_avg = _mean(att_vals) or 1.0, _mean(def_vals) or 1.0
+    def strength(t: dict, kind: str) -> float:
+        return ((t.get(f"strength_{kind}_home") or 0)
+                + (t.get(f"strength_{kind}_away") or 0)) / 2
 
+    # 2026/27 dan FPL `strength_attack_*` / `strength_defence_*` ni **0** qilib
+    # beradi — faqat 2..5 shkaladagi `strength_overall_*` qolgan. Nol qiymat
+    # bilan nisbat 0 chiqib, hamma jamoaning hujum priori quyi chegaraga
+    # (0.55) yopishardi va har bir jamoaning kutilayotgan goli ~20% kam
+    # hisoblanardi (backtest: bashorat 1.07, haqiqat 1.35 gol).
+    detailed = all(strength(t, "attack") > 0 and strength(t, "defence") > 0
+                   for t in teams)
     prior: dict[int, tuple[float, float]] = {}
-    for t in teams:
-        a_ratio = ((t["strength_attack_home"] + t["strength_attack_away"]) / 2) / att_avg
-        d_ratio = ((t["strength_defence_home"] + t["strength_defence_away"]) / 2) / def_avg
-        # d_ratio kattaroq = kuchli himoya -> gol kamroq kiradi, shuning uchun teskarisi
-        prior[t["id"]] = (
-            _clamp(a_ratio ** gamma, 0.55, 1.70),
-            _clamp((1.0 / d_ratio if d_ratio else 1.0) ** gamma, 0.55, 1.70),
-        )
+    if detailed:
+        att_avg = _mean([strength(t, "attack") for t in teams]) or 1.0
+        def_avg = _mean([strength(t, "defence") for t in teams]) or 1.0
+        for t in teams:
+            a_ratio = strength(t, "attack") / att_avg
+            d_ratio = strength(t, "defence") / def_avg
+            # d_ratio kattaroq = kuchli himoya -> gol kamroq kiradi, shuning uchun teskarisi
+            prior[t["id"]] = (
+                _clamp(a_ratio ** gamma, 0.55, 1.70),
+                _clamp((1.0 / d_ratio) ** gamma, 0.55, 1.70),
+            )
+    else:
+        # Zaxira: umumiy kuch (2..5). Bu shkala allaqachon keng (5/2 = 2.5x),
+        # shuning uchun kengaytirilmaydi, aksincha siqiladi.
+        ovr_avg = _mean([strength(t, "overall") for t in teams]) or 0.0
+        for t in teams:
+            ratio = (strength(t, "overall") / ovr_avg) if (
+                ovr_avg and strength(t, "overall") > 0) else 1.0
+            prior[t["id"]] = (
+                _clamp(ratio ** OVERALL_STRENGTH_POWER, 0.55, 1.70),
+                _clamp((1.0 / ratio) ** OVERALL_STRENGTH_POWER, 0.55, 1.70),
+            )
+    # Liga o'rtachasi aniq 1.0 bo'lsin: aks holda butun liganing gol darajasi siljiydi
+    a_mean = _mean([p[0] for p in prior.values()]) or 1.0
+    d_mean = _mean([p[1] for p in prior.values()]) or 1.0
+    prior = {tid: (a / a_mean, d / d_mean) for tid, (a, d) in prior.items()}
 
     # ------------------------------------------------- 2. joriy mavsum: xG va gollar
     played: dict[int, int] = {}

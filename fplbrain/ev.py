@@ -31,12 +31,42 @@ SAVES_PER_POINT = 3
 # raqib kuchi 20% ortsa, CBIT ~12% ortadi
 DC_FIXTURE_TILT = 0.6
 # Bonus voqeaga bog'liq: gol/uzatma bergan o'yinchi BPS da yuqoriga chiqadi,
-# toza darvoza esa himoyachiga +12 BPS beradi. Koeffitsiyentlar shunday
-# tanlanganki, o'rtacha o'yinchida umumiy bonus tezligi o'zgarmasin —
-# u faqat qaytim bo'lgan holatlarga qarab qayta taqsimlanadi.
+# toza darvoza esa himoyachiga +12 BPS beradi. Lift o'yinchining O'Z neytral
+# uchrashuviga nisbatan olinadi (pastga qarang) — shunda uning umumiy bonus
+# tezligi o'zgarmaydi, faqat uchrashuvga qarab qayta taqsimlanadi.
 BONUS_RETURN_LIFT = 1.10
 BONUS_CS_LIFT = 0.55
-BONUS_NORMALISER = 1.30      # o'rtacha lift ~1.30, shunga bo'lib qaytariladi
+
+# FPL "uzatma"si xA dan kengroq: to'siqdan qaytgan to'p, ishlab berilgan
+# penalti/shtrafnoy, raqibning o'z darvozasiga goli ham uzatma sanaladi.
+# 2026/27 GW1-10: jami uzatma / jami xA = 1.37, hujumchilarda esa 2.8.
+# Bitta formula uchala pozitsiyani tushuntiradi: uzatma/90 ≈ xA/90 + 0.22·xG/90
+# (HIM 0.071 vs 0.067, YAR 0.159 vs 0.159, HUJ 0.156 vs 0.175).
+ASSIST_FROM_XG = 0.22
+
+# DefCon: BIR o'yinchining o'yindan o'yinga tarqoqligi (dispersiya/o'rtacha).
+# O'lchangan: HIM 1.34, YAR 1.39, HUJ 1.16. Ilgari 1.8 edi — u o'yinchilar
+# ORASIDAGI farqni ham o'z ichiga olgan, o'yinchining o'z tezligi esa
+# allaqachon profilda bor.
+DC_DISPERSION = 1.4
+# O'yinchilar orasidagi tezlik farqi (standart chetlanish / o'rtacha ≈ 0.35:
+# p10 4.3, mediana 7.3, p90 11.0) va uni aniqlash uchun kerak bo'ladigan dalil
+DC_RATE_CV = 0.35
+DC_RATE_K = 2.0
+
+# Futbolda 0 gol Puasson kutganidan biroz ko'proq uchraydi (Dixon–Coles
+# past hisob tuzatishi). GW2-10: haqiqiy 0.283, Puasson 0.273.
+CS_LOW_SCORE_LIFT = 1.04
+
+# --- daqiqalar ---
+# Asosiy tarkibda boshlagan o'yinchining 60+ daqiqa o'ynash ehtimoli va
+# o'rtacha daqiqasi (o'lchangan, GW1-10)
+P60_GIVEN_START = {1: 0.99, 2: 0.94, 3: 0.91, 4: 0.93}
+DEFAULT_START_MIN = {1: 90.0, 2: 85.0, 3: 79.0, 4: 79.0}
+SHORT_MINUTES = 22.0         # 60 daqiqaga yetmagan chiqishning o'rtacha davomiyligi
+# Boshlamagan o'yinchining zaxiradan chiqish ehtimoli: so'nggi o'yinlardagi
+# ishtirok ulushiga chiziqli bog'liq (0 → 0.20, 1.0 → 0.55)
+SUB_BASE, SUB_SLOPE = 0.20, 0.35
 
 # --- rotatsiya (jadval zichligi) ---
 ROTATION_NEUTRAL = 0.55      # "kim o'ynashi noma'lum" holatidagi ehtimol
@@ -48,8 +78,10 @@ ROTATION_MINUTES = 0.08      # kutilayotgan daqiqalarning o'zgarishi
 PRIOR_XG90 = {GK: 0.0, DEF: 0.06, MID: 0.16, FWD: 0.34}
 PRIOR_XA90 = {GK: 0.01, DEF: 0.08, MID: 0.16, FWD: 0.14}
 PRIOR_BONUS90 = {GK: 0.28, DEF: 0.26, MID: 0.28, FWD: 0.34}
-PRIOR_DC90 = {GK: 0.0, DEF: 6.4, MID: 6.0, FWD: 3.4}
+PRIOR_DC90 = {GK: 0.0, DEF: 7.7, MID: 7.6, FWD: 4.6}
 PRIOR_YELLOW90 = 0.13
+# Pozitsiya bo'yicha (o'lchangan): darvozabon deyarli kartochka olmaydi
+PRIOR_YELLOW90_POS = {GK: 0.035, DEF: 0.195, MID: 0.205, FWD: 0.175}
 PRIOR_SAVES90 = 3.0
 # Kam uchraydigan, lekin haqiqiy ochkolar
 RED_POINTS = -3
@@ -86,7 +118,7 @@ def poisson_tail(threshold: int, lam: float) -> float:
     return max(0.0, min(1.0, 1.0 - below))
 
 
-def negbinom_tail(threshold: int, mean: float, dispersion: float = 1.8) -> float:
+def negbinom_tail(threshold: int, mean: float, dispersion: float = DC_DISPERSION) -> float:
     """P(X >= threshold), dispersiyasi kattaroq taqsimot bilan.
 
     Himoya harakatlari (CBIT/CBIRT) Poisson dan ko'ra "tarqoq": bir o'yinda ko'p,
@@ -162,7 +194,7 @@ class PlayerProfile:
     xg90: float
     xa90: float
     dc90: float
-    dc_hit_rate: float | None
+    dc_hit_rate: float | None          # 60+ o'ynagan o'yinlarda chegaradan o'tish ulushi
     bonus90: float
     saves90: float
     yellow90: float
@@ -180,6 +212,71 @@ class PlayerProfile:
     pensave90: float = 0.0
     # Mavsumdagi sariq kartochkalar soni — 5 tasi diskvalifikatsiya
     yellow_total: int = 0
+    # Asosiy tarkibda boshlagandagi o'rtacha daqiqa va DefCon namunasi hajmi
+    start_mins: float = 82.0
+    dc_hit_n: int = 0
+
+
+def state_start_prob(recent_minutes: list[int], recent_starts: list[int]) -> float:
+    """Keyingi o'yinda boshlash ehtimoli — so'nggi o'yin holati bo'yicha.
+
+    Koeffitsiyentlar o'lchangan (2026/27 GW1-10, ~3000 o'yinchi-o'yin): har
+    holat uchun haqiqiy boshlash ulushi, so'nggi 6 o'yindagi boshlash ulushi
+    `r` ga qarab. Eski qoidalar ancha saxiy edi: "o'tgan turda o'ynamadi"
+    holatiga 0.45 gacha ruxsat berilardi, haqiqatda esa 0.16 (doimiy asosiy
+    o'yinchi bo'lsa 0.41, zaxira bo'lsa 0.09).
+    """
+    window_m, window_s = recent_minutes[-6:], recent_starts[-6:]
+    r = sum(window_s) / len(window_s)
+    streak = 0
+    for m, s in zip(reversed(recent_minutes), reversed(recent_starts)):
+        if s and m >= 60:
+            streak += 1
+        else:
+            break
+    last_m, last_s = recent_minutes[-1], bool(recent_starts[-1])
+    if streak >= 3:
+        return 0.60 + 0.33 * r
+    if streak == 2:
+        return 0.80 + 0.06 * r
+    if streak == 1:
+        return 0.66 + 0.10 * r
+    if last_s and last_m >= 30:
+        return 0.48                       # boshladi, lekin erta almashtirildi
+    if last_m == 0:
+        missed = 0
+        for m in reversed(recent_minutes):
+            if m == 0:
+                missed += 1
+            else:
+                break
+        return (0.05 + 0.42 * r) if missed == 1 else (0.03 + 0.28 * r)
+    if last_m >= 25:
+        return 0.36 + 0.40 * r            # zaxiradan uzoq chiqish
+    return 0.11 + 0.22 * r                # zaxiradan qisqa chiqish
+
+
+def _interp(points: tuple[tuple[float, float], ...], x: float) -> float:
+    """Bo'lakli-chiziqli interpolyatsiya (nuqtalar x bo'yicha o'sish tartibida)."""
+    if x <= points[0][0]:
+        return points[0][1]
+    for (x0, y0), (x1, y1) in zip(points, points[1:]):
+        if x <= x1:
+            return y0 + (y1 - y0) * (x - x0) / (x1 - x0) if x1 > x0 else y1
+    return points[-1][1]
+
+
+# Batafsil tarixsiz (faqat bootstrap) boshlash ehtimoli: mavsumdagi boshlash
+# ulushi `s` va **o'tgan turdagi ochko** bo'yicha. Ochko — so'nggi o'yin
+# holatining bootstrapdagi yagona izi: 0 → o'ynamagan (91%), 1 → qisqa chiqish,
+# 2+ → 60+ daqiqa (95%). O'lchangan ulushlar, GW3-10, ~3600 o'yinchi-tur.
+# Usiz model o'rnini yo'qotgan o'yinchini mavsum o'rtachasi bilan baholardi.
+_START_BY_LAST = {
+    0: ((0.0, 0.07), (0.3, 0.095), (0.6, 0.25), (0.9, 0.66), (1.0, 0.75)),
+    1: ((0.0, 0.15), (0.32, 0.36), (0.62, 0.52), (1.0, 0.75)),
+    2: ((0.0, 0.30), (0.1, 0.38), (0.33, 0.73), (0.64, 0.81), (1.0, 0.92)),
+}
+_SUB_BY_LAST = {0: 0.23, 1: 0.60, 2: 0.50}
 
 
 def _history_window(history: list[dict], n: int = 6) -> list[dict]:
@@ -226,8 +323,15 @@ def build_profile(
     cfg: Config,
     team_matches: int = 0,
     form_base: float = 0.0,
+    last_event_played: bool | None = None,
 ) -> PlayerProfile:
-    """team_matches — o'yinchi jamoasi mavsumda nechta o'yin o'ynagani (bootstrap teams.played)."""
+    """team_matches — o'yinchi jamoasi mavsumda nechta o'yin o'ynagani (bootstrap teams.played).
+
+    last_event_played — jamoa oxirgi turda o'ynab **bo'lganmi**. `True` bo'lsa
+    `event_points` so'nggi o'yin holati sifatida ishlatiladi (batafsil tarix
+    yo'q paytda). `None`/`False` — ishlatilmaydi: tur davom etayotgan yoki
+    jamoa bo'sh turda bo'lsa, 0 ochko "o'ynamadi" degani emas.
+    """
     pos = element["element_type"]
     minutes = element.get("minutes", 0) or 0
     nineties = minutes / 90.0
@@ -270,25 +374,58 @@ def build_profile(
             prior_p60 = min(0.95, prior_start_rate * 0.94)
 
     sub_min = 18.0
+    default_start_min = DEFAULT_START_MIN[pos]
+    appear_rate: float | None = None      # so'nggi o'yinlarda maydonga tushish ulushi
     if recent_minutes:
         # batafsil tarix bor — oxirgi o'yinlar bo'yicha
         n = len(recent_minutes)
         obs_start = sum(recent_starts) / n
         obs_p60 = sum(1 for m in recent_minutes if m >= 60) / n
         start_minutes = [m for m, s in zip(recent_minutes, recent_starts) if s]
-        avg_start_min = sum(start_minutes) / len(start_minutes) if start_minutes else 80.0
+        # Bir-ikki o'yindan olingan o'rtacha tasodifga boy — pozitsiya
+        # o'rtachasi tomon tortiladi (2 o'yinga teng dalil)
+        avg_start_min = ((sum(start_minutes) + default_start_min * 2)
+                         / (len(start_minutes) + 2))
+        last4 = recent_minutes[-4:]
+        appear_rate = sum(1 for m in last4 if m > 0) / len(last4)
     elif team_matches > 0:
         # faqat mavsum yig'indisi bor (bootstrap) — starts/minutes dan chiqaramiz
         n = team_matches
         starts = element.get("starts", 0) or 0
         obs_start = min(1.0, starts / team_matches)
-        avg_start_min = (minutes / starts) if starts else 80.0
-        obs_p60 = min(1.0, (minutes / team_matches) / 78.0)
+        raw_start_min = min(90.0, minutes / starts) if starts else default_start_min
+        avg_start_min = ((raw_start_min * starts + default_start_min * 2)
+                         / (starts + 2))
+        obs_p60 = obs_start * P60_GIVEN_START[pos]
+        # Zaxiradan chiqishlar soni: boshlanmagan o'yinlarga to'g'ri kelgan daqiqalar
+        sub_apps = max(0.0, minutes - starts * default_start_min) / 20.0
+        appear_rate = min(1.0, (starts + sub_apps) / team_matches)
     else:
         n = 0
-        obs_start, obs_p60, avg_start_min = prior_start_rate, prior_p60, 82.0
+        obs_start, obs_p60, avg_start_min = prior_start_rate, prior_p60, default_start_min
 
-    if n:
+    state_based = len(recent_minutes) >= 3
+    # Bootstrap rejimi: o'tgan turdagi ochko so'nggi o'yin holatini aytadi
+    last_class: int | None = None
+    if (not recent_minutes and last_event_played and team_matches >= 2
+            and element.get("event_points") is not None):
+        last_points = int(_f(element.get("event_points")))
+        last_class = 0 if last_points == 0 else (1 if last_points == 1 else 2)
+
+    if state_based:
+        # Yetarli tarix bor: so'nggi o'yin holati + so'nggi 6 o'yindagi boshlash
+        # ulushi. Bu — o'lchangan ulushlar (`state_start_prob` ga qarang).
+        p_start = state_start_prob(recent_minutes, recent_starts)
+        if pos == GK and recent_starts[-1] and recent_minutes[-1] >= 60:
+            # Darvozabon almashmaydi: o'tgan turda o'ynagan bo'lsa, yana o'ynaydi
+            p_start = max(p_start, 0.95 if p_start < 0.85 else 0.97)
+        p60 = p_start * P60_GIVEN_START[pos]
+    elif last_class is not None:
+        p_start = _interp(_START_BY_LAST[last_class], obs_start)
+        if pos == GK and last_class == 2 and obs_start >= 0.5:
+            p_start = max(p_start, 0.95)
+        p60 = p_start * P60_GIVEN_START[pos]
+    elif n:
         # Bayescha vazn: prior "k ta o'yinga teng dalil" sifatida qaraladi.
         # n=1 -> 0.75, n=3 -> 0.50, n=6 -> 0.33, n=12 -> 0.20.
         # Mavsum boshida bitta zaxiradan chiqish o'yinchini "yo'q" qilib
@@ -312,7 +449,9 @@ def build_profile(
     # Mavsum boshida statistika kam, lekin "o'tgan turda 90 daqiqa o'ynadi"
     # degan fakt o'tgan mavsumning butun o'rtachasidan ko'ra ko'proq narsani
     # aytadi. Shuning uchun so'nggi o'yin quyi/yuqori chegara qo'yadi.
-    if recent_minutes:
+    # Faqat 1-2 o'yinlik tarix bo'lganda (mavsumning ilk turlari): holat
+    # modeliga dalil yetmaydi, shuning uchun prior + quyi/yuqori chegaralar.
+    if recent_minutes and not state_based:
         last_minutes = recent_minutes[-1]
         last_started = bool(recent_starts[-1])
 
@@ -324,22 +463,30 @@ def build_profile(
             else:
                 break
 
-        if streak >= 3:
-            p_start, p60 = max(p_start, 0.88), max(p60, 0.84)
-        elif streak == 2:
+        if streak == 2:
             p_start, p60 = max(p_start, 0.82), max(p60, 0.78)
         elif streak == 1:
             p_start, p60 = max(p_start, 0.75), max(p60, 0.70)
         elif last_started and last_minutes >= 30:
-            p_start = max(p_start, 0.60)
+            p_start = max(p_start, 0.50)
         elif last_minutes == 0:
-            p_start = min(p_start, 0.45)          # o'ynamadi — ehtiyot bo'lamiz
+            p_start = min(p_start, 0.30)          # o'ynamadi — ehtiyot bo'lamiz
         elif not last_started and last_minutes < 25:
-            p_start = min(p_start, 0.55)          # zaxiradan qisqa chiqish
+            p_start = min(p_start, 0.30)          # zaxiradan qisqa chiqish
 
     p_start = max(0.0, min(1.0, p_start)) * availability
     p60 = max(0.0, min(p_start, p60 * availability))
-    p_appear = min(1.0, p_start + (1 - p_start) * 0.30 * availability)
+    # Zaxiradan chiqish: doim ishtirok etayotgan o'yinchi boshlamasa ham
+    # ko'pincha maydonga tushadi (0.55), umuman o'ynamayotgani esa kam (0.20)
+    if pos == GK:
+        p_sub = 0.02
+    elif last_class is not None:
+        p_sub = _SUB_BY_LAST[last_class]
+    elif appear_rate is None:
+        p_sub = 0.30
+    else:
+        p_sub = SUB_BASE + SUB_SLOPE * appear_rate
+    p_appear = min(1.0, p_start + (1 - p_start) * p_sub * availability)
     xmins = p_start * avg_start_min + (p_appear - p_start) * sub_min
 
     # ---------- 3. hujum tezliklari ----------
@@ -381,6 +528,7 @@ def build_profile(
     # empirik: nechta o'yinda chegaradan o'tgan
     dc_hit_rate = None
     starts_played = [h for h in history if (h.get("minutes") or 0) >= 60]
+    dc_hit_n = len(starts_played) if pos != GK else 0
     if len(starts_played) >= 4 and pos != GK:
         thr = DEFCON_THRESHOLD[pos]
         hits = 0
@@ -395,7 +543,8 @@ def build_profile(
     bonus90 = shrink(_f(element.get("bonus")), nineties,
                      priors.bonus90_prior(price, pos), cfg.shrink_bonus_90s) * fm
     saves90 = shrink(_f(element.get("saves")), nineties, PRIOR_SAVES90, 4.0) if pos == GK else 0.0
-    yellow90 = shrink(_f(element.get("yellow_cards")), nineties, PRIOR_YELLOW90, 6.0)
+    yellow90 = shrink(_f(element.get("yellow_cards")), nineties,
+                      PRIOR_YELLOW90_POS.get(pos, PRIOR_YELLOW90), 6.0)
     # Kam uchraydigan hodisalar: kuchli siqiladi (k=10), aks holda bitta
     # qizil kartochka butun mavsumga tarqalib ketardi
     red90 = shrink(_f(element.get("red_cards")), nineties, PRIOR_RED90, 10.0)
@@ -444,6 +593,8 @@ def build_profile(
         penmiss90=penmiss90,
         pensave90=pensave90,
         yellow_total=yellow_total,
+        start_mins=avg_start_min,
+        dc_hit_n=dc_hit_n,
     )
 
 
@@ -518,27 +669,48 @@ def fixture_ev(
     att_mult = fx.lam_for / team_neutral_lam_for if team_neutral_lam_for else 1.0
     def_mult = fx.lam_against / team_neutral_lam_against if team_neutral_lam_against else 1.0
 
+    # Ishtirok: zaxiradan chiqish ehtimoli rotatsiya bilan birga siljiydi
+    p_appear = min(1.0, max(p_start, profile.p_appear
+                            - (profile.p_start - p_start) * 0.4))
+    # Chegarali (pog'onali) ochkolar — o'tkazilgan gol, to'xtatish, DefCon —
+    # "kutilayotgan daqiqa ulushi" bilan EMAS, **o'ynagan holat** bo'yicha
+    # hisoblanadi: 60+ o'ynasa uzoq (`long`), aks holda qisqa (`short`) chiqish.
+    # Sabab — 5-xatodagi bilan bir xil (E[⌊N/3⌋] ≠ E[N]/3): tezlikni 0.85 ga
+    # ko'paytirib chegaradan o'tish ehtimolini hisoblash natijani keskin
+    # pasaytiradi. Backtestda aynan shu uchun DefCon ~3 barobar, o'tkazilgan
+    # gol jarimasi ~2 barobar kam chiqqan edi.
+    long = max(60.0, min(90.0, profile.start_mins)) / 90.0
+    short = SHORT_MINUTES / 90.0
+    p_short = max(0.0, p_appear - p60)
+
     xg = profile.xg90 * share * att_mult
-    xa = profile.xa90 * share * att_mult
+    # FPL uzatmasi xA dan kengroq (qaytgan to'p, ishlab berilgan penalti…)
+    xa = (profile.xa90 + ASSIST_FROM_XG * profile.xg90) * share * att_mult
 
     pts_goals = xg * GOAL_POINTS[pos]
     pts_assists = xa * ASSIST_POINTS
 
-    # toza darvoza — 60+ daqiqa talab qilinadi
-    p_cs = math.exp(-fx.lam_against)
+    # Toza darvoza — 60+ daqiqa talab qilinadi. O'yinchining toza darvozasi
+    # jamoanikidan TEZ-TEZ uchraydi: 70-daqiqada almashtirilgan himoyachi
+    # jamoa 85-daqiqada gol o'tkazsa ham ochkosini saqlab qoladi. Shuning
+    # uchun gol kutilmasi o'yinchi maydonda bo'lgan vaqtga ko'paytiriladi.
+    # (O'lchangan: jamoa 0.283, 60+ o'ynagan DRV/HIM 0.308.)
+    p_cs = min(1.0, math.exp(-fx.lam_against * long) * CS_LOW_SCORE_LIFT)
     pts_cs = p_cs * CS_POINTS[pos] * p60
 
-    # kiritilgan gollar (faqat GK/DEF)
+    # kiritilgan gollar (faqat GK/DEF) — maydonda bo'lgan vaqtdagi gollar
     pts_conceded = 0.0
     if pos in (GK, DEF):
-        pts_conceded = -expected_conceded_penalty(fx.lam_against * share)
+        pts_conceded = -(
+            p60 * expected_conceded_penalty(fx.lam_against * long)
+            + p_short * expected_conceded_penalty(fx.lam_against * short))
 
     # darvozabon to'xtatishlari (har 3 tasi = 1 ochko) va penalti to'xtatish
     pts_saves = 0.0
     lam_saves = 0.0
     if pos == GK:
-        lam_saves = profile.saves90 * share * def_mult
-        pts_saves = expected_floor(lam_saves, SAVES_PER_POINT)
+        lam_saves = profile.saves90 * long * def_mult
+        pts_saves = p60 * expected_floor(lam_saves, SAVES_PER_POINT)
         pts_saves += profile.pensave90 * share * def_mult * PEN_SAVE_POINTS
 
     # DefCon. Uchrashuv qiyinligi bu yerda **teskari** ishlaydi: kuchli
@@ -547,14 +719,25 @@ def fixture_ev(
     # Bitta "qiyinlik koeffitsiyenti" ni butun o'yinchiga qo'llash shu yerda
     # xato bo'lardi.
     pts_dc = 0.0
+    p_dc = 0.0
     if pos in DEFCON_THRESHOLD:
         thr = DEFCON_THRESHOLD[pos]
-        lam_actions = profile.dc90 * share * (1.0 + DC_FIXTURE_TILT * (def_mult - 1.0))
-        p_model = negbinom_tail(thr, lam_actions)
+        lam_actions = profile.dc90 * long * (1.0 + DC_FIXTURE_TILT * (def_mult - 1.0))
+        # Tezlikning o'zi ham noaniq: 2 o'yin o'ynagan o'yinchining haqiqiy
+        # tezligi priordan ancha farq qilishi mumkin. Chegaradan o'tish
+        # ehtimoli qavariq bo'lgani uchun bu noaniqlik ehtimolni OSHIRADI —
+        # shuning uchun u dispersiyaga qo'shiladi va dalil ko'paygan sari so'nadi.
+        rate_var = (DC_RATE_CV * profile.dc90) ** 2 * DC_RATE_K / (profile.nineties + DC_RATE_K)
+        dispersion = DC_DISPERSION + (rate_var / profile.dc90 if profile.dc90 > 0 else 0.0)
+        p_given = negbinom_tail(thr, lam_actions, dispersion)   # 60+ o'ynagan holatda
         if profile.dc_hit_rate is not None:
-            p_dc = 0.5 * p_model + 0.5 * (profile.dc_hit_rate * min(1.0, share / 0.75))
-        else:
-            p_dc = p_model
+            # O'yinchining haqiqiy ulushi — namuna qancha katta bo'lsa, vazni
+            # shuncha ortadi (4 o'yin → 0.33, 8 → 0.50), yarmidan oshmaydi
+            n_hit = max(4, profile.dc_hit_n)
+            w_hit = min(0.5, n_hit / (n_hit + 8.0))
+            p_given = (1 - w_hit) * p_given + w_hit * profile.dc_hit_rate
+        # Qisqa chiqishda chegaraga yetish deyarli mumkin emas
+        p_dc = p60 * p_given
         pts_dc = p_dc * DEFCON_POINTS
 
     # Bonus. Avval bu shunchaki 90 daqiqalik o'rtacha edi — ya'ni bonus
@@ -562,23 +745,28 @@ def fixture_ev(
     # **voqeaga bog'liq**: gol yoki uzatma bergan o'yinchi BPS reytingida
     # deyarli har doim yuqoriga chiqadi, toza darvoza esa himoyachiga +12 BPS
     # beradi. Shuning uchun o'rtacha tezlik shartli holatlarga taqsimlanadi.
-    p_goal_pre = 1 - math.exp(-xg)
-    p_assist_pre = 1 - math.exp(-xa)
-    p_ret = 1 - (1 - p_goal_pre) * (1 - p_assist_pre)
+    #
+    # Lift o'yinchining **o'z neytral uchrashuviga** nisbatan olinadi. Ilgari
+    # u "o'rtacha o'yinchi" ga nisbatan edi (doimiy 1.30 ga bo'linardi) va
+    # ko'p gol uradigan o'yinchi ikki marta mukofotlanardi: uning yuqori
+    # bonus tezligi allaqachon `bonus90` da bor. Backtestda EV ≥ 5 bo'lgan
+    # o'yinchilarda bonus 0.87 bashorat qilingan, haqiqatda 0.38 chiqqan.
+    def lift(p_return: float, p_clean: float) -> float:
+        return 1.0 + BONUS_RETURN_LIFT * p_return + BONUS_CS_LIFT * p_clean
+
+    p_ret = 1 - math.exp(-(xg + xa))
     p_cs_eff = p_cs * p60 if pos in (GK, DEF) else 0.0
-    # Voqea ro'y berganda bonus tezligi bir necha barobar ortadi
-    event_lift = (1.0
-                  + BONUS_RETURN_LIFT * p_ret
-                  + BONUS_CS_LIFT * p_cs_eff) / BONUS_NORMALISER
-    pts_bonus = profile.bonus90 * share * (0.6 + 0.4 * att_mult) * event_lift
+    neutral_att = (xg + xa) / att_mult if att_mult > 0 else (xg + xa)
+    p_ret_neutral = 1 - math.exp(-neutral_att)
+    p_cs_neutral = (math.exp(-team_neutral_lam_against) * p60
+                    if pos in (GK, DEF) else 0.0)
+    event_lift = lift(p_ret, p_cs_eff) / lift(p_ret_neutral, p_cs_neutral)
+    pts_bonus = profile.bonus90 * share * event_lift
     # Kartochkalar: sariq −1, qizil −3. Qizil kam uchraydi, lekin bor.
     pts_cards = -(profile.yellow90 * share) + profile.red90 * share * RED_POINTS
     # O'z darvozasiga gol va o'tkazib yuborilgan penalti
     pts_misc = (profile.og90 * share * OG_POINTS
                 + profile.penmiss90 * share * PEN_MISS_POINTS)
-    # Ishtirok: zaxiradan chiqish ehtimoli rotatsiya bilan birga siljiydi
-    p_appear = min(1.0, max(p_start, profile.p_appear
-                            - (profile.p_start - p_start) * 0.4))
     pts_appearance = p_appear * 1.0 + p60 * 1.0
 
     total = (
@@ -590,11 +778,15 @@ def fixture_ev(
     p_assist = 1 - math.exp(-xa)
     p_return = 1 - (1 - p_goal) * (1 - p_assist)
 
+    # Taqsimot `p_appear` ga shartli quriladi, shuning uchun DefCon va
+    # o'tkazilgan gollar ham "maydonga tushgan" holat uchun beriladi.
+    played = (p60 * long + p_short * short) / p_appear if p_appear > 0 else 0.0
     inputs = FixtureInputs(
-        xg=xg, xa=xa, p_cs=p_cs, p_dc=(pts_dc / DEFCON_POINTS),
-        p_appear=profile.p_appear, p60=profile.p60,
-        bonus_mean=pts_bonus, lam_conceded=fx.lam_against * share,
-        saves_mean=(profile.saves90 * share * def_mult) if pos == GK else 0.0,
+        xg=xg, xa=xa, p_cs=p_cs,
+        p_dc=(p_dc / p_appear) if p_appear > 0 else 0.0,
+        p_appear=p_appear, p60=p60,
+        bonus_mean=pts_bonus, lam_conceded=fx.lam_against * played,
+        saves_mean=lam_saves if pos == GK else 0.0,
         position=pos,
     )
     # Arzon taxmin — har o'yinchi uchun hisoblanadi. Aniq taqsimot kerak bo'lganda

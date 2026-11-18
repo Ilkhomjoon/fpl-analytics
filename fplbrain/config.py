@@ -73,7 +73,10 @@ class Config:
 
     # shrinkage (kam o'yin o'ynagan o'yinchini prior tomon tortish), 90 daqiqalik birlikda
     shrink_attack_90s: float = 6.0
-    shrink_defcon_90s: float = 5.0
+    # DefCon tezligi o'yinchiga juda xos (o'yinchilar orasida p10 4.3, p90 11.0)
+    # va tez barqarorlashadi: ichki dispersiya / o'yinchilararo dispersiya ≈ 1.5
+    # ta 90 daqiqa. 5.0 bilan markaziy himoyachilar o'rtachaga tortilib ketardi.
+    shrink_defcon_90s: float = 2.0
     shrink_bonus_90s: float = 8.0
     prior_season_weight: float = 0.55      # o'tgan mavsum ma'lumotining boshlang'ich vazni
     minutes_prior_matches: float = 1.2     # daqiqalar priori necha o'yinga teng dalil sanaladi
@@ -84,7 +87,10 @@ class Config:
     # jamoa kuchi
     home_base_goals: float = 1.55
     away_base_goals: float = 1.22
-    team_form_shrink_matches: float = 4.0  # joriy mavsum natijasiga ishonch (kichik = tezroq)
+    # Joriy mavsum natijasiga ishonch (kichik = tezroq). Backtestda 4-6 qiymat
+    # so'nggi natijalarga ortiqcha ishonib yuborgan (qiyalik 0.7-0.85): 10 o'yin
+    # davomida jamoa "haqiqiy" kuchi natijalardan ko'ra sekinroq o'zgaradi.
+    team_form_shrink_matches: float = 10.0
     # FPL ning strength qiymatlari juda siqilgan (eng kuchli va eng zaif jamoa
     # orasida atigi ~15% farq), haqiqiy gol tezliklari esa ikki barobar farq
     # qiladi. Nisbatni shu darajaga ko'tarib tarqalishni tiklaymiz.

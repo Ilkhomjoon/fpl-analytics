@@ -669,6 +669,10 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g,
 const fmt = (v, d) => (v === null || v === undefined || v === "") ? "—"
   : (typeof v === "number" ? v.toFixed(d ?? 0) : v);
 const n1 = (v) => (v ?? 0).toFixed(1);
+// Kutilayotgan ochko yaxlit ko'rsatiladi: FPL da ochko butun son, 6.4 va 6.2
+// orasidagi farq esa modelning aniqligidan (±2.7) ancha kichik. Aniq qiymat
+// o'yinchi tafsilotida (EV qismlari) qoladi.
+const ev0 = (v) => String(Math.round(v ?? 0));
 const signed = (v, d = 1) => (v > 0 ? "+" : "") + Number(v).toFixed(d);
 const big = (v) => v ? v.toLocaleString("ru") : "—";
 const store = {
@@ -1029,7 +1033,7 @@ function pitchCard(ctx, p){
     : ((p.p_start ?? 100) < 60 ? '<span class="bdg warn">?</span>' : "");
   return `<button class="pc p${posOf(p)}" data-ctx="${ctx}" data-el="${p.element}"
       title="${esc(p.name)} — EV ${n1(p.ev)}">
-    ${cap}${flag}<span class="ev">${n1(p.ev)}</span>
+    ${cap}${flag}<span class="ev">${ev0(p.ev)}</span>
     <span class="nm">${esc(p.name)}</span>${line}</button>`;
 }
 
@@ -1051,7 +1055,7 @@ function listRow(ctx, p, last){
     <div class="m ${form >= 5 ? "easy" : (form < 2 ? "hard" : "")}">${n1(form)}</div>
     <div class="m">${n1(p.ownership)}%</div>
     <div class="m">${(p.p_start ?? 0).toFixed(0)}%</div>
-    <div class="evc">${n1(p.ev)}</div>
+    <div class="evc">${ev0(p.ev)}</div>
     ${last(p)}</button>`;
 }
 
@@ -1111,7 +1115,10 @@ function renderSquad(){
   $("v-squad").innerHTML = `${banner}
     <div class="kpis">
       ${kpi(Math.round(s.xi_ev_captain ?? s.xi_ev), "Kutilayotgan ochko",
-            s.captain ? "kapitan: " + esc(s.captain) : "", "hero")}
+            s.captain ? "11 lik · kapitan: " + esc(s.captain) : "11 lik", "hero")}
+      ${kpi(Math.round(s.squad_ev ?? s.players.reduce((a, p) => a + (p.ev || 0), 0)),
+            "Butun tarkib", `15 o'yinchi · zaxira ${ev0(s.bench_ev
+              ?? s.players.filter(p => !p.in_xi).reduce((a, p) => a + (p.ev || 0), 0))}`)}
       ${kpi(esc(s.formation), "Sxema", `GW${s.event}`)}
       ${kpi(`${n1(s.value)}<small>m</small>`, "Jamoa qiymati")}
       ${kpi(`${n1(s.bank)}<small>m</small>`, "Bank")}
@@ -1168,9 +1175,9 @@ function openPlayer(ctx, el){
       `<b class="${diffClass(fx.eff_fdr_def)}">${fx.eff_fdr_def.toFixed(1)}</b> / <b class="${diffClass(fx.eff_fdr_att)}">${fx.eff_fdr_att.toFixed(1)}</b>`]);
   if ((fx.rotation ?? 0) >= 0.45) facts.push(["Jadval", `<b class="hard">zich — rotatsiya ehtimoli</b>`]);
   if (posOf(p) <= 3 && d.p_cs)
-    facts.push(["Toza darvoza", `<b>${d.p_cs.toFixed(0)}%</b> → bo'lsa <b>${d.if_cs.toFixed(1)}</b> ochko`]);
+    facts.push(["Toza darvoza", `<b>${d.p_cs.toFixed(0)}%</b> → bo'lsa <b>${ev0(d.if_cs)}</b> ochko`]);
   if (d.p_return) facts.push(["Gol yoki uzatma", `<b>${d.p_return.toFixed(0)}%</b>`]);
-  if (p.ev_horizon != null) facts.push(["Gorizont bo'yicha EV", `<b>${n1(p.ev_horizon)}</b>`]);
+  if (p.ev_horizon != null) facts.push(["Gorizont bo'yicha EV", `<b>${ev0(p.ev_horizon)}</b>`]);
   if (p.pen) facts.push(["Penaltichi", "ha"]);
   if (p.set_piece) facts.push(["Standart pozitsiyalar", "ha"]);
 
@@ -1186,7 +1193,7 @@ function openPlayer(ctx, el){
     </div>
     <div class="dr-b">
       <div class="q4">
-        <div><b style="color:var(--accent)">${n1(p.ev)}</b><small>EV</small></div>
+        <div><b style="color:var(--accent)">${ev0(p.ev)}</b><small>EV</small></div>
         <div><b>${(p.p_start ?? 0).toFixed(0)}%</b><small>tarkibda</small></div>
         <div><b>${n1(p.form)}</b><small>forma</small></div>
         <div><b>${n1(p.ownership)}%</b><small>egalik</small></div>
@@ -1194,8 +1201,9 @@ function openPlayer(ctx, el){
       ${p.news && p.status !== "a" ? `<div class="banner warn" style="margin:14px 0 0">${ICON.alert}<div>${esc(p.news)}</div></div>` : ""}
       ${p.reason && p.in_xi === false ? `<div class="banner info" style="margin:14px 0 0">${ICON.alert}<div><b>Nega zaxirada:</b> ${esc(p.reason)}</div></div>` : ""}
       ${keys.length ? `<h4>EV nimadan iborat</h4>${partRows}
-        <div class="part total"><span class="t">Jami</span><span></span><b>${n1(p.ev)}</b></div>
-        <p class="note" style="margin-top:10px">EV — o'rtacha qiymat: yaxshi va yomon holatlarning aralashmasi.</p>` : ""}
+        <div class="part total"><span class="t">Jami (aniq)</span><span></span><b>${(p.ev ?? 0).toFixed(2)}</b></div>
+        <p class="note" style="margin-top:10px">EV — o'rtacha qiymat: yaxshi va yomon holatlarning aralashmasi.
+          Sahifada yaxlitlab ko'rsatiladi; aniq qiymat va qismlari shu yerda.</p>` : ""}
       ${facts.length ? `<h4>Uchrashuv va ehtimollar</h4><div class="facts">${
         facts.map(f => `<div><span>${f[0]}</span><div>${f[1]}</div></div>`).join("")}</div>` : ""}
     </div>`;
@@ -1215,13 +1223,13 @@ function movePlayer(p, out){
   const narx = out ? p.selling : p.price;
   return `<div class="pl ${out ? "out" : "in"}">
     <span class="pos p${posOf(p)}">${esc(p.pos_short)}</span>
-    <div><b>${esc(p.name)}</b><small>${n1(narx)}m · EV ${n1(p.ev)}</small></div></div>`;
+    <div><b>${esc(p.name)}</b><small>${n1(narx)}m · EV ${ev0(p.ev)}</small></div></div>`;
 }
 
 function moveRow(m, horizon){
   const pul = m.cost > 0 ? `+${m.cost.toFixed(1)}m` : `${m.cost.toFixed(1)}m`;
   return `<div class="move ${m.worth_it ? "" : "off"}">
-    <div class="gain ${m.gain > 0 ? "" : "neg"}"><b>${signed(m.gain)}</b><small>ochko · ${horizon} tur</small></div>
+    <div class="gain ${m.gain > 0 ? "" : "neg"}"><b>${signed(m.gain, 0)}</b><small>ochko · ${horizon} tur</small></div>
     <div>
       <div class="swap">
         <div>${m.out.map(p => movePlayer(p, true)).join("")}</div>
@@ -1268,7 +1276,7 @@ function renderTransfers(){
       ${t.weak.map(p => `<div class="lr" style="grid-template-columns:44px minmax(120px,1fr) 58px minmax(140px,2fr)">
           <span class="pos p${posOf(p)}">${esc(p.pos_short)}</span>
           <div class="who">${esc(p.name)}<small>${n1(p.selling)}m</small></div>
-          <div class="evc">${n1(p.ev)}</div>
+          <div class="evc">${ev0(p.ev)}</div>
           <div class="why">${esc(p.reason)}</div></div>`).join("")}
     </div>`;
 }
@@ -1290,12 +1298,14 @@ function renderDraft(){
   register("draft", d.players);
   const clubs = d.clubs.length ? d.clubs.map(c => `${esc(c.team)}×${c.count}`).join(", ")
                                : "hamma klubdan bittadan";
-  const horizon = p => `<div class="fix">${n1(p.ev_horizon)} jami</div>`;
+  const horizon = p => `<div class="fix">${ev0(p.ev_horizon)} jami</div>`;
+  const squadEv = d.players.reduce((a, p) => a + (p.ev || 0), 0);
   const body = mode === "pitch" ? pitchHtml("draft", d.players)
     : listHtml("draft", d.players, horizon, "Gorizont", horizon, "Gorizont");
   $("v-draft").innerHTML = `
     <div class="kpis">
-      ${kpi(Math.round(d.expected_points), "Kutilayotgan ochko", "kapitan: " + esc(d.captain), "hero")}
+      ${kpi(Math.round(d.expected_points), "Kutilayotgan ochko", "11 lik · kapitan: " + esc(d.captain), "hero")}
+      ${kpi(Math.round(squadEv), "Butun tarkib", "15 o'yinchi")}
       ${kpi(esc(d.formation), "Sxema", `GW${d.event}`)}
       ${kpi(`${n1(d.cost)}<small>m</small>`, "Sarflandi", `byudjet ${n1(d.budget)}m`)}
       ${kpi(`${n1(d.bank)}<small>m</small>`, "Qoldi")}
