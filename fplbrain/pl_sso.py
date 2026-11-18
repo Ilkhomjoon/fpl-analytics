@@ -45,7 +45,7 @@ import logging
 import re
 import secrets
 from dataclasses import dataclass, field
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urljoin, urlparse
 
 import requests
 
@@ -57,8 +57,11 @@ FPL_HOME = "https://fantasy.premierleague.com/"
 AUTHORIZE_RE = re.compile(
     r"https://account\.premierleague\.com/as/authorize\?[^\"'\s\\<>]+"
 )
-REDIRECT_RE = re.compile(r"redirect_uri[\"'=:\s]+(https?://[^\"'\s,&]+)", re.IGNORECASE)
-CLIENT_ID_RE = re.compile(r"client_id[\"'=:\s]+([0-9a-fA-F-]{20,40})")
+# Qo'shtirnoqlar qatorida ` (backtick) ham bor: FPL bundle'i endi satrlarni
+# shablon literal bilan yozadi — client_id:`bfcb…`. Usiz discovery yiqiladi.
+REDIRECT_RE = re.compile(r"redirect_uri[\"'`=:\s]+(https?://[^\"'`\s,&]+)", re.IGNORECASE)
+CLIENT_ID_RE = re.compile(r"client_id[\"'`=:\s]+([0-9a-fA-F-]{20,40})")
+SCRIPT_SRC_RE = re.compile(r'<script[^>]*\ssrc=["\']([^"\']+\.js)["\']', re.IGNORECASE)
 # `/as/resume` formasi va uning yashirin `state` qiymati
 RESUME_FORM_RE = re.compile(r'<form[^>]+action="([^"]*?/as/resume)"', re.IGNORECASE)
 STATE_INPUT_RE = re.compile(
@@ -621,8 +624,12 @@ def discover_authorize(
         home = session.get(FPL_HOME, timeout=25)
         step.status = home.status_code
         texts.append(home.text)
-        for src in re.findall(r'src="([^"]+\.js)"', home.text)[:8]:
-            url = src if src.startswith("http") else FPL_HOME.rstrip("/") + src
+        # Avval FPL ning o'z skriptlari: client_id o'sha yerda. Uchinchi tomon
+        # skriptlari (reklama, analitika) ro'yxatni to'ldirib, asosiy bundle'ni
+        # chegaradan tashqariga surib yubormasligi kerak.
+        urls = [urljoin(FPL_HOME, src) for src in SCRIPT_SRC_RE.findall(home.text)]
+        own = [u for u in urls if urlparse(u).netloc == urlparse(FPL_HOME).netloc]
+        for url in (own + [u for u in urls if u not in own])[:8]:
             try:
                 texts.append(session.get(url, timeout=25).text)
             except Exception:

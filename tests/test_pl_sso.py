@@ -284,6 +284,62 @@ def test_authorize_pkce_bilan_chaqiriladi():
     assert sent["client_id"] == CLIENT_ID
 
 
+# ------------------------------------------------ discovery: yangi bundle
+# 2026-11 dagi haqiqiy sahifa shakli. Uch tuzoq:
+#   1. bosh sahifada BOSHQA ilovalarning `clientId` lari bor (premierleague.com)
+#   2. FPL ning o'z bundle'i uchinchi tomon skriptlaridan KEYIN turadi
+#   3. bundle satrlarni backtick bilan yozadi: client_id:`…`
+WWW_CLIENT_ID = "1f243d70-a140-4035-8c41-341f5af5aa12"
+U13_CLIENT_ID = "c2906aae-cb6e-44d1-838f-0d3565380c06"
+BUNDLE_HOME_HTML = """<!doctype html><html><head>
+<script charset="UTF-8" src="https://cdn.example.com/a.js" type="text/javascript"></script>
+<script src="https://cdn.example.com/b.js"></script>
+<script defer="" src="https://cdn.example.com/c.js"></script>
+<script>window.PULSE.envPaths = {sso: {authUrl: "https://account.premierleague.com",
+  clientId: "%s", u13AppId: "%s"}};</script>
+<script src="//translations.example.com/en.js"></script>
+<script type="module" crossorigin src="/assets/index-CMoSnM_-.js"></script>
+</head><body></body></html>""" % (WWW_CLIENT_ID, U13_CLIENT_ID)
+BUNDLE_JS = (
+    "gz=new _I({authority:`https://account.premierleague.com/as`,"
+    "client_id:`%s`,redirect_uri:`${window.location.origin}/`,"
+    "scope:`openid profile email offline_access`}),"
+    "Rpe=new _I({authority:`https://account.premierleague.com/as`,"
+    "client_id:`%s`,redirect_uri:`${window.location.origin}/`})"
+) % (CLIENT_ID, U13_CLIENT_ID)
+
+
+class BundleSession(FakeSession):
+    def __init__(self, noise_scripts=0):
+        super().__init__()
+        noise = "".join(f'<script src="https://cdn.example.com/n{i}.js"></script>'
+                        for i in range(noise_scripts))
+        self.home = BUNDLE_HOME_HTML.replace("<head>", "<head>" + noise)
+
+    def get(self, url, params=None, timeout=None, headers=None):
+        if url == pl_sso.FPL_HOME:
+            self.calls.append(("GET", url))
+            return FakeResponse(body=self.home)
+        if url == "https://fantasy.premierleague.com/assets/index-CMoSnM_-.js":
+            self.calls.append(("GET", url))
+            return FakeResponse(body=BUNDLE_JS)
+        return super().get(url, params=params, timeout=timeout, headers=headers)
+
+
+def test_discovery_backtickli_bundledan_client_id_topadi():
+    params, step = pl_sso.discover_authorize(BundleSession())
+    assert step.ok, step.detail
+    # Aynan FPL ilovasining ID si — bosh sahifadagi yoki U13 niki emas
+    assert params["client_id"] == CLIENT_ID
+
+
+def test_discovery_begona_skriptlar_bundleni_surib_chiqarmaydi():
+    # Oldinda 10 ta uchinchi tomon skripti: o'z bundle'imiz baribir o'qiladi
+    params, step = pl_sso.discover_authorize(BundleSession(noise_scripts=10))
+    assert step.ok, step.detail
+    assert params["client_id"] == CLIENT_ID
+
+
 # ---------------------------------------------------------- qadam tahlili
 def test_qadam_maydonlari_json_dan_oqiladi():
     """`screen` HTML emas — maydonlar `formFieldsList` da."""
