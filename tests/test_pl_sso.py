@@ -513,6 +513,46 @@ def test_hech_bir_shakl_otmasa_xabar_saqlanadi():
     assert len(step.attempts) == 2
 
 
+# ------------------------------------------------------- discovery keshi
+def test_discovery_keshi_ikkinchi_kirishda_sahifani_yuklamaydi(tmp_path):
+    cache = tmp_path / "sso_discovery.json"
+    assert pl_sso.login("a@b.uz", "parol", session=FakeSession(), cache_path=cache).ok
+    assert cache.exists()
+    # Keshda faqat ochiq parametrlar — parol ham, token ham yo'q
+    assert "parol" not in cache.read_text() and TOKEN not in cache.read_text()
+
+    session = FakeSession()
+    result = pl_sso.login("a@b.uz", "parol", session=session, cache_path=cache)
+    assert result.ok, result.hint
+    assert ("GET", pl_sso.FPL_HOME) not in session.calls
+    assert session.last_authorize_params["client_id"] == CLIENT_ID
+
+
+def test_eskirgan_kesh_qaytadan_topiladi(tmp_path):
+    cache = tmp_path / "sso_discovery.json"
+    pl_sso.save_discovery(cache, {"client_id": "00000000-eski-eski-eski-000000000000"})
+
+    class Strict(FakeSession):
+        """Faqat haqiqiy client_id ni qabul qiladi — eskisiga widget bermaydi."""
+        def get(self, url, params=None, timeout=None, headers=None):
+            if url.endswith("/as/authorize") and (params or {}).get("client_id") != CLIENT_ID:
+                self.calls.append(("GET", url))
+                return FakeResponse(status=400, payload={"message": "invalid client"})
+            return super().get(url, params=params, timeout=timeout, headers=headers)
+
+    session = Strict()
+    result = pl_sso.login("a@b.uz", "parol", session=session, cache_path=cache)
+    assert result.ok, result.hint
+    assert ("GET", pl_sso.FPL_HOME) in session.calls
+    assert pl_sso.load_discovery(cache)["client_id"] == CLIENT_ID
+
+
+def test_muddati_otgan_kesh_ishlatilmaydi(tmp_path):
+    cache = tmp_path / "sso_discovery.json"
+    cache.write_text(json.dumps({"saved_at": 0, "params": {"client_id": CLIENT_ID}}))
+    assert pl_sso.load_discovery(cache) == {}
+
+
 # ---------------------------------------------------------- to'liq oqim
 def test_toliq_oqim_token_bilan_tugaydi():
     session = FakeSession()

@@ -43,6 +43,7 @@ from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 
 import requests
 
@@ -215,7 +216,8 @@ def whoami(session: requests.Session, creds: Credentials) -> tuple[int, str, str
 
 
 # --------------------------------------------------------- yo'l 1: DaVinci SSO
-def _login_sso(email: str, password: str, redirect_uri: str = "") -> LoginResult:
+def _login_sso(email: str, password: str, redirect_uri: str = "",
+               data_dir=None) -> LoginResult:
     """FPL ning haqiqiy login oqimi — PingOne DaVinci (`pl_sso` moduli).
 
     Oldin bu yerda `grant_type=password` (ROPC) turardi. U noto'g'ri edi:
@@ -226,7 +228,10 @@ def _login_sso(email: str, password: str, redirect_uri: str = "") -> LoginResult
 
     result = LoginResult(stage="sso")
     session = pl_sso.new_session()
-    flow = pl_sso.login(email, password, session=session, redirect_uri=redirect_uri)
+    # Discovery keshi `data/cache/` da (gitignore da): ochiq client_id, sir emas
+    cache_path = Path(data_dir) / "cache" / "sso_discovery.json" if data_dir else None
+    flow = pl_sso.login(email, password, session=session,
+                        redirect_uri=redirect_uri, cache_path=cache_path)
 
     # Har bir bosqichni ko'rinadigan qilamiz — qayerda to'xtagani yo'qolmasin
     result.detail = " | ".join(
@@ -376,7 +381,7 @@ def login(
     if not email or not password:
         return LoginResult(hint="Email va parol kerak.")
 
-    attempts = [lambda: _login_sso(email, password, redirect_uri)]
+    attempts = [lambda: _login_sso(email, password, redirect_uri, data_dir)]
     if use_browser:
         attempts.append(lambda: login_with_browser(
             email, password, data_dir, profile_key=profile_key))

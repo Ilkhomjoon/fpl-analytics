@@ -1,356 +1,843 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FPL — O'yinchilar</title>
+<title>FPL Brain</title>
+<script>
+  // Mavzu sahifa chizilishidan OLDIN qo'yiladi — aks holda oq chaqnash bo'ladi.
+  (function(){
+    var t = null;
+    try { t = localStorage.getItem("fpl-theme"); } catch (e) {}
+    if (t !== "light" && t !== "dark")
+      t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
 <style>
+  /* ------------------------------------------------------------ tokenlar */
   :root{
-    --bg:#f6f7f9; --panel:#ffffff; --line:#e2e5ea; --ink:#14171c; --muted:#697386;
-    --accent:#00a887; --accent-ink:#04322a; --warn:#c2410c; --bad:#b91c1c;
-    --good:#047857; --chip:#eef1f5; --shadow:0 1px 2px rgba(16,24,40,.06);
-    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --bg:#f2f4f8; --surface:#ffffff; --surface-2:#f6f7fb; --surface-3:#ebeef5;
+    --line:#e1e5ee; --line-2:#d0d6e2;
+    --ink:#0f1320; --ink-2:#3a4154; --muted:#687085;
+    --accent:#0c9b78; --accent-2:#087f62; --on-accent:#ffffff;
+    --accent-soft:rgba(12,155,120,.11);
+    --good:#0a8a58; --bad:#cf3838; --warn:#b26500; --info:#2a68e8;
+    --good-soft:rgba(10,138,88,.11); --bad-soft:rgba(207,56,56,.10);
+    --warn-soft:rgba(178,101,0,.12); --info-soft:rgba(42,104,232,.10);
+    --p1:#c98a00; --p2:#2a6fe0; --p3:#0c9b78; --p4:#d63a5e;
+    --pitch-a:#3aa96f; --pitch-b:#34a067; --pitch-line:rgba(255,255,255,.42);
+    --shadow-1:0 1px 2px rgba(16,22,40,.05), 0 1px 3px rgba(16,22,40,.04);
+    --shadow-2:0 12px 40px rgba(16,22,40,.16);
+    --st-good:#0ca30c; --st-warn:#e09a00; --st-serious:#e2703f; --st-crit:#d03b3b;
+    --lead:#2a68e8;
+    --r:14px; --r-sm:9px;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+    color-scheme:light;
   }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#0e1116; --panel:#161b22; --line:#262d38; --ink:#e6e9ee; --muted:#8b94a5;
-      --accent:#2dd4a7; --accent-ink:#03211c; --warn:#fb923c; --bad:#f87171;
-      --good:#34d399; --chip:#1d232c; --shadow:none;
-    }
+  :root[data-theme="dark"]{
+    --bg:#090b10; --surface:#11141b; --surface-2:#161a23; --surface-3:#1d222d;
+    --line:#222834; --line-2:#2f3746;
+    --ink:#edf0f6; --ink-2:#c2c8d6; --muted:#8891a4;
+    --accent:#3ddbab; --accent-2:#62e7c0; --on-accent:#04241b;
+    --accent-soft:rgba(61,219,171,.12);
+    --good:#3ddb97; --bad:#ff7b7b; --warn:#f3b144; --info:#74a5ff;
+    --good-soft:rgba(61,219,151,.12); --bad-soft:rgba(255,123,123,.12);
+    --warn-soft:rgba(243,177,68,.13); --info-soft:rgba(116,165,255,.12);
+    --p1:#f0b93a; --p2:#6ea4ff; --p3:#3ddbab; --p4:#ff7092;
+    --pitch-a:#155a3d; --pitch-b:#124f36; --pitch-line:rgba(255,255,255,.2);
+    --shadow-1:none;
+    --shadow-2:0 16px 48px rgba(0,0,0,.55);
+    --st-good:#2fc24a; --st-warn:#fab219; --st-serious:#ec835a; --st-crit:#e25555;
+    --lead:#74a5ff;
+    color-scheme:dark;
   }
+
+  /* ---------------------------------------------------------------- asos */
   *{box-sizing:border-box}
-  /* `hidden` atributi `display:flex` dan kuchliroq bo'lsin */
   [hidden]{display:none !important}
+  html,body{height:100%}
   body{
     margin:0; background:var(--bg); color:var(--ink);
-    font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    font:14px/1.5 "Inter","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
   }
-  header{
-    position:sticky; top:0; z-index:20; background:var(--panel);
-    border-bottom:1px solid var(--line); padding:10px 16px;
-    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
-  }
-  h1{font-size:15px; margin:0; font-weight:650; letter-spacing:-.01em}
-  h1 span{color:var(--muted); font-weight:400}
-  .grow{flex:1}
-  button{
-    font:inherit; padding:6px 12px; border-radius:7px; border:1px solid var(--line);
-    background:var(--panel); color:var(--ink); cursor:pointer;
-  }
-  button:hover{border-color:var(--muted)}
-  button.primary{background:var(--accent); color:var(--accent-ink); border-color:transparent; font-weight:600}
-  button.primary:disabled{opacity:.55; cursor:default}
-  input,select{
-    font:inherit; padding:6px 9px; border-radius:7px; border:1px solid var(--line);
-    background:var(--panel); color:var(--ink); min-width:0;
-  }
-  input:focus,select:focus{outline:2px solid var(--accent); outline-offset:-1px}
-  .pill{
-    font-size:12px; padding:3px 9px; border-radius:999px; background:var(--chip);
-    color:var(--muted); white-space:nowrap;
-  }
-  .pill.on{background:var(--accent); color:var(--accent-ink); font-weight:600}
+  h1,h2,h3,p{margin:0}
+  button,input,select{font:inherit; color:inherit}
+  button{cursor:pointer}
+  svg.ic{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.8;
+         stroke-linecap:round; stroke-linejoin:round; flex:none}
+  .num{font-variant-numeric:tabular-nums}
+  .easy{color:var(--good)} .hard{color:var(--bad)} .dim{color:var(--muted)}
+  code{font-family:var(--mono); font-size:12px; background:var(--surface-3);
+       padding:1px 5px; border-radius:5px}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 
-  main{padding:14px 16px 60px}
+  /* -------------------------------------------------------------- qobiq */
+  .app{display:grid; grid-template-columns:232px minmax(0,1fr); min-height:100%}
+  .side{
+    position:sticky; top:0; height:100vh; padding:18px 12px 14px;
+    background:var(--surface); border-right:1px solid var(--line);
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; padding:4px 10px 18px}
+  .logo{
+    width:34px; height:34px; border-radius:10px; display:grid; place-items:center;
+    background:linear-gradient(135deg,var(--accent),var(--info)); color:#fff;
+    font-weight:800; font-size:13px; letter-spacing:-.02em;
+  }
+  .brand b{font-size:15px; letter-spacing:-.01em; display:block; line-height:1.2}
+  .brand small{color:var(--muted); font-size:11.5px}
+  .nav{
+    display:flex; align-items:center; gap:11px; width:100%; text-align:left;
+    padding:9px 11px; border-radius:10px; border:0; background:none;
+    color:var(--muted); font-weight:550; font-size:13.5px;
+    transition:background .12s,color .12s;
+  }
+  .nav:hover{background:var(--surface-2); color:var(--ink)}
+  .nav.on{background:var(--accent-soft); color:var(--accent)}
+  .nav .lock{margin-left:auto; opacity:.55}
+  .nav .lock svg{width:13px; height:13px}
+  .side .grow{flex:1}
+  .sidefoot{color:var(--muted); font-size:11.5px; padding:8px 11px 0; line-height:1.45}
+
+  .main{min-width:0; display:flex; flex-direction:column}
+  .top{
+    position:sticky; top:0; z-index:30; display:flex; align-items:center; gap:10px;
+    padding:12px 24px; min-height:62px;
+    background:color-mix(in srgb,var(--bg) 86%,transparent);
+    backdrop-filter:saturate(1.4) blur(10px); border-bottom:1px solid var(--line);
+  }
+  .top h1{font-size:18px; font-weight:680; letter-spacing:-.02em; line-height:1.2}
+  .top .sub{color:var(--muted); font-size:12.5px}
+  .top .grow{flex:1}
+  .chip{
+    display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+    font-size:12px; font-weight:550; padding:5px 10px; border-radius:999px;
+    background:var(--surface); border:1px solid var(--line); color:var(--ink-2);
+  }
+  .chip.accent{background:var(--accent-soft); border-color:transparent; color:var(--accent)}
+  .chip.warn{background:var(--warn-soft); border-color:transparent; color:var(--warn)}
+  .chip svg{width:13px; height:13px}
+  main{padding:20px 24px 80px; width:100%; max-width:1440px; margin:0 auto}
+
+  /* ------------------------------------------------------------ tugmalar */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    padding:8px 14px; border-radius:var(--r-sm); border:1px solid var(--line);
+    background:var(--surface); font-weight:600; font-size:13px; white-space:nowrap;
+    transition:border-color .12s,background .12s,transform .05s;
+  }
+  .btn:hover{border-color:var(--line-2); background:var(--surface-2)}
+  .btn:active{transform:translateY(1px)}
+  .btn:disabled{opacity:.55; cursor:default; transform:none}
+  .btn.primary{background:var(--accent); border-color:transparent; color:var(--on-accent)}
+  .btn.primary:hover{background:var(--accent-2)}
+  .btn.block{width:100%; padding:10px 14px}
+  .btn.ghost{background:none; border-color:transparent; color:var(--muted)}
+  .btn.ghost:hover{background:var(--surface-2); color:var(--ink)}
+  .btn.danger{color:var(--bad)}
+  .iconbtn{
+    width:36px; height:36px; border-radius:10px; display:grid; place-items:center;
+    border:1px solid var(--line); background:var(--surface); color:var(--ink-2);
+  }
+  .iconbtn:hover{border-color:var(--line-2); color:var(--ink)}
+  .iconbtn.spin svg{animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .spinner{width:15px; height:15px; border-radius:50%; border:2px solid currentColor;
+           border-right-color:transparent; animation:spin .7s linear infinite; flex:none}
+
+  input[type=text],input[type=email],input[type=password],input[type=number],
+  input[type=search],select{
+    padding:8px 11px; border-radius:var(--r-sm); border:1px solid var(--line);
+    background:var(--surface); min-width:0; transition:border-color .12s,box-shadow .12s;
+  }
+  input::placeholder{color:var(--muted)}
+  input:focus,select:focus{outline:none; border-color:var(--accent);
+                           box-shadow:0 0 0 3px var(--accent-soft)}
+  label.field{display:block; font-size:12px; font-weight:600; color:var(--ink-2)}
+  label.field input{display:block; width:100%; margin-top:5px; font-weight:400; font-size:14px;
+                    padding:10px 12px}
+
+  /* -------------------------------------------------------------- hisob */
+  .acct{position:relative}
+  .acctbtn{
+    display:flex; align-items:center; gap:9px; padding:4px 10px 4px 4px;
+    border-radius:999px; border:1px solid var(--line); background:var(--surface);
+  }
+  .acctbtn:hover{border-color:var(--line-2)}
+  .avatar{
+    width:28px; height:28px; border-radius:50%; display:grid; place-items:center;
+    background:var(--accent); color:var(--on-accent); font-weight:700; font-size:11.5px;
+  }
+  .acctbtn .who{line-height:1.15; text-align:left}
+  .acctbtn .who b{display:block; font-size:12.5px; font-weight:650; max-width:160px;
+                  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .acctbtn .who small{color:var(--muted); font-size:11px}
+  .menu{
+    position:absolute; right:0; top:calc(100% + 8px); z-index:40; min-width:240px;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+    box-shadow:var(--shadow-2); padding:6px;
+  }
+  .menu .info{padding:9px 10px 10px; border-bottom:1px solid var(--line); margin-bottom:6px}
+  .menu .info b{display:block; font-size:13.5px}
+  .menu .info small{color:var(--muted); font-size:12px; display:block}
+  .menu button{
+    display:flex; align-items:center; gap:9px; width:100%; padding:8px 10px;
+    border:0; background:none; border-radius:8px; font-size:13px; text-align:left;
+  }
+  .menu button:hover{background:var(--surface-2)}
+
+  /* -------------------------------------------------------------- karta */
   .card{
-    background:var(--panel); border:1px solid var(--line); border-radius:11px;
-    padding:14px; margin-bottom:14px; box-shadow:var(--shadow);
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+    box-shadow:var(--shadow-1); margin-bottom:16px;
   }
-  .card h2{font-size:13px; margin:0 0 10px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted)}
-  .note{color:var(--muted); font-size:13px; margin:8px 0 0}
-  .filters{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
-  .filters label{display:flex; align-items:center; gap:6px; font-size:13px; color:var(--muted)}
-  .filters input[type=search]{min-width:190px}
-  .filters input[type=number]{width:78px}
+  .card-h{display:flex; align-items:center; gap:10px; padding:14px 18px 0; flex-wrap:wrap}
+  .card-h h2{font-size:14.5px; font-weight:650; letter-spacing:-.01em}
+  .card-h .sub{color:var(--muted); font-size:12.5px}
+  .card-h .grow{flex:1}
+  .card-b{padding:14px 18px 18px}
+  .note{color:var(--muted); font-size:12.5px; line-height:1.6}
+  .note b{color:var(--ink-2)}
+  details.hint{margin-top:12px}
+  details.hint summary{cursor:pointer; color:var(--muted); font-size:12.5px; font-weight:550;
+                       list-style:none; display:inline-flex; align-items:center; gap:6px}
+  details.hint summary::-webkit-details-marker{display:none}
+  details.hint summary::before{content:"ⓘ"; font-size:13px}
+  details.hint[open] summary{margin-bottom:8px}
 
-  .tablewrap{overflow:auto; max-height:calc(100vh - 250px); border:1px solid var(--line); border-radius:11px; background:var(--panel)}
+  .kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;
+        margin-bottom:16px}
+  .kpi{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+    padding:14px 16px; box-shadow:var(--shadow-1); min-width:0;
+  }
+  .kpi .l{color:var(--muted); font-size:12px; font-weight:550}
+  .kpi .v{font-size:25px; font-weight:700; letter-spacing:-.03em; line-height:1.2;
+          margin-top:3px; font-variant-numeric:tabular-nums}
+  .kpi .v small{font-size:13px; font-weight:550; color:var(--muted); letter-spacing:0; margin-left:2px}
+  .kpi .s{color:var(--muted); font-size:11.5px; margin-top:2px; overflow:hidden;
+          text-overflow:ellipsis; white-space:nowrap}
+  .kpi.hero{background:linear-gradient(135deg,var(--accent-soft),transparent 70%),var(--surface);
+            border-color:color-mix(in srgb,var(--accent) 35%,var(--line))}
+  .kpi.hero .v{color:var(--accent)}
+  .kpis.flat{margin:0; grid-template-columns:repeat(auto-fit,minmax(132px,1fr))}
+  .kpis.flat .kpi{background:var(--surface-2); box-shadow:none}
+
+  .seg{display:inline-flex; background:var(--surface-3); padding:3px; border-radius:10px; gap:2px}
+  .seg button{border:0; background:none; padding:5px 11px; border-radius:8px;
+              font-size:12.5px; font-weight:600; color:var(--muted)}
+  .seg button:hover{color:var(--ink)}
+  .seg button.on{background:var(--surface); color:var(--ink); box-shadow:var(--shadow-1)}
+
+  .pos{
+    display:inline-grid; place-items:center; min-width:38px; height:21px; padding:0 6px;
+    border-radius:6px; font-size:10.5px; font-weight:700; letter-spacing:.03em;
+    color:var(--pc); background:color-mix(in srgb,var(--pc) 14%,transparent);
+  }
+  .p1{--pc:var(--p1)} .p2{--pc:var(--p2)} .p3{--pc:var(--p3)} .p4{--pc:var(--p4)}
+  .tag{display:inline-grid; place-items:center; min-width:17px; height:17px; padding:0 4px;
+       border-radius:5px; font-size:10px; font-weight:700; margin-left:5px;
+       background:var(--surface-3); color:var(--muted); vertical-align:1px}
+  .tag.cap{background:var(--accent); color:var(--on-accent)}
+  .tag.warn{background:var(--warn-soft); color:var(--warn)}
+  .tag.bad{background:var(--bad-soft); color:var(--bad)}
+
+  /* ----------------------------------------------------------- holatlar */
+  .state{padding:54px 20px; text-align:center; color:var(--muted)}
+  .state .ico{width:46px; height:46px; border-radius:14px; display:grid; place-items:center;
+              margin:0 auto 14px; background:var(--surface-3); color:var(--ink-2)}
+  .state.err .ico{background:var(--bad-soft); color:var(--bad)}
+  .state h3{color:var(--ink); font-size:15.5px; font-weight:650; margin-bottom:5px}
+  .state p{max-width:460px; margin:0 auto; font-size:13px; white-space:pre-wrap}
+  .state .btn{margin-top:16px}
+  .state .spinner{width:26px; height:26px; margin:0 auto 14px; color:var(--accent); display:block}
+  .banner{display:flex; gap:10px; align-items:flex-start; padding:11px 14px; border-radius:var(--r-sm);
+          font-size:13px; margin-bottom:16px; line-height:1.5}
+  .banner.info{background:var(--info-soft); color:var(--info)}
+  .banner.warn{background:var(--warn-soft); color:var(--warn)}
+  .banner.ok{background:var(--good-soft); color:var(--good)}
+  .banner b{font-weight:650}
+  .msg{padding:10px 12px; border-radius:var(--r-sm); font-size:13px; margin-top:12px;
+       white-space:pre-wrap; line-height:1.5}
+  .msg.err{background:var(--bad-soft); color:var(--bad)}
+  .msg.ok{background:var(--good-soft); color:var(--good)}
+  .msg.info{background:var(--surface-3); color:var(--ink-2); display:flex; gap:9px; align-items:center}
+
+  /* ---------------------------------------------------------- o'yinchilar */
+  .toolbar{display:flex; gap:9px; flex-wrap:wrap; align-items:center}
+  .searchbox{position:relative; flex:1 1 220px; max-width:320px}
+  .searchbox svg{position:absolute; left:10px; top:50%; transform:translateY(-50%);
+                 color:var(--muted); width:15px; height:15px}
+  .searchbox input{width:100%; padding-left:32px}
+  .mini{display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--muted)}
+  .mini input{width:74px; padding:7px 8px}
+  .toggle{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color:var(--ink-2);
+          padding:6px 10px; border-radius:999px; border:1px solid var(--line); cursor:pointer;
+          user-select:none; background:var(--surface)}
+  .toggle input{accent-color:var(--accent); margin:0}
+  .tablewrap{overflow:auto; max-height:calc(100vh - 262px); border-top:1px solid var(--line);
+             border-radius:0 0 var(--r) var(--r)}
   table{border-collapse:separate; border-spacing:0; width:100%; font-size:13px}
-  th,td{padding:7px 9px; text-align:right; white-space:nowrap; border-bottom:1px solid var(--line)}
+  th,td{padding:8px 10px; text-align:right; white-space:nowrap; border-bottom:1px solid var(--line)}
+  tbody tr:last-child td{border-bottom:0}
   th{
-    position:sticky; top:0; z-index:2; background:var(--panel); cursor:pointer;
-    font-weight:600; color:var(--muted); user-select:none; font-size:12px;
+    position:sticky; top:0; z-index:2; background:var(--surface-2); cursor:pointer;
+    font-weight:600; color:var(--muted); user-select:none; font-size:11.5px;
+    text-transform:uppercase; letter-spacing:.04em;
   }
   th:hover{color:var(--ink)}
   th.sorted{color:var(--accent)}
-  th[data-k="name"],td.name{text-align:left; position:sticky; left:0; background:var(--panel); z-index:1}
-  th[data-k="name"]{z-index:3}
+  th.l,td.l{text-align:left}
+  th.name,td.name{text-align:left; position:sticky; left:0; z-index:1; background:var(--surface)}
+  th.name{z-index:3; background:var(--surface-2)}
   td.name{font-weight:600}
-  tbody tr:hover td{background:var(--chip)}
-  tbody tr:hover td.name{background:var(--chip)}
-  .num{font-variant-numeric:tabular-nums; font-family:var(--mono); font-size:12.5px}
-  .pos{display:inline-block; min-width:34px; text-align:center; border-radius:5px; padding:1px 5px; font-size:11px; font-weight:600; background:var(--chip); color:var(--muted)}
-  .up{color:var(--good)} .down{color:var(--bad)} .dim{color:var(--muted)}
-  .flag{font-size:11px; padding:1px 5px; border-radius:5px; background:var(--chip); color:var(--warn); margin-left:5px}
-  .bar{display:inline-block; height:5px; border-radius:3px; background:var(--accent); vertical-align:middle}
-  .msg{padding:10px 12px; border-radius:8px; font-size:13px; margin-top:10px; white-space:pre-wrap}
-  /* pre-wrap faqat server javobi uchun kerak (unda \n bor); oddiy matn HTML bo'ylab oqsin */
-  .msg.prose{white-space:normal; line-height:1.55}
-  .msg.prose p{margin:0 0 8px}
-  .msg.prose p:last-child{margin:0}
-  .msg.err{background:rgba(185,28,28,.1); color:var(--bad)}
-  .msg.ok{background:rgba(4,120,87,.12); color:var(--good)}
-  .msg.info{background:var(--chip); color:var(--muted)}
-  details summary{cursor:pointer; color:var(--muted); font-size:13px}
-  .loginrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px}
-  code{font-family:var(--mono); font-size:12px; background:var(--chip); padding:1px 5px; border-radius:4px}
+  td.name small{color:var(--muted); font-weight:400; margin-left:6px}
+  td{font-variant-numeric:tabular-nums}
+  tbody tr:hover td{background:var(--surface-2)}
+  td.up{color:var(--good)} td.down{color:var(--bad)}
+  .bar{display:inline-block; height:4px; border-radius:2px; background:var(--accent);
+       vertical-align:middle; margin-left:6px; opacity:.8}
 
-  /* --- ko'rinishlar --- */
-  .tabs{display:flex; gap:4px; background:var(--chip); padding:3px; border-radius:9px}
-  .tab{border:none; background:transparent; padding:5px 12px; border-radius:7px; color:var(--muted); font-weight:600; font-size:13px}
-  .tab.on{background:var(--panel); color:var(--ink); box-shadow:var(--shadow)}
-  .stats{display:flex; gap:18px; flex-wrap:wrap}
-  .stat b{display:block; font-size:18px; font-variant-numeric:tabular-nums; letter-spacing:-.02em}
-  .stat span{font-size:12px; color:var(--muted)}
-  .row{display:grid; grid-template-columns:44px 1fr 52px 52px 56px 58px 62px 1fr; gap:9px;
-       align-items:center;
-       padding:7px 4px; border-bottom:1px solid var(--line); font-size:13px}
-  .row:last-child{border-bottom:none}
-  .row .who{font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-  .row .who small{color:var(--muted); font-weight:400; margin-left:5px}
-  .row .ev{font-family:var(--mono); font-weight:700; text-align:right}
-  .row .meta{font-family:var(--mono); color:var(--muted); text-align:right; font-size:12px}
-  .row .fix{color:var(--muted); font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-  .row.head{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:600}
-  .row.head span,.row.head div{font-family:inherit; font-weight:600}
-  .easy{color:var(--good)} .hard{color:var(--bad)}
-  .cap{background:var(--accent); color:var(--accent-ink); border-radius:4px; padding:0 4px; font-size:10px; font-weight:700; margin-left:5px}
-  .why{color:var(--warn); font-size:12px}
-  .row{cursor:pointer}
-  .badge{background:var(--line); color:var(--muted); border-radius:4px; padding:0 4px;
-         font-size:10px; font-weight:700; margin-left:4px}
-  .badge.warn{background:var(--warn); color:#fff}
-  .detail{padding:2px 4px 10px 54px; border-bottom:1px solid var(--line)}
-  .parts{display:flex; flex-wrap:wrap; gap:4px 14px; font-size:12px; color:var(--muted)}
-  .parts b{font-family:var(--mono); color:var(--ink)}
-  .parts.sum{margin-top:5px}
-  .move{padding:10px 4px; border-bottom:1px solid var(--line)}
-  .move:last-child{border-bottom:none}
-  .move.dim{opacity:.55}
-  .movehead{display:flex; align-items:baseline; gap:8px}
-  .movehead b{font-family:var(--mono); font-size:17px}
-  .movehead small{color:var(--muted); font-size:12px}
-  .movebody{margin-top:3px; font-size:13px}
-  .movebody .mv small{color:var(--muted); font-weight:400}
-  .movebody .arrow{color:var(--muted); margin:0 6px}
-  .movefoot{margin-top:3px; font-size:12px; color:var(--muted); font-family:var(--mono)}
+  /* --------------------------------------------------------------- maydon */
+  .pitch{
+    position:relative; border-radius:var(--r); overflow:hidden; padding:18px 8px 20px;
+    background:repeating-linear-gradient(180deg,var(--pitch-a) 0 12.5%,var(--pitch-b) 12.5% 25%);
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .pitch::before{                       /* jarima maydoni va markaz chizig'i */
+    content:""; position:absolute; left:50%; top:0; width:min(46%,340px); height:74px;
+    transform:translateX(-50%); border:2px solid var(--pitch-line); border-top:0;
+    border-radius:0 0 6px 6px; pointer-events:none;
+  }
+  .pitch::after{
+    content:""; position:absolute; left:50%; bottom:-70px; width:140px; height:140px;
+    transform:translateX(-50%); border:2px solid var(--pitch-line); border-radius:50%;
+    pointer-events:none;
+  }
+  .prow{position:relative; z-index:1; display:flex; justify-content:center; gap:clamp(4px,1.6vw,22px)}
+  .pc{
+    position:relative; flex:0 1 112px; min-width:0; padding:0; border:0; background:none;
+    text-align:center; color:#fff; transition:transform .12s;
+  }
+  .pc:hover{transform:translateY(-2px)}
+  .pc .ev{
+    display:inline-grid; place-items:center; min-width:46px; height:34px; padding:0 8px;
+    border-radius:11px 11px 4px 4px; font-weight:750; font-size:15px; letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums; color:#0b1220; background:#fff;
+    border-bottom:3px solid var(--pc); box-shadow:0 3px 10px rgba(0,0,0,.25);
+  }
+  .pc .nm{
+    display:block; margin-top:4px; padding:3px 6px; border-radius:6px 6px 0 0;
+    background:rgba(8,14,24,.82); font-size:12px; font-weight:650; line-height:1.25;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .pc .fx{
+    display:block; padding:2px 6px 3px; border-radius:0 0 6px 6px; font-size:10.5px;
+    background:rgba(255,255,255,.92); color:#1c2433; font-weight:600;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .pc .fx.easy{background:#d6f5e3; color:#0a6a43}
+  .pc .fx.hard{background:#ffdede; color:#a32626}
+  .pc .bdg{
+    position:absolute; top:-5px; right:calc(50% - 34px); min-width:18px; height:18px; padding:0 4px;
+    border-radius:9px; display:grid; place-items:center; font-size:10px; font-weight:800;
+    background:#0b1220; color:#fff; border:2px solid #fff;
+  }
+  .pc .bdg.warn{right:auto; left:calc(50% - 34px); background:#e09a00; color:#1b1300}
+  .pc .bdg.bad{right:auto; left:calc(50% - 34px); background:#d03b3b}
+  .bench{
+    display:flex; align-items:center; gap:clamp(4px,1.6vw,22px); justify-content:center;
+    margin-top:12px; padding:14px 8px 12px; border-radius:var(--r);
+    background:var(--surface-2); border:1px dashed var(--line-2); position:relative;
+  }
+  .bench .lbl{position:absolute; left:12px; top:6px; font-size:10.5px; font-weight:700;
+              text-transform:uppercase; letter-spacing:.06em; color:var(--muted)}
+  .bench .pc{color:#fff; padding-top:8px}
+  .bench .pc .ev{box-shadow:var(--shadow-1); border:1px solid var(--line); border-bottom:3px solid var(--pc)}
 
-  /* --- mavsum sur'ati --- */
-  /* Holat ranglari o'zgarmas va faqat holat uchun — seriya rangi sifatida
-     ishlatilmaydi. Rang yolg'iz ma'no tashimaydi: yonida har doim matn turadi. */
-  :root{--st-good:#0ca30c; --st-warn:#fab219; --st-serious:#ec835a; --st-crit:#d03b3b}
-  .hero{font-size:48px; line-height:1.05; font-weight:650; letter-spacing:-.03em}
-  .hero small{font-size:15px; font-weight:400; color:var(--muted); letter-spacing:0}
-  /* O'lchagich: to'ldirilmagan qism — shu rampaning ochroq pog'onasi,
-     shunda holat butun chiziq bo'ylab o'qiladi */
-  /* To'ldirilmagan qism — holat rangining ochroq pog'onasi, shunda holat
-     butun chiziq bo'ylab o'qiladi (dataviz: "same-ramp track") */
-  .meter{position:relative; height:14px; border-radius:7px;
-         margin:34px 0 6px}
+  /* -------------------------------------------------------------- ro'yxat */
+  .lr{
+    display:grid; grid-template-columns:44px minmax(120px,1.4fr) 54px 54px 60px 60px 58px minmax(120px,1.2fr);
+    gap:10px; align-items:center; padding:9px 18px; border-top:1px solid var(--line);
+    font-size:13px; width:100%; border-left:0; border-right:0; border-bottom:0;
+    background:none; text-align:left;
+  }
+  button.lr:hover{background:var(--surface-2)}
+  .lr.head{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted);
+           font-weight:600; background:var(--surface-2)}
+  .lr .who{font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .lr .who small{color:var(--muted); font-weight:400; margin-left:6px}
+  .lr .m{text-align:right; color:var(--ink-2); font-variant-numeric:tabular-nums}
+  .lr .evc{text-align:right; font-weight:750; font-variant-numeric:tabular-nums; font-size:14px}
+  .lr .fix{color:var(--muted); font-size:12.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .lr .why{color:var(--warn); font-size:12.5px; white-space:normal; line-height:1.35}
+  .listwrap{overflow-x:auto}
+  .listwrap > div{min-width:720px}
+  .subhead{padding:10px 18px; font-size:11px; font-weight:700; text-transform:uppercase;
+           letter-spacing:.06em; color:var(--muted); border-top:1px solid var(--line)}
+
+  /* ------------------------------------------------------------ transfer */
+  .move{display:grid; grid-template-columns:92px minmax(0,1fr); gap:16px; align-items:center;
+        padding:14px 18px; border-top:1px solid var(--line)}
+  .move.off{opacity:.55}
+  .gain{text-align:center; padding:9px 4px; border-radius:12px; background:var(--good-soft); color:var(--good)}
+  .gain.neg{background:var(--bad-soft); color:var(--bad)}
+  .gain b{display:block; font-size:21px; font-weight:750; letter-spacing:-.03em; line-height:1.1;
+          font-variant-numeric:tabular-nums}
+  .gain small{font-size:10.5px; font-weight:600; opacity:.85}
+  .swap{display:grid; grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr); gap:10px; align-items:center}
+  .swap .arrow{color:var(--muted); display:grid; place-items:center}
+  .pl{display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:10px;
+      background:var(--surface-2); min-width:0; margin:3px 0}
+  .pl.out{border-left:3px solid var(--bad)} .pl.in{border-left:3px solid var(--good)}
+  .pl b{display:block; font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .pl small{color:var(--muted); font-size:11.5px; font-variant-numeric:tabular-nums}
+  .pl > div{min-width:0}
+  .movefoot{margin-top:6px; font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums}
+
+  /* ------------------------------------------------------------- tortma */
+  .scrim{position:fixed; inset:0; z-index:60; background:rgba(5,8,14,.5); opacity:0;
+         pointer-events:none; transition:opacity .18s}
+  .scrim.on{opacity:1; pointer-events:auto}
+  .drawer{
+    position:fixed; top:0; right:0; bottom:0; z-index:61; width:min(400px,100vw);
+    background:var(--surface); border-left:1px solid var(--line); box-shadow:var(--shadow-2);
+    transform:translateX(102%); transition:transform .22s cubic-bezier(.2,.8,.2,1);
+    display:flex; flex-direction:column; overflow:auto;
+  }
+  .drawer.on{transform:none}
+  .dr-h{display:flex; gap:12px; align-items:flex-start; padding:18px 18px 14px;
+        border-bottom:1px solid var(--line)}
+  .dr-h h3{font-size:18px; font-weight:700; letter-spacing:-.02em; line-height:1.2}
+  .dr-h .sub{color:var(--muted); font-size:12.5px; margin-top:3px}
+  .dr-b{padding:16px 18px 28px}
+  .dr-b h4{margin:20px 0 9px; font-size:11px; font-weight:700; text-transform:uppercase;
+           letter-spacing:.06em; color:var(--muted)}
+  .q4{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
+  .q4 div{background:var(--surface-2); border-radius:10px; padding:9px 6px; text-align:center}
+  .q4 b{display:block; font-size:16px; font-weight:700; font-variant-numeric:tabular-nums}
+  .q4 small{color:var(--muted); font-size:10.5px}
+  .part{display:grid; grid-template-columns:112px minmax(0,1fr) 46px; gap:9px; align-items:center;
+        font-size:12.5px; padding:3px 0}
+  .part .t{color:var(--ink-2)}
+  .part .track{height:7px; border-radius:4px; background:var(--surface-3); overflow:hidden}
+  .part .fillb{height:100%; border-radius:4px; background:var(--accent)}
+  .part.neg .fillb{background:var(--bad)}
+  .part b{text-align:right; font-variant-numeric:tabular-nums}
+  .part.total{border-top:1px solid var(--line); margin-top:6px; padding-top:9px; font-weight:700}
+  .facts{display:grid; gap:7px; font-size:13px}
+  .facts > div{display:flex; justify-content:space-between; gap:12px}
+  .facts > div > span{color:var(--muted)}
+  .facts > div > div{text-align:right}
+
+  /* ---------------------------------------------------------- sur'at */
+  .hero-n{font-size:52px; line-height:1.05; font-weight:750; letter-spacing:-.04em;
+          font-variant-numeric:tabular-nums}
+  .hero-n small{font-size:14.5px; font-weight:450; color:var(--muted); letter-spacing:0}
+  .meter{position:relative; height:14px; border-radius:7px; margin:38px 0 6px}
   .meter .track{position:absolute; inset:0; border-radius:7px; opacity:.18}
-  .meter .fill{position:relative; height:100%; border-radius:7px;
-               transition:width .4s ease}
-  .meter .good{background:var(--st-good)}
-  .meter .warning{background:var(--st-warn)}
-  .meter .serious{background:var(--st-serious)}
-  .meter .critical{background:var(--st-crit)}
-  /* Reja belgisi — shu paytgacha qayerda bo'lish kerak edi. Yorliq PASTDA:
-     tepada sarlavha raqami turadi va ustma-ust tushib qolardi. */
-  .meter .mark{position:absolute; top:-6px; bottom:-6px; width:2px;
-               background:var(--ink); opacity:.6}
-  .meter .mark span{position:absolute; top:20px; left:50%; transform:translateX(-50%);
-                    font-size:10px; color:var(--muted); white-space:nowrap}
-  /* Birinchi o'rindagi menejer — xuddi shu 2810 shkalasida. Ustunlar
-     grafigida emas: farq aynan maqsadga nisbatan o'lchanadi. */
-  .meter .lead{position:absolute; top:-7px; bottom:-7px; width:2px;
-               background:#3b82f6}
-  .meter .lead span{position:absolute; bottom:22px; left:50%;
-                    transform:translateX(-50%); font-size:10px; color:#3b82f6;
-                    white-space:nowrap; font-weight:600}
-  .meterfoot{display:flex; justify-content:space-between; font-size:12px;
-             color:var(--muted); font-family:var(--mono); margin-top:18px}
-  .state{display:inline-flex; align-items:center; gap:5px; font-weight:600;
-         font-size:13px}
-  .state .dot{width:9px; height:9px; border-radius:50%}
+  .meter .fill{position:relative; height:100%; border-radius:7px; transition:width .5s ease}
+  .meter .good{background:var(--st-good)} .meter .warning{background:var(--st-warn)}
+  .meter .serious{background:var(--st-serious)} .meter .critical{background:var(--st-crit)}
+  .meter .mark{position:absolute; top:-6px; bottom:-6px; width:2px; background:var(--ink); opacity:.6}
+  .meter .mark span{position:absolute; top:22px; left:50%; transform:translateX(-50%);
+                    font-size:10.5px; color:var(--muted); white-space:nowrap}
+  .meter .lead{position:absolute; top:-7px; bottom:-7px; width:2px; background:var(--lead)}
+  .meter .lead span{position:absolute; bottom:23px; left:50%; transform:translateX(-50%);
+                    font-size:10.5px; color:var(--lead); white-space:nowrap; font-weight:650}
+  .meterfoot{display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted);
+             font-variant-numeric:tabular-nums; margin:20px 0 18px}
+  .status{display:inline-flex; align-items:center; gap:7px}
+  .status i{width:10px; height:10px; border-radius:50%; display:inline-block}
 
-  /* --- turlar bo'yicha ustunlar --- */
-  /* Ixcham: balandlik 92px. Grafik asosiy emas, sur'atning qo'shimchasi —
-     sahifaning yarmini egallashi shart emas. */
-  .chart{position:relative; margin-top:16px}
-  .bars{position:relative; display:flex; align-items:flex-end; height:92px}
-  /* Ustunning o'zi — nishon emas. Nishon `.slot`: u to'liq balandlikda va
-     ustundan kengroq, shuning uchun sichqoncha aniq tegishi shart emas.
-     Oraliq `gap` emas, `padding` bilan beriladi: shunda ustun markazlari
-     teng masofada turadi va chiziqli qatlam ular bilan aniq mos tushadi. */
+  .chart{position:relative; margin-top:6px}
+  .bars{position:relative; display:flex; align-items:flex-end; height:150px}
   .slot{flex:1; min-width:8px; height:100%; display:flex; align-items:flex-end;
-        position:relative; cursor:default; padding:0 2px}
-  .slot:hover,.slot:focus-visible{background:var(--chip); outline:none}
-  .slot .b{width:100%; border-radius:2px 2px 0 0; background:var(--muted);
-           opacity:.45; transition:opacity .15s}
+        position:relative; padding:0 2px; border-radius:6px 6px 0 0}
+  .slot:hover,.slot:focus-visible{background:var(--surface-2); outline:none}
+  .slot .b{width:100%; border-radius:4px 4px 0 0; background:var(--muted); opacity:.4; transition:opacity .15s}
   .slot .b.on{background:var(--st-good); opacity:.85}
   .slot:hover .b,.slot:focus-visible .b{opacity:1}
-  .slot .lbl{position:absolute; bottom:-17px; left:0; right:0; text-align:center;
-             font-size:9px; color:var(--muted); font-variant-numeric:tabular-nums}
-  .slot .chip2{position:absolute; top:2px; left:50%; transform:translateX(-50%);
-               font-size:8px; color:var(--accent); font-weight:700}
-  /* Chiziqli qatlam — yetakchi va o'rtacha menejer. Ustunlar ustida turadi,
-     lekin sichqonchani to'smaydi. */
-  .lines{position:absolute; inset:0; width:100%; height:100%; overflow:visible;
-         pointer-events:none; z-index:4}
+  .slot .lbl{position:absolute; bottom:-18px; left:0; right:0; text-align:center;
+             font-size:10px; color:var(--muted); font-variant-numeric:tabular-nums}
+  .slot .chipm{position:absolute; top:2px; left:50%; transform:translateX(-50%);
+               font-size:8.5px; color:var(--accent); font-weight:800; text-transform:uppercase}
+  .lines{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; z-index:4}
   .lines polyline{fill:none; stroke-width:2; vector-effect:non-scaling-stroke}
-  .lines .lead{stroke:#3b82f6}
-  .lines .avg{stroke:var(--muted); stroke-dasharray:1 3; stroke-width:2;
-              stroke-linecap:round}
-  /* Havolalar: norma va o'rtacha menejer */
-  .refline{position:absolute; left:0; right:0; height:0; pointer-events:none; z-index:3}
-  .refline.norm{border-top:1px dashed var(--muted); opacity:.85}
-  .refline.avg{border-top:2px solid var(--accent); opacity:.75}
-  .key i.lead{height:0; border-top:2px solid #3b82f6}
-  .refline span{position:absolute; left:0; top:-15px; font-size:10px;
-                color:var(--muted); background:var(--panel); padding:0 4px;
-                border-radius:3px}
-  .chartfoot{margin-top:26px; display:flex; gap:16px; flex-wrap:wrap;
-             font-size:12px; color:var(--muted)}
-  .key{display:inline-flex; align-items:center; gap:5px}
+  .lines .avg{stroke:var(--ink-2); stroke-dasharray:1 4; stroke-linecap:round}
+  .refline{position:absolute; left:0; right:0; height:0; pointer-events:none; z-index:3;
+           border-top:1px dashed var(--muted)}
+  .refline span{position:absolute; left:0; top:-16px; font-size:10.5px; color:var(--muted);
+                background:var(--surface); padding:0 5px; border-radius:4px}
+  .legend{margin-top:30px; display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--muted)}
+  .key{display:inline-flex; align-items:center; gap:6px}
   .key i{width:14px; height:9px; border-radius:2px; display:inline-block}
-  .key i.line{height:0; border-top:2px solid var(--accent)}
   .key i.dash{height:0; border-top:1px dashed var(--muted)}
-  .key i.dot{height:0; border-top:2px dotted var(--muted)}
-  /* Tooltip: qiymat yetakchi, yorliq ikkinchi darajali */
-  .tip{position:fixed; z-index:50; pointer-events:none; opacity:0;
-       transform:translate(-50%,-100%); transition:opacity .12s;
-       background:var(--panel); border:1px solid var(--line); border-radius:9px;
-       box-shadow:0 6px 24px rgba(16,24,40,.18); padding:9px 11px; min-width:170px}
+  .key i.dot{height:0; border-top:2px dotted var(--ink-2)}
+  .tip{position:fixed; z-index:70; pointer-events:none; opacity:0; transform:translate(-50%,-100%);
+       transition:opacity .12s; background:var(--surface); border:1px solid var(--line);
+       border-radius:12px; box-shadow:var(--shadow-2); padding:10px 12px; min-width:180px}
   .tip.on{opacity:1}
-  .tip h4{margin:0 0 6px; font-size:12px; color:var(--muted); font-weight:600;
+  .tip h4{margin:0 0 6px; font-size:11.5px; color:var(--muted); font-weight:650;
           text-transform:uppercase; letter-spacing:.04em}
-  /* Qiymat yetakchi, yorliq ikkinchi darajali — shuning uchun qiymat
-     birinchi ustunda va to'q rangda. `order` ISHLATILMAYDI: u butun
-     panjarani qayta tartiblab, hamma qiymatni hamma yorliqdan oldinga
-     surib yuborgan edi. */
-  .tip dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:3px 10px;
-          font-size:12.5px; align-items:baseline}
-  .tip dd{margin:0; font-family:var(--mono); font-weight:700; text-align:right;
-          font-variant-numeric:tabular-nums; color:var(--ink)}
+  .tip dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:3px 10px; font-size:12.5px;
+          align-items:baseline}
+  .tip dd{margin:0; font-weight:700; text-align:right; font-variant-numeric:tabular-nums}
   .tip dt{color:var(--muted)}
   .tip .sep{grid-column:1/-1; border-top:1px solid var(--line); margin:3px 0 1px}
+
+  /* ---------------------------------------------------------- kirish oynasi */
+  dialog{
+    border:1px solid var(--line); border-radius:18px; padding:0; width:min(420px,calc(100vw - 28px));
+    background:var(--surface); color:var(--ink); box-shadow:var(--shadow-2);
+  }
+  dialog::backdrop{background:rgba(5,8,14,.55); backdrop-filter:blur(3px)}
+  .dlg{padding:24px 24px 20px; position:relative}
+  .dlg .x{position:absolute; top:14px; right:14px; border:0; background:none}
+  .dlg h2{font-size:19px; font-weight:700; letter-spacing:-.02em}
+  .dlg .lead-t{color:var(--muted); font-size:13px; margin:5px 0 18px}
+  .dlg form{display:grid; gap:13px}
+  .dlg details{margin-top:18px; border-top:1px solid var(--line); padding-top:14px}
+  .dlg summary{cursor:pointer; color:var(--muted); font-size:12.5px; font-weight:600}
+  .dlg .rowf{display:flex; gap:8px; margin-top:10px}
+  .dlg .rowf input{flex:1}
+
+  .toast{
+    position:fixed; left:50%; bottom:26px; z-index:90; transform:translate(-50%,20px);
+    background:var(--ink); color:var(--bg); padding:10px 16px; border-radius:12px;
+    font-size:13px; font-weight:600; box-shadow:var(--shadow-2); opacity:0;
+    pointer-events:none; transition:opacity .2s,transform .2s; max-width:calc(100vw - 32px);
+  }
+  .toast.on{opacity:1; transform:translate(-50%,0)}
+
+  /* --------------------------------------------------------------- mobil */
+  .bottomnav{display:none}
+  @media (max-width:900px){
+    .app{grid-template-columns:minmax(0,1fr)}
+    .side{display:none}
+    .top{padding:10px 14px}
+    .top .sub,.hide-m{display:none}
+    main{padding:14px 12px 92px}
+    .bottomnav{
+      display:grid; grid-template-columns:repeat(5,1fr); position:fixed; left:0; right:0; bottom:0;
+      z-index:35; background:var(--surface); border-top:1px solid var(--line);
+      padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+    }
+    .bottomnav .nav{flex-direction:column; gap:3px; padding:6px 2px; font-size:10.5px;
+                    justify-content:center; text-align:center}
+    .bottomnav .nav .lock{display:none}
+    .acctbtn .who{display:none}
+    .acctbtn{padding:3px}
+    .pc .ev{min-width:38px; height:29px; font-size:13px}
+    .pc .nm{font-size:10.5px; padding:2px 3px}
+    .pc .fx{font-size:9.5px; padding:1px 3px 2px}
+    .move{grid-template-columns:1fr}
+    .gain{display:flex; align-items:baseline; justify-content:center; gap:8px}
+    .swap{grid-template-columns:1fr}
+    .swap .arrow{transform:rotate(90deg)}
+    .hero-n{font-size:40px}
+    .tablewrap{max-height:none}
+    .drawer{top:auto; left:0; width:100%; max-height:86vh; border-left:0;
+            border-top:1px solid var(--line); border-radius:18px 18px 0 0;
+            transform:translateY(102%)}
+    .toast{bottom:84px}
+  }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>FPL <span id="gw">—</span></h1>
-  <span class="pill" id="deadline"></span>
-  <span class="pill" id="count"></span>
-  <span class="tabs">
-    <button class="tab on" data-view="players">O'yinchilar</button>
-    <button class="tab" data-view="squad">Jamoam</button>
-    <button class="tab" data-view="transfers">Transferlar</button>
-    <button class="tab" data-view="draft">Jamoa tuzish</button>
-    <button class="tab" data-view="pace">Sur'at</button>
-  </span>
-  <span class="grow"></span>
-  <span class="pill" id="authpill">login yo'q</span>
-  <button id="toggleLogin">Kirish</button>
-  <button id="refresh">Yangilash</button>
-</header>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">FPL</div>
+      <div><b>FPL Brain</b><small id="brandGw">tahlil dvigateli</small></div>
+    </div>
+    <div id="sideNav"></div>
+    <div class="grow"></div>
+    <div class="sidefoot" id="sideFoot"></div>
+  </aside>
 
-<main>
-  <section class="card" id="loginCard" hidden>
+  <div class="main">
+    <header class="top">
+      <div>
+        <h1 id="viewTitle">O'yinchilar</h1>
+        <div class="sub" id="viewSub"></div>
+      </div>
+      <span class="grow"></span>
+      <span class="chip accent hide-m" id="gwChip" hidden></span>
+      <span class="chip hide-m" id="deadline" hidden></span>
+      <button class="iconbtn" id="refresh" title="Yangilash" aria-label="Yangilash"></button>
+      <button class="iconbtn" id="themeBtn" title="Mavzu" aria-label="Tun/kun mavzusi"></button>
+      <div class="acct" id="acct"></div>
+    </header>
+
+    <main>
+      <!-- ============================ O'yinchilar -->
+      <section id="v-players">
+        <div class="card">
+          <div class="card-b">
+            <div class="toolbar">
+              <div class="searchbox"><span id="searchIc"></span>
+                <input type="search" id="q" placeholder="Ism yoki jamoa…"></div>
+              <div class="seg" id="posSeg"></div>
+              <select id="team"><option value="">Barcha jamoa</option></select>
+              <label class="mini">narx ≤ <input type="number" id="maxPrice" step="0.1" min="3.5" placeholder="15.0"></label>
+              <label class="mini">egalik ≥ <input type="number" id="minOwn" step="0.5" min="0" placeholder="0"></label>
+              <label class="mini">daqiqa % ≥ <input type="number" id="minMin" step="5" min="0" placeholder="0"></label>
+              <label class="toggle"><input type="checkbox" id="hideEnabler" checked> to'ldiruvchilarsiz</label>
+              <label class="toggle"><input type="checkbox" id="onlyAvailable" checked> faqat sog'lomlar</label>
+              <button class="btn ghost" id="reset">Tozalash</button>
+            </div>
+            <details class="hint">
+              <summary>Ball qanday hisoblanadi</summary>
+              <p class="note"><b>Ball</b> = rol × 90 daqiqalik chiqim. Egalik faqat dalil kam bo'lganda va
+                narxga qarab hisobga olinadi — arzon «byudjet to'ldiruvchi» yuqoriga chiqmaydi.
+                Ustun sarlavhasini bosib saralang.</p>
+            </details>
+          </div>
+          <div class="card-h" style="padding-bottom:12px">
+            <h2>Ro'yxat</h2><span class="sub" id="count"></span>
+          </div>
+          <div class="tablewrap" id="tableWrap">
+            <table><thead><tr id="head"></tr></thead><tbody id="body"></tbody></table>
+          </div>
+          <div id="tableMsg"></div>
+        </div>
+      </section>
+
+      <section id="v-squad" hidden></section>
+      <section id="v-transfers" hidden></section>
+      <section id="v-draft" hidden></section>
+      <section id="v-pace" hidden></section>
+    </main>
+  </div>
+</div>
+
+<nav class="bottomnav" id="bottomNav"></nav>
+
+<!-- ============================ o'yinchi tafsiloti -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true"></aside>
+
+<!-- ============================ kirish oynasi -->
+<dialog id="loginDlg">
+  <div class="dlg">
+    <button class="x iconbtn" id="loginClose" aria-label="Yopish"></button>
     <h2>FPL hisobiga kirish</h2>
-    <div class="loginrow">
-      <input type="email" id="email" placeholder="email" autocomplete="username">
-      <input type="password" id="password" placeholder="parol" autocomplete="current-password">
-      <button class="primary" id="doLogin">Kirish</button>
-      <button id="doLogout">Chiqish</button>
-    </div>
+    <p class="lead-t">Jonli tarkib, aniq sotish narxlari va tekin transferlar soni uchun.
+      Parol saqlanmaydi — faqat kirish paytida ishlatiladi.</p>
+    <form id="loginForm">
+      <label class="field">Email
+        <input type="email" id="email" autocomplete="username" required placeholder="siz@example.com"></label>
+      <label class="field">Parol
+        <input type="password" id="password" autocomplete="current-password" required placeholder="parol"></label>
+      <button class="btn primary block" id="doLogin" type="submit">Kirish</button>
+    </form>
     <div id="loginMsg"></div>
-    <div class="loginrow" id="fallbackRow" hidden>
-      <button id="doBrowser">Brauzer orqali davom etish</button>
-      <span class="pill">oyna ochiladi, ~20 soniya</span>
+    <div id="fallbackRow" hidden style="margin-top:10px">
+      <button class="btn block" id="doBrowser" type="button">Brauzer orqali davom etish (~20 soniya)</button>
     </div>
-
-    <details style="margin-top:12px">
+    <details>
       <summary>Boshqa yo'llar</summary>
-      <div class="loginrow" style="margin-top:8px">
-        <input type="number" id="entryId" placeholder="Jamoa ID (parolsiz, cheklangan)">
-        <button id="doConnect">Ulanish</button>
+      <div class="rowf">
+        <input type="number" id="entryId" placeholder="Jamoa ID (parolsiz)">
+        <button class="btn" id="doConnect" type="button">Ulanish</button>
       </div>
-      <div class="loginrow" style="margin-top:8px">
-        <input type="password" id="token" placeholder="Bearer eyJ... yoki cookie satri" style="flex:1; min-width:240px">
-        <button id="doToken">Token bilan</button>
-        <button id="doQuick">Saqlangan profil</button>
+      <div class="rowf">
+        <input type="password" id="token" placeholder="Bearer eyJ… yoki cookie">
+        <button class="btn" id="doToken" type="button">Token</button>
       </div>
-      <p class="note">
-        Jamoa ID deadline'dan keyingi tarkibni beradi; jonli tarkib, aniq sotish
-        narxlari va erkin transferlar soni uchun login kerak.
-      </p>
+      <div class="rowf">
+        <button class="btn" id="doQuick" type="button" style="flex:1">Saqlangan profil bilan kirish</button>
+      </div>
+      <p class="note" style="margin-top:10px">Jamoa ID faqat deadline'dan keyingi tarkibni beradi;
+        qaror qabul qilinayotgan paytda u bo'sh bo'ladi.</p>
     </details>
-  </section>
-
-  <div id="viewPlayers">
-  <section class="card">
-    <h2>Saralash</h2>
-    <div class="filters">
-      <input type="search" id="q" placeholder="Ism yoki jamoa…">
-      <select id="pos"><option value="">Barcha pozitsiya</option></select>
-      <select id="team"><option value="">Barcha jamoa</option></select>
-      <label>narx ≤ <input type="number" id="maxPrice" step="0.1" min="3.5" placeholder="15.0"></label>
-      <label>egalik ≥ <input type="number" id="minOwn" step="0.5" min="0" placeholder="0"></label>
-      <label>daqiqa % ≥ <input type="number" id="minMin" step="5" min="0" placeholder="0"></label>
-      <label><input type="checkbox" id="hideEnabler" checked> byudjet to'ldiruvchilarsiz</label>
-      <label><input type="checkbox" id="onlyAvailable" checked> faqat sog'lomlar</label>
-      <button id="reset">Tozalash</button>
-    </div>
-    <p class="note" id="explain">
-      <b>Ball</b> = rol × 90 daqiqalik chiqim. Egalik faqat dalil kam bo'lganda va
-      narxga qarab hisobga olinadi — arzon «byudjet to'ldiruvchi» yuqoriga chiqmaydi.
-    </p>
-  </section>
-
-  <div class="tablewrap">
-    <table id="tbl">
-      <thead><tr id="head"></tr></thead>
-      <tbody id="body"></tbody>
-    </table>
   </div>
-  <div id="tableMsg"></div>
-  </div>
-
-  <div id="viewSquad" hidden>
-    <section class="card" id="squadTop"></section>
-    <section class="card" id="squadXi"></section>
-    <section class="card" id="squadBench"></section>
-    <div id="squadMsg"></div>
-  </div>
-
-  <div id="viewTransfers" hidden>
-    <section class="card" id="trTop"></section>
-    <section class="card" id="trMoves"></section>
-    <section class="card" id="trWeak"></section>
-    <div id="trMsg"></div>
-  </div>
-
-  <div id="viewPace" hidden>
-    <section class="card" id="paceCard" hidden></section>
-    <section class="card" id="paceStats" hidden></section>
-    <section class="card" id="paceChart" hidden></section>
-    <div id="paceMsg"></div>
-  </div>
-
-  <div id="viewDraft" hidden>
-    <section class="card" id="drTop"></section>
-    <section class="card" id="drXi"></section>
-    <section class="card" id="drBench"></section>
-    <div id="drMsg"></div>
-  </div>
-</main>
+</dialog>
 
 <div class="tip" id="tip" role="tooltip"></div>
+<div class="toast" id="toast" role="status"></div>
 
 <script>
+// ===================================================================== asos
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g,
+  c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = (v, d) => (v === null || v === undefined || v === "") ? "—"
+  : (typeof v === "number" ? v.toFixed(d ?? 0) : v);
+const n1 = (v) => (v ?? 0).toFixed(1);
+const signed = (v, d = 1) => (v > 0 ? "+" : "") + Number(v).toFixed(d);
+const big = (v) => v ? v.toLocaleString("ru") : "—";
+const store = {
+  get(k, d){ try { return localStorage.getItem(k) ?? d; } catch (e) { return d; } },
+  set(k, v){ try { localStorage.setItem(k, v); } catch (e) {} },
+};
+
+const I = (d) => `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+const ICON = {
+  players: I('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>'),
+  squad: I('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'),
+  transfers: I('<path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>'),
+  draft: I('<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/>'),
+  pace: I('<path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/>'),
+  refresh: I('<path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>'),
+  sun: I('<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>'),
+  moon: I('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'),
+  search: I('<circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>'),
+  x: I('<path d="M18 6L6 18M6 6l12 12"/>'),
+  logout: I('<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/>'),
+  login: I('<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/>'),
+  lock: I('<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'),
+  clock: I('<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>'),
+  arrow: I('<path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>'),
+  alert: I('<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>'),
+};
+
+async function api(path, opts){
+  try {
+    const r = await fetch(path, Object.assign({headers:{"Content-Type":"application/json"}}, opts || {}));
+    const body = await r.json().catch(() => ({}));
+    return {ok: r.ok, status: r.status, body};
+  } catch (e) {
+    return {ok: false, status: 0, body: {error: "Server bilan aloqa yo'q"}};
+  }
+}
+
+let toastTimer = null;
+function toast(text){
+  const t = $("toast");
+  t.textContent = text;
+  t.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("on"), 3200);
+}
+
+function message(el, kind, text){
+  el.innerHTML = text ? `<div class="msg ${kind}">${esc(text)}</div>` : "";
+}
+
+/** Bo'lim ichidagi holat: yuklanmoqda / xato / login kerak. */
+function stateBox(el, kind, title, text){
+  if (kind === "loading"){
+    el.innerHTML = `<div class="card"><div class="state"><span class="spinner"></span>
+      <h3>${esc(title)}</h3><p>${esc(text || "")}</p></div></div>`;
+    return;
+  }
+  const auth = kind === "auth";
+  el.innerHTML = `<div class="card"><div class="state ${kind === "err" ? "err" : ""}">
+    <div class="ico">${auth ? ICON.lock : ICON.alert}</div>
+    <h3>${esc(title)}</h3><p>${esc(text || "")}</p>
+    ${auth ? `<button class="btn primary" data-act="login">${ICON.login} Kirish</button>`
+           : `<button class="btn" data-act="retry">${ICON.refresh} Qayta urinish</button>`}
+  </div></div>`;
+}
+
+/** Server xatosini bo'lim holatiga aylantiradi. 401 — xato emas, login kerak. */
+function failBox(el, r, title){
+  const text = (r.body.error || "olinmadi") + (r.body.hint ? "\n" + r.body.hint : "");
+  if (r.status === 401) stateBox(el, "auth", "Avval hisobingizga kiring",
+    "Bu bo'lim sizning jamoangiz bilan ishlaydi.");
+  else stateBox(el, "err", title, text);
+}
+
+const kpi = (v, l, s, cls) => `<div class="kpi ${cls || ""}"><div class="l">${l}</div>
+  <div class="v">${v}</div>${s ? `<div class="s">${s}</div>` : ""}</div>`;
+
+// ==================================================================== mavzu
+function applyTheme(t){
+  document.documentElement.dataset.theme = t;
+  $("themeBtn").innerHTML = t === "dark" ? ICON.sun : ICON.moon;
+  $("themeBtn").title = t === "dark" ? "Kunduzgi mavzu" : "Tungi mavzu";
+}
+$("themeBtn").onclick = () => {
+  const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  store.set("fpl-theme", t);
+  applyTheme(t);
+};
+
+// ================================================================= bo'limlar
+const VIEWS = {
+  players:   {t: "O'yinchilar",  s: "Butun liga — rol, chiqim va bozor oqimi", needs: false},
+  squad:     {t: "Jamoam",       s: "Tavsiya etilgan 11 lik va zaxira", needs: true},
+  transfers: {t: "Transferlar",  s: "Kimni sotib, kimni olish", needs: true},
+  draft:     {t: "Jamoa tuzish", s: "Noldan 15 lik — 100m ichida", needs: false},
+  pace:      {t: "Sur'at",       s: "Mavsum maqsadiga nisbatan", needs: true},
+};
+let view = "players";
+let STATUS = {};
+let DATA = {players: [], teams: [], positions: []};
+let SQUAD = null, TRANSFERS = null, DRAFT = null, PACE = null;
+
+function buildNav(){
+  const html = Object.entries(VIEWS).map(([k, v]) =>
+    `<button class="nav" data-view="${k}">${ICON[k]}<span>${v.t}</span>${
+      v.needs ? `<span class="lock" title="login kerak">${ICON.lock}</span>` : ""}</button>`).join("");
+  $("sideNav").innerHTML = html;
+  $("bottomNav").innerHTML = html;
+}
+
+function markNav(){
+  // Qulf — "bu bo'lim uchun jamoa kerak" degani. Jamoa ID ma'lum bo'lsa
+  // (login, ochiq ID yoki config.yaml) bo'lim ishlaydi, qulf ko'rsatilmaydi.
+  const authed = STATUS.logged_in || STATUS.public_only || STATUS.entry_id;
+  document.querySelectorAll(".nav").forEach(b => {
+    b.classList.toggle("on", b.dataset.view === view);
+    const lock = b.querySelector(".lock");
+    if (lock) lock.hidden = !!authed;
+  });
+}
+
+const LOADERS = {
+  players: (f) => loadPlayers(f), squad: (f) => loadSquad(f),
+  transfers: (f) => loadTransfers(f), draft: (f) => loadDraft(f), pace: (f) => loadPace(f),
+};
+const LOADED = {
+  players: () => DATA.players.length > 0, squad: () => !!SQUAD,
+  transfers: () => !!TRANSFERS, draft: () => !!DRAFT, pace: () => !!PACE,
+};
+
+function setView(name, push){
+  if (!VIEWS[name]) name = "players";
+  view = name;
+  Object.keys(VIEWS).forEach(k => $("v-" + k).hidden = k !== name);
+  $("viewTitle").textContent = VIEWS[name].t;
+  $("viewSub").textContent = VIEWS[name].s;
+  document.title = `${VIEWS[name].t} · FPL Brain`;
+  markNav();
+  if (push !== false && location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
+  if (!LOADED[name]()) LOADERS[name](false);
+  window.scrollTo(0, 0);
+}
+
+document.addEventListener("click", (e) => {
+  const nav = e.target.closest(".nav[data-view]");
+  if (nav) return setView(nav.dataset.view);
+  const act = e.target.closest("[data-act]");
+  if (act){
+    if (act.dataset.act === "login") return openLogin();
+    if (act.dataset.act === "retry") return LOADERS[view](true);
+    if (act.dataset.act === "logout") return doLogout();
+    if (act.dataset.act === "mode") return setMode(act.dataset.mode);
+    if (act.dataset.act === "draft-go") return loadDraft(true);
+  }
+  const pl = e.target.closest("[data-el]");
+  if (pl) return openPlayer(pl.dataset.ctx, pl.dataset.el);
+  if (!e.target.closest("#acct")) closeMenu();
+});
+
+$("refresh").innerHTML = ICON.refresh;
+$("refresh").onclick = async () => {
+  $("refresh").classList.add("spin");
+  await LOADERS[view](true);
+  $("refresh").classList.remove("spin");
+};
+
+// ============================================================== o'yinchilar
 const COLUMNS = [
   {k:"name",  t:"O'yinchi", type:"text"},
-  {k:"team",  t:"Jamoa",    type:"text"},
   {k:"pos_short", t:"Poz",  type:"text"},
   {k:"price", t:"Narx",     d:1},
   {k:"ownership", t:"Egalik %", d:1},
@@ -374,51 +861,35 @@ const COLUMNS = [
   {k:"points", t:"Ochko", d:0},
   {k:"score", t:"Ball", d:1, bar:true},
 ];
+let sortKey = "score", sortDir = -1, posFilter = "";
 
-let DATA = {players:[], teams:[], positions:[]};
-let sortKey = "score", sortDir = -1;
-
-const $ = (id) => document.getElementById(id);
-const fmt = (v, d) => (v === null || v === undefined || v === "") ? "—"
-  : (typeof v === "number" ? v.toFixed(d ?? 0) : v);
-
-async function api(path, opts) {
-  const r = await fetch(path, Object.assign({headers:{"Content-Type":"application/json"}}, opts||{}));
-  const body = await r.json().catch(() => ({}));
-  return {ok:r.ok, status:r.status, body};
-}
-
-function message(el, kind, text){
-  el.innerHTML = text ? `<div class="msg ${kind}">${text}</div>` : "";
-}
-
-// ------------------------------------------------------------------ chizish
 function buildHead(){
   $("head").innerHTML = COLUMNS.map(c =>
-    `<th data-k="${c.k}" class="${c.k===sortKey?'sorted':''}">${c.t}${
-      c.k===sortKey ? (sortDir<0?" ↓":" ↑") : ""}</th>`
-  ).join("");
-  $("head").querySelectorAll("th").forEach(th => th.onclick = () => {
-    const k = th.dataset.k;
-    if (k === sortKey) sortDir = -sortDir;
-    else { sortKey = k; sortDir = (COLUMNS.find(c=>c.k===k)||{}).type === "text" ? 1 : -1; }
-    buildHead(); render();
-  });
+    `<th data-k="${c.k}" class="${c.k === "name" ? "name" : (c.type === "text" ? "l" : "")}${
+      c.k === sortKey ? " sorted" : ""}">${c.t}${
+      c.k === sortKey ? (sortDir < 0 ? " ↓" : " ↑") : ""}</th>`).join("");
 }
+$("head").onclick = (e) => {
+  const th = e.target.closest("th");
+  if (!th) return;
+  const k = th.dataset.k;
+  if (k === sortKey) sortDir = -sortDir;
+  else { sortKey = k; sortDir = (COLUMNS.find(c => c.k === k) || {}).type === "text" ? 1 : -1; }
+  buildHead(); renderPlayers();
+};
 
-function visible(){
+function visiblePlayers(){
   const q = $("q").value.trim().toLowerCase();
-  const pos = $("pos").value, team = $("team").value;
+  const team = $("team").value;
   const maxPrice = parseFloat($("maxPrice").value);
   const minOwn = parseFloat($("minOwn").value);
   const minMin = parseFloat($("minMin").value);
   const hideEnabler = $("hideEnabler").checked;
   const onlyAvailable = $("onlyAvailable").checked;
-
   return DATA.players.filter(p => {
-    if (q && !(p.name.toLowerCase().includes(q) || p.full_name.toLowerCase().includes(q)
+    if (q && !(p.name.toLowerCase().includes(q) || (p.full_name || "").toLowerCase().includes(q)
       || p.team.toLowerCase().includes(q))) return false;
-    if (pos && String(p.pos) !== pos) return false;
+    if (posFilter && String(p.pos) !== posFilter) return false;
     if (team && String(p.team_id) !== team) return false;
     if (!isNaN(maxPrice) && p.price > maxPrice) return false;
     if (!isNaN(minOwn) && p.ownership < minOwn) return false;
@@ -432,273 +903,441 @@ function visible(){
 function cell(p, c){
   const v = p[c.k];
   if (c.k === "name"){
-    const flag = p.status !== "a" ? `<span class="flag" title="${(p.news||"").replace(/"/g,"")}">${p.status}</span>` : "";
-    const enab = p.enabler ? `<span class="flag" title="byudjet to'ldiruvchi">₿</span>` : "";
-    return `<td class="name" title="${p.full_name}">${p.name}${flag}${enab}</td>`;
+    const flag = p.status !== "a"
+      ? `<span class="tag ${p.status === "d" ? "warn" : "bad"}" title="${esc(p.news)}">${esc(p.status)}</span>` : "";
+    const enab = p.enabler ? `<span class="tag" title="byudjet to'ldiruvchi">₿</span>` : "";
+    return `<td class="name" title="${esc(p.full_name)}">${esc(p.name)}${flag}${enab}<small>${esc(p.team)}</small></td>`;
   }
-  if (c.type === "text") return `<td>${v ?? "—"}</td>`;
-
-  let cls = "num";
-  if (c.signed && typeof v === "number") cls += v > 0 ? " up" : (v < 0 ? " down" : " dim");
+  if (c.k === "pos_short") return `<td class="l"><span class="pos p${p.pos}">${esc(v)}</span></td>`;
+  if (c.type === "text") return `<td class="l">${esc(v ?? "—")}</td>`;
+  let cls = "";
+  if (c.signed && typeof v === "number") cls = v > 0 ? "up" : (v < 0 ? "down" : "dim");
   let inner = fmt(v, c.d);
   if (c.signed && typeof v === "number" && v > 0) inner = "+" + inner;
   if (c.bar && typeof v === "number"){
     const w = Math.max(0, Math.min(100, v)) * 0.34;
-    inner += ` <span class="bar" style="width:${w.toFixed(0)}px"></span>`;
+    inner += `<span class="bar" style="width:${w.toFixed(0)}px"></span>`;
   }
   return `<td class="${cls}">${inner}</td>`;
 }
 
-function render(){
-  const rows = visible();
+function renderPlayers(){
+  const rows = visiblePlayers();
   const col = COLUMNS.find(c => c.k === sortKey) || {};
-  rows.sort((a,b) => {
+  rows.sort((a, b) => {
     const x = a[sortKey], y = b[sortKey];
     if (col.type === "text") return String(x).localeCompare(String(y)) * sortDir;
     return ((x ?? -1e9) - (y ?? -1e9)) * sortDir;
   });
   const shown = rows.slice(0, 300);
-  $("body").innerHTML = shown.map(p =>
-    `<tr>${COLUMNS.map(c => cell(p, c)).join("")}</tr>`).join("");
-  $("count").textContent = `${rows.length} o'yinchi` + (rows.length > 300 ? " (300 tasi ko'rsatildi)" : "");
-  message($("tableMsg"), "info", rows.length ? "" : "Bu shartlarga mos o'yinchi yo'q.");
+  $("body").innerHTML = shown.map(p => `<tr>${COLUMNS.map(c => cell(p, c)).join("")}</tr>`).join("");
+  $("count").textContent = `${rows.length} o'yinchi` + (rows.length > 300 ? " · 300 tasi ko'rsatildi" : "");
+  $("tableMsg").innerHTML = rows.length ? "" :
+    `<div class="state"><h3>Mos o'yinchi yo'q</h3><p>Filtrlarni yumshatib ko'ring.</p></div>`;
 }
 
-function fillSelects(){
-  $("pos").innerHTML = `<option value="">Barcha pozitsiya</option>` +
-    DATA.positions.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
-  $("team").innerHTML = `<option value="">Barcha jamoa</option>` +
-    DATA.teams.map(t => `<option value="${t.id}">${t.short} — ${t.name}</option>`).join("");
+function buildPosSeg(){
+  const items = [{id: "", name: "Hammasi"}].concat(
+    DATA.positions.map(p => ({id: String(p.id), name: p.short || p.name})));
+  $("posSeg").innerHTML = items.map(p =>
+    `<button data-pos="${p.id}" class="${p.id === posFilter ? "on" : ""}">${esc(p.name)}</button>`).join("");
 }
+$("posSeg").onclick = (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  posFilter = b.dataset.pos;
+  buildPosSeg(); renderPlayers();
+};
 
 function countdown(iso){
   if (!iso) return "";
   const left = new Date(iso) - new Date();
   if (left <= 0) return "deadline o'tdi";
-  const h = Math.floor(left/3.6e6), d = Math.floor(h/24);
-  return d ? `deadline: ${d} kun ${h%24} soat` : `deadline: ${h} soat ${Math.floor(left/6e4)%60} daq`;
+  const h = Math.floor(left / 3.6e6), d = Math.floor(h / 24);
+  return d ? `${d} kun ${h % 24} soat` : `${h} soat ${Math.floor(left / 6e4) % 60} daq`;
 }
 
-// -------------------------------------------------------------- ma'lumot
-async function load(force){
-  message($("tableMsg"), "info", "Yuklanmoqda…");
+function paintHeader(){
+  if (DATA.event){
+    $("gwChip").hidden = false;
+    $("gwChip").textContent = `GW${DATA.event}`;
+    $("brandGw").textContent = `GW${DATA.event} · tahlil dvigateli`;
+  }
+  const left = countdown(DATA.deadline);
+  $("deadline").hidden = !left;
+  $("deadline").innerHTML = left ? `${ICON.clock} ${esc(left)}` : "";
+  const soon = DATA.deadline && (new Date(DATA.deadline) - new Date()) < 24 * 3.6e6
+    && (new Date(DATA.deadline) - new Date()) > 0;
+  $("deadline").classList.toggle("warn", !!soon);
+}
+
+async function loadPlayers(force){
+  if (!DATA.players.length)
+    $("tableMsg").innerHTML = `<div class="state"><span class="spinner"></span><h3>Yuklanmoqda…</h3></div>`;
   const r = await api("/api/players" + (force ? "?refresh=1" : ""));
   if (!r.ok){
-    message($("tableMsg"), "err", "Ma'lumot olinmadi: " + (r.body.error || r.status));
+    $("tableMsg").innerHTML = `<div class="state err"><div class="ico">${ICON.alert}</div>
+      <h3>Ma'lumot olinmadi</h3><p>${esc(r.body.error || r.status)}</p>
+      <button class="btn" data-act="retry">${ICON.refresh} Qayta urinish</button></div>`;
     return;
   }
   DATA = r.body;
-  fillSelects();
-  $("gw").textContent = DATA.event ? `GW${DATA.event}` : "";
-  $("deadline").textContent = countdown(DATA.deadline);
-  buildHead();
-  render();
+  $("team").innerHTML = `<option value="">Barcha jamoa</option>` +
+    DATA.teams.map(t => `<option value="${t.id}">${esc(t.short)} — ${esc(t.name)}</option>`).join("");
+  buildPosSeg(); buildHead(); renderPlayers(); paintHeader();
 }
 
-let polling = null;
+$("searchIc").outerHTML = ICON.search;
+$("reset").onclick = () => {
+  ["q", "maxPrice", "minOwn", "minMin"].forEach(id => $(id).value = "");
+  $("team").value = ""; posFilter = "";
+  $("hideEnabler").checked = true; $("onlyAvailable").checked = true;
+  buildPosSeg(); renderPlayers();
+};
+["q", "maxPrice", "minOwn", "minMin"].forEach(id => $(id).oninput = renderPlayers);
+["team", "hideEnabler", "onlyAvailable"].forEach(id => $(id).onchange = renderPlayers);
 
-async function refreshStatus(){
-  const r = await api("/api/status");
-  const s = r.body || {};
-  const pill = $("authpill");
-  if (s.logged_in){
-    const left = s.seconds_left
-      ? ` · ${s.seconds_left > 3600
-          ? Math.round(s.seconds_left / 3600) + " soat"
-          : Math.max(1, Math.round(s.seconds_left / 60)) + " daq"}` : "";
-    pill.textContent = (s.name || "kirdingiz")
-      + (s.entry_id ? ` · ${s.entry_id}` : "") + left;
-    pill.classList.add("on");
-  } else if (s.public_only){
-    pill.textContent = `jamoa ${s.entry_id} · ochiq`;
-    pill.classList.remove("on");
-  } else if (s.job_running){
-    pill.textContent = `brauzer ochiq · ${s.job_seconds}s`;
-    pill.classList.remove("on");
-  } else {
-    pill.textContent = s.demo ? "demo rejimi" : "login yo'q";
-    pill.classList.remove("on");
-  }
-  return s;
-}
-
-/** Kirish fonda ishlaydi — natija chiqquncha holatni so'rab turamiz. */
-function pollLogin(){
-  if (polling) clearInterval(polling);
-  polling = setInterval(async () => {
-    const s = await refreshStatus();
-    if (s.job_running){
-      const extra = s.job_seconds > 12
-        ? " Brauzer oynasi ochilgan bo'lsa — o'sha yerda kiring, captcha chiqsa bosing."
-        : "";
-      message($("loginMsg"), "info", `Kirilmoqda… (${s.job_seconds}s)${extra}`);
-      return;
-    }
-    clearInterval(polling); polling = null;
-    ["doLogin", "doBrowser", "doQuick"].forEach(id => $(id).disabled = false);
-    if (s.last_login){
-      message($("loginMsg"), s.last_login.ok ? "ok" : "err", loginReport(s.last_login));
-      // DaVinci o'tmasa — brauzer zaxirasini taklif qilamiz
-      $("fallbackRow").hidden = !!s.last_login.ok;
-      if (s.last_login.ok){ lastPassword = ""; SQUAD = null; }
-    }
-    if (s.logged_in){ SQUAD = null; if (view === "squad") loadSquad(true); }
-  }, 2000);
-}
-
-function stageLine(s){
-  const bits = [s.stage || "?"];
-  if (s.status) bits.push("HTTP " + s.status);
-  if (s.hint) bits.push(s.hint);
-  if (s.detail) bits.push(s.detail);
-  return "  • " + bits.join(" · ");
-}
-
-function loginReport(body){
-  if (!body) return "";
-  if (body.ok) return `Kirdingiz: ${body.name || ""} — jamoa ${body.entry_id}`;
-  const parts = [body.hint || "Kirish amalga oshmadi."];
-  const detail = body.detail || (body.tried || []).map(s => s.detail).filter(Boolean)[0];
-  if (detail) parts.push(detail);
-  return parts.join("\n");
-}
-
-// ------------------------------------------------------------- jamoam
-let SQUAD = null, view = "players";
+// ================================================== tarkib: maydon va ro'yxat
+// `REG` — tortma (drawer) uchun: "squad:123" → o'yinchi obyekti.
+const REG = {};
+const POS_OF = {DRV: 1, HIM: 2, YAR: 3, HUJ: 4};
+const posOf = (p) => p.pos || POS_OF[p.pos_short] || 0;
+let mode = store.get("fpl-mode", "pitch") === "list" ? "list" : "pitch";
 
 function diffClass(v){ return v == null ? "" : (v <= 2.6 ? "easy" : (v >= 3.6 ? "hard" : "")); }
 
-function playerRow(p, withReason){
+function badges(p){
+  const cap = p.is_captain ? '<span class="tag cap">C</span>'
+            : (p.is_vice ? '<span class="tag">V</span>' : "");
+  const pen = p.pen ? '<span class="tag" title="penaltichi">P</span>' : "";
+  const sp = p.set_piece ? '<span class="tag" title="standart pozitsiyalar">S</span>' : "";
+  const ban = p.ban_risk ? '<span class="tag warn" title="4 ta sariq — yana bittasi diskvalifikatsiya">4🟨</span>' : "";
+  const flag = (p.status && p.status !== "a")
+    ? `<span class="tag ${p.status === "d" ? "warn" : "bad"}" title="${esc(p.news)}">${esc(p.status)}</span>` : "";
+  return cap + pen + sp + ban + flag;
+}
+
+function pitchCard(ctx, p){
   const fx = p.fixture || {};
-  const place = fx.opp_position ? ` ${fx.opp_position}-o'r` : "";
-  // Qiyinlik pozitsiyaga bog'liq: DRV/HIM uchun raqibning hujumi,
-  // YAR/HUJ uchun raqibning himoyasi hal qiladi
-  const himoya = p.pos <= 2;
-  const izoh = himoya ? "raqib gol uradimi" : "raqib gol o'tkazadimi";
+  // Maydonda qisqa matn: raqib (yoki jamoa) va qiyinlik rangi
+  const line = fx.opponent
+    ? `<span class="fx ${diffClass(fx.eff_fdr)}">${esc(fx.opponent)}</span>`
+    : `<span class="fx">${esc(p.team_short || p.team || "")} · ${n1(p.price)}</span>`;
+  const cap = p.is_captain ? '<span class="bdg">C</span>' : (p.is_vice ? '<span class="bdg">V</span>' : "");
+  const flag = (p.status && p.status !== "a")
+    ? `<span class="bdg ${p.status === "d" ? "warn" : "bad"}">!</span>`
+    : ((p.p_start ?? 100) < 60 ? '<span class="bdg warn">?</span>' : "");
+  return `<button class="pc p${posOf(p)}" data-ctx="${ctx}" data-el="${p.element}"
+      title="${esc(p.name)} — EV ${n1(p.ev)}">
+    ${cap}${flag}<span class="ev">${n1(p.ev)}</span>
+    <span class="nm">${esc(p.name)}</span>${line}</button>`;
+}
+
+function pitchHtml(ctx, players){
+  const xi = players.filter(p => p.in_xi);
+  const bench = players.filter(p => !p.in_xi);
+  const rows = [1, 2, 3, 4].map(pos =>
+    `<div class="prow">${xi.filter(p => posOf(p) === pos).map(p => pitchCard(ctx, p)).join("")}</div>`).join("");
+  return `<div class="card-b"><div class="pitch">${rows}</div>
+    <div class="bench"><span class="lbl">Zaxira</span>${bench.map(p => pitchCard(ctx, p)).join("")}</div></div>`;
+}
+
+function listRow(ctx, p, last){
+  const form = p.form ?? 0;
+  return `<button class="lr" data-ctx="${ctx}" data-el="${p.element}">
+    <span class="pos p${posOf(p)}">${esc(p.pos_short)}</span>
+    <div class="who">${esc(p.name)}${badges(p)}<small>${esc(p.team_short || p.team || "")}</small></div>
+    <div class="m">${n1(p.price)}</div>
+    <div class="m ${form >= 5 ? "easy" : (form < 2 ? "hard" : "")}">${n1(form)}</div>
+    <div class="m">${n1(p.ownership)}%</div>
+    <div class="m">${(p.p_start ?? 0).toFixed(0)}%</div>
+    <div class="evc">${n1(p.ev)}</div>
+    ${last(p)}</button>`;
+}
+
+const listHead = (last) => `<div class="lr head"><span></span><div>O'yinchi</div>
+  <div class="m">Narx</div><div class="m">Forma</div><div class="m">Egalik</div>
+  <div class="m">Tarkib</div><div class="evc" style="font-size:11px">EV</div><div>${last}</div></div>`;
+
+function fixtureCell(p){
+  const fx = p.fixture || {};
+  const place = fx.opp_position ? ` · ${fx.opp_position}-o'rin` : "";
+  const izoh = posOf(p) <= 2 ? "raqib gol uradimi" : "raqib gol o'tkazadimi";
   const diff = fx.eff_fdr != null
     ? ` · <span class="${diffClass(fx.eff_fdr)}" title="${izoh}">qiy ${fx.eff_fdr.toFixed(1)}</span>` : "";
-  // Zich jadval — tarkib kutilganidan boshqacha bo'lishi mumkin
   const rot = (fx.rotation ?? 0) >= 0.45
     ? ` · <span class="hard" title="zich jadval — rotatsiya ehtimoli">zich</span>` : "";
-  const cap = p.is_captain ? '<span class="cap">C</span>'
-            : (p.is_vice ? '<span class="cap">V</span>' : "");
-  const flag = p.status !== "a"
-    ? `<span class="flag" title="${(p.news||"").replace(/"/g,"")}">${p.status}</span>` : "";
-  const last = withReason
-    ? `<div class="why">${p.reason || ""}</div>`
-    : `<div class="fix">${fx.opponent || "—"}${place}${diff}${rot}</div>`;
-  // Forma va egalik — FPL ning xolis raqamlari. EV model bahosi bo'lgani
-  // uchun, ular yonma-yon turganda modelga ishonish yoki ishonmaslik oson.
-  const form = (p.form ?? 0).toFixed(1);
-  const own = (p.ownership ?? 0).toFixed(1);
-  const pen = p.pen ? '<span class="badge" title="penaltichi">P</span>' : "";
-  const sp = p.set_piece ? '<span class="badge" title="standart pozitsiyalar">S</span>' : "";
-  const ban = p.ban_risk
-    ? '<span class="badge warn" title="4 ta sariq — yana bittasi diskvalifikatsiya">4🟨</span>' : "";
-  return `<div class="row" data-el="${p.element}" onclick="toggleDetail(${p.element})">
-    <span class="pos">${p.pos_short}</span>
-    <div class="who">${p.name}${cap}${pen}${sp}${ban}${flag}<small>${p.team}</small></div>
-    <div class="meta">${p.price.toFixed(1)}</div>
-    <div class="meta ${p.form >= 5 ? "easy" : (p.form < 2 ? "hard" : "")}">${form}</div>
-    <div class="meta">${own}%</div>
-    <div class="meta">${p.p_start.toFixed(0)}%</div>
-    <div class="ev">${p.ev.toFixed(1)}</div>
-    ${last}
-  </div>${detailRow(p)}`;
+  return `<div class="fix">${esc(fx.opponent || "—")}${place}${diff}${rot}</div>`;
 }
 
-// EV qismlari. EV — o'rtacha qiymat: toza darvoza bo'lgan va bo'lmagan
-// holatlarning aralashmasi. Shuning uchun yonida "toza darvoza bo'lsa"
-// degan shartli raqam ham turadi — kutilayotgan yaxshi natija shu.
-const PART_NAMES = {
-  ishtirok: "ishtirok", gol: "gol", uzatma: "uzatma",
-  toza_darvoza: "toza darvoza", kiritilgan: "o'tkazilgan gol",
-  "to'xtatish": "to'xtatish", defcon: "DefCon", bonus: "bonus",
-  kartochka: "kartochka", boshqa: "boshqa",
-};
-
-function detailRow(p){
-  const d = p.detail || {};
-  const parts = d.parts || {};
-  const items = Object.keys(PART_NAMES)
-    .filter(k => Math.abs(parts[k] ?? 0) >= 0.01)
-    .map(k => `<span><b>${(parts[k] > 0 ? "+" : "") + parts[k].toFixed(2)}</b> ${PART_NAMES[k]}</span>`)
-    .join("");
-  const cs = (p.pos <= 3 && d.p_cs)
-    ? `<span>toza darvoza <b>${d.p_cs.toFixed(0)}%</b> → bo'lsa <b>${d.if_cs.toFixed(1)}</b> ochko</span>` : "";
-  const ret = d.p_return
-    ? `<span>gol/uzatma <b>${d.p_return.toFixed(0)}%</b></span>` : "";
-  // Ikki xil qiyinlik yonma-yon: bitta uchrashuv himoyachiga oson,
-  // hujumchiga qiyin bo'lishi mumkin
-  const f = p.fixture || {};
-  const qiy = (f.eff_fdr_def != null && f.eff_fdr_att != null)
-    ? `<span>qiyinlik — himoyaga <b class="${diffClass(f.eff_fdr_def)}">${
-        f.eff_fdr_def.toFixed(1)}</b>, hujumga <b class="${diffClass(f.eff_fdr_att)}">${
-        f.eff_fdr_att.toFixed(1)}</b></span>` : "";
-  return `<div class="detail" id="d${p.element}" hidden>
-    <div class="parts">${items}</div>
-    <div class="parts sum">${cs}${ret}${qiy}</div>
-  </div>`;
+function listHtml(ctx, players, xiLast, xiLastHead, benchLast, benchLastHead){
+  const xi = players.filter(p => p.in_xi);
+  const bench = players.filter(p => !p.in_xi);
+  return `<div class="listwrap"><div>
+    ${listHead(xiLastHead)}${xi.map(p => listRow(ctx, p, xiLast)).join("")}
+    <div class="subhead">Zaxira — avtoalmashtirish tartibida</div>
+    ${listHead(benchLastHead)}${bench.map(p => listRow(ctx, p, benchLast)).join("")}
+  </div></div>`;
 }
 
-function toggleDetail(el){
-  const box = document.getElementById("d" + el);
-  if (box) box.hidden = !box.hidden;
+const modeSeg = () => `<div class="seg">
+  <button data-act="mode" data-mode="pitch" class="${mode === "pitch" ? "on" : ""}">Maydon</button>
+  <button data-act="mode" data-mode="list" class="${mode === "list" ? "on" : ""}">Ro'yxat</button></div>`;
+
+function setMode(m){
+  mode = m; store.set("fpl-mode", m);
+  renderSquad(); renderDraft();
 }
 
-const HEAD_ROW = (last) => `<div class="row head">
-  <span></span><div>O'yinchi</div><div class="meta">Narx</div>
-  <div class="meta">Forma</div><div class="meta">Egalik</div>
-  <div class="meta">Tarkib</div><div class="ev">EV</div><div>${last}</div></div>`;
+function register(ctx, players){
+  players.forEach(p => REG[`${ctx}:${p.element}`] = p);
+}
 
+// ------------------------------------------------------------------ jamoam
 function renderSquad(){
   if (!SQUAD) return;
   const s = SQUAD;
-  // Bitta raqam yetarli: berilgan FT dan shu turda ishlatilgani ayirilgan.
-  // Ikkovini alohida ko'rsatish ortiqcha edi.
+  register("squad", s.players);
   const ft = s.unlimited_transfers ? "∞"
            : (s.authenticated ? String(s.free_transfers) : `${s.free_transfers}?`);
-  $("squadTop").innerHTML = `
-    <h2>GW${s.event} · jamoa ${s.entry_id}</h2>
-    <div class="stats">
-      <div class="stat"><b>${Math.round(s.xi_ev_captain ?? s.xi_ev)}</b>
-        <span>kutilayotgan ochko${s.captain ? " (C: " + s.captain + ")" : ""}</span></div>
-      <div class="stat"><b>${s.formation}</b><span>sxema</span></div>
-      <div class="stat"><b>${s.value.toFixed(1)}m</b><span>qiymat</span></div>
-      <div class="stat"><b>${s.bank.toFixed(1)}m</b><span>bank</span></div>
-      <div class="stat"><b>${ft}</b><span>transferlar</span></div>
-    </div>
-    <p class="note">${s.ft_override
-      ? "<b>Diqqat:</b> transferlar soni <code>config.yaml</code> dagi "
-        + "<code>free_transfers_override</code> dan olindi. "
-      : ""}${s.authenticated
-      ? "Sotish narxlari va FT <b>aniq</b> — my-team dan olindi."
-      : "Login yo'q: sotish narxlari va FT <b>taxminiy</b>."}
-      Qiyinlik rasmiy FDR emas — raqibning jadvaldagi o'rni va joriy natijalari
-      bilan tuzatilgan baho.
-      <b>EV — o'rtacha</b>, ya'ni toza darvoza bo'lgan va bo'lmagan
-      holatlarning aralashmasi. O'yinchi ustiga bosing: ochko qismlarga
-      ajraladi va «toza darvoza bo'lsa nechta» degan raqam ham chiqadi.</p>`;
+  const banner = s.authenticated ? "" : `<div class="banner warn">${ICON.alert}
+    <div><b>Login yo'q.</b> Sotish narxlari va tekin transferlar soni taxminiy.
+    Aniq raqamlar uchun hisobingizga kiring.</div></div>`;
+  const body = mode === "pitch"
+    ? pitchHtml("squad", s.players)
+    : listHtml("squad", s.players, fixtureCell, "Raqib · qiyinlik",
+               p => `<div class="why">${esc(p.reason || "")}</div>`, "Nima uchun zaxirada");
 
-  const xi = s.players.filter(p => p.in_xi);
-  const bench = s.players.filter(p => !p.in_xi);
-  $("squadXi").innerHTML = `<h2>Tavsiya etilgan 11 lik</h2>`
-    + HEAD_ROW("Raqib · qiyinlik") + xi.map(p => playerRow(p, false)).join("");
-  $("squadBench").innerHTML = `<h2>Zaxira — avtoalmashtirish tartibida</h2>`
-    + HEAD_ROW("Nima uchun zaxirada") + bench.map(p => playerRow(p, true)).join("");
+  $("v-squad").innerHTML = `${banner}
+    <div class="kpis">
+      ${kpi(Math.round(s.xi_ev_captain ?? s.xi_ev), "Kutilayotgan ochko",
+            s.captain ? "kapitan: " + esc(s.captain) : "", "hero")}
+      ${kpi(esc(s.formation), "Sxema", `GW${s.event}`)}
+      ${kpi(`${n1(s.value)}<small>m</small>`, "Jamoa qiymati")}
+      ${kpi(`${n1(s.bank)}<small>m</small>`, "Bank")}
+      ${kpi(ft, "Tekin transfer", s.authenticated ? "my-team dan" : "taxminiy")}
+    </div>
+    <div class="card">
+      <div class="card-h" style="padding-bottom:14px">
+        <h2>Tavsiya etilgan 11 lik</h2>
+        <span class="sub">jamoa ${esc(s.entry_id)} · o'yinchini bosing</span>
+        <span class="grow"></span>${modeSeg()}
+      </div>
+      ${body}
+    </div>
+    <details class="hint"><summary>Raqamlar nimani anglatadi</summary>
+      <p class="note">${s.ft_override
+        ? "<b>Diqqat:</b> transferlar soni <code>config.yaml</code> dagi <code>free_transfers_override</code> dan olindi. " : ""}
+        Qiyinlik rasmiy FDR emas — raqibning jadvaldagi o'rni va joriy natijalari bilan tuzatilgan baho.
+        <b>EV — o'rtacha</b>, ya'ni toza darvoza bo'lgan va bo'lmagan holatlarning aralashmasi.
+        O'yinchini bosing: ochko qismlarga ajraladi va «toza darvoza bo'lsa nechta» degan raqam ham chiqadi.</p>
+    </details>`;
 }
 
-// ------------------------------------------------------------ mavsum sur'ati
-// Shakl: bitta nisbat bitta chegaraga qarshi → **o'lchagich** (meter).
-// Yonida bir nechta sarlavha raqam → stat tile qatori. Grafik emas: bu
-// yerda taqqoslanadigan seriya yo'q, bitta progress bor.
-let PACE = null;
+async function loadSquad(force){
+  if (!SQUAD) stateBox($("v-squad"), "loading", "Tarkib yuklanmoqda…");
+  const r = await api("/api/squad" + (force ? "?refresh=1" : ""));
+  if (!r.ok){ SQUAD = null; return failBox($("v-squad"), r, "Tarkib olinmadi"); }
+  SQUAD = r.body;
+  renderSquad();
+}
 
+// --------------------------------------------------------------- tortma
+const PART_NAMES = {
+  ishtirok: "Ishtirok", gol: "Gol", uzatma: "Uzatma",
+  toza_darvoza: "Toza darvoza", kiritilgan: "O'tkazilgan gol",
+  "to'xtatish": "To'xtatish", defcon: "DefCon", bonus: "Bonus",
+  kartochka: "Kartochka", boshqa: "Boshqa",
+};
+
+function openPlayer(ctx, el){
+  const p = REG[`${ctx}:${el}`];
+  if (!p) return;
+  const d = p.detail || {}, parts = d.parts || {}, fx = p.fixture || {};
+  const keys = Object.keys(PART_NAMES).filter(k => Math.abs(parts[k] ?? 0) >= 0.01);
+  const max = Math.max(0.01, ...keys.map(k => Math.abs(parts[k])));
+  const partRows = keys.map(k => `<div class="part ${parts[k] < 0 ? "neg" : ""}">
+      <span class="t">${PART_NAMES[k]}</span>
+      <div class="track"><div class="fillb" style="width:${(Math.abs(parts[k]) / max * 100).toFixed(0)}%"></div></div>
+      <b>${signed(parts[k], 2)}</b></div>`).join("");
+
+  const facts = [];
+  if (fx.opponent) facts.push(["Raqib", esc(fx.opponent) + (fx.opp_position ? ` · ${fx.opp_position}-o'rin` : "")]);
+  if (fx.eff_fdr_def != null && fx.eff_fdr_att != null)
+    facts.push(["Qiyinlik: himoyaga / hujumga",
+      `<b class="${diffClass(fx.eff_fdr_def)}">${fx.eff_fdr_def.toFixed(1)}</b> / <b class="${diffClass(fx.eff_fdr_att)}">${fx.eff_fdr_att.toFixed(1)}</b>`]);
+  if ((fx.rotation ?? 0) >= 0.45) facts.push(["Jadval", `<b class="hard">zich — rotatsiya ehtimoli</b>`]);
+  if (posOf(p) <= 3 && d.p_cs)
+    facts.push(["Toza darvoza", `<b>${d.p_cs.toFixed(0)}%</b> → bo'lsa <b>${d.if_cs.toFixed(1)}</b> ochko`]);
+  if (d.p_return) facts.push(["Gol yoki uzatma", `<b>${d.p_return.toFixed(0)}%</b>`]);
+  if (p.ev_horizon != null) facts.push(["Gorizont bo'yicha EV", `<b>${n1(p.ev_horizon)}</b>`]);
+  if (p.pen) facts.push(["Penaltichi", "ha"]);
+  if (p.set_piece) facts.push(["Standart pozitsiyalar", "ha"]);
+
+  $("drawer").innerHTML = `
+    <div class="dr-h">
+      <span class="pos p${posOf(p)}" style="margin-top:3px">${esc(p.pos_short)}</span>
+      <div style="flex:1; min-width:0">
+        <h3>${esc(p.name)}${p.is_captain ? ' <span class="tag cap">C</span>' : ""}</h3>
+        <div class="sub">${esc(p.team_short || p.team || "")} · ${n1(p.price)}m${
+          p.in_xi === false ? " · zaxirada" : ""}</div>
+      </div>
+      <button class="iconbtn" id="drClose" aria-label="Yopish">${ICON.x}</button>
+    </div>
+    <div class="dr-b">
+      <div class="q4">
+        <div><b style="color:var(--accent)">${n1(p.ev)}</b><small>EV</small></div>
+        <div><b>${(p.p_start ?? 0).toFixed(0)}%</b><small>tarkibda</small></div>
+        <div><b>${n1(p.form)}</b><small>forma</small></div>
+        <div><b>${n1(p.ownership)}%</b><small>egalik</small></div>
+      </div>
+      ${p.news && p.status !== "a" ? `<div class="banner warn" style="margin:14px 0 0">${ICON.alert}<div>${esc(p.news)}</div></div>` : ""}
+      ${p.reason && p.in_xi === false ? `<div class="banner info" style="margin:14px 0 0">${ICON.alert}<div><b>Nega zaxirada:</b> ${esc(p.reason)}</div></div>` : ""}
+      ${keys.length ? `<h4>EV nimadan iborat</h4>${partRows}
+        <div class="part total"><span class="t">Jami</span><span></span><b>${n1(p.ev)}</b></div>
+        <p class="note" style="margin-top:10px">EV — o'rtacha qiymat: yaxshi va yomon holatlarning aralashmasi.</p>` : ""}
+      ${facts.length ? `<h4>Uchrashuv va ehtimollar</h4><div class="facts">${
+        facts.map(f => `<div><span>${f[0]}</span><div>${f[1]}</div></div>`).join("")}</div>` : ""}
+    </div>`;
+  $("drClose").onclick = closePlayer;
+  $("drawer").classList.add("on"); $("scrim").classList.add("on");
+  $("drawer").setAttribute("aria-hidden", "false");
+}
+function closePlayer(){
+  $("drawer").classList.remove("on"); $("scrim").classList.remove("on");
+  $("drawer").setAttribute("aria-hidden", "true");
+}
+$("scrim").onclick = closePlayer;
+document.addEventListener("keydown", (e) => { if (e.key === "Escape"){ closePlayer(); closeMenu(); } });
+
+// ------------------------------------------------------------- transferlar
+function movePlayer(p, out){
+  const narx = out ? p.selling : p.price;
+  return `<div class="pl ${out ? "out" : "in"}">
+    <span class="pos p${posOf(p)}">${esc(p.pos_short)}</span>
+    <div><b>${esc(p.name)}</b><small>${n1(narx)}m · EV ${n1(p.ev)}</small></div></div>`;
+}
+
+function moveRow(m, horizon){
+  const pul = m.cost > 0 ? `+${m.cost.toFixed(1)}m` : `${m.cost.toFixed(1)}m`;
+  return `<div class="move ${m.worth_it ? "" : "off"}">
+    <div class="gain ${m.gain > 0 ? "" : "neg"}"><b>${signed(m.gain)}</b><small>ochko · ${horizon} tur</small></div>
+    <div>
+      <div class="swap">
+        <div>${m.out.map(p => movePlayer(p, true)).join("")}</div>
+        <div class="arrow">${ICON.arrow}</div>
+        <div>${m.in.map(p => movePlayer(p, false)).join("")}</div>
+      </div>
+      <div class="movefoot">narx ${pul} · bank ${m.bank_after.toFixed(1)}m${
+        m.hit ? ` · <span class="hard">−${m.hit} hit</span> · hitsiz ${signed(m.raw_gain)}` : ""}${
+        m.worth_it ? "" : " · hit ni oqlamaydi"}</div>
+    </div></div>`;
+}
+
+function renderTransfers(){
+  if (!TRANSFERS) return;
+  const t = TRANSFERS;
+  const ft = t.unlimited_transfers ? "∞"
+           : (t.authenticated ? String(t.free_transfers) : `${t.free_transfers}?`);
+  const hold = t.recommendation === "hold";
+  const banner = hold
+    ? `<div class="banner info">${ICON.alert}<div><b>Hozircha ushlab turing.</b>
+        Hech bir variant hit va xavfni oqlamayapti — «hech narsa qilmaslik» ham qaror.</div></div>`
+    : `<div class="banner ok">${ICON.pace}<div>Foyda gorizontdagi <b>barcha ${t.horizon} tur</b>
+        bo'yicha hisoblangan, hit ayirilgan.</div></div>`;
+  $("v-transfers").innerHTML = `
+    <div class="kpis">
+      ${kpi(ft, "Tekin transfer", t.free_transfers === 0 && !t.unlimited_transfers
+            ? `har biri −${t.hit_cost} ochko` : "", "hero")}
+      ${kpi(`${n1(t.bank)}<small>m</small>`, "Bank")}
+      ${kpi(`${n1(t.value)}<small>m</small>`, "Jamoa qiymati")}
+      ${kpi(`−${t.hit_cost}`, "Hit narxi", "qo'shimcha transfer uchun")}
+    </div>
+    ${banner}
+    ${t.authenticated ? "" : `<div class="banner warn">${ICON.alert}<div><b>Login yo'q.</b>
+      Sotish narxlari taxminiy.</div></div>`}
+    <div class="card">
+      <div class="card-h" style="padding-bottom:14px"><h2>Takliflar</h2>
+        <span class="sub">GW${t.event} · har o'yinchi bir marta</span></div>
+      ${t.moves.length ? t.moves.map(m => moveRow(m, t.horizon)).join("")
+        : `<div class="state"><h3>Yaxshiroq variant topilmadi</h3><p>Byudjetga sig'adigan foydali almashtirish yo'q.</p></div>`}
+    </div>
+    <div class="card">
+      <div class="card-h" style="padding-bottom:14px"><h2>Zaif bo'g'inlar</h2>
+        <span class="sub">birinchi navbatda shularga qarang</span></div>
+      ${t.weak.map(p => `<div class="lr" style="grid-template-columns:44px minmax(120px,1fr) 58px minmax(140px,2fr)">
+          <span class="pos p${posOf(p)}">${esc(p.pos_short)}</span>
+          <div class="who">${esc(p.name)}<small>${n1(p.selling)}m</small></div>
+          <div class="evc">${n1(p.ev)}</div>
+          <div class="why">${esc(p.reason)}</div></div>`).join("")}
+    </div>`;
+}
+
+async function loadTransfers(force){
+  if (!TRANSFERS) stateBox($("v-transfers"), "loading", "Variantlar hisoblanmoqda…", "Bir necha soniya ketadi.");
+  const r = await api("/api/transfers" + (force ? "?refresh=1" : ""));
+  if (!r.ok){ TRANSFERS = null; return failBox($("v-transfers"), r, "Transferlar olinmadi"); }
+  TRANSFERS = r.body;
+  renderTransfers();
+}
+
+// ------------------------------------------------------------ jamoa tuzish
+let draftBudget = "";
+
+function renderDraft(){
+  if (!DRAFT) return;
+  const d = DRAFT;
+  register("draft", d.players);
+  const clubs = d.clubs.length ? d.clubs.map(c => `${esc(c.team)}×${c.count}`).join(", ")
+                               : "hamma klubdan bittadan";
+  const horizon = p => `<div class="fix">${n1(p.ev_horizon)} jami</div>`;
+  const body = mode === "pitch" ? pitchHtml("draft", d.players)
+    : listHtml("draft", d.players, horizon, "Gorizont", horizon, "Gorizont");
+  $("v-draft").innerHTML = `
+    <div class="kpis">
+      ${kpi(Math.round(d.expected_points), "Kutilayotgan ochko", "kapitan: " + esc(d.captain), "hero")}
+      ${kpi(esc(d.formation), "Sxema", `GW${d.event}`)}
+      ${kpi(`${n1(d.cost)}<small>m</small>`, "Sarflandi", `byudjet ${n1(d.budget)}m`)}
+      ${kpi(`${n1(d.bank)}<small>m</small>`, "Qoldi")}
+      ${kpi(`<span class="${d.legal ? "easy" : "hard"}">${d.legal ? "Mos" : "Mos emas"}</span>`,
+            "Qoidalar", "2/5/5/3 · klubdan ≤3")}
+    </div>
+    <div class="card">
+      <div class="card-h" style="padding-bottom:14px">
+        <h2>Noldan tuzilgan 15 lik</h2><span class="sub">${clubs}</span>
+        <span class="grow"></span>
+        <label class="mini">byudjet <input type="number" id="budget" step="0.5" min="80" max="120"
+          placeholder="100.0" value="${esc(draftBudget)}"></label>
+        <button class="btn" data-act="draft-go">Qayta tuzish</button>
+        ${modeSeg()}
+      </div>
+      ${body}
+    </div>
+    <p class="note">Bu jamoa mavjud tarkibingizdan mustaqil — wildcard uchun ham,
+      ekspertlar bilan H2H sinov uchun ham shu ro'yxat ishlatiladi.</p>`;
+}
+
+async function loadDraft(force){
+  const input = $("budget");
+  if (input) draftBudget = input.value.trim();
+  if (!DRAFT || force) stateBox($("v-draft"), "loading", "Jamoa tuzilmoqda…", "Bir necha soniya ketadi.");
+  const qs = [];
+  if (draftBudget) qs.push("budget=" + encodeURIComponent(draftBudget));
+  if (force) qs.push("refresh=1");
+  const r = await api("/api/draft" + (qs.length ? "?" + qs.join("&") : ""));
+  if (!r.ok || r.body.error){
+    DRAFT = null;
+    return stateBox($("v-draft"), "err", "Jamoa tuzilmadi", r.body.error || "");
+  }
+  DRAFT = r.body;
+  renderDraft();
+}
+
+// ================================================================== sur'at
 const STATE_COLOR = {good: "var(--st-good)", warning: "var(--st-warn)",
                      serious: "var(--st-serious)", critical: "var(--st-crit)"};
 
-// Tooltip matni **textContent** bilan qo'yiladi: qiymatlar server javobidan
-// keladi va ularni HTML sifatida qo'shish xavfli bo'lardi.
+// Tooltip matni **textContent** bilan qo'yiladi: qiymatlar server javobidan keladi.
 function tipRow(dl, label, value, cls){
   const dd = document.createElement("dd");
   dd.textContent = value;
@@ -718,77 +1357,148 @@ function showTip(el, e){
   if (e.hit) tipRow(dl, "minus", `−${e.hit}`, "hard");
   if (e.average){
     tipRow(dl, "o'rtacha menejer", e.average);
-    tipRow(dl, "farq", (e.vs_average > 0 ? "+" : "") + e.vs_average,
-           e.vs_average >= 0 ? "easy" : "hard");
+    tipRow(dl, "farq", (e.vs_average > 0 ? "+" : "") + e.vs_average, e.vs_average >= 0 ? "easy" : "hard");
   }
   const sep = document.createElement("div"); sep.className = "sep";
   dl.append(sep);
-  if (e.rank) tipRow(dl, "umumiy o'rin", e.rank.toLocaleString("ru"));
+  if (e.rank) tipRow(dl, "umumiy o'rin", big(e.rank));
   if (e.bench) tipRow(dl, "zaxirada qoldi", e.bench);
   if (e.transfers) tipRow(dl, "transfer", e.transfers);
   if (e.value) tipRow(dl, "qiymat", e.value.toFixed(1) + "m");
   tipRow(dl, "jami", e.total);
   tip.append(h, dl);
-
-  // Ekran chetiga chiqib ketmasin
   tip.classList.add("on");
   const r = el.getBoundingClientRect();
   const w = tip.offsetWidth || 190;
-  const x = Math.max(w / 2 + 8, Math.min(window.innerWidth - w / 2 - 8,
-                                         r.left + r.width / 2));
+  const x = Math.max(w / 2 + 8, Math.min(window.innerWidth - w / 2 - 8, r.left + r.width / 2));
   tip.style.left = x + "px";
   tip.style.top = Math.max(tip.offsetHeight + 8, r.top - 10) + "px";
 }
-
 function hideTip(){ $("tip").classList.remove("on"); }
 
-function paceChart(events, norm, avgLine){
+function paceChart(events, norm){
   if (!events.length) return "";
-  // Shkala hamma seriyani sig'dirsin: o'z ochkom, yetakchi, norma, o'rtacha
   const vals = events.flatMap(e => [e.net, e.average].filter(v => v != null));
   const max = Math.max(norm, ...vals) * 1.12;
   const h = v => Math.max(2, Math.round(100 * v / (max || 1)));
-
-  // Ustun markazlari teng masofada (oraliq `padding` bilan berilgan), shuning
-  // uchun i-chi markaz aynan (i+0.5)/n — chiziq ular bilan aniq mos tushadi
+  // Ustun markazlari teng masofada: i-chi markaz aynan (i+0.5)/n
   const n = events.length;
   const x = i => ((i + 0.5) / n * 100).toFixed(3);
   const y = v => (100 - 100 * v / (max || 1)).toFixed(3);
-  const line = (key, cls) => {
-    const pts = events.map((e, i) => e[key] != null ? `${x(i)},${y(e[key])}` : null)
-                      .filter(Boolean);
-    return pts.length > 1 ? `<polyline class="${cls}" points="${pts.join(" ")}"/>` : "";
-  };
-  const avgSeries = line("average", "avg");
-
+  const pts = events.map((e, i) => e.average != null ? `${x(i)},${y(e.average)}` : null).filter(Boolean);
+  const avg = pts.length > 1 ? `<polyline class="avg" points="${pts.join(" ")}"/>` : "";
   const bars = events.map((e, i) => `
     <div class="slot" tabindex="0" data-i="${i}">
-      ${e.chip ? '<span class="chip2">chip</span>' : ""}
+      ${e.chip ? '<span class="chipm">chip</span>' : ""}
       <div class="b ${e.net >= norm ? "on" : ""}" style="height:${h(e.net)}%"></div>
-      <span class="lbl">${e.event}</span>
-    </div>`).join("");
-
-  return `<div class="chart">
-    <div class="bars">
-      <div class="refline norm" style="bottom:${h(norm)}%"><span>norma ${norm.toFixed(0)}</span></div>
+      <span class="lbl">${e.event}</span></div>`).join("");
+  return `<div class="chart"><div class="bars">
+      <div class="refline" style="bottom:${h(norm)}%"><span>norma ${norm.toFixed(0)}</span></div>
       ${bars}
-      <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-        ${avgSeries}
-      </svg>
+      <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">${avg}</svg>
     </div>
-    <div class="chartfoot">
+    <div class="legend">
       <span class="key"><i style="background:var(--st-good)"></i> normadan yuqori</span>
-      <span class="key"><i style="background:var(--muted);opacity:.45"></i> normadan past</span>
+      <span class="key"><i style="background:var(--muted);opacity:.4"></i> normadan past</span>
       <span class="key"><i class="dash"></i> norma ${norm.toFixed(0)}</span>
-      ${avgSeries ? '<span class="key"><i class="dot"></i> o\'rtacha menejer</span>' : ""}
-    </div>
-  </div>`;
+      ${avg ? '<span class="key"><i class="dot"></i> o\'rtacha menejer</span>' : ""}
+    </div></div>`;
 }
 
-// Hover/fokus — ustunga emas, kengroq "slot" ga bog'lanadi
-function bindChart(container, events){
-  container.querySelectorAll(".slot").forEach(slot => {
-    const e = events[+slot.dataset.i];
+function renderPace(){
+  if (!PACE) return;
+  const p = PACE;
+  const fill = Math.max(0, Math.min(100, p.progress * 100));
+  const mark = Math.max(0, Math.min(100, p.season_progress * 100));
+  const dot = STATE_COLOR[p.status] || "var(--muted)";
+  // Birinchi o'rindagi menejer XUDDI SHU shkalada: to'ldirilgan qism oxiri
+  // bilan ko'k chiziq orasidagi masofa — undan qancha ortdaligingiz.
+  const leadMark = (p.leader && p.leader.points)
+    ? `<div class="lead" style="left:${Math.max(0, Math.min(100, p.leader.points / p.target * 100))}%">
+         <span>1-o'rin ${p.leader.points}</span></div>` : "";
+  const gap = (p.leader_gap != null)
+    ? `<p class="note" style="margin-top:14px">Birinchi o'rindagi menejerdan turiga
+        <b class="${p.leader_gap >= 0 ? "easy" : "hard"}">${signed(p.leader_gap)}</b> ochko
+        ${p.leader_gap >= 0 ? "oldinda" : "ortda"}siz${p.leader.name ? " (" + esc(p.leader.name) + ")" : ""}.
+        Yig'indida undan <b class="${p.leader_total_gap >= 0 ? "easy" : "hard"}">${Math.abs(p.leader_total_gap)}</b>
+        ochko ${p.leader_total_gap >= 0 ? "oldindasiz" : "ortdasiz"}; u shu sur'atda mavsumni
+        <b>${Math.round(p.leader.projected)}</b> ochko bilan tugatadi.</p>` : "";
+  const vsAvg = p.vs_average_total;
+
+  $("v-pace").innerHTML = `
+    <div class="card"><div class="card-b" style="padding-top:20px">
+      <div style="display:flex; align-items:flex-start; gap:12px; flex-wrap:wrap">
+        <div class="hero-n">${p.points} <small>/ ${p.target} ochko · GW${p.played}/${p.total_events}</small></div>
+        <span class="grow" style="flex:1"></span>
+        <span class="chip"><span class="status"><i style="background:${dot}"></i>${esc(p.grade)}</span>
+          · rejadan ${signed(Math.round(p.delta), 0)}</span>
+      </div>
+      <div class="meter">
+        <div class="track ${p.status}"></div>
+        <div class="fill ${p.status}" style="width:${fill}%"></div>
+        <div class="mark" style="left:${mark}%"><span>reja ${Math.round(p.on_pace_points)}</span></div>
+        ${leadMark}
+      </div>
+      <div class="meterfoot"><span>0</span><span>${p.target}</span></div>
+      <div class="kpis flat">
+        ${kpi(p.average.toFixed(1), "Turiga o'rtacha")}
+        ${kpi(p.per_event_needed.toFixed(1), "Norma", "maqsad / 38")}
+        ${kpi(p.needed_per_event == null ? "—" : p.needed_per_event.toFixed(1),
+              "Endi kerak", `qolgan ${p.remaining_events} turda`)}
+        ${kpi(Math.round(p.projected), "Shu sur'atda yakun")}
+        ${p.leader && p.leader.average ? kpi(p.leader.average.toFixed(1), "1-o'rin o'rtachasi") : ""}
+      </div>
+      ${gap}
+    </div></div>
+
+    <div class="card">
+      <div class="card-h"><h2>Jamoa ko'rsatkichlari</h2></div>
+      <div class="card-b"><div class="kpis flat">
+        ${kpi(big(p.rank), "Umumiy o'rin", p.best_rank ? "eng yaxshisi " + big(p.best_rank) : "")}
+        ${kpi(`<span class="${vsAvg >= 0 ? "easy" : "hard"}">${signed(vsAvg, 0)}</span>`,
+              "O'rtacha menejerdan", `${p.beat_average}/${p.played} turda ustun`)}
+        ${kpi(`<span class="${p.hits_paid ? "hard" : ""}">−${p.hits_paid}</span>`,
+              "Minusga ketdi", `${p.transfers_made} transfer`)}
+        ${kpi(p.bench_lost, "Zaxirada qoldi")}
+        ${kpi(p.best ? p.best.net : "—", "Eng yaxshi tur", p.best ? "GW" + p.best.event : "")}
+        ${kpi(p.worst ? p.worst.net : "—", "Eng yomon tur", p.worst ? "GW" + p.worst.event : "")}
+        ${kpi("±" + p.consistency.toFixed(1), "Tebranish")}
+        ${kpi(p.value ? `${p.value.toFixed(1)}<small>m</small>` : "—", "Jamoa qiymati")}
+      </div>
+      <details class="hint"><summary>Bu raqamlarni qanday o'qish kerak</summary>
+        <p class="note"><b>Minus</b> — to'g'ridan-to'g'ri yo'qotish, uni kamaytirish qo'lingizda.
+          <b>Zaxirada qolgan</b> ochko yo'qotish emas, lekin katta son tarkib tanlashda muammo
+          borligini aytadi. <b>Tebranish</b> — natijalarning standart chetlanishi: kichik son
+          barqarorlik, katta son «portlash va qulash» degani.</p></details>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><h2>Turlar bo'yicha</h2><span class="sub">ustun ustiga olib boring</span></div>
+      <div class="card-b" id="paceChartBox">${paceChart(p.events, p.per_event_needed)}
+        <details class="hint" style="margin-top:18px"><summary>Jadval ko'rinishi</summary>
+          <div class="tablewrap" style="max-height:340px; border:1px solid var(--line); border-radius:var(--r-sm)">
+          <table><thead><tr>
+            <th class="name">GW</th><th>Ochko</th><th>Minus</th><th>Sof</th>
+            <th>O'rtacha</th><th>Farq</th><th>Zaxira</th><th>O'rin</th><th>Jami</th>
+          </tr></thead><tbody>
+          ${p.events.slice().reverse().map(e => `<tr>
+            <td class="name">GW${e.event}${e.chip ? " · " + esc(e.chip) : ""}</td>
+            <td>${e.points}</td>
+            <td class="${e.hit ? "down" : "dim"}">${e.hit ? "−" + e.hit : "—"}</td>
+            <td><b>${e.net}</b></td>
+            <td class="dim">${e.average || "—"}</td>
+            <td class="${e.vs_average >= 0 ? "up" : "down"}">${e.average ? (e.vs_average > 0 ? "+" : "") + e.vs_average : "—"}</td>
+            <td class="dim">${e.bench || "—"}</td>
+            <td>${big(e.rank)}</td>
+            <td>${e.total}</td></tr>`).join("")}
+          </tbody></table></div></details>
+      </div>
+    </div>`;
+
+  // Hover/fokus — ustunga emas, kengroq "slot" ga bog'lanadi
+  $("paceChartBox").querySelectorAll(".slot").forEach(slot => {
+    const e = p.events[+slot.dataset.i];
     if (!e) return;
     slot.addEventListener("pointerenter", () => showTip(slot, e));
     slot.addEventListener("focus", () => showTip(slot, e));
@@ -797,387 +1507,203 @@ function bindChart(container, events){
   });
 }
 
-function renderPace(){
-  const card = $("paceCard"), stats = $("paceStats"), chart = $("paceChart");
-  if (!PACE){ card.hidden = stats.hidden = chart.hidden = true; return; }
-  const p = PACE;
-  card.hidden = stats.hidden = chart.hidden = false;
-
-  // --- 1-karta: o'lchagich (bitta nisbat bitta chegaraga qarshi) ---
-  const fill = Math.max(0, Math.min(100, p.progress * 100));
-  const mark = Math.max(0, Math.min(100, p.season_progress * 100));
-  const oldinda = p.delta >= 0;
-  const dot = STATE_COLOR[p.status] || "var(--muted)";
-  // Birinchi o'rindagi menejer XUDDI SHU shkalada: fill oxiri bilan ko'k
-  // chiziq orasidagi masofa — undan qancha ortdaligingiz
-  const leadMark = (p.leader && p.leader.points)
-    ? `<div class="lead" style="left:${
-        Math.max(0, Math.min(100, p.leader.points / p.target * 100))}%">
-         <span>1-o'rin ${p.leader.points}</span></div>`
-    : "";
-  const gap = (p.leader_gap != null)
-    ? `<p class="note">Birinchi o'rindagi menejerdan turiga
-        <b class="${p.leader_gap >= 0 ? "easy" : "hard"}">${
-          p.leader_gap >= 0 ? "+" : ""}${p.leader_gap.toFixed(1)}</b> ochko
-        ${p.leader_gap >= 0 ? "oldinda" : "ortda"}siz${
-          p.leader.name ? " (" + p.leader.name + ")" : ""}.
-        Yig'indida undan <b class="${p.leader_total_gap >= 0 ? "easy" : "hard"}">${
-          Math.abs(p.leader_total_gap)}</b> ochko
-        ${p.leader_total_gap >= 0 ? "oldindasiz" : "ortdasiz"}; u shu sur'atda
-        mavsumni <b>${Math.round(p.leader.projected)}</b> ochko bilan tugatadi.</p>`
-    : "";
-
-  card.innerHTML = `
-    <h2>Mavsum sur'ati · maqsad ${p.target}</h2>
-    <div class="hero">${p.points}
-      <small>/ ${p.target} ochko · GW${p.played}/${p.total_events}</small></div>
-
-    <div class="meter">
-      <div class="track ${p.status}"></div>
-      <div class="fill ${p.status}" style="width:${fill}%"></div>
-      <div class="mark" style="left:${mark}%"><span>reja ${Math.round(p.on_pace_points)}</span></div>
-      ${leadMark}
-    </div>
-    <div class="meterfoot"><span>0</span><span>${p.target}</span></div>
-
-    <div class="stats" style="margin-top:14px">
-      <div class="stat">
-        <b><span class="state"><span class="dot" style="background:${dot}"></span>${p.grade}</span></b>
-        <span>rejadan ${oldinda ? "+" : ""}${Math.round(p.delta)} ochko</span></div>
-      <div class="stat"><b>${p.average.toFixed(1)}</b><span>turiga o'rtacha</span></div>
-      <div class="stat"><b>${p.per_event_needed.toFixed(1)}</b><span>norma (maqsad/38)</span></div>
-      <div class="stat"><b>${p.needed_per_event == null ? "—"
-          : p.needed_per_event.toFixed(1)}</b>
-        <span>qolgan ${p.remaining_events} turda kerak</span></div>
-      <div class="stat"><b>${Math.round(p.projected)}</b><span>shu sur'atda yakun</span></div>
-      ${p.leader && p.leader.average
-        ? `<div class="stat"><b>${p.leader.average.toFixed(1)}</b>
-             <span>1-o'rin turiga o'rtacha</span></div>` : ""}
-    </div>
-    ${gap}`;
-
-  // --- 2-karta: jamoa ko'rsatkichlari ---
-  // Maqsad "nima bo'layapti" ni aytadi, bu yer esa "nega" ni.
-  const vsAvg = p.vs_average_total;
-  const rank = p.rank ? p.rank.toLocaleString("ru") : "—";
-  stats.innerHTML = `
-    <h2>Jamoa ko'rsatkichlari</h2>
-    <div class="stats">
-      <div class="stat"><b>${rank}</b><span>umumiy o'rin${
-        p.best_rank ? " (eng yaxshisi " + p.best_rank.toLocaleString("ru") + ")" : ""}</span></div>
-      <div class="stat"><b class="${vsAvg >= 0 ? "easy" : "hard"}">${
-        vsAvg >= 0 ? "+" : ""}${vsAvg}</b>
-        <span>o'rtacha menejerdan · ${p.beat_average}/${p.played} turda ustun</span></div>
-      <div class="stat"><b class="${p.hits_paid ? "hard" : ""}">−${p.hits_paid}</b>
-        <span>minusga ketdi (${p.transfers_made} transfer)</span></div>
-      <div class="stat"><b>${p.bench_lost}</b><span>zaxirada qoldi</span></div>
-      <div class="stat"><b>${p.best ? p.best.net : "—"}</b>
-        <span>eng yaxshi tur${p.best ? " (GW" + p.best.event + ")" : ""}</span></div>
-      <div class="stat"><b>${p.worst ? p.worst.net : "—"}</b>
-        <span>eng yomon tur${p.worst ? " (GW" + p.worst.event + ")" : ""}</span></div>
-      <div class="stat"><b>${p.consistency.toFixed(1)}</b><span>tebranish (±)</span></div>
-      <div class="stat"><b>${p.value ? p.value.toFixed(1) + "m" : "—"}</b>
-        <span>jamoa qiymati</span></div>
-    </div>
-    <p class="note"><b>Minus</b> — to'g'ridan-to'g'ri yo'qotish, uni kamaytirish
-      qo'lingizda. <b>Zaxirada qolgan</b> ochko yo'qotish emas (har doim ham
-      taxmin qilib bo'lmaydi), lekin katta son tarkib tanlashda muammo borligini
-      aytadi. <b>Tebranish</b> — natijalarning standart chetlanishi: kichik son
-      barqarorlik, katta son "portlash va qulash" degani.</p>`;
-
-  // --- 3-karta: turlar bo'yicha grafik ---
-  chart.innerHTML = `<h2>Turlar bo'yicha · har ustunga sichqonchani olib boring</h2>`
-    + paceChart(p.events, p.per_event_needed)
-    + `<details style="margin-top:14px"><summary>Jadval ko'rinishi</summary>
-        <div class="tablewrap" style="max-height:320px;margin-top:8px">
-        <table><thead><tr>
-          <th style="text-align:left">GW</th><th>Ochko</th><th>Minus</th><th>Sof</th>
-          <th>O'rtacha</th><th>Farq</th><th>Zaxira</th><th>O'rin</th><th>Jami</th>
-        </tr></thead><tbody>
-        ${p.events.slice().reverse().map(e => `<tr>
-          <td class="name">GW${e.event}${e.chip ? " · " + e.chip : ""}</td>
-          <td class="num">${e.points}</td>
-          <td class="num ${e.hit ? "down" : "dim"}">${e.hit ? "−" + e.hit : "—"}</td>
-          <td class="num"><b>${e.net}</b></td>
-          <td class="num dim">${e.average || "—"}</td>
-          <td class="num ${e.vs_average >= 0 ? "up" : "down"}">${
-            e.average ? (e.vs_average > 0 ? "+" : "") + e.vs_average : "—"}</td>
-          <td class="num dim">${e.bench || "—"}</td>
-          <td class="num">${e.rank ? e.rank.toLocaleString("ru") : "—"}</td>
-          <td class="num">${e.total}</td></tr>`).join("")}
-        </tbody></table></div></details>`;
-  bindChart(chart, p.events);
-}
-
 async function loadPace(force){
+  if (!PACE) stateBox($("v-pace"), "loading", "Sur'at hisoblanmoqda…");
   const r = await api("/api/pace" + (force ? "?refresh=1" : ""));
-  PACE = (r.ok && !r.body.error) ? r.body : null;
+  if (!r.ok || r.body.error){
+    PACE = null;
+    return failBox($("v-pace"), r, "Sur'at olinmadi");
+  }
+  PACE = r.body;
   renderPace();
 }
 
-async function loadSquad(force){
-  message($("squadMsg"), "info", "Tarkib yuklanmoqda…");
-  const r = await api("/api/squad" + (force ? "?refresh=1" : ""));
-  if (!r.ok){
-    SQUAD = null;
-    $("squadTop").innerHTML = "<h2>Jamoam</h2>";
-    $("squadXi").innerHTML = ""; $("squadBench").innerHTML = "";
-    message($("squadMsg"), r.status === 401 ? "info" : "err",
-      (r.body.error || "olinmadi") + (r.body.hint ? "\n" + r.body.hint : ""));
-    return;
+// =================================================================== hisob
+function initials(name){
+  return (name || "?").split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("") || "?";
+}
+
+function closeMenu(){ const m = $("acctMenu"); if (m) m.hidden = true; }
+
+/** Yuqori o'ng burchak: kirgan bo'lsa — hisob menyusi, aks holda «Kirish». */
+function paintAccount(){
+  const s = STATUS, box = $("acct");
+  if (s.logged_in){
+    const left = s.seconds_left
+      ? (s.seconds_left > 3600 ? Math.round(s.seconds_left / 3600) + " soat"
+                               : Math.max(1, Math.round(s.seconds_left / 60)) + " daqiqa") : "";
+    box.innerHTML = `
+      <button class="acctbtn" id="acctBtn" aria-haspopup="true">
+        <span class="avatar">${esc(initials(s.name))}</span>
+        <span class="who"><b>${esc(s.name || "Kirdingiz")}</b><small>jamoa ${esc(s.entry_id || "—")}</small></span>
+      </button>
+      <div class="menu" id="acctMenu" hidden>
+        <div class="info"><b>${esc(s.name || "Kirdingiz")}</b>
+          <small>jamoa ${esc(s.entry_id || "—")}</small>
+          ${left ? `<small>sessiya: yana ${left}</small>` : ""}</div>
+        <button data-act="logout" class="danger" style="color:var(--bad)">${ICON.logout} Chiqish</button>
+      </div>`;
+    $("acctBtn").onclick = () => { $("acctMenu").hidden = !$("acctMenu").hidden; };
+  } else if (s.public_only){
+    box.innerHTML = `<span class="chip hide-m" style="margin-right:6px">jamoa ${esc(s.entry_id)} · ochiq</span>
+      <button class="btn primary" data-act="login">${ICON.login} Kirish</button>`;
+  } else {
+    box.innerHTML = `<button class="btn primary" data-act="login">${ICON.login} Kirish</button>`;
   }
-  SQUAD = r.body;
-  message($("squadMsg"), "info", "");
-  renderSquad();
+  $("sideFoot").textContent = s.demo ? "Demo rejimi — soxta ma'lumot" : "";
+  markNav();
 }
 
-// ------------------------------------------------------------- transferlar
-let TRANSFERS = null;
-
-function movePlayer(p, sotish){
-  const narx = sotish ? p.selling : p.price;
-  return `<span class="mv"><b>${p.name}</b> <small>${p.pos_short} ${narx.toFixed(1)}
-    · EV ${p.ev.toFixed(1)}</small></span>`;
+async function refreshStatus(){
+  const r = await api("/api/status");
+  if (r.ok){ STATUS = r.body || {}; paintAccount(); }
+  return STATUS;
 }
 
-function moveRow(m){
-  const outs = m.out.map(p => movePlayer(p, true)).join(" + ");
-  const ins = m.in.map(p => movePlayer(p, false)).join(" + ");
-  const hit = m.hit ? ` <span class="hard">−${m.hit} hit</span>` : "";
-  const pul = m.cost > 0 ? `+${m.cost.toFixed(1)}m` : `${m.cost.toFixed(1)}m`;
-  return `<div class="move ${m.worth_it ? "" : "dim"}">
-    <div class="movehead">
-      <b class="${m.gain > 0 ? "easy" : "hard"}">${m.gain > 0 ? "+" : ""}${m.gain.toFixed(1)}</b>
-      <small>sof foyda · ${TRANSFERS ? TRANSFERS.horizon : 5} tur${hit}</small>
-    </div>
-    <div class="movebody">${outs} <span class="arrow">➜</span> ${ins}</div>
-    <div class="movefoot">narx ${pul} · bank ${m.bank_after.toFixed(1)}m${
-      m.hit ? ` · hit siz ${m.raw_gain.toFixed(1)}` : ""}</div>
-  </div>`;
+/** Hisob o'zgardi — shaxsiy bo'limlar eskirdi, ochiq turgani qayta yuklanadi. */
+function accountChanged(){
+  SQUAD = TRANSFERS = PACE = null;
+  if (VIEWS[view].needs) LOADERS[view](true);
 }
 
-function renderTransfers(){
-  if (!TRANSFERS) return;
-  const t = TRANSFERS;
-  const ft = t.unlimited_transfers ? "∞"
-           : (t.authenticated ? String(t.free_transfers) : `${t.free_transfers}?`);
-  $("trTop").innerHTML = `
-    <h2>GW${t.event} · transferlar</h2>
-    <div class="stats">
-      <div class="stat"><b>${ft}</b><span>transferlar</span></div>
-      <div class="stat"><b>${t.bank.toFixed(1)}m</b><span>bank</span></div>
-      <div class="stat"><b>${t.value.toFixed(1)}m</b><span>qiymat</span></div>
-      <div class="stat"><b>${t.hit_cost}</b><span>hit narxi</span></div>
-    </div>
-    <p class="note">${t.free_transfers === 0
-      ? `<b>Tekin transfer yo'q</b> — har biri −${t.hit_cost} ochko turadi. `
-      : ""}${t.recommendation === "hold"
-      ? "<b>Hozircha ushlab turing.</b> Hech bir variant hit va xavfni oqlamayapti."
-      : "Foyda <b>gorizontdagi barcha turlar</b> bo'yicha hisoblangan, hit ayirilgan."}
-      ${t.authenticated ? "Sotish narxlari aniq."
-                        : "Login yo'q: sotish narxlari <b>taxminiy</b>."}</p>`;
+// ------------------------------------------------------------ kirish oynasi
+const dlg = $("loginDlg");
+$("loginClose").innerHTML = ICON.x;
+$("loginClose").onclick = () => dlg.close();
+dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
 
-  $("trMoves").innerHTML = `<h2>Takliflar</h2>` + (t.moves.length
-    ? t.moves.map(moveRow).join("")
-    : `<p class="note">Byudjetga sig'adigan yaxshiroq variant topilmadi.</p>`);
-
-  $("trWeak").innerHTML = `<h2>Zaif bo'g'inlar</h2>`
-    + t.weak.map(p => `<div class="row">
-        <span class="pos">${p.pos_short}</span>
-        <div class="who">${p.name}<small>${p.selling.toFixed(1)}m</small></div>
-        <div class="ev">${p.ev.toFixed(1)}</div>
-        <div class="why">${p.reason}</div>
-      </div>`).join("");
+function openLogin(){
+  closeMenu();
+  if (STATUS.logged_in) return;             // kirgan odamga forma ko'rsatilmaydi
+  if (!polling) message($("loginMsg"), "", "");
+  if (!dlg.open) dlg.showModal();
+  ($("email").value ? $("password") : $("email")).focus();
 }
 
-async function loadTransfers(force){
-  message($("trMsg"), "info", "Variantlar hisoblanmoqda… (bir necha soniya)");
-  const r = await api("/api/transfers" + (force ? "?refresh=1" : ""));
-  if (!r.ok){
-    TRANSFERS = null;
-    $("trTop").innerHTML = "<h2>Transferlar</h2>";
-    $("trMoves").innerHTML = ""; $("trWeak").innerHTML = "";
-    message($("trMsg"), r.status === 401 ? "info" : "err",
-      (r.body.error || "olinmadi") + (r.body.hint ? "\n" + r.body.hint : ""));
-    return;
-  }
-  TRANSFERS = r.body;
-  message($("trMsg"), "info", "");
-  renderTransfers();
+let polling = false, lastPassword = "", loginStarted = 0;
+
+function setBusy(on, label){
+  ["doLogin", "doBrowser", "doQuick", "doToken", "doConnect"].forEach(id => $(id).disabled = on);
+  $("doLogin").innerHTML = on ? `<span class="spinner"></span> ${esc(label || "Kirilmoqda…")}` : "Kirish";
 }
 
-// ----------------------------------------------------------- jamoa tuzish
-let DRAFT = null;
-
-function draftRow(p){
-  const cap = p.is_captain ? '<span class="cap">C</span>' : "";
-  return `<div class="row">
-    <span class="pos">${p.pos_short}</span>
-    <div class="who">${p.name}${cap}<small>${p.team_short || ""}</small></div>
-    <div class="meta">${p.price.toFixed(1)}</div>
-    <div class="meta">${(p.form ?? 0).toFixed(1)}</div>
-    <div class="meta">${(p.ownership ?? 0).toFixed(1)}%</div>
-    <div class="meta">${p.p_start.toFixed(0)}%</div>
-    <div class="ev">${p.ev.toFixed(1)}</div>
-    <div class="fix">${p.ev_horizon.toFixed(1)} (${DRAFT ? DRAFT.horizonLabel : ""})</div>
-  </div>`;
+function loginReport(body){
+  if (!body) return "";
+  const parts = [body.hint || "Kirish amalga oshmadi."];
+  const detail = body.detail || (body.tried || []).map(s => s.detail).filter(Boolean)[0];
+  if (detail) parts.push(detail);
+  return parts.join("\n");
 }
 
-const DRAFT_HEAD = `<div class="row head">
-  <span></span><div>O'yinchi</div><div class="meta">Narx</div>
-  <div class="meta">Forma</div><div class="meta">Egalik</div>
-  <div class="meta">Tarkib</div><div class="ev">EV</div><div>Gorizont</div></div>`;
-
-function renderDraft(){
-  if (!DRAFT) return;
-  const d = DRAFT;
-  d.horizonLabel = "jami";
-  const clubs = d.clubs.length
-    ? d.clubs.map(c => `${c.team}×${c.count}`).join(", ")
-    : "hamma klubdan bittadan";
-  $("drTop").innerHTML = `
-    <h2>GW${d.event} · noldan tuzilgan jamoa</h2>
-    <div class="stats">
-      <div class="stat"><b>${Math.round(d.expected_points)}</b>
-        <span>kutilayotgan ochko (C: ${d.captain})</span></div>
-      <div class="stat"><b>${d.formation}</b><span>sxema</span></div>
-      <div class="stat"><b>${d.cost.toFixed(1)}m</b><span>sarflandi</span></div>
-      <div class="stat"><b>${d.bank.toFixed(1)}m</b><span>qoldi</span></div>
-    </div>
-    <p class="note">
-      Byudjet <b>${d.budget.toFixed(1)}m</b>, qoidalar tekshirildi:
-      <b class="${d.legal ? "easy" : "hard"}">${d.legal ? "mos" : "MOS EMAS"}</b>
-      — 2 DRV / 5 HIM / 5 YAR / 3 HUJ, bitta klubdan ko'pi 3 ta.
-      Klublar: ${clubs}.
-      <br>Bu jamoa mavjud tarkibingizdan mustaqil — wildcard uchun ham,
-      ekspertlar bilan H2H sinov uchun ham shu ro'yxat ishlatiladi.</p>`;
-
-  const xi = d.players.filter(p => p.in_xi);
-  const bench = d.players.filter(p => !p.in_xi);
-  $("drXi").innerHTML = `<h2>Asosiy 11 lik</h2>` + DRAFT_HEAD
-    + xi.map(draftRow).join("");
-  $("drBench").innerHTML = `<h2>Zaxira</h2>` + DRAFT_HEAD
-    + bench.map(draftRow).join("");
-}
-
-async function loadDraft(force){
-  message($("drMsg"), "info", "Jamoa tuzilmoqda… (bir necha soniya)");
-  const r = await api("/api/draft" + (force ? "?refresh=1" : ""));
-  if (!r.ok || r.body.error){
-    DRAFT = null;
-    $("drTop").innerHTML = "<h2>Jamoa tuzish</h2>";
-    $("drXi").innerHTML = ""; $("drBench").innerHTML = "";
-    message($("drMsg"), "err", r.body.error || "tuzilmadi");
-    return;
-  }
-  DRAFT = r.body;
-  message($("drMsg"), "info", "");
-  renderDraft();
-}
-
-function setView(name){
-  view = name;
-  $("viewPlayers").hidden = name !== "players";
-  $("viewSquad").hidden = name !== "squad";
-  $("viewTransfers").hidden = name !== "transfers";
-  $("viewDraft").hidden = name !== "draft";
-  $("viewPace").hidden = name !== "pace";
-  document.querySelectorAll(".tab").forEach(b =>
-    b.classList.toggle("on", b.dataset.view === name));
-  if (name === "squad" && !SQUAD) loadSquad(false);
-  if (name === "pace" && !PACE) loadPace(false);
-  if (name === "transfers" && !TRANSFERS) loadTransfers(false);
-  if (name === "draft" && !DRAFT) loadDraft(false);
-}
-
-document.querySelectorAll(".tab").forEach(b =>
-  b.onclick = () => setView(b.dataset.view));
-
-// -------------------------------------------------------------- hodisalar
-$("toggleLogin").onclick = () => { $("loginCard").hidden = !$("loginCard").hidden; };
-$("refresh").onclick = () => {
-  if (view === "squad") return loadSquad(true);
-  if (view === "pace") return loadPace(true);
-  if (view === "transfers") return loadTransfers(true);
-  return load(true);
-};
-$("reset").onclick = () => {
-  ["q","maxPrice","minOwn","minMin"].forEach(id => $(id).value = "");
-  $("pos").value = ""; $("team").value = "";
-  $("hideEnabler").checked = true; $("onlyAvailable").checked = true;
-  render();
-};
-["q","maxPrice","minOwn","minMin"].forEach(id => $(id).oninput = render);
-["pos","team","hideEnabler","onlyAvailable"].forEach(id => $(id).onchange = render);
-
-let lastPassword = "";
-
-async function startLogin(mode, button){
-  button.disabled = true;
+function loggedIn(body){
+  lastPassword = "";
+  $("password").value = ""; $("token").value = "";
   $("fallbackRow").hidden = true;
-  message($("loginMsg"), "info", "Kirilmoqda…");
+  message($("loginMsg"), "", "");
+  if (dlg.open) dlg.close();
+  toast(`Kirdingiz: ${body.name || ""} — jamoa ${body.entry_id}`);
+  accountChanged();
+}
+
+/** Kirish fonda ishlaydi. So'rovlar ustma-ust tushmasin — navbat bilan. */
+async function pollLogin(){
+  if (polling) return;
+  polling = true;
+  for (;;){
+    const s = await refreshStatus();
+    if (!s.job_running){
+      polling = false; setBusy(false);
+      if (s.last_login){
+        if (s.last_login.ok) loggedIn(s.last_login);
+        else {
+          message($("loginMsg"), "err", loginReport(s.last_login));
+          $("fallbackRow").hidden = false;      // DaVinci o'tmasa — brauzer zaxirasi
+        }
+      }
+      return;
+    }
+    const sec = Math.round((Date.now() - loginStarted) / 1000);
+    setBusy(true, `Kirilmoqda… ${sec}s`);
+    if (s.job_seconds > 12) message($("loginMsg"), "info",
+      "Brauzer oynasi ochilgan bo'lsa — o'sha yerda kiring, captcha chiqsa bosing.");
+    await new Promise(res => setTimeout(res, 400));
+  }
+}
+
+async function startLogin(mode){
   const pass = $("password").value || lastPassword;
+  if (!$("email").value.trim() || !pass) return;
   lastPassword = pass;                       // brauzer zaxirasi uchun saqlab turamiz
-  const r = await api("/api/login", {method:"POST", body:JSON.stringify({
-    mode, email: $("email").value, password: pass,
+  loginStarted = Date.now();
+  setBusy(true); $("fallbackRow").hidden = true;
+  message($("loginMsg"), "", "");
+  const r = await api("/api/login", {method: "POST", body: JSON.stringify({
+    mode, email: $("email").value.trim(), password: pass,
   })});
   $("password").value = "";
-  if (r.status === 202){ message($("loginMsg"), "info", r.body.hint || ""); pollLogin(); return; }
-  button.disabled = false;
-  message($("loginMsg"), r.body.ok ? "ok" : "err", loginReport(r.body));
-  refreshStatus();
+  if (r.status === 202 || r.status === 409) return pollLogin();
+  setBusy(false);
+  if (r.body.ok){ await refreshStatus(); return loggedIn(r.body); }
+  message($("loginMsg"), "err", loginReport(r.body));
 }
 
-$("doLogin").onclick = () => startLogin("sso", $("doLogin"));
-$("doBrowser").onclick = () => startLogin("browser", $("doBrowser"));
+$("loginForm").onsubmit = (e) => { e.preventDefault(); startLogin("sso"); };
+$("doBrowser").onclick = () => startLogin("browser");
 
 $("doConnect").onclick = async () => {
-  const btn = $("doConnect"); btn.disabled = true;
-  const r = await api("/api/connect", {method:"POST", body:JSON.stringify({
+  setBusy(true); $("doLogin").textContent = "Kirish";
+  const r = await api("/api/connect", {method: "POST", body: JSON.stringify({
     entry_id: parseInt($("entryId").value, 10) || 0,
   })});
-  btn.disabled = false;
-  if (r.body.ok){
-    message($("loginMsg"), "ok",
-      `Ulandi: ${r.body.team_name || ""} (${r.body.name || ""}) — jamoa ${r.body.entry_id}.\n` +
-      `Ochiq ma'lumot bilan ishlanmoqda; aniq sotish narxlari uchun login kerak.`);
-    SQUAD = null;
-    if (view === "squad") loadSquad(true);
-  } else {
-    message($("loginMsg"), "err",
-      (r.body.hint || "ulanmadi") + (r.body.detail ? "\n" + r.body.detail : ""));
-  }
-  refreshStatus();
+  setBusy(false);
+  if (!r.body.ok)
+    return message($("loginMsg"), "err", (r.body.hint || "ulanmadi") + (r.body.detail ? "\n" + r.body.detail : ""));
+  await refreshStatus();
+  dlg.close();
+  toast(`Ulandi: ${r.body.team_name || "jamoa " + r.body.entry_id} — ochiq ma'lumot bilan`);
+  accountChanged();
 };
 
 $("doQuick").onclick = async () => {
-  const btn = $("doQuick"); btn.disabled = true;
-  message($("loginMsg"), "info", "Saqlangan profil bilan kirilmoqda — oyna ochilmaydi…");
-  const r = await api("/api/reconnect", {method:"POST"});
-  if (r.status === 202){ pollLogin(); return; }
-  btn.disabled = false;
-  message($("loginMsg"), r.body.ok ? "ok" : "err", loginReport(r.body));
-  refreshStatus();
+  loginStarted = Date.now();
+  setBusy(true, "Saqlangan profil…");
+  const r = await api("/api/reconnect", {method: "POST"});
+  if (r.status === 202 || r.status === 409) return pollLogin();
+  setBusy(false);
+  if (r.body.ok){ await refreshStatus(); return loggedIn(r.body); }
+  message($("loginMsg"), "err", loginReport(r.body));
 };
 
 $("doToken").onclick = async () => {
-  const btn = $("doToken"); btn.disabled = true;
-  const r = await api("/api/login", {method:"POST", body:JSON.stringify({token: $("token").value})});
-  message($("loginMsg"), r.body.ok ? "ok" : "err", loginReport(r.body));
-  if (r.body.ok) $("token").value = "";
-  btn.disabled = false;
-  refreshStatus();
+  if (!$("token").value.trim()) return;
+  setBusy(true); $("doLogin").textContent = "Kirish";
+  const r = await api("/api/login", {method: "POST", body: JSON.stringify({token: $("token").value})});
+  setBusy(false);
+  if (r.body.ok){ await refreshStatus(); return loggedIn(r.body); }
+  message($("loginMsg"), "err", loginReport(r.body));
 };
 
-$("doLogout").onclick = async () => {
-  await api("/api/logout", {method:"POST"});
-  message($("loginMsg"), "info", "Chiqdingiz.");
-  SQUAD = null;
-  refreshStatus();
-};
+async function doLogout(){
+  closeMenu();
+  await api("/api/logout", {method: "POST"});
+  await refreshStatus();
+  toast("Hisobdan chiqdingiz");
+  accountChanged();
+}
 
-refreshStatus();
-load(false);
+// ==================================================================== start
+buildNav();
+applyTheme(document.documentElement.dataset.theme);
+window.addEventListener("hashchange", () => setView(location.hash.slice(1), false));
+
+(async function start(){
+  await refreshStatus();
+  if (STATUS.job_running){ loginStarted = Date.now() - (STATUS.job_seconds || 0) * 1000; pollLogin(); }
+  setView(location.hash.slice(1) || "players", false);
+  if (view !== "players") loadPlayers(false);      // sarlavhadagi GW va deadline uchun
+  setInterval(paintHeader, 60000);
+  setInterval(() => { if (!polling) refreshStatus(); }, 60000);
+})();
 </script>
 </body>
 </html>

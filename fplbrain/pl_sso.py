@@ -44,7 +44,9 @@ import json
 import logging
 import re
 import secrets
+import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from urllib.parse import parse_qs, urljoin, urlparse
 
 import requests
@@ -619,47 +621,47 @@ def discover_authorize(
 ) -> tuple[dict, Step]:
     """FPL sahifasidan `client_id` va (imkon bo'lsa) `redirect_uri` ni topadi."""
     step = Step(name="discovery", url=FPL_HOME)
-    texts: list[str] = []
     try:
         home = session.get(FPL_HOME, timeout=25)
         step.status = home.status_code
-        texts.append(home.text)
-        # Avval FPL ning o'z skriptlari: client_id o'sha yerda. Uchinchi tomon
-        # skriptlari (reklama, analitika) ro'yxatni to'ldirib, asosiy bundle'ni
-        # chegaradan tashqariga surib yubormasligi kerak.
-        urls = [urljoin(FPL_HOME, src) for src in SCRIPT_SRC_RE.findall(home.text)]
-        own = [u for u in urls if urlparse(u).netloc == urlparse(FPL_HOME).netloc]
-        for url in (own + [u for u in urls if u not in own])[:8]:
-            try:
-                texts.append(session.get(url, timeout=25).text)
-            except Exception:
-                continue
     except Exception as exc:
         step.detail = f"{type(exc).__name__}: {exc}"
         return {}, step
 
-    for text in texts:
-        match = AUTHORIZE_RE.search(text)
-        if match:
-            params = {k: v[0] for k, v in parse_qs(urlparse(match.group(0)).query).items()}
-            if params.get("client_id"):
-                if redirect_uri:
-                    params["redirect_uri"] = redirect_uri
-                step.ok, step.shape = True, sorted(params)
-                step.detail = "authorize havolasi topildi"
-                return params, step
+    def texts():
+        """Matnlar **bittadan** keladi: topilgan zahoti qolgani yuklanmaydi.
+
+        Oldin 8 ta skriptning hammasi (jami ~6 MB, asosan reklama/analitika)
+        ketma-ket yuklanardi — login vaqtining ~4 soniyasi shu yerda ketardi.
+        Avval FPL ning o'z skriptlari: client_id o'sha yerda.
+        """
+        yield home.text
+        urls = [urljoin(FPL_HOME, src) for src in SCRIPT_SRC_RE.findall(home.text)]
+        own = [u for u in urls if urlparse(u).netloc == urlparse(FPL_HOME).netloc]
+        for url in (own + [u for u in urls if u not in own])[:8]:
+            try:
+                yield session.get(url, timeout=25).text
+            except Exception:
+                continue
 
     params: dict = {}
-    for text in texts:
-        if "client_id" not in params:
-            found = CLIENT_ID_RE.search(text)
-            if found:
-                params["client_id"] = found.group(1)
+    for text in texts():
+        match = AUTHORIZE_RE.search(text)
+        if match:
+            link = {k: v[0] for k, v in parse_qs(urlparse(match.group(0)).query).items()}
+            if link.get("client_id"):
+                if redirect_uri:
+                    link["redirect_uri"] = redirect_uri
+                step.ok, step.shape = True, sorted(link)
+                step.detail = "authorize havolasi topildi"
+                return link, step
         if "redirect_uri" not in params:
             found = REDIRECT_RE.search(text)
             if found and "premierleague.com" in found.group(1):
                 params["redirect_uri"] = found.group(1)
-        if len(params) == 2:
+        found = CLIENT_ID_RE.search(text)
+        if found:
+            params["client_id"] = found.group(1)
             break
     if redirect_uri:
         params["redirect_uri"] = redirect_uri
@@ -671,6 +673,34 @@ def discover_authorize(
 
     step.detail = "authorize havolasi ham, client_id ham topilmadi"
     return {}, step
+
+
+DISCOVERY_TTL = 7 * 24 * 3600
+
+
+def load_discovery(path) -> dict:
+    """Keshlangan discovery natijasi. Unda sir yo'q: `client_id` ochiq qiymat."""
+    if not path:
+        return {}
+    try:
+        data = json.loads(Path(path).read_text(encoding="utf-8"))
+        params = data.get("params") or {}
+        if time.time() - float(data.get("saved_at", 0)) > DISCOVERY_TTL:
+            return {}
+        return dict(params) if params.get("client_id") else {}
+    except (OSError, ValueError, TypeError, AttributeError):
+        return {}
+
+
+def save_discovery(path, params: dict) -> None:
+    if not path or not params.get("client_id"):
+        return
+    try:
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
+        Path(path).write_text(json.dumps(
+            {"saved_at": time.time(), "params": params}), encoding="utf-8")
+    except OSError:
+        pass                      # kesh — qulaylik, yozilmasa ham login ishlaydi
 
 
 # ------------------------------------------------------------- 2. authorize
@@ -1007,12 +1037,26 @@ def login(
     session: requests.Session | None = None,
     redirect_uri: str = "",
     max_nodes: int = MAX_NODES,
+    cache_path=None,
 ) -> SsoResult:
-    """To'liq oqim. Parol faqat parol maydoni bor qadamga beriladi."""
+    """To'liq oqim. Parol faqat parol maydoni bor qadamga beriladi.
+
+    `cache_path` berilsa, discovery natijasi (ochiq `client_id`) o'sha faylda
+    saqlanadi va keyingi kirishlarda FPL sahifasi umuman yuklanmaydi. Kesh
+    eskirgan bo'lsa (`authorize` rad etsa) — qaytadan topiladi.
+    """
     session = session or new_session()
     result = SsoResult()
 
-    params, step = discover_authorize(session, redirect_uri)
+    params = load_discovery(cache_path)
+    cached = bool(params)
+    if cached:
+        if redirect_uri:
+            params["redirect_uri"] = redirect_uri
+        step = Step(name="discovery", ok=True, shape=sorted(params),
+                    detail="client_id keshdan olindi")
+    else:
+        params, step = discover_authorize(session, redirect_uri)
     result.steps.append(step)
     if not step.ok:
         result.hint = "FPL sahifasidan login parametrlari topilmadi."
@@ -1020,6 +1064,18 @@ def login(
 
     verifier, challenge = pkce_pair()
     widget, step = start_authorize(session, params, challenge, secrets.token_urlsafe(16))
+    if not step.ok and cached:
+        # Keshdagi client_id eskirgan bo'lishi mumkin — sahifadan qayta olamiz
+        cached = False
+        params, again = discover_authorize(session, redirect_uri)
+        result.steps.append(again)
+        if not again.ok:
+            result.hint = "FPL sahifasidan login parametrlari topilmadi."
+            return result
+        widget, step = start_authorize(
+            session, params, challenge, secrets.token_urlsafe(16))
+    if step.ok and not cached:
+        save_discovery(cache_path, params)
     result.steps.append(step)
     if not step.ok:
         result.hint = "PingOne widget sozlamasi kelmadi."
