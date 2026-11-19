@@ -1,0 +1,46 @@
+{
+ "gw": 10,
+ "experts": {
+  "xi": [
+   1,
+   4,
+   229,
+   115,
+   40,
+   68,
+   236,
+   124,
+   411,
+   249,
+   79
+  ],
+  "bench": [
+   497,
+   31,
+   112,
+   127
+  ],
+  "captain": 411,
+  "vice": 68,
+  "expected": 0.0,
+  "names": {
+   "1": "Raya",
+   "4": "Gabriel",
+   "229": "Tarkowski",
+   "115": "De Cuyper",
+   "40": "Rogers",
+   "68": "Tavernier",
+   "236": "Dewsbury-Hall",
+   "124": "Groß",
+   "411": "Haaland",
+   "249": "Barry",
+   "79": "Evanilson",
+   "497": "Dubravka",
+   "31": "Konsa",
+   "112": "Van Hecke",
+   "127": "Gomez"
+  },
+  "saved_at": 1795069906.372378,
+  "note": "narx 101.0m"
+ }
+}

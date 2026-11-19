@@ -18,7 +18,8 @@ tanlanadi**, kapitan ikkilanadi, zaxira esa kichik vazn oladi — ya'ni
 maqsad haqiqiy ochko hisobiga mos keladi.
 
 USUL. Ochko maksimallashtirish — butun sonli optimallashtirish masalasi
-(knapsack). Tashqi kutubxonasiz ikki bosqichda yechiladi:
+(knapsack). Asosiy yo'l — **aniq yechim** (`solve_exact`, PuLP + CBC): global
+optimumni kafolatlaydi. PuLP o'rnatilmagan bo'lsa, zaxira yo'l ikki bosqichda:
 
 1. **Ochko'z boshlang'ich** — har pozitsiyada narx birligiga to'g'ri
    keladigan EV bo'yicha saralab, byudjetga sig'adigan 15 lik yig'iladi;
@@ -26,9 +27,9 @@ USUL. Ochko maksimallashtirish — butun sonli optimallashtirish masalasi
    funksiyasini oshiradigan har qanday o'zgarish qabul qilinadi. Yaxshilanish
    qolmaganda to'xtaydi.
 
-Bu global optimumni **kafolatlamaydi**, lekin amalda unga juda yaqin keladi
-va bir necha soniyada ishlaydi. Kafolat kerak bo'lsa MILP (PuLP + CBC)
-kerak — u qo'shimcha o'rnatma talab qiladi.
+Zaxira yo'l global optimumni **kafolatlamaydi**: qimmat o'yinchini olish uchun
+uch-to'rt o'ringa birdan tegish kerak bo'lganda tiqilib qoladi (backtestda u
+Haaland siz tarkib tuzgan). Shuning uchun `pulp` — `requirements.txt` da.
 """
 
 from __future__ import annotations
@@ -40,6 +41,7 @@ from .squad import Squad, SquadPlayer, best_eleven
 
 # FPL qoidalari
 SQUAD_SHAPE = {GK: 2, DEF: 5, MID: 5, FWD: 3}
+XI_SHAPE = {GK: (1, 1), DEF: (3, 5), MID: (2, 5), FWD: (1, 3)}   # asosiy 11 lik
 MAX_PER_TEAM = 3
 DEFAULT_BUDGET = 100.0
 
@@ -287,24 +289,108 @@ def _pair_search(
     return players, best_score, considered
 
 
+def solve_exact(
+    pool: dict[int, list[PlayerEV]],
+    events: list[int],
+    cfg,
+    budget: float,
+    time_limit: int = 20,
+) -> list[SquadPlayer] | None:
+    """Global optimum — butun sonli dasturlash (PuLP + CBC) bilan.
+
+    Mahalliy qidiruv "bir-ikki o'yinchini almashtirish" bilan cheklangan va
+    qimmat o'yinchini olish uchun **uch-to'rt** o'ringa tegish kerak bo'lganda
+    tiqilib qoladi. Backtestda (GW3-10) u Haaland siz tarkib tuzib, kapitandan
+    o'rtacha atigi 3.5 ochko olgan. Aniq yechimda bunday tuzoq yo'q.
+
+    O'zgaruvchilar: `x` — 15 likda, `y[e]` — `e`-turda asosiy 11 likda,
+    `c[e]` — kapitan. Maqsad `objective()` bilan bir xil: 11 lik + kapitan
+    (ikkilanadi) + zaxiraning `bench_weight` ulushi, turlar bo'yicha so'nish bilan.
+
+    PuLP o'rnatilmagan yoki yechim topilmasa `None` — chaqiruvchi mahalliy
+    qidiruvga qaytadi.
+    """
+    try:
+        import pulp
+    except ImportError:
+        return None
+
+    items = [pev for group in pool.values() for pev in group]
+    if not items:
+        return None
+    ids = [p.element for p in items]
+    by_id = {p.element: p for p in items}
+    pos_of = {i: by_id[i].profile.position for i in ids}
+
+    def ev(i: int, event: int) -> float:
+        return by_id[i].per_event.get(event, 0.0)
+
+    model = pulp.LpProblem("squad", pulp.LpMaximize)
+    x = pulp.LpVariable.dicts("x", ids, cat="Binary")
+    y = pulp.LpVariable.dicts("y", [(i, e) for i in ids for e in events], cat="Binary")
+    c = pulp.LpVariable.dicts("c", [(i, e) for i in ids for e in events], cat="Binary")
+
+    weight, decay = cfg.bench_weight, cfg.horizon_decay
+    model += pulp.lpSum(
+        (decay ** n) * ev(i, e) * (y[(i, e)] + c[(i, e)] + weight * (x[i] - y[(i, e)]))
+        for n, e in enumerate(events) for i in ids)
+
+    for pos, need in SQUAD_SHAPE.items():
+        model += pulp.lpSum(x[i] for i in ids if pos_of[i] == pos) == need
+    model += pulp.lpSum(by_id[i].profile.price * x[i] for i in ids) <= budget
+    for team in {by_id[i].profile.team for i in ids}:
+        model += pulp.lpSum(x[i] for i in ids if by_id[i].profile.team == team) <= MAX_PER_TEAM
+    for e in events:
+        model += pulp.lpSum(y[(i, e)] for i in ids) == 11
+        model += pulp.lpSum(c[(i, e)] for i in ids) == 1
+        for pos, (low, high) in XI_SHAPE.items():
+            count = pulp.lpSum(y[(i, e)] for i in ids if pos_of[i] == pos)
+            model += count >= low
+            model += count <= high
+        for i in ids:
+            model += y[(i, e)] <= x[i]
+            model += c[(i, e)] <= y[(i, e)]
+
+    try:
+        model.solve(pulp.PULP_CBC_CMD(msg=False, timeLimit=time_limit))
+    except Exception:
+        return None
+    if pulp.LpStatus.get(model.status) != "Optimal":
+        return None
+    chosen = [i for i in ids if (x[i].value() or 0) > 0.5]
+    if len(chosen) != 15:
+        return None
+    return [_as_squad_player(by_id[i]) for i in chosen]
+
+
 def build_squad(
     all_ev: list[PlayerEV],
     events: list[int],
     cfg,
     budget: float = DEFAULT_BUDGET,
     max_passes: int = MAX_PASSES,
+    exact: bool = True,
 ) -> BuiltSquad | None:
-    """Byudjet ichida eng yaxshi 15 lik. Topilmasa `None`."""
+    """Byudjet ichida eng yaxshi 15 lik. Topilmasa `None`.
+
+    Avval aniq yechim (`solve_exact`) sinaladi; u mavjud bo'lmasa — eski
+    mahalliy qidiruv. Ikkalasi ham bir xil `objective()` bilan baholanadi.
+    """
     if not events:
         return None
     pool = candidate_pool(all_ev, cfg)
-    players = _greedy_seed(pool, budget, events, cfg)
+    players = solve_exact(pool, events, cfg, budget) if exact else None
+    solved = players is not None
+    if players is None:
+        players = _greedy_seed(pool, budget, events, cfg)
     if players is None:
         return None
 
     best_score = objective(players, events, cfg)
     considered = 0
     passes = 0
+    if solved:
+        max_passes = 0            # global optimum topilgan — qidirishga hojat yo'q
 
     for passes in range(1, max_passes + 1):
         improved = False
@@ -339,9 +425,10 @@ def build_squad(
     # o'yinchini olish uchun pul boshqa joydan chiqishi kerak. "Bir o'yinchini
     # arzonlashtirib, ikkinchisini kuchaytirish" — FPL da eng ko'p ishlatiladigan
     # harakat va u faqat juftlikda ko'rinadi.
-    players, best_score, pair_considered = _pair_search(
-        players, pool, budget, events, cfg, best_score)
-    considered += pair_considered
+    if not solved:
+        players, best_score, pair_considered = _pair_search(
+            players, pool, budget, events, cfg, best_score)
+        considered += pair_considered
 
     xi, bench, formation, xi_ev = best_eleven(players, events[0])
     captain = max(xi, key=lambda p: p.ev.per_event.get(events[0], 0.0),

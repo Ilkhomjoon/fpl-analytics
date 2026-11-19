@@ -1,0 +1,175 @@
+"""H2H: tarkibni o'qish, FPL qoidalari bo'yicha hisob va aniq jamoa tuzuvchi."""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from fplbrain import builder, h2h
+from fplbrain.config import Config
+from fplbrain.ev import PlayerEV, PlayerProfile
+
+GK, DEF, MID, FWD = 1, 2, 3, 4
+
+
+def _element(i, name, pos, own=5.0, second=None, cost=50):
+    return {"id": i, "web_name": name, "second_name": second or name, "first_name": "A",
+            "element_type": pos, "selected_by_percent": str(own), "status": "a",
+            "now_cost": cost}
+
+
+ELEMENTS = [
+    _element(1, "Raya", GK), _element(2, "Dubravka", GK),
+    _element(3, "Gabriel", DEF, own=40), _element(4, "Gabriel", DEF, own=1, second="Gabriel Jesus"),
+    _element(5, "Tarkowski", DEF), _element(6, "De Cuyper", DEF),
+    _element(7, "Konsa", DEF), _element(8, "Van Hecke", DEF),
+    _element(9, "Rogers", MID), _element(10, "Tavernier", MID),
+    _element(11, "Dewsbury-Hall", MID), _element(12, "Groß", MID), _element(13, "Gomez", MID),
+    _element(14, "Haaland", FWD), _element(15, "Barry", FWD), _element(16, "Evanilson", FWD),
+]
+POSITIONS = {e["id"]: e["element_type"] for e in ELEMENTS}
+TEXT = ("Raya, Gabriel, Tarkowski, De Cupyer, Rogers, Tavernier (v), Dewsburry-hall, "
+        "Grob, Haaland (c), Barry, Evanilson | Dubravka, Konsa, Van Hecke, Gomez")
+
+
+# ------------------------------------------------------------------ o'qish
+def test_tarkib_imlo_xatolari_bilan_ham_oqiladi():
+    """Jadvaldagi yozuv: «De Cupyer», «Dewsburry-hall», «Grob» (Groß)."""
+    lineup, errors = h2h.parse_lineup(TEXT, ELEMENTS)
+    assert errors == []
+    assert lineup.xi == [1, 3, 5, 6, 9, 10, 11, 12, 14, 15, 16]
+    assert lineup.bench == [2, 7, 8, 13]
+    assert lineup.captain == 14 and lineup.vice == 10
+
+
+def test_bir_xil_ismda_mashhuri_olinadi():
+    ids, missing = h2h.resolve_names(["Gabriel"], ELEMENTS)
+    assert ids == [3] and missing == []
+
+
+def test_notanish_ism_xato_beradi_va_taxmin_qilinmaydi():
+    lineup, errors = h2h.parse_lineup(TEXT.replace("Barry", "Zzzzqqq"), ELEMENTS)
+    assert any("Zzzzqqq" in e for e in errors)
+
+
+def test_kapitansiz_yoki_notogri_sonli_tarkib_rad_etiladi():
+    _, errors = h2h.parse_lineup(TEXT.replace(" (c)", ""), ELEMENTS)
+    assert any("kapitan" in e for e in errors)
+    _, errors = h2h.parse_lineup(TEXT.replace("Evanilson |", "|"), ELEMENTS)
+    assert any("11 emas" in e for e in errors)
+
+
+# ------------------------------------------------------------------- hisob
+def _lineup() -> h2h.Lineup:
+    return h2h.parse_lineup(TEXT, ELEMENTS)[0]
+
+
+def _stats(**over) -> dict:
+    stats = {i: (90, 2) for i in POSITIONS}
+    stats.update(over)
+    return stats
+
+
+def test_kapitan_ikkilanadi():
+    stats = _stats()
+    stats[14] = (90, 10)
+    result = h2h.score_lineup(_lineup(), stats, POSITIONS)
+    assert result["points"] == 10 * 2 + 10 * 2          # 10 o'yinchi × 2 + kapitan 10 × 2
+    assert result["armband"] == 14 and result["subs"] == []
+
+
+def test_kapitan_oynamasa_vitse_ikkilanadi():
+    stats = _stats()
+    stats[14] = (0, 0)                                   # Haaland o'ynamadi
+    stats[10] = (90, 7)                                  # vitse Tavernier
+    result = h2h.score_lineup(_lineup(), stats, POSITIONS)
+    assert result["armband"] == 10
+    # Haaland o'rniga zaxiradagi birinchi mos o'yinchi (Konsa) chiqadi
+    assert result["subs"] == [(14, 7)]
+    assert result["points"] == 9 * 2 + 7 * 2 + 2
+
+
+def test_avtoalmashtirish_sxemani_buzmaydi():
+    """Uch himoyachidan biri o'ynamasa, o'rniga yarim himoyachi chiqa olmaydi."""
+    lineup = _lineup()
+    lineup.bench = [2, 13, 7, 8]                         # zaxirada birinchi — Gomez (YAR)
+    stats = _stats()
+    stats[5] = (0, 0)                                    # Tarkowski o'ynamadi: 2 HIM qoladi
+    result = h2h.score_lineup(lineup, stats, POSITIONS)
+    assert result["subs"] == [(5, 7)]                    # Gomez emas, Konsa
+
+
+def test_darvozabon_faqat_darvozabon_bilan_almashadi():
+    stats = _stats()
+    stats[1] = (0, 0)
+    stats[2] = (90, 6)
+    result = h2h.score_lineup(_lineup(), stats, POSITIONS)
+    assert result["subs"] == [(1, 2)]
+
+
+def test_oynamagan_zaxira_chiqmaydi():
+    stats = _stats()
+    stats[15] = (0, 0)                                   # Barry o'ynamadi
+    stats[7] = (0, 0)                                    # Konsa ham
+    result = h2h.score_lineup(_lineup(), stats, POSITIONS)
+    assert result["subs"] == [(15, 8)]                   # keyingisi — Van Hecke
+
+
+# ----------------------------------------------------------------- saqlash
+def test_ikki_tomon_bitta_faylda_va_bir_birini_ochirmaydi(tmp_path):
+    lineup = _lineup()
+    h2h.save(tmp_path, 11, "experts", lineup)
+    h2h.save(tmp_path, 11, "model", lineup, note="narx 99.5m")
+    record = h2h.load(tmp_path, 11)
+    assert h2h.Lineup.from_dict(record["experts"]).captain == 14
+    assert record["model"]["note"] == "narx 99.5m"
+    assert [r["gw"] for r in h2h.all_records(tmp_path)] == [11]
+
+
+# ------------------------------------------------------- aniq jamoa tuzuvchi
+def _pev(i, pos, price, ev, team) -> PlayerEV:
+    profile = PlayerProfile(
+        element=i, name=f"P{i}", team=team, position=pos, price=price, status="a",
+        availability=1.0, p_start=0.9, p_appear=0.95, p60=0.85, xmins=80.0,
+        xg90=0.1, xa90=0.1, dc90=5.0, dc_hit_rate=None, bonus90=0.2, saves90=0.0,
+        yellow90=0.1, is_pen_taker=False, is_set_piece=False, minutes=900, nineties=10.0)
+    return PlayerEV(profile=profile, per_event={1: ev}, fixtures={}, horizon_ev=ev, next_ev=ev)
+
+
+def _market() -> list[PlayerEV]:
+    """Arzon o'rtamiyona o'yinchilar + bitta juda qimmat yulduz.
+
+    Yulduzni olish uchun bir necha o'rinni birdan arzonlashtirish kerak —
+    mahalliy qidiruv aynan shu yerda tiqilib qolardi.
+    """
+    out, i = [], 1
+    for pos, count in ((GK, 4), (DEF, 10), (MID, 10), (FWD, 6)):
+        for n in range(count):
+            # ikki narx pog'onasi: 4.5m → 2.5 ochko, 7.0m → 4.0 ochko
+            pricey = n % 2 == 0
+            out.append(_pev(i, pos, 7.0 if pricey else 4.5, 4.0 if pricey else 2.5, team=i))
+            i += 1
+    out.append(_pev(i, FWD, 15.0, 9.0, team=i))
+    return out
+
+
+def test_aniq_yechim_qonuniy_va_yulduzni_oladi():
+    pytest.importorskip("pulp")
+    cfg = Config()
+    market = _market()
+    built = builder.build_squad(market, [1], cfg, budget=85.0)
+    assert built is not None and built.legal(85.0)
+    assert built.captain.element == market[-1].element       # 15.0m lik yulduz kapitan
+
+
+def test_aniq_yechim_mahalliy_qidiruvdan_yomon_emas():
+    pytest.importorskip("pulp")
+    cfg = Config()
+    market = _market()
+    exact = builder.build_squad(market, [1], cfg, budget=85.0)
+    local = builder.build_squad(market, [1], cfg, budget=85.0, exact=False)
+    assert exact.objective >= local.objective - 1e-6

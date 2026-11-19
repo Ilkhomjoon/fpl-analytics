@@ -5,7 +5,7 @@
 > qaysi yo'l sinalib rad etilgani va qaysi xatolar qaytib kelmasligi kerak.
 > Kodni qayta yozish mumkin, bu bilimni esa yo'q.
 
-**Sana:** 2026-11-18 · **Holat:** web sahifada 5 ta modul ishlaydi, 348 ta test o'tadi,
+**Sana:** 2026-11-19 · **Holat:** web sahifada 5 ta modul ishlaydi, 360 ta test o'tadi,
 model `tools/backtest.py` bilan haqiqiy ochkoga solishtirilgan (4.1-bo'lim)
 
 ---
@@ -507,15 +507,44 @@ python -m pytest -q
 Tartib bo'yicha, eng foydalisidan:
 
 1. **`git push`** — hammasidan muhim
-2. **H2H sinovi** — algoritm tuzgan jamoani FPLUzbekistan ekspertlari
-   jamoasiga qarshi. **Kamida 8–10 tur** kerak: bir turda ±20 ochko farq
-   model haqida deyarli hech narsa aytmaydi
+2. **H2H sinovi** — GW11 dan boshlangan (pastda). **Kamida 8–10 tur** kerak:
+   bir turda ±20 ochko farq model haqida deyarli hech narsa aytmaydi
 3. **Kapitan moduli** — `fplbrain/captain.py` bor, web da yo'q
 4. **Chiplar** — WC/BB/TC/FH vaqti, `fplbrain/chips.py` bor
 5. **Mini-liga raqiblari** — `fplbrain/rivals.py` bor
 6. **Botga ko'chirish** — web tayyor bo'lgach
-7. **MILP** (PuLP + CBC) — hozirgi jamoa tuzuvchi global optimumni
-   kafolatlamaydi; H2H natijalari yaqin chiqsa shunga o'tish mumkin
+7. ~~MILP~~ — qilindi (`builder.solve_exact`)
+8. **H2H ni web sahifaga chiqarish** — hozircha faqat buyruq satrida
+
+### H2H va jonli EV sinovi — har tur bajariladigan ish
+
+Ekspertlar har tur oldidan **Free Hit** tarkib e'lon qiladi (kanalda «Ekspertlar
+jamoasi»). Model ham noldan, 100m ichida, faqat shu tur uchun tuzadi — eng
+halol taqqoslash shu. Ekspertlarning haqiqiy jamoasi: **FPLUzbekistan, ID 715763**.
+
+```powershell
+# deadline oldidan
+python tools/h2h.py freeze                      # model tarkibini muzlatadi
+python tools/h2h.py experts "Raya, Gabriel, … Haaland (c), Tavernier (v), … | Dubravka, Konsa, Van Hecke, Gomez"
+python tools/ev_check.py save                   # barcha o'yinchilar bashoratini muzlatadi
+# tur tugagach
+python tools/h2h.py score                       # ikkala tarkib, FPL qoidalari bo'yicha
+python tools/h2h.py table                       # barcha turlar
+python tools/ev_check.py check                  # bashorat vs haqiqat
+```
+
+Tarkiblar `data/store/h2h/gwNN.json` da, bashoratlar `data/store/ev/` da —
+ikkalasi ham git da. Ism xatolariga chidamli («De Cupyer», «Grob»); hisob
+kapitan/vitse va avtoalmashtirishni hisobga oladi (GW10 ekspert tarkibi
+jadvaldagi bilan bir xil chiqdi: 75).
+
+`python tools/h2h.py backfill` — model orqaga qarab (GW3-10): Free Hit
+tarkiblari jami **518** ochko (kutilgan 530; FPL o'rtachasi 432). Jarohat
+bayroqlarisiz, shuning uchun jonli natijadan biroz yomonroq bo'lishi kutiladi.
+
+**Jamoa tuzuvchi endi aniq yechadi** (`builder.solve_exact`, PuLP + CBC).
+Eski mahalliy qidiruv Haaland ni byudjetga sig'dira olmay tiqilib qolardi:
+backfillda 498 → 518 ochko. `pulp>=2.8,<3` (3.x numpy talab qiladi).
 
 ### Model uchun eng katta imkoniyat
 

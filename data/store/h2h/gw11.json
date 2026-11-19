@@ -1,0 +1,46 @@
+{
+ "gw": 11,
+ "model": {
+  "xi": [
+   1,
+   112,
+   115,
+   4,
+   504,
+   566,
+   68,
+   183,
+   411,
+   379,
+   166
+  ],
+  "bench": [
+   542,
+   45,
+   75,
+   109
+  ],
+  "captain": 411,
+  "vice": 379,
+  "expected": 67.01,
+  "names": {
+   "1": "Raya",
+   "109": "Verbruggen",
+   "4": "Gabriel",
+   "115": "De Cuyper",
+   "112": "Van Hecke",
+   "504": "Vuskovic",
+   "566": "Silva",
+   "68": "Tavernier",
+   "542": "E.Le Fée",
+   "183": "Rudoni",
+   "45": "McGinn",
+   "75": "Christie",
+   "411": "Haaland",
+   "166": "N.Jackson",
+   "379": "Isak"
+  },
+  "saved_at": 1795069915.9263954,
+  "note": "narx 100.0m"
+ }
+}

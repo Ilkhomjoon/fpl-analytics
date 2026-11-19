@@ -178,32 +178,41 @@ def actual_parts(pos: int, rows: list[dict]) -> dict[str, float]:
 
 
 # ------------------------------------------------------------------- yurish
+def asof_state(cfg: Config, raw: dict, k: int, histories: dict[int, list] | None = None):
+    """`k`-tur deadline'idagi dunyo: (o'yinchilar, EV dvigateli, o'ynalgan o'yinlar, forma bazasi)."""
+    bootstrap, fixtures = raw["bootstrap"], raw["fixtures"]
+    if histories is None:
+        histories = {int(i): h for i, h in raw["history"].items()}
+    deadline = next((_when(e.get("deadline_time")) for e in bootstrap["events"]
+                     if e["id"] == k), None)
+    total_players = bootstrap.get("total_players") or 0
+    elements = [
+        asof_element(e, histories[e["id"]], k, total_players, deadline)
+        for e in bootstrap["elements"] if e["id"] in histories
+    ]
+    boot = dict(bootstrap, elements=elements)
+    fx = asof_fixtures(fixtures, k)
+    table = table_mod.build_table(boot, fx)
+    team_ratings = ratings_mod.build_team_ratings(boot, cfg, table)
+    views = ratings_mod.build_fixture_views(
+        fx, team_ratings, cfg, k, k,
+        schedules=congestion.build_schedules(fx),
+        european=congestion.european_team_ids(cfg, bootstrap.get("teams", [])),
+        table=table)
+    engine = EVEngine(cfg, team_ratings, views)
+    played = {tid: row.played for tid, row in table.items()}
+    return elements, engine, played, form_baseline(elements)
+
+
 def run(cfg: Config, raw: dict, first: int, last: int, use_history: bool) -> list[dict]:
     """Har (o'yinchi, tur) uchun bashorat va haqiqat. `use_history` — batafsil
     tarix bilan (jamoangizdagi o'yinchilar shunday baholanadi) yoki faqat
     mavsum yig'indisi bilan (qolgan hamma shunday baholanadi)."""
-    bootstrap, fixtures = raw["bootstrap"], raw["fixtures"]
     histories = {int(i): h for i, h in raw["history"].items()}
-    deadlines = {e["id"]: _when(e.get("deadline_time")) for e in bootstrap["events"]}
-    total_players = bootstrap.get("total_players") or 0
-    european = congestion.european_team_ids(cfg, bootstrap.get("teams", []))
     records: list[dict] = []
 
     for k in range(first, last + 1):
-        elements = [
-            asof_element(e, histories[e["id"]], k, total_players, deadlines.get(k))
-            for e in bootstrap["elements"] if e["id"] in histories
-        ]
-        boot = dict(bootstrap, elements=elements)
-        fx = asof_fixtures(fixtures, k)
-        table = table_mod.build_table(boot, fx)
-        team_ratings = ratings_mod.build_team_ratings(boot, cfg, table)
-        views = ratings_mod.build_fixture_views(
-            fx, team_ratings, cfg, k, k,
-            schedules=congestion.build_schedules(fx), european=european, table=table)
-        engine = EVEngine(cfg, team_ratings, views)
-        played = {tid: row.played for tid, row in table.items()}
-        form_base = form_baseline(elements)
+        elements, engine, played, form_base = asof_state(cfg, raw, k, histories)
 
         for e in elements:
             history = histories[e["id"]]

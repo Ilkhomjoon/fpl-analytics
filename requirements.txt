@@ -3,6 +3,9 @@ PyYAML>=6.0
 Flask>=3.0
 tzdata>=2024.1 ; sys_platform == "win32"
 pytest>=8.0
+# Jamoa tuzuvchining aniq yechimi (MILP, CBC ichida keladi). 3.x numpy talab
+# qiladi — shuning uchun 2.x. Yo'q bo'lsa mahalliy qidiruvga qaytiladi.
+pulp>=2.8,<3
 
 # Brauzer orqali FPL ga kirish uchun. Ixtiyoriy, lekin amalda ishlaydigan
 # yagona login yo'li shu. Yoqish uchun quyidagi satrdan # ni oling va
