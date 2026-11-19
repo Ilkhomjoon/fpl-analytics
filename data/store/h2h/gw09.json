@@ -1,0 +1,78 @@
+{
+ "gw": 9,
+ "experts": {
+  "xi": [
+   597,
+   112,
+   4,
+   566,
+   68,
+   53,
+   40,
+   512,
+   411,
+   166,
+   79
+  ],
+  "bench": [],
+  "captain": 411,
+  "vice": 0,
+  "expected": 0.0,
+  "names": {
+   "597": "Suzuki",
+   "112": "Van Hecke",
+   "4": "Gabriel",
+   "566": "Silva",
+   "68": "Tavernier",
+   "53": "Manzambi",
+   "40": "Rogers",
+   "512": "Kudus",
+   "411": "Haaland",
+   "166": "N.Jackson",
+   "79": "Evanilson"
+  },
+  "note": "GW Team (jadval)"
+ },
+ "model_backtest": {
+  "xi": [
+   1,
+   112,
+   4,
+   566,
+   60,
+   68,
+   427,
+   40,
+   183,
+   411,
+   106
+  ],
+  "bench": [
+   249,
+   455,
+   277,
+   496
+  ],
+  "captain": 411,
+  "vice": 68,
+  "expected": 60.34,
+  "names": {
+   "1": "Raya",
+   "496": "Kinsky",
+   "112": "Van Hecke",
+   "4": "Gabriel",
+   "566": "Silva",
+   "60": "Hill",
+   "277": "Egan",
+   "68": "Tavernier",
+   "427": "Mbeumo",
+   "40": "Rogers",
+   "183": "Rudoni",
+   "455": "Tonali",
+   "411": "Haaland",
+   "106": "Thiago",
+   "249": "Barry"
+  },
+  "note": "backtest (jarohat bayroqlarisiz)"
+ }
+}

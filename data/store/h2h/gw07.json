@@ -1,0 +1,78 @@
+{
+ "gw": 7,
+ "experts": {
+  "xi": [
+   496,
+   115,
+   8,
+   112,
+   391,
+   124,
+   40,
+   12,
+   411,
+   165,
+   138
+  ],
+  "bench": [],
+  "captain": 411,
+  "vice": 0,
+  "expected": 0.0,
+  "names": {
+   "496": "Kinsky",
+   "115": "De Cuyper",
+   "8": "Calafiori",
+   "112": "Van Hecke",
+   "391": "Gvardiol",
+   "124": "Groß",
+   "40": "Rogers",
+   "12": "Saka",
+   "411": "Haaland",
+   "165": "João Pedro",
+   "138": "Kostoulas"
+  },
+  "note": "GW Team (jadval)"
+ },
+ "model_backtest": {
+  "xi": [
+   1,
+   115,
+   388,
+   504,
+   566,
+   124,
+   12,
+   399,
+   411,
+   249,
+   569
+  ],
+  "bench": [
+   112,
+   68,
+   45,
+   385
+  ],
+  "captain": 411,
+  "vice": 124,
+  "expected": 70.17,
+  "names": {
+   "1": "Raya",
+   "385": "Trafford",
+   "115": "De Cuyper",
+   "388": "Guéhi",
+   "504": "Vuskovic",
+   "566": "Silva",
+   "112": "Van Hecke",
+   "124": "Groß",
+   "399": "Cherki",
+   "12": "Saka",
+   "68": "Tavernier",
+   "45": "McGinn",
+   "411": "Haaland",
+   "249": "Barry",
+   "569": "Gonzalo"
+  },
+  "note": "backtest (jarohat bayroqlarisiz)"
+ }
+}

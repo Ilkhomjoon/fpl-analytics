@@ -4,43 +4,75 @@
   "xi": [
    1,
    4,
-   229,
    115,
-   40,
+   229,
    68,
+   40,
    236,
    124,
    411,
-   249,
-   79
+   79,
+   249
   ],
-  "bench": [
-   497,
-   31,
-   112,
-   127
-  ],
+  "bench": [],
   "captain": 411,
-  "vice": 68,
+  "vice": 0,
   "expected": 0.0,
   "names": {
    "1": "Raya",
    "4": "Gabriel",
-   "229": "Tarkowski",
    "115": "De Cuyper",
-   "40": "Rogers",
+   "229": "Tarkowski",
    "68": "Tavernier",
+   "40": "Rogers",
    "236": "Dewsbury-Hall",
    "124": "Groß",
    "411": "Haaland",
-   "249": "Barry",
    "79": "Evanilson",
-   "497": "Dubravka",
-   "31": "Konsa",
-   "112": "Van Hecke",
-   "127": "Gomez"
+   "249": "Barry"
   },
-  "saved_at": 1795069906.372378,
-  "note": "narx 101.0m"
+  "note": "GW Team (jadval)"
+ },
+ "model_backtest": {
+  "xi": [
+   1,
+   4,
+   31,
+   115,
+   566,
+   504,
+   68,
+   427,
+   411,
+   249,
+   379
+  ],
+  "bench": [
+   261,
+   264,
+   183,
+   496
+  ],
+  "captain": 411,
+  "vice": 4,
+  "expected": 65.94,
+  "names": {
+   "1": "Raya",
+   "496": "Kinsky",
+   "4": "Gabriel",
+   "31": "Konsa",
+   "115": "De Cuyper",
+   "566": "Silva",
+   "504": "Vuskovic",
+   "68": "Tavernier",
+   "427": "Mbeumo",
+   "261": "Iwobi",
+   "264": "Bobb",
+   "183": "Rudoni",
+   "411": "Haaland",
+   "249": "Barry",
+   "379": "Isak"
+  },
+  "note": "backtest (jarohat bayroqlarisiz)"
  }
 }

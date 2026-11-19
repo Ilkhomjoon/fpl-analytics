@@ -1,0 +1,78 @@
+{
+ "gw": 4,
+ "experts": {
+  "xi": [
+   1,
+   115,
+   8,
+   356,
+   154,
+   40,
+   368,
+   124,
+   15,
+   165,
+   379
+  ],
+  "bench": [],
+  "captain": 154,
+  "vice": 0,
+  "expected": 0.0,
+  "names": {
+   "1": "Raya",
+   "115": "De Cuyper",
+   "8": "Calafiori",
+   "356": "Virgil",
+   "154": "Palmer",
+   "40": "Rogers",
+   "368": "Szoboszlai",
+   "124": "Groß",
+   "15": "Ødegaard",
+   "165": "João Pedro",
+   "379": "Isak"
+  },
+  "note": "GW Team (jadval)"
+ },
+ "model_backtest": {
+  "xi": [
+   1,
+   115,
+   388,
+   8,
+   154,
+   368,
+   12,
+   40,
+   367,
+   379,
+   165
+  ],
+  "bench": [
+   330,
+   204,
+   249,
+   597
+  ],
+  "captain": 154,
+  "vice": 379,
+  "expected": 67.0,
+  "names": {
+   "1": "Raya",
+   "597": "Suzuki",
+   "115": "De Cuyper",
+   "388": "Guéhi",
+   "8": "Calafiori",
+   "330": "Bogle",
+   "204": "Mitchell",
+   "154": "Palmer",
+   "368": "Szoboszlai",
+   "12": "Saka",
+   "40": "Rogers",
+   "367": "Gakpo",
+   "379": "Isak",
+   "165": "João Pedro",
+   "249": "Barry"
+  },
+  "note": "backtest (jarohat bayroqlarisiz)"
+ }
+}

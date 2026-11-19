@@ -13,3 +13,7 @@ data/session.json
 data/sessions/
 data/sso_probe.json
 hisobot.html
+
+# Ekspertlarning shaxsiy tanlovlari va jadvali - yopiq guruh ma'lumoti (repo ochiq)
+data/store/h2h_private/
+*.xlsx

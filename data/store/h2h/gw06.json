@@ -1,0 +1,78 @@
+{
+ "gw": 6,
+ "experts": {
+  "xi": [
+   1,
+   229,
+   449,
+   4,
+   12,
+   426,
+   124,
+   480,
+   569,
+   249,
+   464
+  ],
+  "bench": [],
+  "captain": 12,
+  "vice": 0,
+  "expected": 0.0,
+  "names": {
+   "1": "Raya",
+   "229": "Tarkowski",
+   "449": "Hall",
+   "4": "Gabriel",
+   "12": "Saka",
+   "426": "B.Fernandes",
+   "124": "Groß",
+   "480": "Gibbs-White",
+   "569": "Gonzalo",
+   "249": "Barry",
+   "464": "Wissa"
+  },
+  "note": "GW Team (jadval)"
+ },
+ "model_backtest": {
+  "xi": [
+   1,
+   229,
+   449,
+   472,
+   426,
+   12,
+   480,
+   427,
+   124,
+   379,
+   249
+  ],
+  "bench": [
+   305,
+   316,
+   93,
+   572
+  ],
+  "captain": 426,
+  "vice": 12,
+  "expected": 64.14,
+  "names": {
+   "1": "Raya",
+   "572": "Tzolakis",
+   "229": "Tarkowski",
+   "449": "Hall",
+   "472": "Murillo",
+   "305": "Davis",
+   "93": "Schuster",
+   "426": "B.Fernandes",
+   "12": "Saka",
+   "480": "Gibbs-White",
+   "427": "Mbeumo",
+   "124": "Groß",
+   "379": "Isak",
+   "249": "Barry",
+   "316": "Emersonn"
+  },
+  "note": "backtest (jarohat bayroqlarisiz)"
+ }
+}

@@ -1,0 +1,78 @@
+{
+ "gw": 2,
+ "experts": {
+  "xi": [
+   1,
+   8,
+   534,
+   418,
+   426,
+   368,
+   427,
+   557,
+   565,
+   165,
+   411
+  ],
+  "bench": [],
+  "captain": 426,
+  "vice": 0,
+  "expected": 0.0,
+  "names": {
+   "1": "Raya",
+   "8": "Calafiori",
+   "534": "Hume",
+   "418": "Maguire",
+   "426": "B.Fernandes",
+   "368": "Szoboszlai",
+   "427": "Mbeumo",
+   "557": "Tzolis",
+   "565": "M.Sangaré",
+   "165": "João Pedro",
+   "411": "Haaland"
+  },
+  "note": "GW Team (jadval)"
+ },
+ "model_backtest": {
+  "xi": [
+   1,
+   388,
+   356,
+   387,
+   391,
+   418,
+   426,
+   368,
+   427,
+   12,
+   379
+  ],
+  "bench": [
+   194,
+   195,
+   290,
+   57
+  ],
+  "captain": 426,
+  "vice": 368,
+  "expected": 59.91,
+  "names": {
+   "1": "Raya",
+   "57": "Petrović",
+   "388": "Guéhi",
+   "356": "Virgil",
+   "387": "O'Reilly",
+   "391": "Gvardiol",
+   "418": "Maguire",
+   "426": "B.Fernandes",
+   "368": "Szoboszlai",
+   "427": "Mbeumo",
+   "12": "Saka",
+   "290": "Slater",
+   "379": "Isak",
+   "194": "Thomas-Asante",
+   "195": "Simms"
+  },
+  "note": "backtest (jarohat bayroqlarisiz)"
+ }
+}

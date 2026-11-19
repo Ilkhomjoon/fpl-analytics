@@ -1,6 +1,7 @@
 """H2H — model Free Hit tarkibi ekspertlar tarkibiga qarshi.
 
     python tools/h2h.py freeze                 # deadline oldidan: model tarkibini muzlatadi
+    python tools/h2h.py import                 # ekspertlar jadvalidan («2026-27 GW Team.xlsx»)
     python tools/h2h.py experts "Raya, Gabriel, … Haaland (c), … | Dubravka, Konsa, …"
     python tools/h2h.py score                  # tur tugagach: ikkala tarkibni hisoblaydi
     python tools/h2h.py table                  # barcha turlar bo'yicha jadval
@@ -131,7 +132,8 @@ def score(cfg: Config, gw: int) -> None:
         if not lineup:
             print(f"  {title}: tarkib kiritilmagan")
             continue
-        result = h2h.score_lineup(lineup, stats, positions)
+        # Jadval qoidasi: 11 lik + kapitan, zaxirasiz — ikkala tomon uchun bir xil
+        result = h2h.score_lineup(lineup, stats, positions, autosubs=False)
         _show(f"{title}: {result['points']} ochko"
               + (f" (kutilgan {lineup.expected:.1f})" if lineup.expected else ""),
               lineup, positions, result)
@@ -157,11 +159,17 @@ def table(cfg: Config) -> None:
             continue
         stats = _live(client, gw)
         got = {}
-        for side in ("model", "experts"):
-            lineup = h2h.Lineup.from_dict(record.get(side))
-            got[side] = h2h.score_lineup(lineup, stats, positions)["points"] if lineup else None
+        live_model = bool(record.get("model"))
+        sides = {"model": record.get("model") or record.get("model_backtest"),
+                 "experts": record.get("experts")}
+        for side, data in sides.items():
+            lineup = h2h.Lineup.from_dict(data)
+            got[side] = (h2h.score_lineup(lineup, stats, positions, autosubs=False)["points"]
+                         if lineup else None)
         m, e = got["model"], got["experts"]
         diff = f"{m - e:+5d}" if (m is not None and e is not None) else "    —"
+        if m is not None and not live_model:
+            diff += " *"                        # * — orqaga qarab tuzilgan (backtest)
         print(f"  {gw:2d}   {m if m is not None else '—':>5}  {e if e is not None else '—':>7}"
               f"  {diff}   {real.get(gw, '—'):>6}  {events[gw].get('average_entry_score', '—'):>8}")
         if m is not None and e is not None:
@@ -173,20 +181,60 @@ def table(cfg: Config) -> None:
             print(f"  ({n} tur — xulosa uchun kam: kamida 8-10 tur kerak.)")
 
 
+# ------------------------------------------------------------------ import
+def import_xlsx(cfg: Config, path: str) -> None:
+    """Ekspertlar jadvalidan («GW Team» fayli) barcha turlarni yuklaydi."""
+    import json
+    client = _client(cfg)
+    bootstrap = client.bootstrap()
+    finished = [e["id"] for e in bootstrap["events"] if e.get("finished")]
+    points = {gw: {i: s[1] for i, s in _live(client, gw).items()} for gw in finished}
+    positions = {e["id"]: e["element_type"] for e in bootstrap["elements"]}
+    for rec in h2h.read_workbook(path, bootstrap["elements"], points):
+        gw, team = rec["gw"], rec["team"]
+        record = h2h.load(cfg.store_dir, gw)
+        record["gw"] = gw
+        record["experts"] = dict(team.as_dict(), note="GW Team (jadval)")
+        record.pop("experts_all", None)
+        managers = rec["managers"]
+        # Shaxsiy tanlovlar — git'ga kirmaydigan papkaga (repo ochiq)
+        h2h.save_private(cfg.store_dir, gw, [
+            dict(lineup.as_dict(), manager=(managers[n] if n < len(managers) else f"{n + 1}-o'rin"))
+            for n, lineup in enumerate(rec["experts"]) if lineup.xi])
+        target = h2h.path_for(cfg.store_dir, gw)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps(record, ensure_ascii=False, indent=1), encoding="utf-8")
+
+        line = f"  GW{gw:2d}: {len(team.xi)} o'yinchi, kapitan {team.names.get(team.captain, '—')}"
+        if gw in points:
+            stats = {i: (90 if p else 0, p) for i, p in points[gw].items()}
+            got = h2h.score_lineup(team, stats, positions, autosubs=False)["points"]
+            sheet = rec["sheet_scores"][-1] if rec["sheet_scores"] else None
+            line += f" — {got} ochko" + ("" if sheet in (None, got) else f"  (jadvalda {sheet} — FARQ!)")
+        if len(team.xi) != 11:
+            line += "  ← 11 ta emas!"
+        if rec["missing"]:
+            line += f"  TOPILMADI: {', '.join(rec['missing'])}"
+        print(line)
+
+
 # ---------------------------------------------------------------- backfill
 def backfill(cfg: Config, first: int) -> None:
+    """Model o'tgan turlarda nima tuzgan bo'lardi — ekspertlar jadvaliga qarshi.
+
+    Hisob jadval qoidasi bilan: faqat 11 lik + kapitan (zaxira va
+    avtoalmashtirishsiz) — ikkala tomon uchun bir xil.
+    """
+    import json
     import backtest as bt
     raw = bt.load_raw(cfg)
     bootstrap = raw["bootstrap"]
     histories = {int(i): h for i, h in raw["history"].items()}
     events = {e["id"]: e for e in bootstrap["events"]}
     finished = [e["id"] for e in bootstrap["events"] if e.get("finished")]
-    client = _client(cfg)
-    real = _entry_points(client, EXPERT_ENTRY)
-    mine = _entry_points(client, cfg.entry_id) if cfg.entry_id else {}
 
-    print("  GW  model FH (kutilgan)   FPLUzb    siz   FPL o'rt   kapitan")
-    total = {"model": 0, "real": 0, "mine": 0, "avg": 0, "exp": 0.0}
+    print("  GW   model (kutilgan)  GW Team  eksp. o'rt  eng yaxshi  model o'rni   FPL o'rt   model kapitani")
+    tot = {"model": 0, "team": 0, "avg": 0.0, "fpl": 0, "n": 0, "wins": 0, "exp": 0.0}
     for k in range(first, max(finished) + 1):
         elements, engine, played, form_base = bt.asof_state(cfg, raw, k, histories)
         evs = []
@@ -205,26 +253,49 @@ def backfill(cfg: Config, first: int) -> None:
         stats = {i: (sum(h.get("minutes") or 0 for h in rows if h.get("round") == k),
                      sum(h.get("total_points") or 0 for h in rows if h.get("round") == k))
                  for i, rows in histories.items()}
-        positions = {e["id"]: e["element_type"] for e in elements}
-        result = h2h.score_lineup(lineup, stats, positions)
+        positions = {e["id"]: e["element_type"] for e in bootstrap["elements"]}
+        result = h2h.score_lineup(lineup, stats, positions, autosubs=False)
+        model = result["points"]
+
+        # Orqaga qarab tuzilgan tarkib alohida kalitda: jonli muzlatilgani bilan aralashmasin
+        record = h2h.load(cfg.store_dir, k)
+        record["gw"] = k
+        record["model_backtest"] = dict(lineup.as_dict(), note="backtest (jarohat bayroqlarisiz)")
+        target = h2h.path_for(cfg.store_dir, k)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps(record, ensure_ascii=False, indent=1), encoding="utf-8")
+
+        team = h2h.Lineup.from_dict(record.get("experts"))
+        team_pts = h2h.score_lineup(team, stats, positions, autosubs=False)["points"] if team else None
+        each = [h2h.score_lineup(h2h.Lineup.from_dict(x), stats, positions, autosubs=False)["points"]
+                for x in h2h.load_private(cfg.store_dir, k)]
         avg = events[k].get("average_entry_score") or 0
-        cap = lineup.names.get(result["armband"], "—")
-        print(f"  {k:2d}   {result['points']:4d}    ({lineup.expected:5.1f})      "
-              f"{real.get(k, 0):4d}   {mine.get(k, 0):4d}   {avg:6d}     "
-              f"{cap} {result['captain_points']}")
-        total["model"] += result["points"]; total["exp"] += lineup.expected
-        total["real"] += real.get(k, 0); total["mine"] += mine.get(k, 0); total["avg"] += avg
-    print(f"  jami {total['model']:4d}    ({total['exp']:5.0f})      {total['real']:4d}"
-          f"   {total['mine']:4d}   {total['avg']:6d}")
-    print("\n  Eslatma: model har tur Free Hit o'ynaydi (transfer cheklovi yo'q), "
-          "haqiqiy jamoalar esa yo'q —\n  shuning uchun bu ustunlar to'g'ridan-to'g'ri "
-          "raqobat emas, miqyos uchun. Halol taqqoslash — ekspertlarning\n  Free Hit "
-          "tarkibi bilan (`score` / `table`).")
+        cap = f"{lineup.names.get(result['armband'], '—')} {result['captain_points']}"
+        if team_pts is None:
+            print(f"  {k:2d}   {model:4d}  ({lineup.expected:5.1f})        —  (ekspertlar tarkibi yo'q)"
+                  f"{'':24s}{avg:6d}   {cap}")
+            continue
+        each = each or [team_pts]            # shaxsiy tanlovlar yuklanmagan bo'lsa
+        rank = 1 + sum(1 for s in each if s > model)
+        print(f"  {k:2d}   {model:4d}  ({lineup.expected:5.1f})     {team_pts:4d}      "
+              f"{sum(each) / len(each):5.1f}       {max(each):4d}     {rank:2d}/{len(each) + 1}"
+              f"      {avg:6d}   {cap}")
+        tot["model"] += model; tot["team"] += team_pts; tot["avg"] += sum(each) / len(each)
+        tot["fpl"] += avg; tot["n"] += 1; tot["wins"] += model > team_pts; tot["exp"] += lineup.expected
+    if tot["n"]:
+        print(f"  jami {tot['model']:4d}  ({tot['exp']:5.0f})     {tot['team']:4d}      {tot['avg']:5.0f}"
+              f"{'':29s}{tot['fpl']:6d}")
+        print(f"\n  {tot['n']} tur: model GW Team dan {tot['model'] - tot['team']:+d} ochko,"
+              f" yutgan turlari {tot['wins']}/{tot['n']}.")
+    print("  Cheklovlar: (1) backtestda jarohat bayroqlari yo'q — model ba'zan o'sha turda jarohatli\n"
+          "  o'yinchini tanlaydi; (2) model koeffitsiyentlari shu turlar ma'lumotida tekshirilgan,\n"
+          "  ya'ni natija biroz optimistik bo'lishi mumkin. Haqiqiy sinov — GW11 dan boshlab jonli.")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("command", choices=("freeze", "experts", "score", "table", "backfill"))
+    parser.add_argument("command", choices=("freeze", "experts", "import", "score",
+                                            "table", "backfill"))
     parser.add_argument("text", nargs="?", default="")
     parser.add_argument("--gw", type=int, default=0)
     parser.add_argument("--from", dest="first", type=int, default=3)
@@ -237,6 +308,8 @@ def main() -> None:
         if not args.text:
             sys.exit('Tarkib matni kerak: python tools/h2h.py experts "… | …"')
         experts(cfg, args.text, args.gw)
+    elif args.command == "import":
+        import_xlsx(cfg, args.text or str(ROOT / "2026-27 GW Team.xlsx"))
     elif args.command == "score":
         score(cfg, args.gw)
     elif args.command == "table":

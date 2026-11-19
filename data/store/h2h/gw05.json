@@ -1,0 +1,78 @@
+{
+ "gw": 5,
+ "experts": {
+  "xi": [
+   1,
+   391,
+   233,
+   201,
+   449,
+   480,
+   426,
+   40,
+   411,
+   346,
+   249
+  ],
+  "bench": [],
+  "captain": 411,
+  "vice": 0,
+  "expected": 0.0,
+  "names": {
+   "1": "Raya",
+   "391": "Gvardiol",
+   "233": "Mykolenko",
+   "201": "Muñoz",
+   "449": "Hall",
+   "480": "Gibbs-White",
+   "426": "B.Fernandes",
+   "40": "Rogers",
+   "411": "Haaland",
+   "346": "Calvert-Lewin",
+   "249": "Barry"
+  },
+  "note": "GW Team (jadval)"
+ },
+ "model_backtest": {
+  "xi": [
+   1,
+   388,
+   330,
+   229,
+   472,
+   480,
+   426,
+   335,
+   411,
+   346,
+   249
+  ],
+  "bench": [
+   233,
+   98,
+   605,
+   572
+  ],
+  "captain": 411,
+  "vice": 480,
+  "expected": 72.58,
+  "names": {
+   "1": "Raya",
+   "572": "Tzolakis",
+   "388": "Guéhi",
+   "330": "Bogle",
+   "229": "Tarkowski",
+   "472": "Murillo",
+   "233": "Mykolenko",
+   "480": "Gibbs-White",
+   "426": "B.Fernandes",
+   "335": "Stach",
+   "98": "Janelt",
+   "605": "Yalcouyé",
+   "411": "Haaland",
+   "346": "Calvert-Lewin",
+   "249": "Barry"
+  },
+  "note": "backtest (jarohat bayroqlarisiz)"
+ }
+}

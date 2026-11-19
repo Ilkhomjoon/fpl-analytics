@@ -1,0 +1,36 @@
+{
+ "gw": 1,
+ "experts": {
+  "xi": [
+   1,
+   534,
+   8,
+   423,
+   426,
+   427,
+   557,
+   368,
+   165,
+   552,
+   411
+  ],
+  "bench": [],
+  "captain": 426,
+  "vice": 0,
+  "expected": 0.0,
+  "names": {
+   "1": "Raya",
+   "534": "Hume",
+   "8": "Calafiori",
+   "423": "Shaw",
+   "426": "B.Fernandes",
+   "427": "Mbeumo",
+   "557": "Tzolis",
+   "368": "Szoboszlai",
+   "165": "João Pedro",
+   "552": "Brobbey",
+   "411": "Haaland"
+  },
+  "note": "GW Team (jadval)"
+ }
+}

@@ -1,0 +1,78 @@
+{
+ "gw": 3,
+ "experts": {
+  "xi": [
+   597,
+   115,
+   8,
+   88,
+   399,
+   426,
+   367,
+   124,
+   411,
+   464,
+   379
+  ],
+  "bench": [],
+  "captain": 411,
+  "vice": 0,
+  "expected": 0.0,
+  "names": {
+   "597": "Suzuki",
+   "115": "De Cuyper",
+   "8": "Calafiori",
+   "88": "Kayode",
+   "399": "Cherki",
+   "426": "B.Fernandes",
+   "367": "Gakpo",
+   "124": "Groß",
+   "411": "Haaland",
+   "464": "Wissa",
+   "379": "Isak"
+  },
+  "note": "GW Team (jadval)"
+ },
+ "model_backtest": {
+  "xi": [
+   572,
+   388,
+   391,
+   115,
+   88,
+   426,
+   368,
+   480,
+   411,
+   379,
+   249
+  ],
+  "bench": [
+   279,
+   605,
+   290,
+   109
+  ],
+  "captain": 411,
+  "vice": 426,
+  "expected": 68.66,
+  "names": {
+   "572": "Tzolakis",
+   "109": "Verbruggen",
+   "388": "Guéhi",
+   "391": "Gvardiol",
+   "115": "De Cuyper",
+   "88": "Kayode",
+   "279": "Ajayi",
+   "426": "B.Fernandes",
+   "368": "Szoboszlai",
+   "480": "Gibbs-White",
+   "605": "Yalcouyé",
+   "290": "Slater",
+   "411": "Haaland",
+   "379": "Isak",
+   "249": "Barry"
+  },
+  "note": "backtest (jarohat bayroqlarisiz)"
+ }
+}

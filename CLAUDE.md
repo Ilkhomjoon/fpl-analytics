@@ -538,9 +538,26 @@ ikkalasi ham git da. Ism xatolariga chidamli («De Cupyer», «Grob»); hisob
 kapitan/vitse va avtoalmashtirishni hisobga oladi (GW10 ekspert tarkibi
 jadvaldagi bilan bir xil chiqdi: 75).
 
-`python tools/h2h.py backfill` — model orqaga qarab (GW3-10): Free Hit
-tarkiblari jami **518** ochko (kutilgan 530; FPL o'rtachasi 432). Jarohat
-bayroqlarisiz, shuning uchun jonli natijadan biroz yomonroq bo'lishi kutiladi.
+**Ekspertlar jadvali** — `2026-27 GW Team.xlsx` (har varaq bitta tur: 10 ekspertning
+Free Hit tanlovi + umumiy «GW Team», `1` = tanlangan, `2` = kapitan). Bu
+tarkiblar haqiqiy jamoalarga **aloqasi yo'q**; jadvalda faqat 11 lik + kapitan
+bor, shuning uchun H2H hisobi ham shunday (zaxira va avtoalmashtirishsiz).
+
+```powershell
+python tools/h2h.py import      # jadvaldan barcha turlarni yuklaydi
+python tools/h2h.py backfill    # model orqaga qarab, ekspertlarga qarshi
+```
+
+Import jadval bilan tekshirilgan: «GW Team» ochkosi 10 turning hammasida bir xil.
+**Repo ochiq**, shuning uchun: `.xlsx` va har ekspertning shaxsiy tanlovi
+(`data/store/h2h_private/`) `.gitignore` da; git da faqat kanalda e'lon
+qilinadigan umumiy «GW Team» va model tarkibi turadi.
+
+Orqaga qarab natija (GW2-10, 9 tur): **model 611**, GW Team 637, ekspertlarning
+o'rtachasi 594, FPL o'rtachasi 513; model GW Team ni 9 turdan 5 tasida yutgan.
+Ya'ni model o'rtacha ekspert darajasida, umumiy tarkibdan biroz past. Bu
+backtest (jarohat bayroqlarisiz, koeffitsiyentlar shu turlarda tekshirilgan) —
+hukm emas; hisob GW11 dan jonli yuritiladi.
 
 **Jamoa tuzuvchi endi aniq yechadi** (`builder.solve_exact`, PuLP + CBC).
 Eski mahalliy qidiruv Haaland ni byudjetga sig'dira olmay tiqilib qolardi:

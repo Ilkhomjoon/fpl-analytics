@@ -119,6 +119,86 @@ def test_oynamagan_zaxira_chiqmaydi():
     assert result["subs"] == [(15, 8)]                   # keyingisi — Van Hecke
 
 
+def test_jadval_qoidasi_zaxirasiz_va_vitsesiz():
+    """Ekspertlar jadvali: 11 lik + kapitan. O'ynamagan kapitan 0 × 2 = 0, almashtirish yo'q."""
+    stats = _stats()
+    stats[14] = (0, 0)
+    result = h2h.score_lineup(_lineup(), stats, POSITIONS, autosubs=False)
+    assert result["subs"] == [] and result["armband"] == 14
+    assert result["points"] == 10 * 2
+
+
+# ----------------------------------------------------------- jadval (xlsx)
+def test_taxallus_va_bosh_harfli_ism_topiladi():
+    elements = ELEMENTS + [
+        _element(20, "Calvert-Lewin", FWD),
+        {**_element(21, "Andrey Santos", MID, second="Santos"), "first_name": "Andrey"},
+        {**_element(22, "Santos", MID, second="Santos"), "first_name": "Bruno"},
+    ]
+    index = h2h.build_index(elements)
+    assert [e["id"] for e in h2h.find_candidates("DCL", index)] == [20]
+    assert [e["id"] for e in h2h.find_candidates("CLW", index)] == [20]
+    assert [e["id"] for e in h2h.find_candidates("A.Santos", index)] == [21]
+
+
+def _workbook(path):
+    openpyxl = pytest.importorskip("openpyxl")
+    book = openpyxl.Workbook()
+    sheet = book.active
+    sheet.title = "7"
+    head = ["Darvozabonlar", "1-o'rin", "2-o'rin", "GW Team", "Foiz", "Ballar"]
+    blocks = [
+        [("Raya", 1, 1, 1, 6)],
+        [("Gabriel", 1, 1, 1, 8), ("Tarkowski", 1, 0, 1, 2), ("De Cupyer", 1, 1, 1, 6),
+         ("Konsa", 0, 1, 0, 1)],
+        [("Rogers", 1, 1, 1, 2), ("Tavernier", 1, 1, 1, 3), ("Dewsburry-hall", 1, 1, 1, 9),
+         ("Grob", 1, 1, 1, 10)],
+        [("Haaland", 2, 1, 2, 2), ("Barry", 1, 2, 1, 16), ("Evanilson", 1, 1, 1, 9)],
+    ]
+    sheet.append([])
+    for n, block in enumerate(blocks):
+        sheet.append(head if n == 0 else ["Column1", "Column2", "Column3", "Column4", "Foiz", "Ballar"])
+        for name, a, b, team, ball in block:
+            sheet.append([name, a or None, b or None, team or None, 1.0, ball, None, "Maestro"])
+        sheet.append([])
+    sheet.append([None, 12, 12, 12])
+    sheet.append([None, 75, 88, 75])
+    empty = book.create_sheet("8")                      # hali to'ldirilmagan tur
+    empty.append(head)
+    book.save(path)
+
+
+def test_jadvaldan_tarkib_va_kapitan_oqiladi(tmp_path):
+    path = tmp_path / "gw.xlsx"
+    _workbook(path)
+    records = h2h.read_workbook(path, ELEMENTS)
+    assert [r["gw"] for r in records] == [7]            # bo'sh varaq tashlab ketiladi
+    rec = records[0]
+    assert rec["missing"] == []
+    assert rec["team"].xi == [1, 3, 5, 6, 9, 10, 11, 12, 14, 15, 16]
+    assert rec["team"].captain == 14
+    assert rec["experts"][1].captain == 15 and 7 in rec["experts"][1].xi
+    assert rec["sheet_scores"][-1] == 75
+    stats = {i: (90, p) for i, p in rec["sheet_points"].items()}
+    assert h2h.score_lineup(rec["team"], stats, POSITIONS, autosubs=False)["points"] == 75
+
+
+def test_adash_familiya_ochko_boyicha_ajratiladi(tmp_path):
+    """Ikki «Gabriel»: jadvaldagi «Ballar» qaysi biri ekanini aytadi."""
+    path = tmp_path / "gw.xlsx"
+    _workbook(path)
+    points = {7: {3: 1, 4: 8}}                          # 8 ochkoni kam egalikdagisi olgan
+    rec = h2h.read_workbook(path, ELEMENTS, points)[0]
+    assert 4 in rec["team"].xi and 3 not in rec["team"].xi
+
+
+def test_shaxsiy_tanlovlar_alohida_papkada(tmp_path):
+    h2h.save_private(tmp_path, 7, [{"xi": [1], "manager": "Maestro"}])
+    assert h2h.load_private(tmp_path, 7)[0]["manager"] == "Maestro"
+    assert "h2h_private" in str(h2h.private_path(tmp_path, 7))
+    assert h2h.all_records(tmp_path) == []              # ochiq yozuvlarga aralashmaydi
+
+
 # ----------------------------------------------------------------- saqlash
 def test_ikki_tomon_bitta_faylda_va_bir_birini_ochirmaydi(tmp_path):
     lineup = _lineup()

@@ -53,41 +53,84 @@ def _keys(element: dict) -> set[str]:
     return keys
 
 
-def resolve_names(names: list[str], elements: list[dict]) -> tuple[list[int], list[str]]:
+def resolve_names(names: list[str], elements: list[dict],
+                  active_only: bool = True) -> tuple[list[int], list[str]]:
     """Ismlarni o'yinchi ID lariga aylantiradi: (ID lar, topilmagan ismlar).
 
     Bir ismga bir nechta o'yinchi to'g'ri kelsa (masalan «Gabriel») — egaligi
     eng yuqorisi olinadi: ekspert tarkibida mashhuri nazarda tutiladi.
-    Topilmagan ism uchun ID o'rnida 0 turadi.
+    Topilmagan ism uchun ID o'rnida 0 turadi. `active_only=False` — o'tgan
+    turlar uchun: o'shanda o'ynagan, keyin ligadan ketgan o'yinchi ham topiladi.
     """
-    active = [e for e in elements if e.get("status") != "u"]
-    index: dict[str, list[dict]] = {}
-    for e in active:
-        for key in _keys(e):
-            index.setdefault(key, []).append(e)
-
-    def best(candidates: list[dict]) -> int:
-        return max(candidates, key=lambda e: float(e.get("selected_by_percent") or 0))["id"]
-
+    index = build_index(elements, active_only)
     ids: list[int] = []
     missing: list[str] = []
     for name in names:
-        key = normalise(name)
-        found = index.get(key)
-        if not found and key:
-            prefixed = [e for k, v in index.items() for e in v
-                        if len(key) >= 4 and (k.startswith(key) or key.startswith(k))
-                        and len(k) >= 4]
-            found = prefixed or None
-        if not found and key:
-            close = difflib.get_close_matches(key, list(index), n=1, cutoff=0.75)
-            found = index.get(close[0]) if close else None
+        found = find_candidates(name, index)
         if found:
-            ids.append(best(found))
+            ids.append(most_owned(found))
         else:
             ids.append(0)
             missing.append(name)
     return ids, missing
+
+
+# Ekspertlar ishlatadigan taxalluslar (jadvalda uchraganlari)
+ALIASES = {
+    "dcl": "calvertlewin", "clw": "calvertlewin", "kdb": "debruyne",
+    "taa": "alexanderarnold", "dh": "dewsburyhall", "kdh": "dewsburyhall",
+}
+
+
+def build_index(elements: list[dict], active_only: bool = True) -> dict[str, list[dict]]:
+    index: dict[str, list[dict]] = {}
+    for e in elements:
+        if active_only and e.get("status") == "u":
+            continue
+        for key in _keys(e):
+            index.setdefault(key, []).append(e)
+    return index
+
+
+def most_owned(candidates: list[dict]) -> int:
+    return max(candidates, key=lambda e: float(e.get("selected_by_percent") or 0))["id"]
+
+
+def find_candidates(name: str, index: dict[str, list[dict]]) -> list[dict]:
+    """Ismga mos **barcha** o'yinchilar: aniq → taxallus → «A.Familiya» → bosh qism → o'xshash."""
+    key = normalise(name)
+    if not key:
+        return []
+    key = ALIASES.get(key, key)
+    if key in index:
+        return index[key]
+    # «A.Santos» — ismning bosh harfi + familiya
+    initial = re.match(r"^\s*([A-Za-z])\.\s*(.+)$", name)
+    if initial:
+        surname = normalise(initial.group(2))
+        letter = initial.group(1).lower()
+        seen, found = set(), []
+        for k, group in index.items():
+            if not k.endswith(surname):
+                continue
+            for e in group:
+                if e["id"] not in seen and normalise(e.get("first_name") or "").startswith(letter):
+                    seen.add(e["id"])
+                    found.append(e)
+        if found:
+            return found
+    if len(key) >= 4:
+        seen, found = set(), []
+        for k, group in index.items():
+            if len(k) >= 4 and (k.startswith(key) or key.startswith(k)):
+                for e in group:
+                    if e["id"] not in seen:
+                        seen.add(e["id"])
+                        found.append(e)
+        if found:
+            return found
+    close = difflib.get_close_matches(key, list(index), n=1, cutoff=0.75)
+    return index[close[0]] if close else []
 
 
 @dataclass
@@ -176,10 +219,12 @@ def parse_lineup(text: str, elements: list[dict]) -> tuple[Lineup, list[str]]:
 
 # --------------------------------------------------------------- hisoblash
 def score_lineup(lineup: Lineup, stats: dict[int, tuple[int, int]],
-                 positions: dict[int, int]) -> dict:
+                 positions: dict[int, int], autosubs: bool = True) -> dict:
     """FPL qoidalari bo'yicha tur ochkosi.
 
     `stats` — o'yinchi → (daqiqa, ochko); `positions` — o'yinchi → pozitsiya.
+    `autosubs=False` — ekspertlar jadvalidagi qoida: faqat 11 lik + kapitan,
+    zaxira va vitse-kapitan hisobga olinmaydi (jadvalda ular yo'q).
 
     * Maydonga tushmagan (0 daqiqa) asosiy o'yinchi zaxiradagi bilan, zaxira
       tartibida almashadi — faqat sxema qonuniy qolsa (kamida 3 HIM, 2 YAR,
@@ -195,7 +240,7 @@ def score_lineup(lineup: Lineup, stats: dict[int, tuple[int, int]],
     field_ = list(lineup.xi)
     free = list(lineup.bench)
     subs: list[tuple[int, int]] = []
-    for out in list(lineup.xi):
+    for out in (list(lineup.xi) if autosubs else []):
         if minutes(out) > 0:
             continue
         for candidate in free:
@@ -216,7 +261,9 @@ def score_lineup(lineup: Lineup, stats: dict[int, tuple[int, int]],
             break
 
     armband = 0
-    if lineup.captain in field_ and minutes(lineup.captain) > 0:
+    if not autosubs:
+        armband = lineup.captain if lineup.captain in field_ else 0
+    elif lineup.captain in field_ and minutes(lineup.captain) > 0:
         armband = lineup.captain
     elif lineup.vice in field_ and minutes(lineup.vice) > 0:
         armband = lineup.vice
@@ -232,9 +279,141 @@ def score_lineup(lineup: Lineup, stats: dict[int, tuple[int, int]],
     }
 
 
+# ------------------------------------------------- ekspertlar jadvali (xlsx)
+def read_workbook(path, elements: list[dict],
+                  points_by_gw: dict[int, dict[int, int]] | None = None) -> list[dict]:
+    """«GW Team» faylini o'qiydi: har varaq — bitta tur.
+
+    Varaq tuzilishi: A ustun — ism (to'rt blok: DRV, HIM, YAR, HUJ; har blok
+    sarlavha qatoridan keyin), B..K — o'nta ekspertning tanlovi, keyingi ustun
+    — «GW Team» (umumiy tarkib). Katakda `1` — tanlangan, `2` — kapitan.
+    Oxirgi to'ldirilgan qator — har ustunning ochkosi.
+
+    Har tur uchun: `{"gw", "team": Lineup, "experts": [Lineup…], "sheet_scores",
+    "sheet_points": {id: ochko}, "missing": [ism…], "managers": [nom…]}`.
+    Zaxira va vitse-kapitan jadvalda yo'q — tarkib faqat 11 kishi.
+
+    `points_by_gw` (tur → o'yinchi → haqiqiy ochko) berilsa, adash familiyalar
+    (ikki «Gomez», ikki «Sangaré») jadvaldagi «Ballar» ustuni bo'yicha
+    ajratiladi: o'sha turda aynan shuncha ochko olgani tanlanadi.
+    """
+    import openpyxl
+
+    by_pos: dict[int, list[dict]] = {GK: [], DEF: [], MID: [], FWD: []}
+    for e in elements:
+        by_pos.setdefault(e["element_type"], []).append(e)
+    index_pos = {p: build_index(group, active_only=False) for p, group in by_pos.items()}
+    index_all = build_index(elements, active_only=False)
+    names_of = {e["id"]: e.get("web_name", "?") for e in elements}
+
+    def pick(label: str, position: int, ball, gw: int) -> int:
+        found = find_candidates(label, index_pos[position]) \
+            or find_candidates(label, index_all)          # boshqa blokka yozilgan bo'lsa
+        if not found:
+            return 0
+        actual = (points_by_gw or {}).get(gw)
+        if actual is not None and isinstance(ball, (int, float)) and len(found) > 1:
+            exact = [e for e in found if actual.get(e["id"], 0) == int(ball)]
+            if exact:
+                found = exact
+        return most_owned(found)
+
+    out: list[dict] = []
+    book = openpyxl.load_workbook(path, data_only=True)
+    for sheet in book.worksheets:
+        try:
+            gw = int(str(sheet.title).strip())
+        except ValueError:
+            continue
+        rows = list(sheet.iter_rows(values_only=True))
+        header = next((i for i, r in enumerate(rows)
+                       if r and any(str(c or "").strip() == "GW Team" for c in r)), None)
+        if header is None:
+            continue
+        team_col = next(i for i, c in enumerate(rows[header])
+                        if str(c or "").strip() == "GW Team")
+        cols = list(range(1, team_col + 1))               # ekspertlar + GW Team
+        picks: dict[int, list[int]] = {c: [] for c in cols}
+        captains: dict[int, int] = {c: 0 for c in cols}
+        sheet_points: dict[int, int] = {}
+        missing: list[str] = []
+        position, scores_row = GK, None
+        for r in rows[header + 1:]:
+            if not r:
+                continue
+            label = str(r[0] or "").strip()
+            marks = [r[c] if c < len(r) else None for c in cols]
+            if label.lower().startswith("column"):         # keyingi pozitsiya bloki
+                position = min(FWD, position + 1)
+                continue
+            if not label:
+                numeric = [m for m in marks if isinstance(m, (int, float))]
+                if numeric and max(numeric) > 15:           # ochkolar qatori
+                    scores_row = marks
+                continue
+            ball = r[team_col + 2] if team_col + 2 < len(r) else None
+            pid = pick(label, position, ball, gw)
+            if not pid:
+                missing.append(label)
+                continue
+            if isinstance(ball, (int, float)):
+                sheet_points[pid] = int(ball)
+            for c, mark in zip(cols, marks):
+                if mark in (1, 2):
+                    picks[c].append(pid)
+                    if mark == 2:
+                        captains[c] = pid
+
+        def lineup(c: int) -> Lineup:
+            return Lineup(xi=picks[c], captain=captains[c],
+                          names={i: names_of[i] for i in picks[c]})
+
+        # Menejer nomlari — jadvalning o'ng tomonidagi matnli ustunda, o'rin tartibida
+        managers: list[str] = []
+        for r in rows[header + 1:]:
+            for cell in (r[team_col + 3:] if r else ()):
+                if isinstance(cell, str) and cell.strip():
+                    managers.append(cell.strip())
+        if not picks[team_col]:
+            continue                                        # hali to'ldirilmagan varaq
+        out.append({
+            "gw": gw,
+            "team": lineup(team_col),
+            "experts": [lineup(c) for c in cols[:-1]],
+            "sheet_scores": [int(s) if isinstance(s, (int, float)) else None
+                             for s in (scores_row or [])],
+            "sheet_points": sheet_points,
+            "missing": missing,
+            "managers": managers,
+        })
+    return out
+
+
 # ------------------------------------------------------------------ saqlash
 def path_for(store_dir, gw: int) -> Path:
     return Path(store_dir) / "h2h" / f"gw{gw:02d}.json"
+
+
+def private_path(store_dir, gw: int) -> Path:
+    """Har bir ekspertning shaxsiy tanlovi — yopiq guruh ma'lumoti.
+
+    Alohida, `.gitignore` dagi papkada turadi: repo ochiq, kanalda esa faqat
+    umumiy «GW Team» tarkibi e'lon qilinadi.
+    """
+    return Path(store_dir) / "h2h_private" / f"gw{gw:02d}.json"
+
+
+def load_private(store_dir, gw: int) -> list[dict]:
+    path = private_path(store_dir, gw)
+    if not path.exists():
+        return []
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def save_private(store_dir, gw: int, lineups: list[dict]) -> None:
+    path = private_path(store_dir, gw)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(lineups, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
 def load(store_dir, gw: int) -> dict:

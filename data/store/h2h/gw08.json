@@ -1,0 +1,78 @@
+{
+ "gw": 8,
+ "experts": {
+  "xi": [
+   1,
+   8,
+   31,
+   334,
+   391,
+   40,
+   94,
+   480,
+   427,
+   411,
+   106
+  ],
+  "bench": [],
+  "captain": 411,
+  "vice": 0,
+  "expected": 0.0,
+  "names": {
+   "1": "Raya",
+   "8": "Calafiori",
+   "31": "Konsa",
+   "334": "Muharemović",
+   "391": "Gvardiol",
+   "40": "Rogers",
+   "94": "Schade",
+   "480": "Gibbs-White",
+   "427": "Mbeumo",
+   "411": "Haaland",
+   "106": "Thiago"
+  },
+  "note": "GW Team (jadval)"
+ },
+ "model_backtest": {
+  "xi": [
+   1,
+   8,
+   449,
+   504,
+   12,
+   427,
+   40,
+   68,
+   411,
+   346,
+   569
+  ],
+  "bench": [
+   183,
+   173,
+   304,
+   28
+  ],
+  "captain": 411,
+  "vice": 12,
+  "expected": 61.5,
+  "names": {
+   "1": "Raya",
+   "28": "Martinez",
+   "8": "Calafiori",
+   "449": "Hall",
+   "504": "Vuskovic",
+   "173": "Thomas",
+   "304": "O'Shea",
+   "12": "Saka",
+   "427": "Mbeumo",
+   "40": "Rogers",
+   "68": "Tavernier",
+   "183": "Rudoni",
+   "411": "Haaland",
+   "346": "Calvert-Lewin",
+   "569": "Gonzalo"
+  },
+  "note": "backtest (jarohat bayroqlarisiz)"
+ }
+}

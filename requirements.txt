@@ -11,3 +11,5 @@ pulp>=2.8,<3
 # yagona login yo'li shu. Yoqish uchun quyidagi satrdan # ni oling va
 # o'rnatgandan keyin bir marta: python -m playwright install chromium
 # playwright>=1.40
+# Ekspertlar jadvalini (xlsx) o'qish uchun - tools/h2h.py import
+openpyxl>=3.1
