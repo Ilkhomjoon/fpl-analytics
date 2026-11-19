@@ -34,7 +34,8 @@ from fplbrain import rating as rating_mod
 from fplbrain import session_store
 from fplbrain.api import FplClient
 from fplbrain.config import Config
-from web import draftview, paceview, squadview, transferview
+from web import (captainview, chipsview, draftview, h2hview, paceview,
+                 rivalsview, squadview, transferview)
 
 log = logging.getLogger("fplweb")
 
@@ -631,5 +632,72 @@ def create_app(cfg: Config | None = None, client=None, demo: bool = False) -> Fl
             draft_cache.update(payload=payload, at=time.time(),
                                budget=(budget or 0.0))
         return jsonify(payload)
+
+    # ---------------------------------------- kapitan, chiplar, raqiblar, H2H
+    # Bir xil qolip: kalit bo'yicha kesh + bitta qulf. Kalitga jamoa ID kiradi,
+    # shuning uchun bir foydalanuvchining javobi boshqasiga chiqib ketmaydi.
+    extra_lock = threading.Lock()
+    extra_cache: dict[tuple, tuple[float, dict]] = {}
+
+    def cached(key: tuple, ttl: int, build):
+        with extra_lock:
+            hit = extra_cache.get(key)
+            if hit and (time.time() - hit[0]) < ttl and request.args.get("refresh") != "1":
+                return jsonify(hit[1])
+            try:
+                payload = build()
+            except Exception as exc:
+                log.exception("%s olinmadi", key[0])
+                return jsonify({"error": f"{type(exc).__name__}: {exc}"}), 502
+            if not payload.get("error"):
+                extra_cache[key] = (time.time(), payload)
+        return jsonify(payload)
+
+    def need_entry():
+        entry_id = _S().entry_id or cfg.entry_id
+        if entry_id:
+            return entry_id, None
+        return 0, (jsonify({"error": "entry_id noma'lum",
+                            "hint": "Jamoa ID bering yoki kirish qiling."}), 401)
+
+    @app.get("/api/captain")
+    def captain():
+        """Kapitan variantlari: EV, 10+ ehtimoli, raqiblar tanlovi, o'ringa mos strategiya."""
+        maybe_refresh()
+        entry_id, error = need_entry()
+        if error:
+            return error
+        return cached(("captain", entry_id, _S().logged_in), 300,
+                      lambda: captainview.build(client_for(_S()), cfg, entry_id))
+
+    @app.get("/api/chips")
+    def chips():
+        """Chiplarni qaysi turda ishlatish — gorizont bo'yicha baho."""
+        maybe_refresh()
+        entry_id, error = need_entry()
+        if error:
+            return error
+        return cached(("chips", entry_id, _S().logged_in), 600,
+                      lambda: chipsview.build(client_for(_S()), cfg, entry_id))
+
+    @app.get("/api/rivals")
+    def rivals():
+        """Mini-liga: xavf, imkoniyat va har raqib bo'yicha farq."""
+        maybe_refresh()
+        entry_id, error = need_entry()
+        if error:
+            return error
+        try:
+            league_id = int(request.args.get("league") or 0)
+        except ValueError:
+            league_id = 0
+        return cached(("rivals", entry_id, league_id, _S().logged_in), 600,
+                      lambda: rivalsview.build(client_for(_S()), cfg, entry_id,
+                                               league_id or None))
+
+    @app.get("/api/h2h")
+    def h2h():
+        """Model va ekspertlar Free Hit tarkiblari — tur bo'yicha hisob. Login shart emas."""
+        return cached(("h2h",), 600, lambda: h2hview.build(client_for(_S()), cfg))
 
     return app

@@ -253,3 +253,42 @@ def test_aniq_yechim_mahalliy_qidiruvdan_yomon_emas():
     exact = builder.build_squad(market, [1], cfg, budget=85.0)
     local = builder.build_squad(market, [1], cfg, budget=85.0, exact=False)
     assert exact.objective >= local.objective - 1e-6
+
+
+# ------------------------------------------------------------ web ko'rinishi
+class _LiveClient:
+    """`h2hview` ga yetarli soxta klient: bootstrap + tur natijalari."""
+
+    def bootstrap(self):
+        return {"elements": ELEMENTS,
+                "events": [{"id": 7, "finished": True, "average_entry_score": 50},
+                           {"id": 8, "finished": False, "average_entry_score": 0}]}
+
+    def event_live(self, gw):
+        return {"elements": [{"id": i, "stats": {"minutes": 90, "total_points": 2}}
+                             for i in POSITIONS]}
+
+
+def test_h2h_korinishi_jonli_va_orqaga_qarabni_ajratadi(tmp_path):
+    from fplbrain.config import Config as _Config
+    from web import h2hview
+    cfg = _Config()
+    cfg.store_dir = tmp_path
+    lineup = _lineup()
+    h2h.save(tmp_path, 7, "experts", lineup)
+    record = h2h.load(tmp_path, 7)
+    record["model_backtest"] = lineup.as_dict()            # orqaga qarab tuzilgan
+    h2h.path_for(tmp_path, 7).write_text(__import__("json").dumps(record), encoding="utf-8")
+    h2h.save(tmp_path, 8, "model", lineup)                 # jonli, hali o'ynalmagan
+    h2h.save_private(tmp_path, 7, [lineup.as_dict(), lineup.as_dict()])
+
+    body = h2hview.build(_LiveClient(), cfg)
+    done, coming = body["rows"]
+    assert done["gw"] == 7 and done["live"] is False
+    assert done["model"]["points"] == done["experts"]["points"] == 24   # 11 × 2 + kapitan 2
+    assert done["diff"] == 0 and done["model_rank"] == 1 and done["field"] == 3
+    assert coming["live"] is True and coming["model"]["points"] is None
+    assert body["upcoming"]["gw"] == 8
+    # Jonli hisobga faqat muzlatilgan turlar kiradi
+    assert body["totals"]["n"] == 1 and body["totals"]["live_n"] == 0
+    assert body["enough"] is False

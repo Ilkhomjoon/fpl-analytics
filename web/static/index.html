@@ -488,6 +488,50 @@
   .tip dt{color:var(--muted)}
   .tip .sep{grid-column:1/-1; border-top:1px solid var(--line); margin:3px 0 1px}
 
+  /* ------------------------------------- kapitan, chiplar, raqiblar, H2H */
+  .duo{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-bottom:16px}
+  .duo > .card{margin:0}
+  .pick{padding:16px 18px}
+  .pick .tagline{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted)}
+  .pick h3{font-size:22px; font-weight:750; letter-spacing:-.02em; margin:4px 0 2px}
+  .pick .meta{color:var(--muted); font-size:12.5px}
+  .pick .nums{display:flex; gap:18px; margin-top:12px; flex-wrap:wrap}
+  .pick .nums b{display:block; font-size:19px; font-weight:700; font-variant-numeric:tabular-nums}
+  .pick .nums small{color:var(--muted); font-size:11px}
+  .pick.accent{background:linear-gradient(135deg,var(--accent-soft),transparent 70%)}
+  table.plain th{position:static; cursor:default; background:var(--surface-2)}
+  table.plain td.l small{color:var(--muted); margin-left:6px}
+  tr.me td{background:var(--accent-soft) !important; font-weight:650}
+  tr.gap td{padding:5px 10px; text-align:center; color:var(--muted); font-size:11.5px;
+            background:var(--surface-2)}
+  .minibar{display:inline-block; width:54px; height:5px; border-radius:3px; background:var(--surface-3);
+           vertical-align:middle; margin-left:7px; overflow:hidden}
+  .minibar i{display:block; height:100%; background:var(--accent)}
+  .chipcard{padding:16px 18px}
+  .chipcard h3{font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+  .chipcard .verdict{margin:6px 0 12px; font-size:13px}
+  .chipcard.off{opacity:.55}
+  .evbars{display:flex; align-items:flex-end; gap:6px; height:74px}
+  .evbars div{flex:1; text-align:center; font-size:10.5px; color:var(--muted); display:flex;
+              flex-direction:column; justify-content:flex-end; height:100%}
+  .evbars i{display:block; border-radius:4px 4px 0 0; background:var(--muted); opacity:.4; min-height:2px}
+  .evbars .best i{background:var(--accent); opacity:1}
+  .evbars b{font-size:11px; color:var(--ink-2); font-variant-numeric:tabular-nums}
+  .plist{display:grid; gap:0}
+  .plist .it{display:flex; align-items:center; gap:10px; padding:8px 18px; border-top:1px solid var(--line);
+             font-size:13px}
+  .plist .it b{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .plist .it b small{color:var(--muted); font-weight:400; margin-left:6px}
+  .plist .it span.n{font-variant-numeric:tabular-nums; color:var(--ink-2); min-width:46px; text-align:right}
+  .lineup{padding:4px 18px 16px}
+  .lineup .ln{display:flex; gap:8px; align-items:baseline; padding:3px 0; font-size:13px}
+  .lineup .ln .pos{flex:none}
+  .vs{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px; margin-bottom:16px}
+  .vs > .card{margin:0}
+  @media (max-width:900px){ .vs{grid-template-columns:1fr} }
+  .badge-live{background:var(--good-soft); color:var(--good)}
+  .badge-bt{background:var(--surface-3); color:var(--muted)}
+
   /* ---------------------------------------------------------- kirish oynasi */
   dialog{
     border:1px solid var(--line); border-radius:18px; padding:0; width:min(420px,calc(100vw - 28px));
@@ -520,13 +564,15 @@
     .top{padding:10px 14px}
     .top .sub,.hide-m{display:none}
     main{padding:14px 12px 92px}
+    /* 9 ta bo'lim ekranga sig'maydi — pastki menyu yon tomonga suriladi */
     .bottomnav{
-      display:grid; grid-template-columns:repeat(5,1fr); position:fixed; left:0; right:0; bottom:0;
+      display:flex; overflow-x:auto; scrollbar-width:none; position:fixed; left:0; right:0; bottom:0;
       z-index:35; background:var(--surface); border-top:1px solid var(--line);
       padding:6px 4px calc(6px + env(safe-area-inset-bottom));
     }
-    .bottomnav .nav{flex-direction:column; gap:3px; padding:6px 2px; font-size:10.5px;
-                    justify-content:center; text-align:center}
+    .bottomnav::-webkit-scrollbar{display:none}
+    .bottomnav .nav{flex:0 0 74px; width:74px; flex-direction:column; gap:3px; padding:6px 2px;
+                    font-size:10.5px; justify-content:center; text-align:center}
     .bottomnav .nav .lock{display:none}
     .acctbtn .who{display:none}
     .acctbtn{padding:3px}
@@ -608,8 +654,12 @@
       </section>
 
       <section id="v-squad" hidden></section>
+      <section id="v-captain" hidden></section>
       <section id="v-transfers" hidden></section>
+      <section id="v-chips" hidden></section>
       <section id="v-draft" hidden></section>
+      <section id="v-rivals" hidden></section>
+      <section id="v-h2h" hidden></section>
       <section id="v-pace" hidden></section>
     </main>
   </div>
@@ -687,6 +737,10 @@ const ICON = {
   transfers: I('<path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>'),
   draft: I('<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/>'),
   pace: I('<path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/>'),
+  captain: I('<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>'),
+  chips: I('<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>'),
+  rivals: I('<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>'),
+  h2h: I('<path d="M7 7h11l-3-3M17 17H6l3 3"/>'),
   refresh: I('<path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>'),
   sun: I('<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>'),
   moon: I('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'),
@@ -766,14 +820,19 @@ $("themeBtn").onclick = () => {
 const VIEWS = {
   players:   {t: "O'yinchilar",  s: "Butun liga — rol, chiqim va bozor oqimi", needs: false},
   squad:     {t: "Jamoam",       s: "Tavsiya etilgan 11 lik va zaxira", needs: true},
+  captain:   {t: "Kapitan",      s: "Kimga bandaj — o'rningizga mos", needs: true},
   transfers: {t: "Transferlar",  s: "Kimni sotib, kimni olish", needs: true},
+  chips:     {t: "Chiplar",      s: "WC, FH, BB, TC — qaysi turda", needs: true},
   draft:     {t: "Jamoa tuzish", s: "Noldan 15 lik — 100m ichida", needs: false},
+  rivals:    {t: "Raqiblar",     s: "Mini-liga: xavf va imkoniyat", needs: true},
+  h2h:       {t: "H2H",          s: "Model ekspertlarga qarshi", needs: false},
   pace:      {t: "Sur'at",       s: "Mavsum maqsadiga nisbatan", needs: true},
 };
 let view = "players";
 let STATUS = {};
 let DATA = {players: [], teams: [], positions: []};
 let SQUAD = null, TRANSFERS = null, DRAFT = null, PACE = null;
+let CAPTAIN = null, CHIPS = null, RIVALS = null, H2H = null;
 
 function buildNav(){
   const html = Object.entries(VIEWS).map(([k, v]) =>
@@ -797,10 +856,13 @@ function markNav(){
 const LOADERS = {
   players: (f) => loadPlayers(f), squad: (f) => loadSquad(f),
   transfers: (f) => loadTransfers(f), draft: (f) => loadDraft(f), pace: (f) => loadPace(f),
+  captain: (f) => loadCaptain(f), chips: (f) => loadChips(f),
+  rivals: (f) => loadRivals(f), h2h: (f) => loadH2h(f),
 };
 const LOADED = {
   players: () => DATA.players.length > 0, squad: () => !!SQUAD,
   transfers: () => !!TRANSFERS, draft: () => !!DRAFT, pace: () => !!PACE,
+  captain: () => !!CAPTAIN, chips: () => !!CHIPS, rivals: () => !!RIVALS, h2h: () => !!H2H,
 };
 
 function setView(name, push){
@@ -826,6 +888,7 @@ document.addEventListener("click", (e) => {
     if (act.dataset.act === "logout") return doLogout();
     if (act.dataset.act === "mode") return setMode(act.dataset.mode);
     if (act.dataset.act === "draft-go") return loadDraft(true);
+    if (act.dataset.act === "go") return setView(act.dataset.to);
   }
   const pl = e.target.closest("[data-el]");
   if (pl) return openPlayer(pl.dataset.ctx, pl.dataset.el);
@@ -1343,6 +1406,286 @@ async function loadDraft(force){
   renderDraft();
 }
 
+// ================================================================= kapitan
+function captainPick(o, tagline, accent){
+  if (!o) return "";
+  return `<div class="card pick ${accent ? "accent" : ""}">
+    <div class="tagline">${tagline}</div>
+    <h3>${esc(o.name)}</h3>
+    <div class="meta"><span class="pos p${o.pos}">${esc(o.pos_short)}</span>
+      ${esc(o.team)} · ${esc(o.opponent)}</div>
+    <div class="nums">
+      <div><b>${ev0(o.ev)}</b><small>kutilayotgan ochko</small></div>
+      <div><b>${o.p10.toFixed(0)}%</b><small>10+ ochko ehtimoli</small></div>
+      <div><b>${o.ceiling}</b><small>yaxshi kunda (90%)</small></div>
+      <div><b>${o.eo.toFixed(0)}%</b><small>raqiblarda kapitan</small></div>
+    </div>
+    <p class="note" style="margin-top:10px">${esc(o.verdict)}</p></div>`;
+}
+
+function renderCaptain(){
+  if (!CAPTAIN) return;
+  const c = CAPTAIN;
+  const same = c.safe && c.bold && c.safe.element === c.bold.element;
+  const picks = same
+    ? captainPick(c.safe, "Ikkala yondashuvda ham", true)
+    : captainPick(c.safe, "Xavfsiz tanlov — o'rinni saqlaydi", c.strategy === "safe")
+      + captainPick(c.bold, "Tavakkal tanlov — o'rin ko'taradi", c.strategy !== "safe");
+  const top = c.options[0];
+  $("v-captain").innerHTML = `
+    <div class="banner info">${ICON.captain}<div><b>Strategiya: ${esc(c.strategy_name)}.</b>
+      ${esc(c.reason)}${c.rank ? ` (umumiy o'rin ${big(c.rank)})` : ""}.</div></div>
+    <div class="duo">${picks}</div>
+    <div class="card">
+      <div class="card-h" style="padding-bottom:14px"><h2>Barcha variantlar</h2>
+        <span class="sub">GW${c.event} · ${esc(c.strategy_name)} strategiya bo'yicha tartiblangan</span></div>
+      <div class="tablewrap" style="max-height:none"><table class="plain"><thead><tr>
+        <th class="l">O'yinchi</th><th class="l">Raqib</th><th>EV</th><th>10+</th><th>15+</th>
+        <th>Yaxshi kunda</th><th>Raqiblarda</th><th class="l">Xulosa</th></tr></thead><tbody>
+        ${c.options.map((o, i) => `<tr class="${i === 0 ? "me" : ""}">
+          <td class="l"><span class="pos p${o.pos}">${esc(o.pos_short)}</span> <b>${esc(o.name)}</b><small>${esc(o.team)}</small></td>
+          <td class="l ${diffClass(o.eff_fdr)}">${esc(o.opponent)}</td>
+          <td><b>${ev0(o.ev)}</b></td>
+          <td>${o.p10.toFixed(0)}%<span class="minibar"><i style="width:${Math.min(100, o.p10 * 3)}%"></i></span></td>
+          <td>${o.p15.toFixed(0)}%</td>
+          <td>${o.ceiling}</td>
+          <td>${o.eo.toFixed(0)}%</td>
+          <td class="l" style="white-space:normal">${esc(o.verdict)}</td></tr>`).join("")}
+      </tbody></table></div>
+    </div>
+    <details class="hint"><summary>Bu raqamlar qanday o'qiladi</summary>
+      <p class="note">Kapitan ochkosi ikkilanadi, shuning uchun o'rtacha EV dan tashqari
+        <b>10+ ochko ehtimoli</b> ham muhim. <b>Raqiblarda</b> — ${c.field_sample
+          ? `o'tgan turda (GW${c.field_event}) eng yuqori ${c.field_sample} menejerning necha foizi shu o'yinchini kapitan qilgani; kelgusi tur tanlovi deadline'gacha yopiq, shuning uchun bu taxminiy mo'ljal`
+          : "raqiblar ma'lumoti olinmadi"}.
+        Hamma qo'ygan kapitan o'rinni saqlaydi, lekin ko'tarmaydi.${top
+          ? ` Hozirgi tavsiya: <b>${esc(top.name)}</b>.` : ""}</p></details>`;
+}
+
+async function loadCaptain(force){
+  if (!CAPTAIN) stateBox($("v-captain"), "loading", "Kapitan variantlari hisoblanmoqda…",
+                         "Raqiblar tanlovi ham yuklanadi — 10-20 soniya.");
+  const r = await api("/api/captain" + (force ? "?refresh=1" : ""));
+  if (!r.ok || r.body.error){ CAPTAIN = null; return failBox($("v-captain"), r, "Kapitan tahlili olinmadi"); }
+  CAPTAIN = r.body;
+  renderCaptain();
+}
+
+// ================================================================= chiplar
+function chipCard(c){
+  if (!c.available)
+    return `<div class="card chipcard off"><h3>${esc(c.name)} <span class="chip">ishlatilgan</span></h3>
+      <p class="verdict dim">${esc(c.verdict)}</p></div>`;
+  const max = Math.max(1, ...c.by_event.map(e => e.value));
+  const bars = c.by_event.map(e => `<div class="${c.best && e.event === c.best.event ? "best" : ""}"
+      title="${esc(e.reason)}">
+      <b>${e.value > 0 ? "+" : ""}${e.value.toFixed(0)}</b>
+      <i style="height:${Math.max(3, Math.max(0, e.value) / max * 100)}%"></i>GW${e.event}</div>`).join("");
+  return `<div class="card chipcard">
+    <h3>${esc(c.name)} <span class="chip ${c.worth_it ? "accent" : ""}">${c.worth_it ? "vaqti keldi" : "kuting"}</span></h3>
+    <p class="verdict ${c.worth_it ? "easy" : ""}">${esc(c.verdict)}</p>
+    <div class="evbars">${bars}</div>
+    ${c.best ? `<p class="note" style="margin-top:10px">${esc(c.best.reason)}</p>` : ""}</div>`;
+}
+
+function renderChips(){
+  if (!CHIPS) return;
+  const c = CHIPS;
+  const list = (rows, label) => rows.length
+    ? rows.map(r => `<b>GW${r.event}</b> — ${label}: ${esc(r.teams.join(", "))}`).join("; ") : "";
+  const special = [list(c.doubles, "ikki o'yin"), list(c.blanks, "o'yin yo'q")].filter(Boolean).join(". ");
+  $("v-chips").innerHTML = `
+    <div class="banner ${special ? "warn" : "info"}">${ICON.chips}<div>${special
+      ? special + "."
+      : `Yaqin ${c.events.length} turda ikki o'yinli (DGW) yoki bo'sh (BGW) tur yo'q.`}
+      Chiplar <b>GW${c.refresh_event}</b> da yangilanadi — ${c.half === 1
+        ? "birinchi yarim yillik chiplari o'shangacha ishlatilmasa, kuyadi."
+        : "hozir ikkinchi yarim yillik."}</div></div>
+    <div class="duo">${c.chips.map(chipCard).join("")}</div>
+    <details class="hint"><summary>Baho qanday chiqariladi</summary>
+      <p class="note">Har ustun — chipni o'sha turda ishlatsangiz qo'shiladigan taxminiy ochko.
+        <b>Bench Boost</b> — zaxiradagi to'rt o'yinchining kutilayotgan ochkosi;
+        <b>Triple Captain</b> — kapitanning yana bir nusxasi;
+        <b>Free Hit</b> — shu tur uchun ideal 11 lik va sizniki orasidagi farq;
+        <b>Wildcard</b> — qolgan turlar bo'yicha ideal tarkibdan jami orqada qolish.
+        Chegara +${c.threshold.toFixed(0)}: undan past bo'lsa kutish ma'qul. Model faqat yaqin
+        ${c.events.length} turni ko'radi — undan naridagi ikki o'yinli turlar bu yerda ko'rinmaydi.
+        ${c.authenticated ? "" : "Login yo'q: zaxira va tarkib oxirgi deadline holatida."}</p></details>`;
+}
+
+async function loadChips(force){
+  if (!CHIPS) stateBox($("v-chips"), "loading", "Chiplar baholanmoqda…");
+  const r = await api("/api/chips" + (force ? "?refresh=1" : ""));
+  if (!r.ok || r.body.error){ CHIPS = null; return failBox($("v-chips"), r, "Chiplar tahlili olinmadi"); }
+  CHIPS = r.body;
+  renderChips();
+}
+
+// ================================================================ raqiblar
+let rivalLeague = "";
+
+const plItem = (p, right) => `<div class="it"><span class="pos p${p.pos}">${esc(p.pos_short)}</span>
+  <b>${esc(p.name)}<small>${esc(p.team)}</small></b>${right}</div>`;
+
+function renderRivals(){
+  if (!RIVALS) return;
+  const v = RIVALS, me = v.me;
+  const leagues = v.leagues.some(l => l.id === v.league.id)
+    ? v.leagues : [{id: v.league.id, name: v.league.name}].concat(v.leagues);
+  const options = leagues.map(l => `<option value="${l.id}" ${l.id === v.league.id ? "selected" : ""}>${
+    esc(l.name)}${l.rank ? ` · ${big(l.rank)}-o'rin` : ""}</option>`).join("");
+  const chipNames = {bboost: "BB", "3xc": "TC", freehit: "FH", wildcard: "WC"};
+  let lastRank = 0;
+  const rows = v.managers.map(m => {
+    const gapRow = (v.split && lastRank && m.rank && m.rank - lastRank > 1)
+      ? `<tr class="gap"><td colspan="9">… ${big(m.rank - lastRank - 1)} ta jamoa …</td></tr>` : "";
+    lastRank = m.rank || lastRank;
+    const gap = m.gap == null ? "—" : (m.is_me ? "—" : signed(m.gap, 0));
+    return gapRow + `<tr class="${m.is_me ? "me" : ""}">
+      <td>${m.rank ?? "—"}</td>
+      <td class="l"><b>${esc(m.name)}</b><small>${esc(m.manager)}</small></td>
+      <td>${m.total ?? "—"}</td>
+      <td class="${m.gap > 0 ? "down" : (m.gap < 0 ? "up" : "")}">${gap}</td>
+      <td class="l">${esc(m.captain)}${m.chip ? ` <span class="tag warn">${chipNames[m.chip] || esc(m.chip)}</span>` : ""}</td>
+      <td>${m.is_me ? "—" : m.shared + "/15"}</td>
+      <td>${ev0(m.projected)}</td>
+      <td class="${m.edge > 0 ? "up" : (m.edge < 0 ? "down" : "")}">${m.edge == null ? "—" : signed(m.edge, 0)}</td>
+      <td class="l">${m.is_me ? "" : m.differs.map(d => esc(d.name)).join(", ")}</td></tr>`;
+  }).join("");
+
+  $("v-rivals").innerHTML = `
+    <div class="card"><div class="card-b" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+      <b>Liga</b>
+      <select id="leagueSel" style="flex:1; min-width:200px; max-width:420px">${options}</select>
+      <span class="sub dim">${v.league.size} jamoa yuklandi · tarkiblar GW${v.picks_event} holatida</span>
+    </div></div>
+    ${me.in_league ? "" : `<div class="banner warn">${ICON.alert}<div>Bu ligada sizning jamoangiz topilmadi —
+      farq va ustunlik ustunlari bo'sh.</div></div>`}
+    <div class="kpis">
+      ${kpi(me.rank ? big(me.rank) : "—", "Ligadagi o'rningiz", me.total != null ? me.total + " ochko" : "", "hero")}
+      ${kpi(v.leader_gap == null ? "—" : (v.leader_gap > 0 ? "−" + v.leader_gap : "+" + (-v.leader_gap)),
+            "Yetakchidan", v.managers[0] ? esc(v.managers[0].name) : "")}
+      ${kpi(me.projected == null ? "—" : ev0(me.projected), "Kelgusi turda kutilmoqda", `GW${v.event}`)}
+      ${kpi(v.my_captain_share + "%", "Kapitaningiz raqiblarda", "o'tgan turda")}
+    </div>
+    <div class="duo">
+      <div class="card"><div class="card-h" style="padding-bottom:12px"><h2>Xavf</h2>
+        <span class="sub">raqiblarda ko'p, sizda yo'q</span></div>
+        <div class="plist">${v.threats.map(p => plItem(p,
+          `<span class="n hard">${p.eo.toFixed(0)}%</span><span class="n">EV ${ev0(p.ev)}</span>`)).join("")
+          || '<div class="it dim">Xavf yo\'q — raqiblardagi hamma mashhur o\'yinchi sizda bor.</div>'}</div></div>
+      <div class="card"><div class="card-h" style="padding-bottom:12px"><h2>Imkoniyat</h2>
+        <span class="sub">sizda bor, raqiblarda kam</span></div>
+        <div class="plist">${v.differentials.map(p => plItem(p,
+          `<span class="n easy">${p.eo.toFixed(0)}%</span><span class="n">EV ${ev0(p.ev)}</span>`)).join("")}</div></div>
+    </div>
+    <div class="card">
+      <div class="card-h" style="padding-bottom:14px"><h2>Raqiblar</h2>
+        <span class="sub">${v.split ? "yetakchilar va o'rningiz atrofidagilar" : esc(v.league.name)}</span></div>
+      <div class="tablewrap" style="max-height:none"><table class="plain"><thead><tr>
+        <th>#</th><th class="l">Jamoa</th><th>Ochko</th><th>Sizdan</th><th class="l">Kapitan</th>
+        <th>Umumiy</th><th>Kutilmoqda</th><th>Ustunligingiz</th><th class="l">Unda bor, sizda yo'q</th>
+      </tr></thead><tbody>${rows}</tbody></table></div>
+    </div>
+    <details class="hint"><summary>Ustunlar nimani anglatadi</summary>
+      <p class="note"><b>Foiz</b> — liga yetakchilari orasida o'yinchining «ta'sirli egaligi»:
+        egalik + kapitanlik (kapitan ikki marta sanaladi, shuning uchun 100% dan oshishi mumkin).
+        <b>Kutilmoqda</b> — raqib o'tgan turdagi tarkibini o'zgartirmasa, kelgusi turda undan
+        kutilayotgan ochko. <b>Ustunligingiz</b> — sizniki bilan farq: musbat bo'lsa, shu turda
+        undan oldinda bo'lishingiz kutilmoqda. Raqiblar transfer qilsa, bu raqamlar o'zgaradi —
+        kelgusi tur tarkiblari deadline'gacha yopiq.</p></details>`;
+  $("leagueSel").onchange = (e) => { rivalLeague = e.target.value; loadRivals(false, true); };
+}
+
+async function loadRivals(force, switching){
+  if (!RIVALS || switching) stateBox($("v-rivals"), "loading", "Raqiblar tarkibi yuklanmoqda…",
+                                     "50 tagacha jamoa — birinchi marta 15-20 soniya.");
+  const qs = [];
+  if (rivalLeague) qs.push("league=" + encodeURIComponent(rivalLeague));
+  if (force) qs.push("refresh=1");
+  const r = await api("/api/rivals" + (qs.length ? "?" + qs.join("&") : ""));
+  if (!r.ok || r.body.error){ RIVALS = null; return failBox($("v-rivals"), r, "Raqiblar olinmadi"); }
+  RIVALS = r.body;
+  renderRivals();
+}
+
+// ===================================================================== H2H
+function h2hLineup(side, title, cls){
+  if (!side) return `<div class="card"><div class="card-h" style="padding-bottom:14px"><h2>${title}</h2></div>
+    <div class="state" style="padding:26px 18px"><p>Tarkib hali kiritilmagan.</p></div></div>`;
+  const posNames = {1: "DRV", 2: "HIM", 3: "YAR", 4: "HUJ"};
+  const lines = [1, 2, 3, 4].map(pos => {
+    const row = side.players.filter(p => p.pos === pos).map(p =>
+      `${esc(p.name)}${p.captain ? ' <span class="tag cap">C</span>' : ""}${
+        p.points != null ? ` <b>${p.points}</b>` : ""}`).join(", ");
+    return `<div class="ln"><span class="pos p${pos}">${posNames[pos]}</span><div>${row || "—"}</div></div>`;
+  }).join("");
+  const head = side.points != null ? `${side.points} ochko`
+             : (side.expected ? `kutilmoqda ${ev0(side.expected)}` : "");
+  return `<div class="card ${cls || ""}"><div class="card-h" style="padding-bottom:10px"><h2>${title}</h2>
+    <span class="grow"></span><span class="chip accent">${head}</span></div>
+    <div class="lineup">${lines}</div></div>`;
+}
+
+function renderH2h(){
+  if (!H2H) return;
+  const h = H2H, t = h.totals;
+  const up = h.upcoming;
+  const diff = t.model - t.experts;
+  const liveDiff = t.live_model - t.live_experts;
+  const body = h.rows.slice().reverse().map(r => {
+    const m = r.model ? r.model.points : null, e = r.experts ? r.experts.points : null;
+    const pending = !r.finished;
+    return `<tr>
+      <td class="l"><b>GW${r.gw}</b> <span class="tag ${r.live ? "badge-live" : "badge-bt"}">${
+        r.live ? "jonli" : "orqaga qarab"}</span></td>
+      <td><b>${m ?? (pending && r.model ? "kutilmoqda " + ev0(r.model.expected) : "—")}</b></td>
+      <td><b>${e ?? "—"}</b></td>
+      <td class="${r.diff > 0 ? "up" : (r.diff < 0 ? "down" : "dim")}">${r.diff == null ? "—" : signed(r.diff, 0)}</td>
+      <td class="dim">${r.experts_avg ?? "—"}</td>
+      <td>${r.model_rank ? r.model_rank + "/" + r.field : "—"}</td>
+      <td class="dim">${r.fpl_average || "—"}</td>
+      <td class="l dim">${r.model ? esc(r.model.captain) : "—"} / ${r.experts ? esc(r.experts.captain) : "—"}</td></tr>`;
+  }).join("");
+
+  $("v-h2h").innerHTML = `
+    <div class="kpis">
+      ${kpi(t.live_n ? `${t.live_model}<small> : ${t.live_experts}</small>` : "—",
+            "Jonli hisob", t.live_n ? `${t.live_n} tur · ${signed(liveDiff, 0)}` : "GW11 dan boshlanadi", "hero")}
+      ${kpi(`${t.model}<small> : ${t.experts}</small>`, "Orqaga qarab bilan birga",
+            `${t.n} tur · ${signed(diff, 0)}`)}
+      ${kpi(`${t.wins}<small> / ${t.n}</small>`, "Model yutgan turlar", t.draws ? t.draws + " durang" : "")}
+      ${kpi(h.enough ? "yetarli" : `${t.live_n}<small> / 8</small>`, "Xulosa uchun", "kamida 8 jonli tur")}
+    </div>
+    <div class="banner info">${ICON.alert}<div><b>Qoida:</b> ikkala tomon ham har tur noldan, 100m ichida
+      tarkib tuzadi; hisob — ${esc(h.rule)}. <b>«Orqaga qarab»</b> turlar — model o'sha paytdagi
+      ma'lumot bilan nima tuzgan bo'lardi (jarohat xabarlarisiz, taxminiy). Haqiqiy sinov —
+      <b>«jonli»</b> turlar: model tarkibi deadline'dan oldin muzlatilgan.</div></div>
+    ${up ? `<div class="vs">
+        ${h2hLineup(up.model, `Model · GW${up.gw}`)}
+        ${h2hLineup(up.experts, `Ekspertlar · GW${up.gw}`)}</div>` : ""}
+    <div class="card">
+      <div class="card-h" style="padding-bottom:14px"><h2>Turlar bo'yicha</h2></div>
+      <div class="tablewrap" style="max-height:none"><table class="plain"><thead><tr>
+        <th class="l">Tur</th><th>Model</th><th>Ekspertlar</th><th>Farq</th><th>Eksp. o'rtachasi</th>
+        <th>Model o'rni</th><th>FPL o'rtachasi</th><th class="l">Kapitanlar (model / eksp.)</th>
+      </tr></thead><tbody>${body || '<tr><td colspan="8" class="l dim">Hali yozuv yo\'q.</td></tr>'}</tbody></table></div>
+    </div>
+    <details class="hint"><summary>Tarkiblar qanday kiritiladi</summary>
+      <p class="note">Deadline oldidan: <code>python tools/h2h.py freeze</code> (model) va
+        <code>python tools/h2h.py import</code> (ekspertlar jadvalidan). <b>Eksp. o'rtachasi</b> va
+        <b>model o'rni</b> — o'nta ekspertning yakka tarkiblari orasida; ular faqat shu kompyuterda
+        saqlanadi.</p></details>`;
+}
+
+async function loadH2h(force){
+  if (!H2H) stateBox($("v-h2h"), "loading", "H2H hisobi yuklanmoqda…");
+  const r = await api("/api/h2h" + (force ? "?refresh=1" : ""));
+  if (!r.ok || r.body.error){ H2H = null; return failBox($("v-h2h"), r, "H2H olinmadi"); }
+  H2H = r.body;
+  renderH2h();
+}
+
 // ================================================================== sur'at
 const STATE_COLOR = {good: "var(--st-good)", warning: "var(--st-warn)",
                      serious: "var(--st-serious)", critical: "var(--st-crit)"};
@@ -1572,7 +1915,8 @@ async function refreshStatus(){
 
 /** Hisob o'zgardi — shaxsiy bo'limlar eskirdi, ochiq turgani qayta yuklanadi. */
 function accountChanged(){
-  SQUAD = TRANSFERS = PACE = null;
+  SQUAD = TRANSFERS = PACE = CAPTAIN = CHIPS = RIVALS = null;
+  rivalLeague = "";
   if (VIEWS[view].needs) LOADERS[view](true);
 }
 

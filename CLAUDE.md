@@ -5,7 +5,7 @@
 > qaysi yo'l sinalib rad etilgani va qaysi xatolar qaytib kelmasligi kerak.
 > Kodni qayta yozish mumkin, bu bilimni esa yo'q.
 
-**Sana:** 2026-11-19 · **Holat:** web sahifada 5 ta modul ishlaydi, 360 ta test o'tadi,
+**Sana:** 2026-11-19 · **Holat:** web sahifada 9 ta bo'lim ishlaydi, 373 ta test o'tadi,
 model `tools/backtest.py` bilan haqiqiy ochkoga solishtirilgan (4.1-bo'lim)
 
 ---
@@ -431,6 +431,22 @@ kalitlari yoziladi. Parol, token, cookie **yozilmaydi**.
 | **Transferlar** | Kimni sotib kimni olish, sof foyda (hit ayirilgan) | ha (aniqroq) |
 | **Jamoa tuzish** | Noldan 15 lik: 100m, 2/5/5/3, klubdan ≤3 | yo'q |
 | **Sur'at** | Maqsadga nisbatan progress + jamoa ko'rsatkichlari | ha |
+| **Kapitan** | Variantlar: EV, 10+ ehtimoli, raqiblardagi ulush; o'ringa mos strategiya | ha |
+| **Chiplar** | WC/FH/BB/TC — gorizontdagi har tur uchun qo'shiladigan ochko, chegara +8 | ha |
+| **Raqiblar** | Mini-liga: xavf, imkoniyat, har raqib bo'yicha farq va kelgusi tur kutilmasi | ha |
+| **H2H** | Model va ekspertlar Free Hit tarkiblari — tur bo'yicha hisob | yo'q |
+
+Yangi to'rttasi (`captainview`, `chipsview`, `rivalsview`, `h2hview`) mavjud
+`captain.py` / `chips.py` / `rivals.py` / `h2h.py` ustiga qurilgan — model
+mantig'i o'zgarmagan. Bilish kerak:
+
+* **Raqiblar tarkibi o'tgan deadline holatida** — kelgusi tur tarkiblari FPL da
+  yopiq. Kapitandagi «raqiblarda» ustuni ham shunday (top-50, o'tgan tur).
+* **Katta ligada** (FPLUzbekistan — siz 144-o'rinda) yetakchilar sahifasi yoniga
+  o'rningizdan ±7 ta jamoa qo'shiladi; xavf/imkoniyat yetakchilar bo'yicha.
+* **Birinchi yuklash sekin** (raqiblar ~18 s, kapitan ~20 s: 50 ta jamoa
+  so'raladi), keyin 5–10 daqiqa keshda.
+* **Chiplar faqat `horizon` turni ko'radi** — undan naridagi DGW ko'rinmaydi.
 
 ### Diqqatga sazovor yechimlar
 
@@ -509,12 +525,16 @@ Tartib bo'yicha, eng foydalisidan:
 1. **`git push`** — hammasidan muhim
 2. **H2H sinovi** — GW11 dan boshlangan (pastda). **Kamida 8–10 tur** kerak:
    bir turda ±20 ochko farq model haqida deyarli hech narsa aytmaydi
-3. **Kapitan moduli** — `fplbrain/captain.py` bor, web da yo'q
-4. **Chiplar** — WC/BB/TC/FH vaqti, `fplbrain/chips.py` bor
-5. **Mini-liga raqiblari** — `fplbrain/rivals.py` bor
-6. **Botga ko'chirish** — web tayyor bo'lgach
-7. ~~MILP~~ — qilindi (`builder.solve_exact`)
-8. **H2H ni web sahifaga chiqarish** — hozircha faqat buyruq satrida
+3. ~~Kapitan, chiplar, mini-liga raqiblari, H2H~~ — web'da (7-bo'lim)
+4. ~~MILP~~ — qilindi (`builder.solve_exact`)
+5. **O'ringa mos funksiyalar** (kelishilgan reja, hali boshlanmagan): menejerning
+   o'rni atrofidagi raqiblar bo'yicha xavf/imkoniyat, o'ringa mos kapitan,
+   xavf darajasi maslahati, chiplar raqiblarga nisbatan, tur oldidan o'rin
+   prognozi. Moslash kuchi mavsum oxiriga qarab ortishi kerak (20-turgacha
+   kichik); ko'p foydalanuvchi uchun o'rin oraliqlari bo'yicha namuna haftada
+   bir marta yig'iladi. Asos: `rivals.rank_neighbours`, `captain.rank_strategy`.
+6. **Botga ko'chirish** — web tayyor; ekspertlar bilan yopiq sinov, so'ng
+   ikkinchi davra (GW20) oldidan kanalda ishga tushirish
 
 ### H2H va jonli EV sinovi — har tur bajariladigan ish
 

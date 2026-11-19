@@ -854,3 +854,52 @@ def test_surat_birinchi_orin_bilan_solishtiradi(pace_payload):
 def test_surat_entry_id_siz_401():
     app = create_app(Config(), demo=False)
     assert app.test_client().get("/api/pace").status_code == 401
+
+
+# ------------------------------------------ kapitan, chiplar, raqiblar, H2H
+def test_kapitan_variantlari_va_strategiya(client):
+    body = client.get("/api/captain").get_json()
+    assert body["strategy"] in ("safe", "balanced", "aggressive")
+    assert body["options"], "kamida bitta kapitan varianti bo'lishi kerak"
+    top = body["options"][0]
+    for key in ("name", "ev", "p10", "p15", "ceiling", "eo", "verdict", "opponent"):
+        assert key in top
+    # Darvozabon kapitan bo'lmaydi — tepasi yo'q
+    assert all(o["pos"] != 1 for o in body["options"])
+    assert body["safe"] and body["bold"]
+
+
+def test_chiplar_tort_chip_va_har_tur_bahosi(client):
+    body = client.get("/api/chips").get_json()
+    assert [c["chip"] for c in body["chips"]] == ["wildcard", "freehit", "bboost", "3xc"]
+    for chip in body["chips"]:
+        if chip["available"]:
+            assert [e["event"] for e in chip["by_event"]] == body["events"]
+            assert chip["best"]["value"] == max(e["value"] for e in chip["by_event"])
+            assert chip["worth_it"] == (chip["best"]["value"] >= body["threshold"])
+
+
+def test_raqiblar_xavf_va_imkoniyat(client):
+    body = client.get("/api/rivals?league=77").get_json()
+    assert body["league"]["id"] == 77 and body["managers"]
+    mine = {p["element"] for p in client.get("/api/squad").get_json()["players"]}
+    # Xavf — menda YO'Q o'yinchilar; imkoniyat — menda BOR o'yinchilar
+    assert all(p["element"] not in mine for p in body["threats"])
+    assert all(p["element"] in mine for p in body["differentials"])
+    row = body["managers"][0]
+    for key in ("name", "total", "captain", "shared", "projected", "differs"):
+        assert key in row
+    assert 0 <= row["shared"] <= 15
+
+
+def test_h2h_demo_rejimida_bosh_va_yiqilmaydi(client):
+    """Demo bootstrapdagi ID lar haqiqiy saqlangan tarkiblarga mos emas — aralashtirilmaydi."""
+    body = client.get("/api/h2h").get_json()
+    assert body["rows"] == [] and body["demo"] is True
+    assert body["totals"]["n"] == 0
+
+
+@pytest.mark.parametrize("path", ["/api/captain", "/api/chips", "/api/rivals"])
+def test_yangi_bolimlar_entry_id_siz_401(path):
+    app = create_app(Config(), demo=False)
+    assert app.test_client().get(path).status_code == 401
