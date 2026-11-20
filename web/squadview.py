@@ -24,7 +24,8 @@ import logging
 from fplbrain import congestion
 from fplbrain import ratings as ratings_mod
 from fplbrain import table as table_mod
-from fplbrain.ev import CS_POINTS, EVEngine, build_profile, form_baseline
+from fplbrain.ev import (CS_POINTS, EVEngine, build_profile, combine_distributions,
+                         form_baseline, points_distribution)
 from fplbrain.squad import bench_reason, best_eleven, load_squad
 
 log = logging.getLogger(__name__)
@@ -153,6 +154,32 @@ def ev_detail(player, event: int) -> dict:
         "p_return": round(max(f.p_return for f in fixtures) * 100, 0),
         "p_haul": round(max(f.p_haul for f in fixtures) * 100, 0),
         "if_cs": round(if_cs, 1),
+    }
+
+
+def outlook(pev, event: int) -> dict:
+    """Natija qanday taqsimlanadi — EV ning yonida turadigan rasm.
+
+    EV — o'rtacha, va u ko'pincha **eng kam uchraydigan** natija: EV si 4 bo'lgan
+    himoyachi 42% holatda 1-2 ochko, 34% holatda 6+ oladi, 3-5 esa atigi 23%
+    (backtest, GW3-10). Shuning uchun "5" ko'rsatib qo'yish chalg'itadi —
+    yonida "yaxshi kunda nechta" va "6+ ehtimoli" bo'lishi kerak. EV ning
+    o'zi ko'tarilmaydi: u haqiqiy o'rtachaga mos (bashorat 4.0, haqiqat 3.99)
+    va tanlov, transfer, kapitan hisoblari shunga tayanadi.
+
+    `good` — 80-foizli natija: besh o'yindan birida shuncha yoki ko'proq.
+    Ehtimollar biroz optimistik (model 35% deganida haqiqatda ~29%).
+    """
+    fixtures = pev.fixtures.get(event, [])
+    if not fixtures:
+        return {"good": 0, "low": 0, "mid": 0, "p6": 0, "p10": 0}
+    dist = combine_distributions([points_distribution(f.inputs) for f in fixtures])
+    p6, p10 = dist.tail(6), dist.tail(10)
+    low = 1.0 - dist.tail(3)
+    return {
+        "good": int(dist.percentile(0.80)),
+        "low": round(low * 100), "mid": round(max(0.0, 1.0 - low - p6) * 100),
+        "p6": round(p6 * 100), "p10": round(p10 * 100),
     }
 
 
@@ -300,6 +327,7 @@ def build(client, cfg, entry_id: int, world: World | None = None) -> dict:
             "reason": "" if in_xi else bench_reason(player, next_event, xi_min_ev),
             "fixture": fixture_note(player, next_event, world.views),
             "detail": ev_detail(player, next_event),
+            "outlook": outlook(player.ev, next_event),
             "pen": bool(profile.is_pen_taker),
             "set_piece": bool(profile.is_set_piece),
             # 5 ta sariq — bir o'yinlik diskvalifikatsiya (GW19 gacha)

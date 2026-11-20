@@ -903,3 +903,16 @@ def test_h2h_demo_rejimida_bosh_va_yiqilmaydi(client):
 def test_yangi_bolimlar_entry_id_siz_401(path):
     app = create_app(Config(), demo=False)
     assert app.test_client().get(path).status_code == 401
+
+def test_natija_taqsimoti_ev_yonida_keladi(squad_payload):
+    """EV — o'rtacha va kam uchraydigan natija; yonida haqiqiy holatlar turadi."""
+    for row in squad_payload["players"]:
+        look = row["outlook"]
+        assert set(look) == {"good", "low", "mid", "p6", "p10"}
+        if row["fixture"]["blank"]:
+            continue
+        # Uch oraliq butun taqsimotni qoplaydi (yaxlitlash xatosi bilan)
+        assert 97 <= look["low"] + look["mid"] + look["p6"] <= 103
+        assert look["p10"] <= look["p6"]
+        # «Yaxshi kunda» o'rtachadan past bo'lmaydi
+        assert look["good"] >= int(row["ev"])

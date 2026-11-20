@@ -46,7 +46,8 @@ from fplbrain import table as table_mod                            # noqa: E402
 from fplbrain.api import FplClient                                 # noqa: E402
 from fplbrain.config import Config                                 # noqa: E402
 from fplbrain.ev import (CS_POINTS, DEFCON_THRESHOLD, GOAL_POINTS,  # noqa: E402
-                         EVEngine, build_profile, form_baseline)
+                         EVEngine, build_profile, combine_distributions,
+                         form_baseline, points_distribution)
 
 RAW_PATH = ROOT / "data" / "cache" / "backtest_raw.json"
 POS = {1: "DRV", 2: "HIM", 3: "YAR", 4: "HUJ"}
@@ -232,6 +233,7 @@ def run(cfg: Config, raw: dict, first: int, last: int, use_history: bool) -> lis
             for f in fxs:
                 for key, value in f.parts.items():
                     pred[key] += value
+            dist = combine_distributions([points_distribution(f.inputs) for f in fxs])
             minutes = sum(h.get("minutes") or 0 for h in rows)
             # Faqat O'TMISH: k-turning o'zi kirsa, tanlanma natijaga qarab
             # saralangan bo'lardi va past ehtimolli o'yinchilar sun'iy ravishda
@@ -244,6 +246,9 @@ def run(cfg: Config, raw: dict, first: int, last: int, use_history: bool) -> lis
                 "p_start": profile.p_start, "p60": profile.p60,
                 "p_appear": profile.p_appear,
                 "p_cs": fxs[0].inputs.p_cs, "p_dc": fxs[0].inputs.p_dc,
+                # Taqsimot: sahifadagi «6+ ehtimoli» va «yaxshi kunda» shundan olinadi
+                "p6": dist.tail(6), "p10": dist.tail(10), "p_low": 1.0 - dist.tail(3),
+                "good": dist.percentile(0.80), "dist_mean": dist.mean(),
                 "pts": sum(h.get("total_points") or 0 for h in rows),
                 "act": actual_parts(e["element_type"], rows),
                 "minutes": minutes,
@@ -346,6 +351,30 @@ def summarise(records: list[dict]) -> dict:
     out["top20_pred"] = sum(r["ev"] for r in top_model) / (len(top_model) or 1)
     out["spearman"] = sum(rho) / (len(rho) or 1)
 
+    # Taqsimot kalibrovkasi: «6+ ochko ehtimoli» haqiqiy ulushga mosmi
+    spread = {}
+    for p in POS:
+        rows = [r for r in active if r["pos"] == p and r["ev"] >= 2.5]
+        n = len(rows) or 1
+        spread[POS[p]] = {
+            "n": len(rows),
+            "p6": (sum(r["p6"] for r in rows) / n, sum(r["pts"] >= 6 for r in rows) / n),
+            "p10": (sum(r["p10"] for r in rows) / n, sum(r["pts"] >= 10 for r in rows) / n),
+            "low": (sum(r["p_low"] for r in rows) / n, sum(r["pts"] <= 2 for r in rows) / n),
+            "good": (sum(r["good"] for r in rows) / n,
+                     sorted(r["pts"] for r in rows)[int(len(rows) * 0.8)] if rows else 0),
+            "mean": (sum(r["dist_mean"] for r in rows) / n, sum(r["ev"] for r in rows) / n),
+        }
+    out["spread"] = spread
+    out["p6_buckets"] = []
+    for lo, hi in [(0, .1), (.1, .2), (.2, .3), (.3, .4), (.4, .5), (.5, 1.01)]:
+        rows = [r for r in active if lo <= r["p6"] < hi]
+        if rows:
+            out["p6_buckets"].append({
+                "lo": lo, "hi": hi, "n": len(rows),
+                "pred": sum(r["p6"] for r in rows) / len(rows),
+                "act": sum(r["pts"] >= 6 for r in rows) / len(rows)})
+
     # Toza darvoza: bashorat qilingan ehtimol va haqiqiy ulush (60+ o'ynaganlar)
     cs_rows = [r for r in active if r["pos"] in (1, 2) and r["sixty"] and r["n_fix"] == 1]
     out["cs"] = {"n": len(cs_rows),
@@ -391,6 +420,16 @@ def report(label: str, s: dict) -> None:
             print(f"    {m['lo']:.1f}-{min(m['hi'], 1.0):.1f}  n={m['n']:5d}"
                   f"  p_start {m['p_start']:.2f} → boshladi {m['started']:.2f}"
                   f"   p60 {m['p60']:.2f} → 60+ {m['sixty']:.2f}")
+
+    print("\n  Taqsimot (EV ≥ 2.5; bashorat / haqiqat):")
+    for name, d in s["spread"].items():
+        print(f"    {name} n={d['n']:4d}  ≤2 ochko {d['low'][0]:.2f}/{d['low'][1]:.2f}"
+              f"   6+ {d['p6'][0]:.2f}/{d['p6'][1]:.2f}   10+ {d['p10'][0]:.2f}/{d['p10'][1]:.2f}"
+              f"   yaxshi kunda (p80) {d['good'][0]:.1f}/{d['good'][1]}"
+              f"   taqsimot o'rtachasi {d['mean'][0]:.2f} vs EV {d['mean'][1]:.2f}")
+    for b in s["p6_buckets"]:
+        print(f"    6+ ehtimoli {b['lo']:.1f}-{min(b['hi'], 1.0):.1f}  n={b['n']:4d}"
+              f"  bashorat {b['pred']:.2f}  haqiqat {b['act']:.2f}")
 
     print(f"\n  Toza darvoza (60+ o'ynagan DRV/HIM): bashorat {s['cs']['pred']:.3f}"
           f" / haqiqat {s['cs']['act']:.3f}  (n={s['cs']['n']})")

@@ -458,6 +458,17 @@ Yonida «toza darvoza 35% → bo'lsa 6.2 ochko».
 > CS dan `0.35 × 4 = 1.4` oladi, jami ~4. "5-7 ochko" — bu CS **ro'y
 > bergan** holat. EV ni o'sha darajaga ko'tarish tanlovni buzadi.
 
+**EV yonida natija taqsimoti turadi (`squadview.outlook`).** EV — o'rtacha va
+ko'pincha eng **kam** uchraydigan natija: backtestda EV ≈ 4 bo'lgan himoyachi
+42% holatda 1–2 ochko, 34% holatda 6+ olgan, 3–5 esa atigi 23%. Shuning uchun
+har o'yinchida «yaxshi kunda» (80-foizli natija, maydonda `↑8`) va
+0–2 / 3–5 / 6+ / 10+ ehtimollari ko'rsatiladi. **EV ning o'zi ko'tarilmaydi**
+(«toza darvoza kutilsa 6 yozaylik» degan talab bo'lgan): u haqiqiy o'rtachaga
+mos (4.0 vs 3.99) va 11 lik, transfer, kapitan, H2H hisoblari shunga tayanadi;
+ko'tarilsa jamoa yig'indisi ~60 o'rniga ~75 chiqib, hamma solishtiruv buziladi.
+Ehtimollar biroz optimistik: model «6+ 35%» deganida haqiqatda ~29%
+(`tools/backtest.py`, «Taqsimot» bo'limi).
+
 **Transferlarda bir o'yinchi bir marta.** Xom dvigatel bitta o'yinchi uchun
 o'nlab variant beradi — u «NEW44 ni kimga almashtirsam?» degan savolga
 javob beradi. Kerakligi boshqa: «kimni sotsam?».
