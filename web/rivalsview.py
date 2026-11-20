@@ -15,8 +15,12 @@ deadline'gacha yopiq. "Kutilayotgan ochko" — o'sha tarkib o'zgarmasa.
 from __future__ import annotations
 
 import logging
+import math
 
-from fplbrain import rivals
+from fplbrain import bands, rivals
+from fplbrain.ev import combine_distributions, points_distribution
+from fplbrain.squad import SquadPlayer, best_eleven
+from fplbrain.transfers import best_move_for, evaluate_moves
 
 from . import squadview
 
@@ -71,6 +75,186 @@ def _projected(picks: list[dict], ev_by_element: dict, event: int) -> float:
         if pev:
             total += pev.per_event.get(event, 0.0) * max(1, p.get("multiplier") or 1)
     return total
+
+
+# ------------------------------------------------------------ bir raqibga qarshi
+DUEL_MOVES = 3
+EDGE_PERSISTENCE = 0.5      # gorizontdan keyin bugungi ustunlikning qancha qismi saqlanadi
+
+
+def _normal_cdf(x: float) -> float:
+    return 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))
+
+
+def _lineup(elements: list[int], ev_by_element: dict, event: int):
+    """15 likdan eng yaxshi 11 lik va kapitan: (o'yinchi → ulush, kutilayotgan ochko)."""
+    players = [SquadPlayer(ev=ev_by_element[el], purchase_price=0.0, selling_price=0.0)
+               for el in elements if el in ev_by_element]
+    if len(players) < 11:
+        return {}, 0.0
+    xi, _, _, xi_ev = best_eleven(players, event)
+    captain = max(xi, key=lambda p: p.ev.per_event.get(event, 0.0), default=None)
+    exposure = {p.element: 1.0 for p in xi}
+    if captain:
+        exposure[captain.element] = 2.0
+    return exposure, xi_ev + (captain.ev.per_event.get(event, 0.0) if captain else 0.0)
+
+
+def _variance(pev, event: int) -> float:
+    fixtures = pev.fixtures.get(event, [])
+    if not fixtures:
+        return 0.0
+    dist = combine_distributions([points_distribution(f.inputs) for f in fixtures])
+    mean = dist.mean()
+    return sum(p * (k - mean) ** 2 for k, p in dist.pmf.items())
+
+
+def duel(client, cfg, entry_id: int, rival_id: int, world=None) -> dict:
+    """Bitta raqibga qarshi: farq, kimda nima bor, quvib yetish ehtimoli va reja.
+
+    Ehtimollar — **taxminiy**: raqib tarkibini o'zgartirmaydi deb olinadi (kelgusi
+    tur tarkiblari yopiq), tur natijalari esa bir-biridan mustaqil va normal
+    taqsimlangan deb. Umumiy o'yinchilar hisobdan chiqib ketadi: ikkalangizda
+    ham bor o'yinchi qancha ochko olmasin, orangizdagi farq o'zgarmaydi —
+    farqni faqat **farq qiladigan** o'yinchilar hal qiladi.
+    """
+    world = world or squadview.World(client, cfg, entry_id)
+    event, picks_event, events = world.next_event, world.picks_event, world.events
+    if rival_id == entry_id:
+        return {"error": "Bu sizning jamoangiz."}
+
+    rival_picks = (client.entry_picks(rival_id, picks_event) or {}).get("picks") or []
+    if not rival_picks:
+        return {"error": "Raqib tarkibi olinmadi.",
+                "hint": "U shu turda o'ynamagan yoki FPL javob bermadi."}
+    his = [p["element"] for p in rival_picks]
+    world.deepen(his)                       # raqib o'yinchilari ham batafsil baholansin
+    squad = world.squad()
+    mine = [p.element for p in squad.players]
+
+    def info(eid: int) -> dict:
+        try:
+            return client.entry(eid) or {}
+        except Exception as exc:
+            log.warning("jamoa %s olinmadi: %s", eid, exc)
+            return {}
+
+    me, him = info(entry_id), info(rival_id)
+    my_total, his_total = me.get("summary_overall_points"), him.get("summary_overall_points")
+    gap = (his_total - my_total) if (my_total is not None and his_total is not None) else None
+
+    # ---- gorizont bo'yicha kutilma: har tur uchun ikkala tomon eng yaxshi 11 ligini qo'yadi
+    per_event = []
+    for ev in events:
+        _, my_ev = _lineup(mine, world.ev, ev)
+        _, his_ev = _lineup(his, world.ev, ev)
+        per_event.append({"event": ev, "mine": round(my_ev, 1), "his": round(his_ev, 1),
+                          "edge": round(my_ev - his_ev, 1)})
+    edge_next = per_event[0]["edge"] if per_event else 0.0
+    edge_avg = (sum(e["edge"] for e in per_event) / len(per_event)) if per_event else 0.0
+
+    # ---- farq qiladigan o'yinchilar va tur ichidagi tebranish
+    my_x, _ = _lineup(mine, world.ev, event)
+    his_x, _ = _lineup(his, world.ev, event)
+    variance = 0.0
+    for el in set(my_x) | set(his_x):
+        delta = my_x.get(el, 0.0) - his_x.get(el, 0.0)
+        if delta and el in world.ev:
+            variance += delta * delta * _variance(world.ev[el], event)
+    sd = math.sqrt(variance)
+
+    remaining = max(1, bands.SEASON_EVENTS - picks_event)
+
+    def ahead_after(k: int) -> float | None:
+        """`k` turdan keyin oldinda bo'lish ehtimoli (0..100).
+
+        Gorizontdan naridagi turlarda ustunlikning faqat `EDGE_PERSISTENCE`
+        qismi saqlanadi deb olinadi: tarkiblar o'zgaradi, raqib ham transfer
+        qiladi — bugungi 5 turlik ustunlikni 28 turga cho'zib bo'lmaydi.
+        """
+        if gap is None or sd <= 0:
+            return None
+        near = min(k, len(events))
+        expected = near * edge_avg + (k - near) * edge_avg * EDGE_PERSISTENCE
+        return round(100 * _normal_cdf((expected - gap) / (sd * math.sqrt(k))))
+
+    def row(el: int, exposure: dict) -> dict:
+        pev = world.ev[el]
+        return {
+            "element": el, "name": pev.profile.name, "pos": pev.profile.position,
+            "pos_short": squadview.POS_SHORT.get(pev.profile.position, "?"),
+            "team": world.team_ratings[pev.profile.team].short,
+            "ev": round(pev.per_event.get(event, 0.0), 2),
+            "ev_horizon": round(pev.horizon_ev, 1),
+            "share": exposure.get(el, 0.0),          # 0 — zaxirada, 1 — 11 likda, 2 — kapitan
+        }
+
+    only_mine = sorted((row(el, my_x) for el in set(mine) - set(his) if el in world.ev),
+                       key=lambda r: -r["ev_horizon"])
+    only_his = sorted((row(el, his_x) for el in set(his) - set(mine) if el in world.ev),
+                      key=lambda r: -r["ev_horizon"])
+
+    # ---- reja: oldinda bo'lsangiz — yoping, ortda bo'lsangiz — farq yarating
+    behind = gap is not None and gap > 0
+    # Har ro'yxatda bir o'yinchi bir marta sotiladi — takliflar birga bajarsa bo'ladigan bo'lsin
+    cover = []
+    for target in only_his[:8]:
+        move, short = best_move_for(squad, world.ev[target["element"]], events, cfg)
+        if (move and move.gain > 0
+                and not any(c["out"] == move.out_players[0].name for c in cover)):
+            cover.append({"in": target["name"], "out": move.out_players[0].name,
+                          "gain": move.gain, "hit": move.hit, "bank_after": move.bank_after})
+        if len(cover) >= DUEL_MOVES:
+            break
+    differ = []
+    his_set = set(his)
+    for move in evaluate_moves(squad, list(world.ev.values()), events, cfg, max_transfers=1):
+        target = move.in_players[0]
+        if target.element in his_set or move.gain <= 0:
+            continue
+        if any(d["in"] == target.profile.name or d["out"] == move.out_players[0].name
+               for d in differ):
+            continue
+        differ.append({"in": target.profile.name, "out": move.out_players[0].name,
+                       "gain": move.gain, "hit": move.hit, "bank_after": move.bank_after})
+        if len(differ) >= DUEL_MOVES:
+            break
+
+    need = round(gap / remaining, 1) if behind else 0.0
+    if gap is None:
+        verdict = "Ochkolar ma'lum emas — faqat tarkiblar solishtirildi."
+    elif not behind:
+        verdict = (f"Siz {-gap} ochko oldindasiz. U bilan farqni kamaytirsangiz — ya'ni undagi "
+                   "kuchli o'yinchilarni olsangiz — ustunligingiz xavfsizroq bo'ladi."
+                   if gap < 0 else "Ochkolaringiz teng.")
+    elif edge_avg > 0:
+        turns = math.ceil(gap / edge_avg)
+        verdict = (f"{gap} ochko ortdasiz. Hozirgi tarkiblar bilan turiga o'rtacha "
+                   f"{edge_avg:+.1f} ochko yutyapsiz — o'rtacha hisobda ~{turns} turda yetasiz"
+                   + (" (mavsum tugaguncha ulgurmaysiz)." if turns > remaining else "."))
+    else:
+        verdict = (f"{gap} ochko ortdasiz va hozirgi tarkiblar bilan turiga {edge_avg:+.1f} "
+                   "ochko yo'qotyapsiz. Bir xil o'yinchilar bilan quvib yetib bo'lmaydi — "
+                   "unda yo'q, kuchli o'yinchilar kerak.")
+
+    return {
+        "entry_id": entry_id, "event": event, "picks_event": picks_event,
+        "rival": {"entry": rival_id, "name": him.get("name", "?"),
+                  "manager": " ".join(x for x in (him.get("player_first_name"),
+                                                  him.get("player_last_name")) if x),
+                  "total": his_total},
+        "me": {"name": me.get("name", "?"), "total": my_total},
+        "gap": gap, "behind": behind, "remaining": remaining, "need_per_event": need,
+        "shared": len(set(mine) & set(his)),
+        "per_event": per_event, "edge_next": edge_next, "edge_avg": round(edge_avg, 1),
+        "sd": round(sd, 1),
+        "win_next": (round(100 * _normal_cdf(edge_next / sd)) if sd > 0 else None),
+        "ahead": {"horizon": ahead_after(len(events)), "season": ahead_after(remaining),
+                  "horizon_events": len(events)},
+        "only_mine": only_mine, "only_his": only_his,
+        "plan": {"mode": "chase" if behind else "protect", "cover": cover, "differ": differ},
+        "verdict": verdict,
+    }
 
 
 def build(client, cfg, entry_id: int, league_id: int | None = None, world=None) -> dict:

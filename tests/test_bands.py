@@ -219,3 +219,53 @@ def test_transfer_takliflarida_raqiblar_belgisi():
     for move in body["moves"]:
         assert move["rank"]["kind"] in ("cover", "differ", "neutral")
         assert all("eo" in p for p in move["in"] + move["out"])
+
+# ------------------------------------------------------- bir raqibga qarshi
+@pytest.fixture(scope="module")
+def duel_payload():
+    return create_app(Config(), demo=True).test_client().get("/api/duel?rival=100007").get_json()
+
+
+def test_duel_asosiy_qismlari(duel_payload):
+    d = duel_payload
+    assert d["rival"]["entry"] == 100007
+    assert [e["event"] for e in d["per_event"]] and all(
+        abs(e["edge"] - (e["mine"] - e["his"])) < 0.11 for e in d["per_event"])
+    assert d["plan"]["mode"] in ("chase", "protect")
+    assert 0 <= d["shared"] <= 15
+    for key in ("horizon", "season"):
+        assert d["ahead"][key] is None or 0 <= d["ahead"][key] <= 100
+
+
+def test_duel_farq_qiladigan_oyinchilar_kesishmaydi(duel_payload):
+    mine = {p["element"] for p in duel_payload["only_mine"]}
+    his = {p["element"] for p in duel_payload["only_his"]}
+    assert mine and his and not (mine & his)
+    # Umumiylar + faqat mendagilar = mening 15 ligim
+    assert len(mine) + duel_payload["shared"] == 15
+
+
+def test_duel_rejasi_farq_yaratish_unda_yoq_oyinchilar(duel_payload):
+    his_names = {p["name"] for p in duel_payload["only_his"]}
+    differ, cover = duel_payload["plan"]["differ"], duel_payload["plan"]["cover"]
+    assert all(m["in"] not in his_names for m in differ)
+    assert all(m["in"] in his_names for m in cover)
+    assert all(m["gain"] > 0 for m in differ + cover)
+    # Bir o'yinchi bir ro'yxatda ikki marta sotilmaydi
+    for moves in (differ, cover):
+        outs = [m["out"] for m in moves]
+        assert len(outs) == len(set(outs))
+
+
+def test_duel_ozi_bilan_va_idsiz_rad_etiladi():
+    client = create_app(Config(), demo=True).test_client()
+    assert client.get("/api/duel").status_code == 400
+    me = client.get("/api/squad").get_json()["entry_id"]
+    assert "error" in client.get(f"/api/duel?rival={me}").get_json()
+
+
+def test_ehtimol_farq_va_ustunlikka_mos():
+    """Katta farq va manfiy ustunlik — past ehtimol; kichik farq va musbat ustunlik — yuqori."""
+    from web import rivalsview
+    assert rivalsview._normal_cdf(0) == pytest.approx(0.5)
+    assert rivalsview._normal_cdf(2) > 0.97 and rivalsview._normal_cdf(-2) < 0.03

@@ -509,6 +509,11 @@
   table.plain th{position:static; cursor:default; background:var(--surface-2)}
   table.plain td.l small{color:var(--muted); margin-left:6px}
   tr.me td{background:var(--accent-soft) !important; font-weight:650}
+  tr.pick-row{cursor:pointer}
+  .duel{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+  .duel .kpis{margin:0 0 14px}
+  .movelist .it{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px}
+  .movelist .it small{color:var(--muted)}
   tr.gap td{padding:5px 10px; text-align:center; color:var(--muted); font-size:11.5px;
             background:var(--surface-2)}
   .minibar{display:inline-block; width:54px; height:5px; border-radius:3px; background:var(--surface-3);
@@ -901,7 +906,10 @@ document.addEventListener("click", (e) => {
     if (act.dataset.act === "mode") return setMode(act.dataset.mode);
     if (act.dataset.act === "draft-go") return loadDraft(true);
     if (act.dataset.act === "go") return setView(act.dataset.to);
+    if (act.dataset.act === "duel-close") return void ($("duelBox").innerHTML = "");
   }
+  const rival = e.target.closest("tr[data-rival]");
+  if (rival) return loadDuel(rival.dataset.rival);
   const pl = e.target.closest("[data-el]");
   if (pl) return openPlayer(pl.dataset.ctx, pl.dataset.el);
   if (!e.target.closest("#acct")) closeMenu();
@@ -1690,7 +1698,7 @@ function renderRivals(){
       ? `<tr class="gap"><td colspan="9">… ${big(m.rank - lastRank - 1)} ta jamoa …</td></tr>` : "";
     lastRank = m.rank || lastRank;
     const gap = m.gap == null ? "—" : (m.is_me ? "—" : signed(m.gap, 0));
-    return gapRow + `<tr class="${m.is_me ? "me" : ""}">
+    return gapRow + `<tr class="${m.is_me ? "me" : "pick-row"}" ${m.is_me ? "" : `data-rival="${m.entry}"`}>
       <td>${m.rank ?? "—"}</td>
       <td class="l"><b>${esc(m.name)}</b><small>${esc(m.manager)}</small></td>
       <td>${m.total ?? "—"}</td>
@@ -1728,9 +1736,11 @@ function renderRivals(){
         <div class="plist">${v.differentials.map(p => plItem(p,
           `<span class="n easy">${p.eo.toFixed(0)}%</span><span class="n">EV ${ev0(p.ev)}</span>`)).join("")}</div></div>
     </div>
+    <div id="duelBox"></div>
     <div class="card">
       <div class="card-h" style="padding-bottom:14px"><h2>Raqiblar</h2>
-        <span class="sub">${v.split ? "yetakchilar va o'rningiz atrofidagilar" : esc(v.league.name)}</span></div>
+        <span class="sub">${v.split ? "yetakchilar va o'rningiz atrofidagilar" : esc(v.league.name)}
+          · raqib ustiga bosing — u bilan yakkama-yakka tahlil</span></div>
       <div class="tablewrap" style="max-height:none"><table class="plain"><thead><tr>
         <th>#</th><th class="l">Jamoa</th><th>Ochko</th><th>Sizdan</th><th class="l">Kapitan</th>
         <th>Umumiy</th><th>Kutilmoqda</th><th>Ustunligingiz</th><th class="l">Unda bor, sizda yo'q</th>
@@ -1744,6 +1754,91 @@ function renderRivals(){
         undan oldinda bo'lishingiz kutilmoqda. Raqiblar transfer qilsa, bu raqamlar o'zgaradi —
         kelgusi tur tarkiblari deadline'gacha yopiq.</p></details>`;
   $("leagueSel").onchange = (e) => { rivalLeague = e.target.value; loadRivals(false, true); };
+}
+
+// ------------------------------------------------------ bir raqibga qarshi
+function renderDuel(d){
+  // 0% va 100% — yolg'on aniqlik: hisob taxminiy, shuning uchun chetlar yumshatiladi
+  const pct = v => v == null ? "—" : (v <= 0 ? "<1%" : (v >= 100 ? ">99%" : v + "%"));
+  const shareLabel = s => s >= 2 ? "kapitan" : (s >= 1 ? "11 likda" : "zaxirada");
+  const side = (rows) => rows.map(p => plItem(p,
+    `<span class="n dim" style="min-width:70px">${shareLabel(p.share)}</span>
+     <span class="n" title="yaqin turlar bo'yicha kutilayotgan ochko">${ev0(p.ev_horizon)}</span>`)).join("")
+    || '<div class="it dim">Yo\'q.</div>';
+  const moves = (rows) => rows.length ? rows.map(m => `<div class="it">
+      <div><b>${esc(m.out)} → ${esc(m.in)}</b></div>
+      <span class="easy"><b>${signed(m.gain)}</b>${m.hit ? ` <small>(−${m.hit} hit)</small>` : ""}</span></div>`).join("")
+    : '<div class="it dim">Foydali variant topilmadi.</div>';
+  const chase = d.plan.mode === "chase";
+  const gap = d.gap == null ? "—" : (d.gap > 0 ? "−" + d.gap : "+" + (-d.gap));
+
+  $("duelBox").innerHTML = `<div class="card duel">
+    <div class="card-h" style="padding-bottom:12px">
+      <h2>Siz va ${esc(d.rival.name)}</h2>
+      <span class="sub">${esc(d.rival.manager)} · ${d.shared}/15 o'yinchi umumiy</span>
+      <span class="grow"></span>
+      <button class="iconbtn" data-act="duel-close" aria-label="Yopish">${ICON.x}</button>
+    </div>
+    <div class="card-b" style="padding-top:0">
+      <div class="kpis flat">
+        ${kpi(`<span class="${d.gap > 0 ? "hard" : "easy"}">${gap}</span>`, "Orangizdagi farq",
+              `${d.me.total ?? "—"} : ${d.rival.total ?? "—"}`)}
+        ${kpi(`<span class="${d.edge_next >= 0 ? "easy" : "hard"}">${signed(d.edge_next)}</span>`,
+              `GW${d.event} da kutilma`, `yutish ehtimoli ${pct(d.win_next)}`)}
+        ${kpi(`<span class="${d.edge_avg >= 0 ? "easy" : "hard"}">${signed(d.edge_avg)}</span>`,
+              "Turiga o'rtacha", `yaqin ${d.ahead.horizon_events} tur`)}
+        ${kpi(pct(d.ahead.horizon), `${d.ahead.horizon_events} turdan keyin oldinda`, "ehtimol")}
+        ${kpi(pct(d.ahead.season), "Mavsum oxirida oldinda", `${d.remaining} tur qoldi`)}
+      </div>
+      <div class="banner ${chase ? "warn" : "ok"}" style="margin:0 0 14px">${ICON.rivals}<div>${esc(d.verdict)}
+        ${d.behind ? ` Yetish uchun turiga o'rtacha <b>+${d.need_per_event}</b> ochko ustunlik kerak.` : ""}</div></div>
+      <div class="tablewrap" style="max-height:none; border:1px solid var(--line); border-radius:var(--r-sm); margin-bottom:14px">
+        <table class="plain"><thead><tr><th class="l">Tur</th>${d.per_event.map(e => `<th>GW${e.event}</th>`).join("")}</tr></thead>
+        <tbody>
+          <tr><td class="l">Siz</td>${d.per_event.map(e => `<td>${ev0(e.mine)}</td>`).join("")}</tr>
+          <tr><td class="l">${esc(d.rival.name)}</td>${d.per_event.map(e => `<td>${ev0(e.his)}</td>`).join("")}</tr>
+          <tr><td class="l"><b>Farq</b></td>${d.per_event.map(e =>
+            `<td class="${e.edge > 0 ? "up" : (e.edge < 0 ? "down" : "")}"><b>${signed(e.edge)}</b></td>`).join("")}</tr>
+        </tbody></table></div>
+      <div class="duo" style="margin-bottom:14px">
+        <div class="card"><div class="card-h" style="padding-bottom:10px"><h2>Faqat sizda</h2>
+          <span class="sub">ular ochko olsa — yaqinlashasiz</span></div><div class="plist">${side(d.only_mine)}</div></div>
+        <div class="card"><div class="card-h" style="padding-bottom:10px"><h2>Faqat unda</h2>
+          <span class="sub">ular ochko olsa — uzoqlashasiz</span></div><div class="plist">${side(d.only_his)}</div></div>
+      </div>
+      <div class="duo" style="margin:0">
+        <div class="card ${chase ? "duel" : ""}">
+          <div class="card-h" style="padding-bottom:10px"><h2>Farq yaratish</h2>
+            <span class="sub">unda yo'q o'yinchilar${chase ? " · quvayotganga mos" : ""}</span></div>
+          <div class="plist movelist">${moves(d.plan.differ)}</div></div>
+        <div class="card ${chase ? "" : "duel"}">
+          <div class="card-h" style="padding-bottom:10px"><h2>Farqni yopish</h2>
+            <span class="sub">undagi o'yinchilarni olish${chase ? "" : " · oldindagiga mos"}</span></div>
+          <div class="plist movelist">${moves(d.plan.cover)}</div></div>
+      </div>
+      <details class="hint"><summary>Ehtimollar qanday hisoblanadi</summary>
+        <p class="note">Ikkalangizda ham bor o'yinchilar hisobdan chiqadi — ular qancha ochko olmasin, orangizdagi farq
+          o'zgarmaydi. Farqni faqat <b>farq qiladigan</b> o'yinchilar hal qiladi; ularning bir turdagi tebranishi
+          ±${d.sd} ochko atrofida. Ehtimollar <b>taxminiy</b>: raqib tarkibini o'zgartirmaydi deb olingan
+          (kelgusi tur tarkiblari yopiq), yaqin ${d.ahead.horizon_events} turdan keyin esa bugungi ustunlikning
+          yarmi saqlanadi deb. Ikkala ro'yxatdagi transferlarning foydasi ${d.ahead.horizon_events} turlik;
+          foyda ikkalasida ham haqiqiy — farq faqat u bilan orangizdagi tebranishda.</p></details>
+    </div></div>`;
+  $("duelBox").scrollIntoView({behavior: "smooth", block: "start"});
+}
+
+async function loadDuel(rival){
+  $("duelBox").innerHTML = `<div class="card duel"><div class="state"><span class="spinner"></span>
+    <h3>Raqib tahlil qilinmoqda…</h3></div></div>`;
+  $("duelBox").scrollIntoView({behavior: "smooth", block: "start"});
+  const r = await api("/api/duel?rival=" + encodeURIComponent(rival));
+  if (!r.ok || r.body.error){
+    $("duelBox").innerHTML = `<div class="card duel"><div class="state err"><div class="ico">${ICON.alert}</div>
+      <h3>Tahlil olinmadi</h3><p>${esc(r.body.error || "")}${r.body.hint ? "\n" + esc(r.body.hint) : ""}</p>
+      <button class="btn" data-act="duel-close">Yopish</button></div></div>`;
+    return;
+  }
+  renderDuel(r.body);
 }
 
 async function loadRivals(force, switching){

@@ -705,6 +705,22 @@ def create_app(cfg: Config | None = None, client=None, demo: bool = False) -> Fl
                       lambda: rivalsview.build(client_for(_S()), cfg, entry_id,
                                                league_id or None))
 
+    @app.get("/api/duel")
+    def duel():
+        """Bitta raqibga qarshi: farq, farq qiladigan o'yinchilar, quvib yetish rejasi."""
+        maybe_refresh()
+        entry_id, error = need_entry()
+        if error:
+            return error
+        try:
+            rival = int(request.args.get("rival") or 0)
+        except ValueError:
+            rival = 0
+        if rival <= 0:
+            return jsonify({"error": "Raqib ID si kerak."}), 400
+        return cached(("duel", entry_id, rival, _S().logged_in), 600,
+                      lambda: rivalsview.duel(client_for(_S()), cfg, entry_id, rival))
+
     @app.get("/api/h2h")
     def h2h():
         """Model va ekspertlar Free Hit tarkiblari — tur bo'yicha hisob. Login shart emas."""

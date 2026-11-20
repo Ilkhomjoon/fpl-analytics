@@ -583,7 +583,17 @@ chipini ishlatgan menejerga ham). Endi ochiq `entry/history` dan
   uni bitta transfer bilan olishning eng yaxshi yo'li — foyda manfiy bo'lsa
   "olmagan ma'qul" deb ko'rsatiladi.
 
-**Hali qilinmagan (keyingi bosqich):** mini-ligada raqibga qarshi "quvib yetish rejasi";
+* **Yakkama-yakka** (`rivalsview.duel`, `/api/duel?rival=ID`; «Raqiblar»
+  jadvalida raqib ustiga bosiladi). Umumiy o'yinchilar hisobdan chiqadi —
+  farqni faqat farq qiladigan o'yinchilar hal qiladi. Ko'rsatadi: gorizont
+  bo'yicha tur-ma-tur kutilma, «faqat sizda / faqat unda», ikki reja («farq
+  yaratish» — unda yo'q o'yinchilar; «farqni yopish» — undagilarni olish) va
+  ehtimollar. Ehtimol = Φ((kutilgan ustunlik − farq) / (σ·√tur)); σ — farq
+  qiladigan o'yinchilarning ochko taqsimotidan. **Taxminiy:** raqib tarkibini
+  o'zgartirmaydi deb olinadi, gorizontdan keyin ustunlikning yarmi saqlanadi
+  (`EDGE_PERSISTENCE`). Haqiqatga mosligi **tekshirilmagan**.
+
+**Hali qilinmagan (keyingi bosqich):**
 namunani fon rejimida haftasiga bir marta barcha oraliqlar uchun yig'ish (bot
 uchun); o'rin prognozining haqiqatga mosligini bir necha turda tekshirish —
 u hozircha **tekshirilmagan** taxmin.
