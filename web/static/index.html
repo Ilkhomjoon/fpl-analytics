@@ -530,6 +530,7 @@
   .plist .it b{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
   .plist .it b small{color:var(--muted); font-weight:400; margin-left:6px}
   .plist .it span.n{font-variant-numeric:tabular-nums; color:var(--ink-2); min-width:46px; text-align:right}
+  .plist .how{padding:0 18px 9px 68px; margin-top:-3px; font-size:12px; color:var(--muted)}
   .lineup{padding:4px 18px 16px}
   .lineup .ln{display:flex; gap:8px; align-items:baseline; padding:3px 0; font-size:13px}
   .lineup .ln .pos{flex:none}
@@ -1312,7 +1313,8 @@ function movePlayer(p, out){
   const narx = out ? p.selling : p.price;
   return `<div class="pl ${out ? "out" : "in"}">
     <span class="pos p${posOf(p)}">${esc(p.pos_short)}</span>
-    <div><b>${esc(p.name)}</b><small>${n1(narx)}m · EV ${ev0(p.ev)}</small></div></div>`;
+    <div><b>${esc(p.name)}</b><small>${n1(narx)}m · EV ${ev0(p.ev)}${
+      p.eo != null ? ` · raqiblarda ${p.eo}%` : ""}</small></div></div>`;
 }
 
 function moveRow(m, horizon){
@@ -1325,7 +1327,12 @@ function moveRow(m, horizon){
         <div class="arrow">${ICON.arrow}</div>
         <div>${m.in.map(p => movePlayer(p, false)).join("")}</div>
       </div>
-      <div class="movefoot">narx ${pul} · bank ${m.bank_after.toFixed(1)}m${
+      <div class="movefoot">${m.rank && m.rank.label
+          ? `<span class="tag ${m.rank.kind === "cover" ? "badge-live" : "warn"}" style="margin:0 6px 0 0"
+               title="${m.rank.kind === "cover"
+                 ? "Raqiblarda ko'p uchraydigan o'yinchi: olsangiz natijangiz ularnikiga yaqinlashadi, o'rin kamroq tebranadi"
+                 : "Raqiblarda kam uchraydigan o'yinchi: olsangiz natijangiz ularnikidan uzoqlashadi — o'rin ikki tomonga ham ko'proq tebranadi"}">${esc(m.rank.label)}</span>` : ""}${
+        m.rank && m.rank.promoted ? `<span class="tag cap" style="margin:0 6px 0 0">rejimga mos</span>` : ""}narx ${pul} · bank ${m.bank_after.toFixed(1)}m${
         m.hit ? ` · <span class="hard">−${m.hit} hit</span> · hitsiz ${signed(m.raw_gain)}` : ""}${
         m.worth_it ? "" : " · hit ni oqlamaydi"}</div>
     </div></div>`;
@@ -1353,6 +1360,15 @@ function renderTransfers(){
     ${banner}
     ${t.authenticated ? "" : `<div class="banner warn">${ICON.alert}<div><b>Login yo'q.</b>
       Sotish narxlari taxminiy.</div></div>`}
+    ${t.rank ? `<details class="hint" style="margin:0 0 16px"><summary>Raqiblarga nisbatan: «${esc(t.rank.mode_name)}» rejimi</summary>
+      <p class="note">Har o'yinchi yonidagi foiz — o'rningiz oralig'idagi (${esc(t.rank.band)}, ${t.rank.size} ta jamoa)
+        ta'sirli egalik. <b>Transferning raqiblarga nisbatan kutilayotgan foydasi uning oddiy foydasiga teng</b> —
+        raqiblar ochkosi sizning transferingizdan o'zgarmaydi. Egalik faqat xavfni o'zgartiradi:
+        <b>«xavfni yopadi»</b> — ommaviy o'yinchi, natijangiz raqiblarnikiga yaqinlashadi;
+        <b>«farq yaratadi»</b> — kam uchraydigan o'yinchi, o'rin ikki tomonga ham ko'proq tebranadi.
+        Foydasi eng yaxshisidan ${t.rank.tolerance} ochkodan kam farq qiladigan variantlar «teng» sanaladi va
+        ular orasida rejimga mosi oldinga chiqadi${t.rank.reordered ? " (shu safar tartib o'zgardi)" : " (shu safar tartib o'zgarmadi)"}.
+        Bu chegara mavsum oxiriga qarab kengayadi.</p></details>` : ""}
     <div class="card">
       <div class="card-h" style="padding-bottom:14px"><h2>Takliflar</h2>
         <span class="sub">GW${t.event} · har o'yinchi bir marta</span></div>
@@ -1433,6 +1449,22 @@ async function loadDraft(force){
 }
 
 // ================================================================== o'rnim
+/** Xavf ostidagi "qanday olish" qatori. Foyda manfiy bo'lsa ham ko'rsatiladi —
+    "olmagan ma'qul" ham javob. */
+function howLine(how, horizon){
+  if (how === undefined) return "";
+  let text;
+  if (!how) text = "olib bo'lmaydi — bitta klubdan 3 ta o'yinchi chegarasi";
+  else if (how.short) text = `pul yetmaydi — yana ${n1(how.short)}m kerak`;
+  else {
+    const verdict = how.worth_it
+      ? `<b class="easy">${signed(how.gain)}</b> ochko (${horizon} tur)`
+      : `<b class="hard">${signed(how.gain)}</b> ochko (${horizon} tur) — olmagan ma'qul`;
+    text = `${esc(how.out)} o'rniga: ${verdict}${how.hit ? `, shundan −${how.hit} hit` : ""} · bank ${n1(how.bank_after)}m`;
+  }
+  return `<div class="how">↳ ${text}</div>`;
+}
+
 function renderRank(){
   if (!RANK) return;
   const r = RANK, p = r.projection, risk = r.risk;
@@ -1465,8 +1497,11 @@ function renderRank(){
     <div class="duo">
       <div class="card"><div class="card-h" style="padding-bottom:12px"><h2>Xavf</h2>
         <span class="sub">raqiblarda bor, sizda yo'q</span></div>
-        <div class="plist">${r.threats.map(x => swingRow(x, "hard")).join("")
-          || '<div class="it dim">Xavf yo\'q — raqiblardagi asosiy o\'yinchilar sizda bor.</div>'}</div></div>
+        <div class="plist">${r.threats.map(x => swingRow(x, "hard") + howLine(x.how, r.horizon)).join("")
+          || '<div class="it dim">Xavf yo\'q — raqiblardagi asosiy o\'yinchilar sizda bor.</div>'}</div>
+        <p class="note" style="padding:10px 18px 14px">Har xavf ostida — uni bitta transfer bilan olishning
+          eng yaxshi yo'li va ${r.horizon} turlik foydasi. Bank ${n1(r.bank)}m, tekin transfer ${r.free_transfers}.
+          To'liq variantlar <a href="#transfers" data-act="go" data-to="transfers" style="color:var(--accent)">Transferlar</a> bo'limida.</p></div>
       <div class="card"><div class="card-h" style="padding-bottom:12px"><h2>Imkoniyat</h2>
         <span class="sub">sizning 11 ligingizda, raqiblarda kamroq</span></div>
         <div class="plist">${r.chances.map(x => swingRow(x, "easy")).join("")

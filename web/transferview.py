@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import logging
 
+from fplbrain import bands
 from fplbrain.squad import best_eleven
 from fplbrain.transfers import evaluate_moves, weak_links
 
@@ -126,6 +127,46 @@ def _distinct(moves) -> list:
     return out
 
 
+def _rank_aware(client, cfg, entry_id: int, world, rows: list[dict]) -> dict | None:
+    """Takliflarga "raqiblarga nisbatan" belgisini qo'shadi va rejimga qarab tartiblaydi.
+
+    Har o'yinchiga `eo` (o'rin oralig'idagi ta'sirli egalik), har taklifga
+    `rank` (`bands.move_profile`) yoziladi; `rows` **joyida** qayta tartiblanadi.
+    Namuna olinmasa (o'rin noma'lum, FPL javob bermadi) — takliflar o'zgarishsiz
+    qoladi va `None` qaytadi: asosiy tahlil bunga bog'liq bo'lmasligi kerak.
+    """
+    try:
+        rank = (client.entry(entry_id) or {}).get("summary_overall_rank")
+        total = world.bootstrap.get("total_players") or 0
+        if not rank or not total:
+            return None
+        band = bands.band_for(rank, total)
+        sample = bands.load_band(client, cfg, band, world.picks_event, world.next_event)
+        if not sample.get("size"):
+            return None
+    except Exception as exc:
+        log.warning("o'rin oralig'i olinmadi: %s", exc)
+        return None
+
+    eo = bands.effective_ownership(sample)
+    for row in rows:
+        for side in ("out", "in"):
+            for p in row[side]:
+                p["eo"] = round(eo.get(p["element"], 0.0) * 100)
+        row["rank"] = bands.move_profile([p["eo"] for p in row["in"]],
+                                         [p["eo"] for p in row["out"]])
+    risk = bands.risk_advice(rank, total, world.next_event)
+    decay = float(getattr(cfg, "horizon_decay", 0.9))
+    weight = sum(decay ** i for i in range(len(world.events)))
+    rows[:] = bands.order_moves(rows, risk, weight)
+    return {
+        "band": sample["band"]["label"], "size": sample["size"],
+        "mode": risk["mode"], "mode_name": risk["name"],
+        "tolerance": round(risk["sacrifice"] * weight, 1),
+        "reordered": any(r["rank"].get("promoted") for r in rows),
+    }
+
+
 def build(client, cfg, entry_id: int, world=None) -> dict:
     """Transfer tahlili. `world` berilsa qayta qurilmaydi (tarkib bilan birga)."""
     world = world or squadview.World(client, cfg, entry_id)
@@ -146,6 +187,7 @@ def build(client, cfg, entry_id: int, world=None) -> dict:
 
     by_element = {p.element: p for p in squad.players}
     rows = [_move_row(m, by_element) for m in _distinct(moves)[:MAX_SUGGESTIONS]]
+    rank_note = _rank_aware(client, cfg, entry_id, world, rows)
 
     # Hech narsa qilmaslik ham qaror: eng yaxshi taklif foyda bermasa,
     # buni aytish kerak — "transfer qilmang" ham tavsiya.
@@ -169,6 +211,7 @@ def build(client, cfg, entry_id: int, world=None) -> dict:
         "hit_cost": int(getattr(cfg, "hit_cost", 4)),
         "xi_ev": round(xi_ev, 2),
         "recommendation": tavsiya,
+        "rank": rank_note,
         "horizon": len(world.events),
         "moves": rows,
         "weak": [

@@ -167,6 +167,49 @@ def evaluate_moves(
     return moves
 
 
+def best_move_for(
+    squad: Squad,
+    target: PlayerEV,
+    events: list[int],
+    cfg: Config,
+) -> tuple[TransferMove | None, float]:
+    """Aniq o'yinchini olishning eng yaxshi yo'li: (transfer, yetishmayotgan pul).
+
+    "Raqiblarda Isak bor, menda yo'q" degan xavfga amaliy javob: uni kimning
+    o'rniga olsam eng ko'p foyda (yoki eng kam zarar) bo'ladi. Faqat bitta
+    transferli variantlar ko'riladi. Pul yetmasa transfer `None`, ikkinchi
+    qiymat esa eng kam yetishmovchilik (mln).
+    """
+    if any(p.element == target.element for p in squad.players):
+        return None, 0.0
+    base = squad_ev(squad, events, cfg)
+    best: TransferMove | None = None
+    short = float("inf")
+    for out in squad.players:
+        if out.position != target.profile.position:
+            continue
+        budget = squad.bank + out.selling_price
+        if target.profile.price > budget + 1e-9:
+            short = min(short, target.profile.price - budget)
+            continue
+        new_players = _swap(squad, [out], [target])
+        if not _legal(new_players):
+            continue
+        new_squad = Squad(players=new_players, bank=round(budget - target.profile.price, 1),
+                          event=squad.event, free_transfers=squad.free_transfers,
+                          chips_used=squad.chips_used)
+        raw = squad_ev(new_squad, events, cfg) - base
+        hit = 0 if squad.free_transfers >= 1 else int(cfg.hit_cost)
+        move = TransferMove(
+            out_players=[out], in_players=[target], raw_gain=round(raw, 2),
+            gain=round(raw - hit, 2), hit=hit,
+            cost=round(target.profile.price - out.selling_price, 1),
+            bank_after=new_squad.bank)
+        if best is None or move.gain > best.gain:
+            best = move
+    return best, (0.0 if best or short == float("inf") else round(short, 1))
+
+
 def weak_links(
     squad: Squad,
     events: list[int],

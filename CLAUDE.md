@@ -572,8 +572,18 @@ olinardi — loginsiz bo'sh ro'yxat "hammasi mavjud" bo'lib chiqardi (to'rt
 chipini ishlatgan menejerga ham). Endi ochiq `entry/history` dan
 (`squadview.chips_left`).
 
-**Hali qilinmagan (keyingi bosqich):** transfer tavsiyalarini tebranish bilan
-tartiblash (hozir faqat EV); mini-ligada raqibga qarshi "quvib yetish rejasi";
+* **Transferlar raqiblarga nisbatan** (`bands.move_profile`, `order_moves`,
+  `transfers.best_move_for`). Asosiy haqiqat: **transferning raqiblarga nisbatan
+  kutilayotgan foydasi uning EV foydasiga teng** — raqiblar ochkosi mening
+  transferimdan o'zgarmaydi. Egalik faqat xavfni o'zgartiradi. Shuning uchun
+  "tebranish bo'yicha tartiblash" degan dastlabki g'oya noto'g'ri bo'lardi;
+  o'rniga: har taklifga «xavfni yopadi» / «farq yaratadi» belgisi, va rejimga
+  qarab tartib faqat **deyarli teng** variantlar orasida o'zgaradi (chegara
+  `sacrifice × gorizont vazni`, hozir ~0.7 ochko). «O'rnim»da har xavf ostida
+  uni bitta transfer bilan olishning eng yaxshi yo'li — foyda manfiy bo'lsa
+  "olmagan ma'qul" deb ko'rsatiladi.
+
+**Hali qilinmagan (keyingi bosqich):** mini-ligada raqibga qarshi "quvib yetish rejasi";
 namunani fon rejimida haftasiga bir marta barcha oraliqlar uchun yig'ish (bot
 uchun); o'rin prognozining haqiqatga mosligini bir necha turda tekshirish —
 u hozircha **tekshirilmagan** taxmin.

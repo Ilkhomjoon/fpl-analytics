@@ -24,12 +24,14 @@ import logging
 
 from fplbrain import bands, captain as captain_mod, chips as chips_mod
 from fplbrain.squad import SquadPlayer, best_eleven
+from fplbrain.transfers import best_move_for
 
 from . import squadview
 
 log = logging.getLogger(__name__)
 
 LIST_SIZE = 8
+DEEPEN_POPULAR = 24          # raqiblarda eng ko'p uchraydigan shuncha o'yinchi chuqur baholanadi
 DIFFERENTIAL_EO = 15.0       # shundan kam kapitanlik ulushi — "farq qiluvchi"
 POPULAR_EO = 30.0            # shundan ko'p — "ommaviy"
 
@@ -93,6 +95,11 @@ def build(client, cfg, entry_id: int, world=None) -> dict:
                 "hint": "FPL javob bermadi — birozdan keyin qayta urining."}
     eo = bands.effective_ownership(sample)
     risk = bands.risk_advice(rank, total_players, event)
+    # Raqiblarda eng ko'p uchraydigan o'yinchilar batafsil tarix bilan baholanadi:
+    # xavf ro'yxati va "qanday olish" hisobi aynan shularga tayanadi.
+    popular = sorted(eo, key=lambda el: -eo[el])[:DEEPEN_POPULAR]
+    world.deepen(popular)
+    squad = world.squad()
 
     # ---- mening tarkibim: model tavsiya etgan 11 lik va kapitan
     xi, _, _, xi_ev = best_eleven(squad.players, event)
@@ -137,6 +144,21 @@ def build(client, cfg, entry_id: int, world=None) -> dict:
                      key=lambda r: r["swing"])[:LIST_SIZE]
     chances = sorted((r for r in rows if r["in_xi"] and r["swing"] > 0),
                      key=lambda r: -r["swing"])[:LIST_SIZE]
+
+    # ---- har xavf uchun: uni qanday olish mumkin (bitta transfer bilan)
+    for threat in threats:
+        move, short = best_move_for(squad, world.ev[threat["element"]], world.events, cfg)
+        if move:
+            out = move.out_players[0]
+            threat["how"] = {
+                "out": out.name, "gain": move.gain, "raw_gain": move.raw_gain,
+                "hit": move.hit, "bank_after": move.bank_after,
+                "worth_it": move.gain > 0,
+            }
+        elif short > 0:
+            threat["how"] = {"short": short}
+        else:
+            threat["how"] = None             # klub chegarasi (bitta jamoadan 3 ta)
 
     # ---- oraliq chegaralari: yuqoriga chiqish va pastga tushish uchun ochko
     def total_at(target: int) -> int | None:
@@ -196,6 +218,8 @@ def build(client, cfg, entry_id: int, world=None) -> dict:
             "rank_change": rank - after,
         },
         "climb": climb, "cushion": cushion, "remaining": remaining,
+        "horizon": len(world.events),
+        "free_transfers": squad.free_transfers, "bank": round(squad.bank, 1),
         "threats": threats, "chances": chances,
         "captain": {"pick": pick, "why": why, "options": options},
         "chips": chip_rows,

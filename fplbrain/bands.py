@@ -179,6 +179,57 @@ def effective_ownership(sample: dict) -> dict[int, float]:
     return {el: own.get(el, 0.0) + cap.get(el, 0.0) for el in set(own) | set(cap)}
 
 
+# Transferni raqiblarga nisbatan belgilash chegaralari (ta'sirli egalik, %)
+COVER_EO = 30.0          # shundan ko'p — "ommaviy": olsangiz farq yopiladi
+DIFFER_EO = 12.0         # shundan kam — "kam uchraydi": olsangiz farq yaratiladi
+
+
+def move_profile(in_eo: list[float], out_eo: list[float]) -> dict:
+    """Transfer raqiblarga nisbatan nima qiladi: farqni yopadimi yoki yaratadimi.
+
+    MUHIM: transferning raqiblarga nisbatan **kutilayotgan** foydasi uning EV
+    foydasiga teng — raqiblar ochkosi mening transferimdan o'zgarmaydi. Egalik
+    faqat **xavfni** o'zgartiradi: ommaviy o'yinchini olish natijamni
+    raqiblarnikiga yaqinlashtiradi (o'rin kam tebranadi), kam uchraydiganini
+    olish uzoqlashtiradi (ko'p tebranadi — ikki tomonga ham).
+
+    `cover` — raqiblar bilan umumiylik qanchaga ortadi (foiz punktlarida).
+    """
+    cover = sum(in_eo) - sum(out_eo)
+    if in_eo and min(in_eo) >= COVER_EO and cover > 0:
+        kind, label = "cover", "xavfni yopadi"
+    elif in_eo and max(in_eo) <= DIFFER_EO:
+        kind, label = "differ", "farq yaratadi"
+    else:
+        kind, label = "neutral", ""
+    return {"kind": kind, "label": label, "cover": round(cover)}
+
+
+def order_moves(rows: list[dict], risk: dict, horizon_weight: float) -> list[dict]:
+    """Takliflarni xavf rejimiga qarab tartiblaydi — faqat **deyarli teng** variantlar orasida.
+
+    Eng yaxshi EV foydasidan `sacrifice × horizon_weight` ochkodan ko'p orqada
+    qolmagan, foydali variantlar "teng" sanaladi. Ular orasida himoya rejimi
+    farqni yopadiganini, quvish rejimi farq yaratadiganini oldinga chiqaradi.
+    Chegara mavsum boshida juda kichik (bir ochkodan kam) — ya'ni tartibni
+    deyarli har doim EV belgilaydi. Qolganlari EV bo'yicha qoladi.
+    """
+    if not rows:
+        return rows
+    tolerance = risk.get("sacrifice", 0.0) * horizon_weight
+    best = max(r["gain"] for r in rows)
+    mode = risk.get("mode", "balanced")
+    sign = {"protect": -1, "chase": 1}.get(mode, 0)
+    if not sign or tolerance <= 0:
+        return rows
+    close = [r for r in rows if r["worth_it"] and best - r["gain"] <= tolerance]
+    rest = [r for r in rows if r not in close]
+    ordered = sorted(close, key=lambda r: (sign * r["rank"]["cover"], -r["gain"]))
+    if ordered and ordered[0] is not close[0]:
+        ordered[0]["rank"]["promoted"] = True
+    return ordered + rest
+
+
 # ------------------------------------------------------------- o'rin hisobi
 def rank_density(anchors: list[tuple[int, int]], rank: int) -> float:
     """Shu o'rin atrofida **bir ochkoga** nechta menejer to'g'ri keladi.

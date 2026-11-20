@@ -157,3 +157,65 @@ def test_ishlatilgan_chiplar_tarixdan_olinadi():
     assert squadview.chips_left(Client(), 1, squad, 11) == []
     # Ikkinchi yarim yillikda (GW20+) chiplar yangilanadi
     assert len(squadview.chips_left(Client(), 1, squad, 20)) == 4
+
+
+# ------------------------------------------------ transferlar raqiblarga nisbatan
+def test_transfer_belgisi_ommaviy_va_kam_uchraydigan():
+    assert bands.move_profile([57], [5])["kind"] == "cover"         # Isak kabi: farqni yopadi
+    assert bands.move_profile([4], [40])["kind"] == "differ"        # kam uchraydigan: farq yaratadi
+    assert bands.move_profile([20], [18])["kind"] == "neutral"
+    # Ikkita transfer: bittasi kam uchrasa, "xavfni yopadi" deyilmaydi
+    assert bands.move_profile([60, 5], [10, 10])["kind"] != "cover"
+    assert bands.move_profile([57], [5])["cover"] == 52
+
+
+def _move(gain, cover, worth=True):
+    return {"gain": gain, "worth_it": worth, "rank": {"cover": cover}}
+
+
+def test_tartib_faqat_deyarli_teng_variantlar_orasida_ozgaradi():
+    rows = [_move(5.0, -20), _move(4.6, +40), _move(2.0, +80)]
+    # Himoya: 0.5 ochko farq chegarada (1.0) — farqni yopadigan oldinga chiqadi
+    protect = bands.order_moves([dict(r, rank=dict(r["rank"])) for r in rows],
+                                {"mode": "protect", "sacrifice": 0.25}, 4.0)
+    assert [r["gain"] for r in protect] == [4.6, 5.0, 2.0]
+    assert protect[0]["rank"].get("promoted") is True
+    # 3 ochko orqadagi variant hech qachon oldinga chiqmaydi
+    assert protect[-1]["gain"] == 2.0
+
+
+def test_quvishda_farq_yaratadigan_oldinga_chiqadi():
+    rows = [_move(5.0, +40), _move(4.6, -20)]
+    chase = bands.order_moves(rows, {"mode": "chase", "sacrifice": 0.25}, 4.0)
+    assert [r["gain"] for r in chase] == [4.6, 5.0]
+
+
+def test_muvozanat_yoki_nol_chegara_tartibni_ozgartirmaydi():
+    rows = [_move(5.0, -20), _move(4.9, +40)]
+    assert bands.order_moves(list(rows), {"mode": "balanced", "sacrifice": 0.5}, 4.0) == rows
+    assert bands.order_moves(list(rows), {"mode": "protect", "sacrifice": 0.0}, 4.0) == rows
+
+
+def test_zararli_variant_rejim_uchun_ham_oldinga_chiqmaydi():
+    rows = [_move(0.4, -20), _move(-0.2, +90, worth=False)]
+    out = bands.order_moves(rows, {"mode": "protect", "sacrifice": 1.0}, 4.0)
+    assert out[0]["gain"] == 0.4
+
+
+def test_xavf_ostida_qanday_olish_korsatiladi(rank_payload):
+    """Har xavf uchun: transfer (kimning o'rniga, foyda), yoki pul yetmasligi, yoki klub chegarasi."""
+    assert rank_payload["threats"]
+    for threat in rank_payload["threats"]:
+        how = threat["how"]
+        if how is None:
+            continue
+        assert ("short" in how and how["short"] > 0) or (
+            how["out"] and how["worth_it"] == (how["gain"] > 0))
+
+
+def test_transfer_takliflarida_raqiblar_belgisi():
+    body = create_app(Config(), demo=True).test_client().get("/api/transfers").get_json()
+    assert body["rank"]["mode"] in ("protect", "balanced", "chase")
+    for move in body["moves"]:
+        assert move["rank"]["kind"] in ("cover", "differ", "neutral")
+        assert all("eo" in p for p in move["in"] + move["out"])
