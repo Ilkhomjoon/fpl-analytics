@@ -157,6 +157,24 @@ def ev_detail(player, event: int) -> dict:
     }
 
 
+def chips_left(client, entry_id: int, squad, event: int) -> list[str]:
+    """Shu yarim yillikda hali ishlatilmagan chiplar.
+
+    Ochiq `entry/{id}/history/` dan olinadi — loginsiz ham aniq. `squad.chips_available`
+    ga tayanib bo'lmaydi: u loginsiz bo'sh keladi, bo'sh ro'yxat esa "hammasi
+    ishlatilgan" degani ham bo'lishi mumkin. Ikkalasini `or` bilan ajratib
+    bo'lmaydi — ilgari shu sabab to'rt chipini ham ishlatgan menejerga
+    "hammasi mavjud" deb ko'rsatilgan.
+    """
+    from fplbrain import chips as chips_mod
+    try:
+        history = client.entry_history(entry_id).get("chips") or []
+    except Exception as exc:
+        log.warning("chiplar tarixi olinmadi: %s", exc)
+        return list(squad.chips_available) if squad.authenticated else list(chips_mod.ALL_CHIPS)
+    return chips_mod.available_chips(history, event)
+
+
 def outlook(pev, event: int) -> dict:
     """Natija qanday taqsimlanadi — EV ning yonida turadigan rasm.
 

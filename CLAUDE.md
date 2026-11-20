@@ -5,7 +5,7 @@
 > qaysi yo'l sinalib rad etilgani va qaysi xatolar qaytib kelmasligi kerak.
 > Kodni qayta yozish mumkin, bu bilimni esa yo'q.
 
-**Sana:** 2026-11-19 · **Holat:** web sahifada 9 ta bo'lim ishlaydi, 373 ta test o'tadi,
+**Sana:** 2026-11-19 · **Holat:** web sahifada 10 ta bo'lim ishlaydi, 390 ta test o'tadi,
 model `tools/backtest.py` bilan haqiqiy ochkoga solishtirilgan (4.1-bo'lim)
 
 ---
@@ -540,14 +540,43 @@ Tartib bo'yicha, eng foydalisidan:
    bir turda ±20 ochko farq model haqida deyarli hech narsa aytmaydi
 3. ~~Kapitan, chiplar, mini-liga raqiblari, H2H~~ — web'da (7-bo'lim)
 4. ~~MILP~~ — qilindi (`builder.solve_exact`)
-5. **O'ringa mos funksiyalar** (kelishilgan reja, hali boshlanmagan): menejerning
-   o'rni atrofidagi raqiblar bo'yicha xavf/imkoniyat, o'ringa mos kapitan,
-   xavf darajasi maslahati, chiplar raqiblarga nisbatan, tur oldidan o'rin
-   prognozi. Moslash kuchi mavsum oxiriga qarab ortishi kerak (20-turgacha
-   kichik); ko'p foydalanuvchi uchun o'rin oraliqlari bo'yicha namuna haftada
-   bir marta yig'iladi. Asos: `rivals.rank_neighbours`, `captain.rank_strategy`.
+5. **O'ringa mos funksiyalar** — birinchi bosqich qilindi: «O'rnim» bo'limi
+   (`fplbrain/bands.py`, `web/rankview.py`). Qolgani pastda («O'rnim» ostida).
 6. **Botga ko'chirish** — web tayyor; ekspertlar bilan yopiq sinov, so'ng
    ikkinchi davra (GW20) oldidan kanalda ishga tushirish
+
+### «O'rnim» — o'ringa mos maslahat (bot uchun asosiy farqlovchi)
+
+Tamoyil: **o'rin ochkoga emas, raqiblardan farqqa bog'liq.** Hamma olgan
+o'yinchi gol ursa, o'rin o'zgarmaydi. Shuning uchun maslahat menejerning
+o'rnidagi raqiblarga nisbatan beriladi.
+
+* **Oraliqlar** (`bands.EDGES`): top 1k, 10k, 50k, 100k, 250k, 500k, 1 mln,
+  2 mln, 4 mln, qolgani. Har oraliqdan 8 sahifa × 5 jamoa = 40 ta namuna,
+  **diskda keshlanadi** (`data/cache/bands/gwNN_b…json`) — bitta oraliqdagi
+  hamma foydalanuvchi shuni ishlatadi. Birinchi yuklash ~30 s, keyin 0.3 s.
+* **Tebranish** = (mening ulushim − raqiblarniki) × EV. Ulush: 11 likda 1,
+  kapitan 2; raqiblarda egalik + kapitanlik (100% dan oshishi mumkin).
+* **O'rin prognozi**: kutilma farqi × zichlik (bir ochkoga nechta menejer;
+  1.8 mln-o'rinda ~41 000). Hamma bir xil qoida bilan baholanadi: har kim o'z
+  15 ligidan eng yaxshi 11 lik + kapitan qo'yadi deb olinadi.
+* **Xavf rejimi**: himoya (yuqori 1%) / muvozanat (10%) / quvish. Farq qiluvchi
+  tanlov uchun EV dan voz kechish chegarasi `SACRIFICE × intensity`;
+  **intensity GW19 gacha 0.15**, GW34 da 1.0. Sabab: mavsum o'rtasida deyarli
+  hamma uchun to'g'ri yo'l — shunchaki EV; aks holda bot odamlarni keraksiz
+  tavakkalga undaydi. Himoyada chegara doim 0.
+* Kapitan bo'limi ham raqiblar tanlovini endi shu oraliqdan oladi (top-50 emas).
+
+**Tuzatilgan xato:** chiplar ro'yxati `squad.chips_available or ALL_CHIPS` bilan
+olinardi — loginsiz bo'sh ro'yxat "hammasi mavjud" bo'lib chiqardi (to'rt
+chipini ishlatgan menejerga ham). Endi ochiq `entry/history` dan
+(`squadview.chips_left`).
+
+**Hali qilinmagan (keyingi bosqich):** transfer tavsiyalarini tebranish bilan
+tartiblash (hozir faqat EV); mini-ligada raqibga qarshi "quvib yetish rejasi";
+namunani fon rejimida haftasiga bir marta barcha oraliqlar uchun yig'ish (bot
+uchun); o'rin prognozining haqiqatga mosligini bir necha turda tekshirish —
+u hozircha **tekshirilmagan** taxmin.
 
 ### H2H va jonli EV sinovi — har tur bajariladigan ish
 

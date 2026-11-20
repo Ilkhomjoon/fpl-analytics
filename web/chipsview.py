@@ -22,9 +22,10 @@ def build(client, cfg, entry_id: int, world=None) -> dict:
     world = world or squadview.World(client, cfg, entry_id)
     squad = world.squad()
     events = world.events
-    available = squad.chips_available or list(chips_mod.ALL_CHIPS)
-    advice = chips_mod.advise(squad, list(world.ev.values()), events, world.views,
-                              cfg, available)
+    available = squadview.chips_left(client, entry_id, squad, events[0])
+    # `advise` bo'sh ro'yxatni "hammasi mavjud" deb o'qiydi — bo'sh bo'lsa chaqirilmaydi
+    advice = (chips_mod.advise(squad, list(world.ev.values()), events, world.views,
+                               cfg, available) if available else [])
 
     teams = {tid: r.short for tid, r in world.team_ratings.items()}
     doubles = chips_mod.double_gameweeks(world.views, events)

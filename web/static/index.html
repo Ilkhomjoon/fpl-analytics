@@ -661,6 +661,7 @@
       </section>
 
       <section id="v-squad" hidden></section>
+      <section id="v-rank" hidden></section>
       <section id="v-captain" hidden></section>
       <section id="v-transfers" hidden></section>
       <section id="v-chips" hidden></section>
@@ -748,6 +749,7 @@ const ICON = {
   chips: I('<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>'),
   rivals: I('<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>'),
   h2h: I('<path d="M7 7h11l-3-3M17 17H6l3 3"/>'),
+  rank: I('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>'),
   refresh: I('<path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>'),
   sun: I('<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>'),
   moon: I('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'),
@@ -827,7 +829,8 @@ $("themeBtn").onclick = () => {
 const VIEWS = {
   players:   {t: "O'yinchilar",  s: "Butun liga — rol, chiqim va bozor oqimi", needs: false},
   squad:     {t: "Jamoam",       s: "Tavsiya etilgan 11 lik va zaxira", needs: true},
-  captain:   {t: "Kapitan",      s: "Kimga bandaj — o'rningizga mos", needs: true},
+  rank:      {t: "O'rnim",       s: "O'rningizdagi raqiblarga nisbatan", needs: true},
+  captain:  {t: "Kapitan",      s: "Kimga bandaj — o'rningizga mos", needs: true},
   transfers: {t: "Transferlar",  s: "Kimni sotib, kimni olish", needs: true},
   chips:     {t: "Chiplar",      s: "WC, FH, BB, TC — qaysi turda", needs: true},
   draft:     {t: "Jamoa tuzish", s: "Noldan 15 lik — 100m ichida", needs: false},
@@ -839,7 +842,7 @@ let view = "players";
 let STATUS = {};
 let DATA = {players: [], teams: [], positions: []};
 let SQUAD = null, TRANSFERS = null, DRAFT = null, PACE = null;
-let CAPTAIN = null, CHIPS = null, RIVALS = null, H2H = null;
+let CAPTAIN = null, CHIPS = null, RIVALS = null, H2H = null, RANK = null;
 
 function buildNav(){
   const html = Object.entries(VIEWS).map(([k, v]) =>
@@ -864,12 +867,13 @@ const LOADERS = {
   players: (f) => loadPlayers(f), squad: (f) => loadSquad(f),
   transfers: (f) => loadTransfers(f), draft: (f) => loadDraft(f), pace: (f) => loadPace(f),
   captain: (f) => loadCaptain(f), chips: (f) => loadChips(f),
-  rivals: (f) => loadRivals(f), h2h: (f) => loadH2h(f),
+  rivals: (f) => loadRivals(f), h2h: (f) => loadH2h(f), rank: (f) => loadRank(f),
 };
 const LOADED = {
   players: () => DATA.players.length > 0, squad: () => !!SQUAD,
   transfers: () => !!TRANSFERS, draft: () => !!DRAFT, pace: () => !!PACE,
   captain: () => !!CAPTAIN, chips: () => !!CHIPS, rivals: () => !!RIVALS, h2h: () => !!H2H,
+  rank: () => !!RANK,
 };
 
 function setView(name, push){
@@ -1428,6 +1432,91 @@ async function loadDraft(force){
   renderDraft();
 }
 
+// ================================================================== o'rnim
+function renderRank(){
+  if (!RANK) return;
+  const r = RANK, p = r.projection, risk = r.risk;
+  const swingRow = (x, cls) => plItem(x,
+    `<span class="n" title="raqiblardagi ta'sirli egalik (kapitan ikki marta)">${x.eo}%</span>
+     <span class="n ${cls}" title="shu o'yinchi tufayli raqiblarga nisbatan kutilayotgan ochko"><b>${signed(x.swing)}</b></span>`);
+  const change = p.rank_change;
+  const changeText = !p.density ? "—"
+    : (Math.abs(change) < 500 ? "o'zgarishsiz"
+       : (change > 0 ? "↑ " : "↓ ") + big(Math.abs(change)));
+  const cap = r.captain.pick;
+  const modeBanner = {protect: "ok", balanced: "info", chase: "warn"}[risk.mode] || "info";
+  const usedMine = r.chips.filter(c => c.mine_used).length;
+
+  $("v-rank").innerHTML = `
+    <div class="kpis">
+      ${kpi(big(r.rank), "Umumiy o'rin", `yuqori ${r.percentile}% · ${r.points ?? "—"} ochko`, "hero")}
+      ${kpi(esc(r.band.label), "Oralig'ingiz", `${r.band.size} ta jamoa namunasi`)}
+      ${kpi(`<span class="${p.edge >= 0 ? "easy" : "hard"}">${signed(p.edge)}</span>`,
+            "Raqiblarga nisbatan", `GW${r.event}: siz ${ev0(p.mine)}, ular ${ev0(p.field)}`)}
+      ${kpi(changeText, "Turdan keyin o'rin", p.density ? `taxminan ${big(p.rank_after)}` : "hisoblab bo'lmadi")}
+      ${r.climb ? kpi(r.climb.points, `Top ${big(r.climb.rank)} gacha`,
+                      `ochko · turiga +${r.climb.per_event} kerak`) : ""}
+      ${r.cushion ? kpi(r.cushion.points, "Pastga zaxira", `${big(r.cushion.rank)}-o'ringacha ochko`) : ""}
+    </div>
+
+    <div class="banner ${modeBanner}">${ICON.rank}<div><b>Rejim: ${esc(risk.name)}.</b> ${esc(risk.text)}
+      <br><span style="opacity:.85">${esc(risk.stage)}</span></div></div>
+
+    <div class="duo">
+      <div class="card"><div class="card-h" style="padding-bottom:12px"><h2>Xavf</h2>
+        <span class="sub">raqiblarda bor, sizda yo'q</span></div>
+        <div class="plist">${r.threats.map(x => swingRow(x, "hard")).join("")
+          || '<div class="it dim">Xavf yo\'q — raqiblardagi asosiy o\'yinchilar sizda bor.</div>'}</div></div>
+      <div class="card"><div class="card-h" style="padding-bottom:12px"><h2>Imkoniyat</h2>
+        <span class="sub">sizning 11 ligingizda, raqiblarda kamroq</span></div>
+        <div class="plist">${r.chances.map(x => swingRow(x, "easy")).join("")
+          || '<div class="it dim">Farq qiluvchi o\'yinchi yo\'q — tarkibingiz raqiblarnikiga juda o\'xshash.</div>'}</div></div>
+    </div>
+
+    <div class="duo">
+      <div class="card pick ${cap ? "accent" : ""}">
+        <div class="tagline">O'rningizga mos kapitan</div>
+        <h3>${cap ? esc(cap.name) : "—"}</h3>
+        <div class="meta">${esc(r.captain.why)}</div>
+        <div class="plist" style="margin:12px -18px -16px">${r.captain.options.map(o => plItem(o,
+          `<span class="n">EV ${ev0(o.ev)}</span><span class="n">10+ ${o.p10}%</span>
+           <span class="n" title="raqiblarda kapitan">${o.eo.toFixed(0)}%</span>`)).join("")}</div>
+      </div>
+      <div class="card">
+        <div class="card-h" style="padding-bottom:12px"><h2>Chiplar</h2>
+          <span class="sub">shu yarim yillikda ishlatganlar</span></div>
+        <div class="plist">${r.chips.map(c => `<div class="it"><b>${esc(c.name)}</b>
+          <span class="n" style="min-width:86px">${c.mine_used
+            ? '<span class="dim">ishlatgansiz</span>' : '<span class="easy">sizda bor</span>'}</span>
+          <span class="n" style="min-width:120px">raqiblar: ${c.field_used}%</span></div>`).join("")}</div>
+        <p class="note" style="padding:10px 18px 14px">${usedMine === r.chips.length
+          ? "Bu yarim yillik chiplaringiz tugagan — raqiblarning chipi bor turlarda ular ustunlikka ega."
+          : "Raqiblarning ko'pi ishlatib bo'lgan chip sizda qolgan bo'lsa — bu sizning zaxirangiz."}</p>
+      </div>
+    </div>
+
+    <details class="hint"><summary>Bu raqamlar qanday chiqadi</summary>
+      <p class="note">Raqiblar — umumiy jadvalda <b>${esc(r.band.label)}</b> oralig'idan teng tarqatib olingan
+        ${r.band.size} ta jamoa, GW${r.picks_event} tarkibi bilan (kelgusi tur tarkiblari deadline'gacha yopiq).
+        <b>Foiz</b> — ta'sirli egalik: egalik + kapitanlik, shuning uchun 100% dan oshishi mumkin.
+        <b>Tebranish</b> — (sizdagi ulush − raqiblardagi ulush) × kutilayotgan ochko: o'yinchi o'z o'rtachasini
+        olsa, raqiblarga nisbatan shuncha yutasiz yoki yo'qotasiz.
+        <b>Raqiblarga nisbatan</b> — har kim o'z 15 ligidan eng yaxshi 11 lik va kapitanni qo'yadi deb olingan
+        kutilma farqi; siz raqiblarning ${p.beat}% idan yuqorisiz.
+        <b>Turdan keyin o'rin</b> — shu farq o'rningiz atrofida bir ochkoga to'g'ri keladigan
+        ~${big(p.density)} ta jamoaga ko'paytirilgan. Bu o'rtacha kutilma: bitta turda tasodif
+        ±15–20 ochko, ya'ni haqiqiy o'zgarish ancha katta bo'lishi mumkin.</p></details>`;
+}
+
+async function loadRank(force){
+  if (!RANK) stateBox($("v-rank"), "loading", "O'rningizdagi raqiblar yuklanmoqda…",
+                      "40 ta jamoa — birinchi marta 30 soniyagacha, keyin bir zumda.");
+  const r = await api("/api/rank" + (force ? "?refresh=1" : ""));
+  if (!r.ok || r.body.error){ RANK = null; return failBox($("v-rank"), r, "O'rin tahlili olinmadi"); }
+  RANK = r.body;
+  renderRank();
+}
+
 // ================================================================= kapitan
 function captainPick(o, tagline, accent){
   if (!o) return "";
@@ -1478,7 +1567,7 @@ function renderCaptain(){
     <details class="hint"><summary>Bu raqamlar qanday o'qiladi</summary>
       <p class="note">Kapitan ochkosi ikkilanadi, shuning uchun o'rtacha EV dan tashqari
         <b>10+ ochko ehtimoli</b> ham muhim. <b>Raqiblarda</b> — ${c.field_sample
-          ? `o'tgan turda (GW${c.field_event}) eng yuqori ${c.field_sample} menejerning necha foizi shu o'yinchini kapitan qilgani; kelgusi tur tanlovi deadline'gacha yopiq, shuning uchun bu taxminiy mo'ljal`
+          ? `o'tgan turda (GW${c.field_event}) o'rningiz oralig'idagi (${esc(c.field_label)}) ${c.field_sample} ta jamoaning necha foizi shu o'yinchini kapitan qilgani; kelgusi tur tanlovi deadline'gacha yopiq, shuning uchun bu taxminiy mo'ljal`
           : "raqiblar ma'lumoti olinmadi"}.
         Hamma qo'ygan kapitan o'rinni saqlaydi, lekin ko'tarmaydi.${top
           ? ` Hozirgi tavsiya: <b>${esc(top.name)}</b>.` : ""}</p></details>`;
@@ -1520,9 +1609,12 @@ function renderChips(){
     <div class="banner ${special ? "warn" : "info"}">${ICON.chips}<div>${special
       ? special + "."
       : `Yaqin ${c.events.length} turda ikki o'yinli (DGW) yoki bo'sh (BGW) tur yo'q.`}
-      Chiplar <b>GW${c.refresh_event}</b> da yangilanadi — ${c.half === 1
-        ? "birinchi yarim yillik chiplari o'shangacha ishlatilmasa, kuyadi."
-        : "hozir ikkinchi yarim yillik."}</div></div>
+      ${c.chips.every(x => !x.available)
+        ? `<b>Bu yarim yillik chiplaringizning hammasi ishlatilgan.</b> ${c.half === 1
+            ? `Yangilari GW${c.refresh_event} da beriladi.` : ""}`
+        : (c.half === 1
+            ? `Chiplar <b>GW${c.refresh_event}</b> da yangilanadi — birinchi yarim yillik chiplari o'shangacha ishlatilmasa, kuyadi.`
+            : "Hozir ikkinchi yarim yillik — bu chiplar mavsum oxirigacha.")}</div></div>
     <div class="duo">${c.chips.map(chipCard).join("")}</div>
     <details class="hint"><summary>Baho qanday chiqariladi</summary>
       <p class="note">Har ustun — chipni o'sha turda ishlatsangiz qo'shiladigan taxminiy ochko.
@@ -1937,7 +2029,7 @@ async function refreshStatus(){
 
 /** Hisob o'zgardi — shaxsiy bo'limlar eskirdi, ochiq turgani qayta yuklanadi. */
 function accountChanged(){
-  SQUAD = TRANSFERS = PACE = CAPTAIN = CHIPS = RIVALS = null;
+  SQUAD = TRANSFERS = PACE = CAPTAIN = CHIPS = RIVALS = RANK = null;
   rivalLeague = "";
   if (VIEWS[view].needs) LOADERS[view](true);
 }

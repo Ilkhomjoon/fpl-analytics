@@ -35,7 +35,7 @@ from fplbrain import session_store
 from fplbrain.api import FplClient
 from fplbrain.config import Config
 from web import (captainview, chipsview, draftview, h2hview, paceview,
-                 rivalsview, squadview, transferview)
+                 rankview, rivalsview, squadview, transferview)
 
 log = logging.getLogger("fplweb")
 
@@ -669,6 +669,16 @@ def create_app(cfg: Config | None = None, client=None, demo: bool = False) -> Fl
             return error
         return cached(("captain", entry_id, _S().logged_in), 300,
                       lambda: captainview.build(client_for(_S()), cfg, entry_id))
+
+    @app.get("/api/rank")
+    def rank():
+        """O'ringa mos maslahat: oraliqdagi raqiblar, xavf/imkoniyat, o'rin prognozi."""
+        maybe_refresh()
+        entry_id, error = need_entry()
+        if error:
+            return error
+        return cached(("rank", entry_id, _S().logged_in), 600,
+                      lambda: rankview.build(client_for(_S()), cfg, entry_id))
 
     @app.get("/api/chips")
     def chips():
