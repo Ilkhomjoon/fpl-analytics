@@ -329,9 +329,6 @@
     font-variant-numeric:tabular-nums; color:#0b1220; background:#fff;
     border-bottom:3px solid var(--pc); box-shadow:0 3px 10px rgba(0,0,0,.25);
   }
-  /* «Yaxshi kunda» — o'rtacha yonida kichik: asosiy raqam baribir EV */
-  .pc .ev i{font-style:normal; font-size:10.5px; font-weight:700; color:#0a7a56; margin-left:4px;
-            letter-spacing:0}
   .pc .nm{
     display:block; margin-top:4px; padding:3px 6px; border-radius:6px 6px 0 0;
     background:rgba(8,14,24,.82); font-size:12px; font-weight:650; line-height:1.25;
@@ -363,7 +360,7 @@
 
   /* -------------------------------------------------------------- ro'yxat */
   .lr{
-    display:grid; grid-template-columns:44px minmax(120px,1.4fr) 54px 54px 60px 60px 50px 104px minmax(120px,1.2fr);
+    display:grid; grid-template-columns:44px minmax(120px,1.4fr) 54px 54px 60px 60px 50px 70px minmax(120px,1.2fr);
     gap:10px; align-items:center; padding:9px 18px; border-top:1px solid var(--line);
     font-size:13px; width:100%; border-left:0; border-right:0; border-bottom:0;
     background:none; text-align:left;
@@ -1106,8 +1103,7 @@ function pitchCard(ctx, p){
     : ((p.p_start ?? 100) < 60 ? '<span class="bdg warn">?</span>' : "");
   return `<button class="pc p${posOf(p)}" data-ctx="${ctx}" data-el="${p.element}"
       title="${esc(p.name)} — EV ${n1(p.ev)}">
-    ${cap}${flag}<span class="ev">${ev0(p.ev)}${p.outlook && p.outlook.good > Math.round(p.ev)
-      ? `<i title="yaxshi kunda (besh o'yindan birida) shuncha yoki ko'proq">↑${p.outlook.good}</i>` : ""}</span>
+    ${cap}${flag}<span class="ev">${ev0(p.ev)}</span>
     <span class="nm">${esc(p.name)}</span>${line}</button>`;
 }
 
@@ -1130,15 +1126,15 @@ function listRow(ctx, p, last){
     <div class="m">${n1(p.ownership)}%</div>
     <div class="m">${(p.p_start ?? 0).toFixed(0)}%</div>
     <div class="evc">${ev0(p.ev)}</div>
-    <div class="m" title="yaxshi kunda · 6+ ochko ehtimoli">${p.outlook
-      ? `<b>${p.outlook.good}</b> · ${p.outlook.p6}%` : "—"}</div>
+    <div class="m" title="6 yoki undan ko'p ochko olish ehtimoli">${p.outlook
+      ? p.outlook.p6 + "%" : "—"}</div>
     ${last(p)}</button>`;
 }
 
 const listHead = (last) => `<div class="lr head"><span></span><div>O'yinchi</div>
   <div class="m">Narx</div><div class="m">Forma</div><div class="m">Egalik</div>
   <div class="m">Tarkib</div><div class="evc" style="font-size:11px">EV</div>
-  <div class="m" title="besh o'yindan birida shuncha yoki ko'proq · 6+ ochko ehtimoli">Yaxshi kun · 6+</div>
+  <div class="m" title="6 yoki undan ko'p ochko olish ehtimoli">6+ ochko</div>
   <div>${last}</div></div>`;
 
 function fixtureCell(p){
@@ -1287,9 +1283,8 @@ function openPlayer(ctx, el){
         <div class="oddkey"><span>0–2 ochko <b>${p.outlook.low}%</b></span>
           <span>3–5 <b>${p.outlook.mid}%</b></span><span>6+ <b>${p.outlook.p6}%</b></span>
           <span>10+ <b>${p.outlook.p10}%</b></span></div>
-        <p class="note" style="margin-top:8px">Yaxshi kunda (besh o'yindan birida) <b>${p.outlook.good}</b>
-          yoki ko'proq. O'rtacha <b>${n1(p.ev)}</b> — bu yuqoridagi holatlarning aralashmasi;
-          aynan shuncha ochko kam uchraydi.</p>` : ""}
+        <p class="note" style="margin-top:8px">O'rtacha <b>${n1(p.ev)}</b> — bu yuqoridagi
+          holatlarning aralashmasi; aynan shuncha ochko kam uchraydi.</p>` : ""}
       ${keys.length ? `<h4>EV nimadan iborat</h4>${partRows}
         <div class="part total"><span class="t">Jami (aniq)</span><span></span><b>${(p.ev ?? 0).toFixed(2)}</b></div>
         <p class="note" style="margin-top:10px">EV — o'rtacha qiymat: yaxshi va yomon holatlarning aralashmasi.

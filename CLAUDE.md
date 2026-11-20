@@ -461,8 +461,10 @@ Yonida «toza darvoza 35% → bo'lsa 6.2 ochko».
 **EV yonida natija taqsimoti turadi (`squadview.outlook`).** EV — o'rtacha va
 ko'pincha eng **kam** uchraydigan natija: backtestda EV ≈ 4 bo'lgan himoyachi
 42% holatda 1–2 ochko, 34% holatda 6+ olgan, 3–5 esa atigi 23%. Shuning uchun
-har o'yinchida «yaxshi kunda» (80-foizli natija, maydonda `↑8`) va
-0–2 / 3–5 / 6+ / 10+ ehtimollari ko'rsatiladi. **EV ning o'zi ko'tarilmaydi**
+ro'yxatda «6+ ochko» ehtimoli, o'yinchi tafsilotida esa 0–2 / 3–5 / 6+ / 10+
+ehtimollari ko'rsatiladi. («Yaxshi kunda ↑8» raqami maydonda sinab ko'rilib,
+olib tashlandi: zaif o'yinchida ham 6 chiqib, chalg'itardi — ehtimol foizi
+o'yinchilarni ajratadi, yaxshi kun ochkosi esa yo'q.) **EV ning o'zi ko'tarilmaydi**
 («toza darvoza kutilsa 6 yozaylik» degan talab bo'lgan): u haqiqiy o'rtachaga
 mos (4.0 vs 3.99) va 11 lik, transfer, kapitan, H2H hisoblari shunga tayanadi;
 ko'tarilsa jamoa yig'indisi ~60 o'rniga ~75 chiqib, hamma solishtiruv buziladi.
