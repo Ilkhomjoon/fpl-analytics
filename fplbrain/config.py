@@ -63,6 +63,9 @@ class Config:
     # --- telegram ---
     telegram_token: str = ""
     telegram_chat_id: str = ""             # shaxsiy kanal: -100... yoki @username
+    # Ko'p foydalanuvchili bot (`userbot.py`): kimlar ishlata oladi. Bo'sh —
+    # hamma uchun ochiq; yopiq sinov uchun chat ID lar ro'yxati: [123456789, …]
+    bot_allowed_chats: list = field(default_factory=list)
 
     # --- model parametrlari ---
     horizon: int = 5                       # necha GW oldinga qaraymiz

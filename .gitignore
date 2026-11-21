@@ -17,3 +17,6 @@ hisobot.html
 # Ekspertlarning shaxsiy tanlovlari va jadvali - yopiq guruh ma'lumoti (repo ochiq)
 data/store/h2h_private/
 *.xlsx
+
+# Bot foydalanuvchilari (chat ID va jamoa ID)
+data/bot/

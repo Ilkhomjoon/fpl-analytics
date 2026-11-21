@@ -5,7 +5,7 @@
 > qaysi yo'l sinalib rad etilgani va qaysi xatolar qaytib kelmasligi kerak.
 > Kodni qayta yozish mumkin, bu bilimni esa yo'q.
 
-**Sana:** 2026-11-19 · **Holat:** web sahifada 10 ta bo'lim ishlaydi, 390 ta test o'tadi,
+**Sana:** 2026-11-21 · **Holat:** web sahifada 10 ta bo'lim va ko'p foydalanuvchili bot, 428 ta test o'tadi,
 model `tools/backtest.py` bilan haqiqiy ochkoga solishtirilgan (4.1-bo'lim)
 
 ---
@@ -542,8 +542,31 @@ Tartib bo'yicha, eng foydalisidan:
 4. ~~MILP~~ — qilindi (`builder.solve_exact`)
 5. **O'ringa mos funksiyalar** — birinchi bosqich qilindi: «O'rnim» bo'limi
    (`fplbrain/bands.py`, `web/rankview.py`). Qolgani pastda («O'rnim» ostida).
-6. **Botga ko'chirish** — web tayyor; ekspertlar bilan yopiq sinov, so'ng
-   ikkinchi davra (GW20) oldidan kanalda ishga tushirish
+6. **Bot** — ko'chirildi: `userbot.py` + `tgbot/` (pastda). Qolgani: serverga
+   qo'yish (`docs/DEPLOY.md`), ekspertlar bilan yopiq sinov, so'ng ikkinchi
+   davra (GW20) oldidan kanalda ishga tushirish
+
+### Ko'p foydalanuvchili bot (`userbot.py`, `tgbot/`)
+
+* **Parolsiz, jamoa ID bilan.** Foydalanuvchi ID ni (raqam yoki FPL havolasi)
+  bir marta yuboradi. Parol saqlash muhokama qilingan va rad etilgan: serverda
+  kalit ham turadi, sizib chiqsa javobgarlik; Telegram chatida parol so'rash
+  xavfli. Narxi: tarkib oxirgi deadline holatida, FT va sotish narxlari
+  taxminiy. Kelajakda aniq rejim kerak bo'lsa — parol emas, **yangilash tokeni**
+  (biz `offline_access` so'raymiz, lekin FPL uni berish-bermasligi
+  **tekshirilmagan**; `exchange_code` hozir faqat `access_token` ni oladi).
+* **Hisob web bilan bir xil.** `tgbot/app.py` har bo'lim uchun `web/*view.py`
+  dagi o'sha funksiyani chaqiradi; `tgbot/render.py` faqat payload → matn.
+  Yangi bo'lim qo'shish: view + `render` funksiyasi + `SECTIONS` ga bir qator.
+* **9 bo'lim + yakkama-yakka**; «Raqiblar»da liga va raqib tugma bilan tanlanadi.
+* Hisoblash fonda (`WORKERS = 2`), bir foydalanuvchi — bir vaqtda bitta so'rov,
+  natija 10 daqiqa keshda, `World` bir jamoa uchun bo'limlar orasida umumiy.
+* Yopiq sinov: `config.yaml` da `bot_allowed_chats: [chat_id, …]`; bo'sh — ochiq.
+* Foydalanuvchilar `data/bot/users.json` da (git da yo'q).
+* **Eski `bot.py` o'zgarmagan** (kanal uchun tayyor hisobot, `run.py` orqali).
+  Ikkalasini **bitta token** bilan bir vaqtda ishlatib bo'lmaydi.
+* Sinov: `tests/test_userbot.py` (soxta Telegram). Haqiqiy Telegram bilan
+  **hali sinalmagan** — birinchi ishga tushirishni egasi qiladi.
 
 ### «O'rnim» — o'ringa mos maslahat (bot uchun asosiy farqlovchi)
 
