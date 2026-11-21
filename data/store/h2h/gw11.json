@@ -7,7 +7,7 @@
    115,
    4,
    504,
-   566,
+   31,
    68,
    183,
    411,
@@ -22,15 +22,15 @@
   ],
   "captain": 411,
   "vice": 379,
-  "expected": 67.01,
+  "expected": 67.02,
   "names": {
    "1": "Raya",
    "109": "Verbruggen",
    "4": "Gabriel",
    "115": "De Cuyper",
    "112": "Van Hecke",
+   "31": "Konsa",
    "504": "Vuskovic",
-   "566": "Silva",
    "68": "Tavernier",
    "542": "E.Le Fée",
    "183": "Rudoni",
@@ -40,7 +40,40 @@
    "166": "N.Jackson",
    "379": "Isak"
   },
-  "saved_at": 1795069915.9263954,
+  "saved_at": 1795232361.2092113,
   "note": "narx 100.0m"
+ },
+ "experts": {
+  "xi": [
+   1,
+   112,
+   115,
+   31,
+   124,
+   40,
+   512,
+   15,
+   411,
+   166,
+   79
+  ],
+  "bench": [],
+  "captain": 411,
+  "vice": 0,
+  "expected": 0.0,
+  "names": {
+   "1": "Raya",
+   "112": "Van Hecke",
+   "115": "De Cuyper",
+   "31": "Konsa",
+   "124": "Groß",
+   "40": "Rogers",
+   "512": "Kudus",
+   "15": "Ødegaard",
+   "411": "Haaland",
+   "166": "N.Jackson",
+   "79": "Evanilson"
+  },
+  "note": "GW Team (jadval)"
  }
 }

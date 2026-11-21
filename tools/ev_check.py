@@ -37,8 +37,11 @@ def _path(cfg: Config, gw: int) -> Path:
 
 
 def _client(cfg: Config) -> FplClient:
+    # Cookie ataylab berilmaydi: bu vosita faqat ochiq ma'lumot bilan ishlaydi.
+    # `.env` dagi eskirgan cookie har safar "my-team olinmadi (403)" degan
+    # qo'rqinchli, lekin zararsiz xabar chiqarardi.
     return FplClient(cfg.cache_dir, cfg.cache_ttl_seconds, cfg.request_delay,
-                     cfg.max_workers, cookie=cfg.fpl_cookie)
+                     cfg.max_workers)
 
 
 def save(cfg: Config) -> None:
