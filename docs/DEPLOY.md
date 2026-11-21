@@ -8,10 +8,12 @@ bo'limlarni tugma bilan ochadi. Parol so'ralmaydi.
 Telegramda **@BotFather** → `/newbot` → nom va username → token beriladi
 (`1234567890:AA…` ko'rinishida).
 
-> **Yangi bot oching.** Eski `bot.py` (kanal uchun hisobot) ishlatadigan token
-> bilan `userbot.py` ni bir vaqtda ishga tushirib bo'lmaydi: Telegram bitta
-> tokenga bitta tinglovchiga ruxsat beradi, ikkalasi bir-birining xabarlarini
-> "yeb" qo'yadi.
+> **Mavjud tokenni ishlatsa ham bo'ladi** (hozir shunday: `.env` dagi token).
+> Yagona shart — eski `bot.py` bilan `userbot.py` ni **bir vaqtda** ishga
+> tushirmaslik: Telegram bitta tokenga bitta tinglovchiga ruxsat beradi,
+> ikkalasi bir-birining xabarlarini "yeb" qo'yadi. Kunlik hisobot
+> (`run.py`, GitHub Actions) bunga kirmaydi — u faqat xabar **yuboradi**,
+> tinglamaydi, shuning uchun bot bilan birga ishlayveradi.
 
 ## 2. O'z kompyuteringizda sinash
 
