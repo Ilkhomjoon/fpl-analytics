@@ -870,5 +870,13 @@
   "horizon_ev": 236.457,
   "best_move": "Maguire (4.6) ➜ Gabriel (8.1)",
   "captain": "Haaland"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-11-22T12:39:49.954886+05:00",
+  "event": 12,
+  "horizon_ev": 197.488,
+  "best_move": "Maguire (4.6) + Mykolenko (4.5) ➜ Gabriel (8.1) + Hill (5.6)",
+  "captain": "Haaland"
  }
 ]
