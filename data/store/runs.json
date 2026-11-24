@@ -886,5 +886,13 @@
   "horizon_ev": 218.182,
   "best_move": "Mykolenko (4.5) + Davis (4.0) ➜ Gabriel (8.1) + Van Hecke (5.2)",
   "captain": "De Cuyper"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-11-24T15:36:03.971406+05:00",
+  "event": 12,
+  "horizon_ev": 221.606,
+  "best_move": "Dubravka (3.9) + Raya (6.1) ➜ Trafford (5.1) + Tzolakis (4.7)",
+  "captain": "De Cuyper"
  }
 ]
