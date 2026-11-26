@@ -65,7 +65,7 @@ Doimiy ishlashi uchun — `systemd` xizmati. `/etc/systemd/system/fplbot.service
 
 ```ini
 [Unit]
-Description=FPL Brain bot
+Description=FPLUzbekistan bot
 After=network-online.target
 
 [Service]

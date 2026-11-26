@@ -563,6 +563,15 @@ Tartib bo'yicha, eng foydalisidan:
   natija 10 daqiqa keshda, `World` bir jamoa uchun bo'limlar orasida umumiy.
 * Yopiq sinov: `config.yaml` da `bot_allowed_chats: [chat_id, …]`; bo'sh — ochiq.
 * Foydalanuvchilar `data/bot/users.json` da (git da yo'q).
+* **Brend — FPLUzbekistan** (ilgari «FPL Brain» deb nomlangan edi). Asl logolar
+  `assets/brand/` da; `python tools/brand.py` ulardan sahifa belgisi
+  (`web/static/logo-mark.png`, `favicon.png`), bot banneri va avatarini yasaydi.
+  Logodagi «FPL» yozuvi oq — faqat to'q fonda ko'rinadi, shuning uchun sahifada
+  rasm sifatida faqat sher belgisi turadi, nom esa matn. Urg'u rangi logodagi
+  yashildan (`#01e45c`; kunduzgi mavzuda to'qroq pog'onasi). Botning nomi,
+  tavsifi va buyruqlar menyusi `python tools/bot_profile.py --apply` bilan
+  yoziladi; **avatar faqat @BotFather orqali** (`/setuserpic`,
+  `tgbot/assets/avatar.png`) — Bot API bunga ruxsat bermaydi.
 * **Eski `bot.py` o'zgarmagan** (kanal uchun tayyor hisobot, `run.py` orqali).
   Ikkalasini **bitta token** bilan bir vaqtda ishlatib bo'lmaydi.
 * Sinov: `tests/test_userbot.py` (soxta Telegram). Haqiqiy Telegram bilan

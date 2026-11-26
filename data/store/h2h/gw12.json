@@ -1,0 +1,46 @@
+{
+ "gw": 12,
+ "model": {
+  "xi": [
+   385,
+   115,
+   330,
+   4,
+   426,
+   124,
+   480,
+   68,
+   346,
+   166,
+   379
+  ],
+  "bench": [
+   112,
+   60,
+   542,
+   109
+  ],
+  "captain": 346,
+  "vice": 426,
+  "expected": 58.24,
+  "names": {
+   "385": "Trafford",
+   "109": "Verbruggen",
+   "115": "De Cuyper",
+   "4": "Gabriel",
+   "60": "Hill",
+   "112": "Van Hecke",
+   "330": "Bogle",
+   "426": "B.Fernandes",
+   "68": "Tavernier",
+   "124": "Groß",
+   "542": "E.Le Fée",
+   "480": "Gibbs-White",
+   "379": "Isak",
+   "166": "N.Jackson",
+   "346": "Calvert-Lewin"
+  },
+  "saved_at": 1795690810.535242,
+  "note": "narx 100.0m"
+ }
+}

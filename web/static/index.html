@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FPL Brain</title>
+<title>FPLUzbekistan</title>
+<link rel="icon" type="image/png" href="/static/favicon.png">
 <script>
   // Mavzu sahifa chizilishidan OLDIN qo'yiladi — aks holda oq chaqnash bo'ladi.
   (function(){
@@ -20,8 +21,10 @@
     --bg:#f2f4f8; --surface:#ffffff; --surface-2:#f6f7fb; --surface-3:#ebeef5;
     --line:#e1e5ee; --line-2:#d0d6e2;
     --ink:#0f1320; --ink-2:#3a4154; --muted:#687085;
-    --accent:#0c9b78; --accent-2:#087f62; --on-accent:#ffffff;
-    --accent-soft:rgba(12,155,120,.11);
+    /* Urg'u rangi — logodagi yashil (#01e45c). Oq fonda u juda och, shuning
+       uchun kunduzgi mavzuda o'sha tusning to'qroq pog'onasi olinadi. */
+    --accent:#079a43; --accent-2:#05823a; --on-accent:#ffffff;
+    --accent-soft:rgba(7,154,67,.11);
     --good:#0a8a58; --bad:#cf3838; --warn:#b26500; --info:#2a68e8;
     --good-soft:rgba(10,138,88,.11); --bad-soft:rgba(207,56,56,.10);
     --warn-soft:rgba(178,101,0,.12); --info-soft:rgba(42,104,232,.10);
@@ -39,8 +42,8 @@
     --bg:#090b10; --surface:#11141b; --surface-2:#161a23; --surface-3:#1d222d;
     --line:#222834; --line-2:#2f3746;
     --ink:#edf0f6; --ink-2:#c2c8d6; --muted:#8891a4;
-    --accent:#3ddbab; --accent-2:#62e7c0; --on-accent:#04241b;
-    --accent-soft:rgba(61,219,171,.12);
+    --accent:#1fe36a; --accent-2:#5cf093; --on-accent:#03200f;
+    --accent-soft:rgba(1,228,92,.13);
     --good:#3ddb97; --bad:#ff7b7b; --warn:#f3b144; --info:#74a5ff;
     --good-soft:rgba(61,219,151,.12); --bad-soft:rgba(255,123,123,.12);
     --warn-soft:rgba(243,177,68,.13); --info-soft:rgba(116,165,255,.12);
@@ -81,12 +84,12 @@
     display:flex; flex-direction:column; gap:4px;
   }
   .brand{display:flex; align-items:center; gap:10px; padding:4px 10px 18px}
-  .logo{
-    width:34px; height:34px; border-radius:10px; display:grid; place-items:center;
-    background:linear-gradient(135deg,var(--accent),var(--info)); color:#fff;
-    font-weight:800; font-size:13px; letter-spacing:-.02em;
-  }
-  .brand b{font-size:15px; letter-spacing:-.01em; display:block; line-height:1.2}
+  /* Logodan faqat belgi (sher) rasm sifatida turadi. Yozuv — matn: logodagi
+     «FPL» oq, u kunduzgi mavzuda ko'rinmay qolardi. */
+  .logo{height:40px; width:auto; flex:none; display:block}
+  .brand b{font-size:16px; letter-spacing:-.01em; display:block; line-height:1.2; font-weight:800}
+  .brand b span{color:var(--accent)}
+  .topmark{display:none; height:30px; width:auto; flex:none}
   .brand small{color:var(--muted); font-size:11.5px}
   .nav{
     display:flex; align-items:center; gap:11px; width:100%; text-align:left;
@@ -574,6 +577,7 @@
   @media (max-width:900px){
     .app{grid-template-columns:minmax(0,1fr)}
     .side{display:none}
+    .topmark{display:block}               /* yon panel yo'q — belgi yuqoriga ko'chadi */
     .top{padding:10px 14px}
     .top .sub,.hide-m{display:none}
     main{padding:14px 12px 92px}
@@ -610,8 +614,8 @@
 <div class="app">
   <aside class="side">
     <div class="brand">
-      <div class="logo">FPL</div>
-      <div><b>FPL Brain</b><small id="brandGw">tahlil dvigateli</small></div>
+      <img class="logo" src="/static/logo-mark.png" alt="FPLUzbekistan">
+      <div><b>FPL<span>Uzbekistan</span></b><small id="brandGw">tahlil dvigateli</small></div>
     </div>
     <div id="sideNav"></div>
     <div class="grow"></div>
@@ -620,6 +624,7 @@
 
   <div class="main">
     <header class="top">
+      <img class="topmark" src="/static/logo-mark.png" alt="FPLUzbekistan">
       <div>
         <h1 id="viewTitle">O'yinchilar</h1>
         <div class="sub" id="viewSub"></div>
@@ -689,6 +694,7 @@
 <dialog id="loginDlg">
   <div class="dlg">
     <button class="x iconbtn" id="loginClose" aria-label="Yopish"></button>
+    <img src="/static/logo-mark.png" alt="" style="height:46px; display:block; margin-bottom:12px">
     <h2>FPL hisobiga kirish</h2>
     <p class="lead-t">Jonli tarkib, aniq sotish narxlari va tekin transferlar soni uchun.
       Parol saqlanmaydi — faqat kirish paytida ishlatiladi.</p>
@@ -888,7 +894,7 @@ function setView(name, push){
   Object.keys(VIEWS).forEach(k => $("v-" + k).hidden = k !== name);
   $("viewTitle").textContent = VIEWS[name].t;
   $("viewSub").textContent = VIEWS[name].s;
-  document.title = `${VIEWS[name].t} · FPL Brain`;
+  document.title = `${VIEWS[name].t} · FPLUzbekistan`;
   markNav();
   if (push !== false && location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
   if (!LOADED[name]()) LOADERS[name](false);

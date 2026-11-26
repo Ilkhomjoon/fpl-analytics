@@ -219,3 +219,52 @@ def test_uzun_matn_satr_chegarasida_kesiladi():
     out = render.clip(text, 500)
     assert len(out) < 560 and html_ok(out)
     assert out.endswith("</i>")
+
+
+# ------------------------------------------------------------------- brend
+class PhotoTelegram(FakeTelegram):
+    """Rasm yubora oladigan soxta Telegram."""
+
+    def __init__(self, fail: bool = False) -> None:
+        super().__init__()
+        self.photos: list[dict] = []
+        self.fail = fail
+
+    def send_photo(self, chat_id, photo, caption="", keyboard=None):
+        self.photos.append({"chat_id": chat_id, "photo": str(photo), "caption": caption})
+        return None if self.fail else {"photo": [{"file_id": "kichik"}, {"file_id": "KATTA"}]}
+
+
+def _bot_with(tg, tmp_path):
+    cfg = Config()
+    cfg.store_dir = tmp_path / "store"
+    return BotApp(cfg, FakeClient(), tg=tg, users=Users(tmp_path / "users.json"), sync=True)
+
+
+def test_xush_kelibsiz_logo_bilan_va_file_id_qayta_ishlatiladi(tmp_path):
+    from tgbot import app as app_mod
+    bot = _bot_with(PhotoTelegram(), tmp_path)
+    say(bot, "/start")
+    first = bot.tg.photos[-1]
+    assert first["photo"].endswith("banner.png") and app_mod.BRAND in first["caption"]
+    assert not bot.tg.sent                              # matn takror yuborilmaydi
+    say(bot, "/start", chat=2)
+    assert bot.tg.photos[-1]["photo"] == "KATTA"        # ikkinchi safar fayl yuklanmaydi
+
+
+def test_rasm_ketmasa_matn_yuboriladi(tmp_path):
+    bot = _bot_with(PhotoTelegram(fail=True), tmp_path)
+    say(bot, "/start")
+    assert "jamoa ID" in bot.tg.sent[-1]["text"]
+
+
+def test_xush_kelibsiz_matni_rasm_izohiga_sigadi():
+    """Telegram rasm izohi 1024 belgidan oshmaydi."""
+    from tgbot import app as app_mod
+    assert len(app_mod.WELCOME) <= 1024 and html_ok(app_mod.WELCOME)
+    assert app_mod.BANNER.is_file()
+
+
+def test_menyuda_brend_nomi(bot):
+    say(bot, "34191")
+    assert "FPLUzbekistan" in bot.tg.sent[-1]["text"]

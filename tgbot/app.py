@@ -59,8 +59,12 @@ SECTIONS = [
 TITLES = {key: title for key, title, _ in SECTIONS}
 ENTRY_URL = re.compile(r"entry/(\d+)")
 
+BRAND = "FPLUzbekistan"
+BANNER = Path(__file__).resolve().parent / "assets" / "banner.png"
+
 WELCOME = (
-    "<b>FPL Brain</b> — jamoangiz uchun tahlil.\n\n"
+    f"<b>{BRAND}</b> — FPL jamoangiz uchun shaxsiy tahlil: kim o'ynaydi, kimni "
+    "kapitan qilish, kimni sotib kimni olish va raqiblaringizga nisbatan qayerdasiz.\n\n"
     "Boshlash uchun <b>jamoa ID</b> ingizni yuboring. Uni FPL saytida "
     "«Points» sahifasining manzilidan olasiz:\n"
     "<code>fantasy.premierleague.com/entry/<b>1234567</b>/event/11</code>\n\n"
@@ -134,16 +138,45 @@ class BotApp:
             return
         self.tg.edit(message_id, text, keyboard or {"inline_keyboard": []}, chat_id=chat_id)
 
+    def welcome(self, chat_id) -> None:
+        """Xush kelibsiz: logo banneri bilan. Rasm ketmasa — oddiy matn.
+
+        Banner bir marta yuklanadi; Telegram qaytargan `file_id` saqlanadi va
+        keyingi foydalanuvchilarga o'sha yuboriladi.
+        """
+        sender = getattr(self.tg, "send_photo", None)
+        if sender and BANNER.is_file():
+            cached = self.users.path.with_name("banner_id.txt")
+            try:
+                photo = cached.read_text(encoding="utf-8").strip() or BANNER
+            except OSError:
+                photo = BANNER
+            result = sender(chat_id, photo, WELCOME)
+            if not result and photo != BANNER:        # saqlangan file_id eskirgan
+                result = sender(chat_id, BANNER, WELCOME)
+            if result:
+                try:
+                    sizes = result.get("photo") or []
+                    if sizes:
+                        cached.parent.mkdir(parents=True, exist_ok=True)
+                        cached.write_text(sizes[-1]["file_id"], encoding="utf-8")
+                except (OSError, KeyError, AttributeError):
+                    pass
+                return
+        self.send(chat_id, WELCOME)
+
     def menu(self, chat_id) -> tuple[str, dict]:
         user = self.users.get(chat_id)
         buttons = [{"text": title, "callback_data": f"v:{key}"} for key, title, _ in SECTIONS]
         rows = [buttons[i:i + 2] for i in range(0, len(buttons), 2)]
         rows.append([{"text": "⚙️ Jamoa ID", "callback_data": "id"}])
         if user.get("entry_id"):
-            head = (f"<b>{render.esc(user.get('team') or 'Jamoa')}</b> · "
-                    f"ID {user['entry_id']}\nBo'limni tanlang:")
+            head = (f"<b>{BRAND}</b>\n"
+                    f"Jamoa: <b>{render.esc(user.get('team') or '—')}</b> · "
+                    f"ID {user['entry_id']}\n\nBo'limni tanlang:")
         else:
-            head = ("Jamoa ID kiritilmagan — «Jamoa tuzish» va «H2H» ishlaydi, "
+            head = (f"<b>{BRAND}</b>\n"
+                    "Jamoa ID kiritilmagan — «Jamoa tuzish» va «H2H» ishlaydi, "
                     "qolganlari uchun ID yuboring.")
         return head, {"inline_keyboard": rows}
 
@@ -309,7 +342,7 @@ class BotApp:
                 self.send(chat_id, *self.menu(chat_id))
             else:
                 self.users.update(chat_id, awaiting=True)
-                self.send(chat_id, WELCOME)
+                self.welcome(chat_id)
         elif command == "/menu":
             self.send(chat_id, *self.menu(chat_id))
         elif command == "/id":

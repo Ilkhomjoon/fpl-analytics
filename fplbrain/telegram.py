@@ -152,6 +152,38 @@ class Telegram:
             return None
         return resp.json().get("result")
 
+    def send_photo(self, chat_id, photo, caption: str = "",
+                   keyboard: dict | None = None) -> dict | None:
+        """Rasm yuboradi. `photo` — fayl yo'li yoki Telegram bergan `file_id`.
+
+        Birinchi marta fayl yuklanadi; javobdagi `file_id` ni saqlab, keyingi
+        safar o'shani bersangiz, rasm qayta yuklanmaydi (tezroq va trafik tejaydi).
+        Xato bo'lsa `None` — chaqiruvchi oddiy matnga qaytadi.
+        """
+        if self.dry_run:
+            log.info("[dry-run] sendPhoto: %s", str(photo)[:80])
+            return None
+        import json
+        from pathlib import Path
+        data = {"chat_id": str(chat_id), "caption": caption[:1024], "parse_mode": "HTML"}
+        if keyboard:
+            data["reply_markup"] = json.dumps(keyboard)
+        url = f"https://api.telegram.org/bot{self.token}/sendPhoto"
+        try:
+            path = Path(str(photo))
+            if path.is_file():
+                with path.open("rb") as handle:
+                    resp = requests.post(url, data=data, files={"photo": handle}, timeout=40)
+            else:
+                resp = requests.post(url, data=dict(data, photo=str(photo)), timeout=25)
+        except (requests.exceptions.RequestException, OSError) as exc:
+            log.warning("sendPhoto ishlamadi: %s", type(exc).__name__)
+            return None
+        if resp.status_code != 200:
+            log.warning("sendPhoto rad etildi %s: %s", resp.status_code, resp.text[:200])
+            return None
+        return resp.json().get("result")
+
     def send_menu(self, text: str, keyboard: dict) -> int | None:
         """Tugmali xabar jo'natadi; message_id qaytaradi."""
         if self.dry_run:
