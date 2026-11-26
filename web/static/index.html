@@ -613,7 +613,8 @@
 
 <div class="app">
   <aside class="side">
-    <div class="brand">
+    <div class="brand" data-act="go" data-to="players" role="link" tabindex="0"
+         title="Asosiy sahifa" style="cursor:pointer">
       <img class="logo" src="/static/logo-mark.png" alt="FPLUzbekistan">
       <div><b>FPL<span>Uzbekistan</span></b><small id="brandGw">tahlil dvigateli</small></div>
     </div>
@@ -624,7 +625,8 @@
 
   <div class="main">
     <header class="top">
-      <img class="topmark" src="/static/logo-mark.png" alt="FPLUzbekistan">
+      <img class="topmark" src="/static/logo-mark.png" alt="FPLUzbekistan — asosiy sahifa"
+           data-act="go" data-to="players" role="link" tabindex="0" style="cursor:pointer">
       <div>
         <h1 id="viewTitle">O'yinchilar</h1>
         <div class="sub" id="viewSub"></div>
@@ -1320,7 +1322,12 @@ function closePlayer(){
   $("drawer").setAttribute("aria-hidden", "true");
 }
 $("scrim").onclick = closePlayer;
-document.addEventListener("keydown", (e) => { if (e.key === "Escape"){ closePlayer(); closeMenu(); } });
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape"){ closePlayer(); closeMenu(); }
+  // Logo — havola: klaviaturadan ham ishlasin
+  if (e.key === "Enter" && e.target.matches && e.target.matches('[role="link"][data-act="go"]'))
+    setView(e.target.dataset.to);
+});
 
 // ------------------------------------------------------------- transferlar
 function movePlayer(p, out){
