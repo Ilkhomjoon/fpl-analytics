@@ -902,5 +902,13 @@
   "horizon_ev": 221.599,
   "best_move": "Dubravka (3.9) + Raya (6.1) ➜ Trafford (5.1) + Tzolakis (4.7)",
   "captain": "De Cuyper"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-11-26T14:04:01.090133+05:00",
+  "event": 12,
+  "horizon_ev": 221.584,
+  "best_move": "Dubravka (3.9) + Raya (6.1) ➜ Trafford (5.1) + Tzolakis (4.7)",
+  "captain": "De Cuyper"
  }
 ]
