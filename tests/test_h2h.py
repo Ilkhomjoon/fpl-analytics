@@ -292,3 +292,13 @@ def test_h2h_korinishi_jonli_va_orqaga_qarabni_ajratadi(tmp_path):
     # Jonli hisobga faqat muzlatilgan turlar kiradi
     assert body["totals"]["n"] == 1 and body["totals"]["live_n"] == 0
     assert body["enough"] is False
+
+def test_kutilma_11_lik_va_kapitan_ikkilanadi():
+    """Ekspertlar tarkibi ham model bahosi bilan o'lchanadi — modelniki bilan bir xil qoida."""
+    from types import SimpleNamespace
+    lineup = _lineup()
+    evs = {i: SimpleNamespace(per_event={12: 3.0}) for i in lineup.xi}
+    evs[lineup.captain] = SimpleNamespace(per_event={12: 7.0})
+    evs.pop(lineup.xi[0])                                # bahosi yo'q o'yinchi — 0
+    assert h2h.expected_points(lineup, evs, 12) == pytest.approx(9 * 3.0 + 7.0 * 2)
+    assert h2h.expected_points(lineup, evs, 13) == 0.0   # boshqa tur uchun baho yo'q

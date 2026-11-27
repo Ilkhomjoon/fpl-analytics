@@ -1874,13 +1874,14 @@ function h2hLineup(side, title, cls){
   const lines = [1, 2, 3, 4].map(pos => {
     const row = side.players.filter(p => p.pos === pos).map(p =>
       `${esc(p.name)}${p.captain ? ' <span class="tag cap">C</span>' : ""}${
-        p.points != null ? ` <b>${p.points}</b>` : ""}`).join(", ");
+        p.points != null ? ` <b>${p.points}</b>`
+          : (p.ev != null ? ` <span class="dim">${ev0(p.ev)}</span>` : "")}`).join(", ");
     return `<div class="ln"><span class="pos p${pos}">${posNames[pos]}</span><div>${row || "—"}</div></div>`;
   }).join("");
   const head = side.points != null ? `${side.points} ochko`
              : (side.expected ? `kutilmoqda ${ev0(side.expected)}` : "");
   return `<div class="card ${cls || ""}"><div class="card-h" style="padding-bottom:10px"><h2>${title}</h2>
-    <span class="grow"></span><span class="chip accent">${head}</span></div>
+    <span class="grow"></span>${head ? `<span class="chip accent">${head}</span>` : ""}</div>
     <div class="lineup">${lines}</div></div>`;
 }
 

@@ -192,6 +192,16 @@ def import_xlsx(cfg: Config, path: str) -> None:
     positions = {e["id"]: e["element_type"] for e in bootstrap["elements"]}
     for rec in h2h.read_workbook(path, bootstrap["elements"], points):
         gw, team = rec["gw"], rec["team"]
+        if gw == _next_event(bootstrap) and len(team.xi) == 11:
+            # Kelgusi tur: ekspertlar tarkibini model qanday baholashi ham saqlanadi —
+            # deadline'dan keyin model keyingi turga o'tadi va buni qayta hisoblab bo'lmaydi
+            try:
+                from web import squadview
+                world = squadview.World(client, cfg, cfg.entry_id or 1)
+                world.deepen(team.xi)
+                team.expected = h2h.expected_points(team, world.ev, gw)
+            except Exception as exc:
+                print(f"  (GW{gw} kutilmasi hisoblanmadi: {type(exc).__name__})")
         record = h2h.load(cfg.store_dir, gw)
         record["gw"] = gw
         record["experts"] = dict(team.as_dict(), note="GW Team (jadval)")
@@ -211,6 +221,8 @@ def import_xlsx(cfg: Config, path: str) -> None:
             got = h2h.score_lineup(team, stats, positions, autosubs=False)["points"]
             sheet = rec["sheet_scores"][-1] if rec["sheet_scores"] else None
             line += f" — {got} ochko" + ("" if sheet in (None, got) else f"  (jadvalda {sheet} — FARQ!)")
+        elif team.expected:
+            line += f" — model bahosi {team.expected:.1f}"
         if len(team.xi) != 11:
             line += "  ← 11 ta emas!"
         if rec["missing"]:

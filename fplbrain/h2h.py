@@ -217,6 +217,20 @@ def parse_lineup(text: str, elements: list[dict]) -> tuple[Lineup, list[str]]:
     return lineup, errors
 
 
+def expected_points(lineup: Lineup, ev_by_element: dict, event: int) -> float:
+    """Tarkibning kutilayotgan ochkosi — **model bahosi bilan**: 11 lik + kapitan.
+
+    Ekspertlar tarkibi uchun ham shu ishlatiladi: ularning tanlovini model
+    qanday baholashi. Bu ekspertlarning o'z kutgani emas — ikkala tarkibni
+    bir xil o'lchov bilan solishtirish uchun.
+    """
+    def ev(element: int) -> float:
+        pev = ev_by_element.get(element)
+        return pev.per_event.get(event, 0.0) if pev else 0.0
+
+    return sum(ev(i) for i in lineup.xi) + ev(lineup.captain)
+
+
 # --------------------------------------------------------------- hisoblash
 def score_lineup(lineup: Lineup, stats: dict[int, tuple[int, int]],
                  positions: dict[int, int], autosubs: bool = True) -> dict:

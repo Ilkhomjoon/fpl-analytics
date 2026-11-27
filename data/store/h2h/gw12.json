@@ -16,19 +16,19 @@
   ],
   "bench": [
    112,
-   60,
+   31,
    542,
    109
   ],
   "captain": 346,
   "vice": 426,
-  "expected": 58.24,
+  "expected": 58.25,
   "names": {
    "385": "Trafford",
    "109": "Verbruggen",
    "115": "De Cuyper",
    "4": "Gabriel",
-   "60": "Hill",
+   "31": "Konsa",
    "112": "Van Hecke",
    "330": "Bogle",
    "426": "B.Fernandes",
@@ -40,7 +40,40 @@
    "166": "N.Jackson",
    "346": "Calvert-Lewin"
   },
-  "saved_at": 1795690810.535242,
-  "note": "narx 100.0m"
+  "saved_at": 1795755683.9154367,
+  "note": "narx 99.3m"
+ },
+ "experts": {
+  "xi": [
+   385,
+   334,
+   115,
+   60,
+   426,
+   68,
+   366,
+   40,
+   346,
+   166,
+   379
+  ],
+  "bench": [],
+  "captain": 346,
+  "vice": 0,
+  "expected": 56.38,
+  "names": {
+   "385": "Trafford",
+   "334": "Muharemović",
+   "115": "De Cuyper",
+   "60": "Hill",
+   "426": "B.Fernandes",
+   "68": "Tavernier",
+   "366": "Wirtz",
+   "40": "Rogers",
+   "346": "Calvert-Lewin",
+   "166": "N.Jackson",
+   "379": "Isak"
+  },
+  "note": "GW Team (jadval)"
  }
 }

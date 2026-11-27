@@ -51,6 +51,37 @@ def _side(data: dict | None, stats, positions, names) -> dict | None:
     }
 
 
+def _fill_expected(client, cfg, upcoming: dict | None) -> None:
+    """Kelgusi tur tarkiblariga model bahosini yozadi — **ikkalasiga bir xil o'lchov bilan**.
+
+    Ekspertlar tarkibida kutilma saqlanmagan (jadvalda yo'q), modelniki esa
+    muzlatilgan paytdagi qiymat. Yonma-yon turgan ikki raqam bir vaqtda va bir
+    xil hisob bilan chiqishi kerak, shuning uchun deadline'gacha ikkalasi ham
+    hozirgi EV lardan qayta hisoblanadi. Deadline'dan keyin model keyingi turga
+    o'tadi — unda saqlangan qiymatlar qoladi.
+    """
+    if not upcoming or not (upcoming.get("model") or upcoming.get("experts")):
+        return
+    try:
+        from . import squadview
+        world = squadview.World(client, cfg, getattr(cfg, "entry_id", 0) or 1)
+    except Exception as exc:
+        log.warning("H2H kutilmasi hisoblanmadi: %s", exc)
+        return
+    if world.next_event != upcoming["gw"]:
+        return
+    sides = [upcoming[s] for s in ("model", "experts") if upcoming.get(s)]
+    world.deepen([p["element"] for side in sides for p in side["players"]])
+    for side in sides:
+        lineup = h2h.Lineup(
+            xi=[p["element"] for p in side["players"]],
+            captain=next((p["element"] for p in side["players"] if p["captain"]), 0))
+        side["expected"] = round(h2h.expected_points(lineup, world.ev, upcoming["gw"]), 1)
+        for p in side["players"]:
+            pev = world.ev.get(p["element"])
+            p["ev"] = round(pev.per_event.get(upcoming["gw"], 0.0), 1) if pev else None
+
+
 def build(client, cfg) -> dict:
     if not hasattr(client, "event_live"):
         # Demo rejimi: soxta bootstrapdagi ID lar haqiqiy saqlangan tarkiblarga
@@ -107,6 +138,7 @@ def build(client, cfg) -> dict:
                 totals["live_experts"] += e
 
     upcoming = next((r for r in reversed(rows) if not r["finished"]), None)
+    _fill_expected(client, cfg, upcoming)
     return {
         "rows": rows,
         "totals": totals,
