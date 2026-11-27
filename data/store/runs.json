@@ -926,5 +926,13 @@
   "horizon_ev": 221.615,
   "best_move": "Dubravka (3.9) + Raya (6.1) ➜ Trafford (5.1) + Tzolakis (4.7)",
   "captain": "De Cuyper"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-11-28T02:46:11.505397+05:00",
+  "event": 13,
+  "horizon_ev": 142.041,
+  "best_move": "Maguire (4.5) + King (5.4) ➜ Murillo (5.5) + Gibbs-White (7.8)",
+  "captain": "Rogers"
  }
 ]
