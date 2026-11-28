@@ -934,5 +934,13 @@
   "horizon_ev": 142.041,
   "best_move": "Maguire (4.5) + King (5.4) ➜ Murillo (5.5) + Gibbs-White (7.8)",
   "captain": "Rogers"
+ },
+ {
+  "mode": "daily",
+  "at": "2026-11-28T13:36:33.202287+05:00",
+  "event": 13,
+  "horizon_ev": 142.092,
+  "best_move": "Maguire (4.5) + Davis (4.0) ➜ Murillo (5.5) + N.Williams (4.8)",
+  "captain": "Rogers"
  }
 ]
